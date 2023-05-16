@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
@@ -19,27 +20,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $routes = collect(Route::getRoutes())->map(function ($route) {
-            $middleware = $route->middleware();
-            //dd($middleware);
-            $permission = '';
-
-            foreach ($middleware as $m) {
-                if (preg_match('/^CheckPermission:(.*)$/', $m, $matches)) {
-                    $permission = $matches[1];
-                    break;
-                }
-            }
-
-            return [
-                'permission' => $permission,
-                'route_name' => $route->getName(),
-                'uri' => $route->uri(),
-                'method' => implode('|', $route->methods()),
-            ];
-        })->filter(function($route){
-            return !empty($route['permission']);
-        });
+        $routes = getPermissionBasedAllRoutes();
         $users = User::get();
         return view('admin.permission',compact('routes','users'));
     }
@@ -57,19 +38,20 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        //if(Auth::user()->role =='user') return redirect()->back()->with('error','Only Admin have access this route');
         DB::enableQueryLog();
-        
+
         // echo "<pre>";
         // print_r($request->all());
         // echo "</pre>";
         $users = User::whereIn('id',$request->input('user_id'))->get();
-       
+
         //dd(DB::getQueryLog());
 
 
         // // code to execute first transaction
         while (DB::transactionLevel() > 1) {
-            sleep(1); // wait for the transaction to complete
+            sleep(1); // wait for the running transaction to complete
         }
         DB::beginTransaction();
         // // code to execute second transaction
@@ -80,6 +62,14 @@ class PermissionController extends Controller
             {
                 $permissions_arr = $request->input('permissions_'.$user->id);
                 $permissionIdArr=[];
+                foreach($user->permissions as $prev_permission)
+                {
+                    if($prev_permission->id == 1 || $prev_permission->id == 2) $permissionIdArr[$prev_permission->id]=$prev_permission->id;
+                }
+                foreach($user->permissions as $prev_permission)
+                {
+                    $prev_permission->userPermission()->delete();
+                }
                 foreach($permissions_arr as $perm)
                 {
                     $route_name = $request->input('route_name_'.$user->id.'_'.str_replace(" ","_",$perm));
@@ -92,33 +82,27 @@ class PermissionController extends Controller
                     if(!empty($permission->id))
                     {
                         $permissionIdArr[$permission->id]=$permission->id;
-                        //$user->permissions()->syncWithoutDetaching($permission->id);
                     }
-                    // echo "<pre>";
-                    // print_r(DB::getQueryLog());
-                    // echo "</pre>";
                 }
                 if(count($permissionIdArr))
                 {
                     $user->permissions()->sync($permissionIdArr);
-                    echo "<pre>";
-                    print_r(DB::getQueryLog());
-                    echo "</pre>";
+                    // echo "<pre>";
+                    // print_r(DB::getQueryLog());
+                    // echo "</pre>";
                 }
-                
+
             }
             DB::commit();
-            //return redirect()->back()->with('success', 'Permission Given successfully');
+            return redirect()->back()->with('success', 'Permission Given successfully');
         }
         catch (Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
-            //throw $e;
-            //return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        
-        
-        
+
+
+
     }
 
     /**
@@ -151,5 +135,12 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         //
+    }
+
+    public function popup(Request $request)
+    {
+        $data['user_id'] = $request->user_id;
+        $data['about'] = $request->about;
+        return view('admin.popup',compact('data'));
     }
 }

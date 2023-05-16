@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+        $yes_no = array(1 => "Yes", 2 => "No");
         DB::listen(function ($query) {
 
             if(!empty($query->sql))
@@ -32,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
                 //Log::create(['user_id'=>Auth::user()->id ?? 0,'query'=>$query->sql]);
             }
 
-            
+
             // $query->bindings
             // $query->time
         });

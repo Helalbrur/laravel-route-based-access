@@ -11,7 +11,7 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next)
     {
-       
+
         $routeName = $request->route()->getName();
         $permission = Permission::where('route_name', $routeName)->first();
         //dd($routeName);

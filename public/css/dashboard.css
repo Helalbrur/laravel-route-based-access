@@ -1,0 +1,107 @@
+/* Navbar */
+
+#navbar {
+    margin-bottom: 1rem;
+  }
+
+  .navbar-brand {
+    font-weight: bold;
+  }
+
+  .navbar-toggler:focus {
+    outline: none;
+  }
+
+  .dropdown-menu {
+    background-color: #f8f9fa;
+    border: none;
+  }
+
+  .dropdown-item:hover {
+    background-color: #e9ecef;
+  }
+
+  /* Left menu */
+
+  .left-menu {
+    width: 240px;
+    padding: 20px;
+    margin-top: 56px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    z-index: 1;
+  }
+
+
+  #left-menu.open {
+    left: 0;
+  }
+
+  .menu-item {
+    position: relative;
+  }
+
+  .menu-item a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .menu-item a:hover {
+    background-color: #212529;
+  }
+
+  .sublist {
+    padding-left: 1.5rem;
+  }
+
+  .sublist .arrow {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+  }
+
+  .sublist .sublist {
+    display: none;
+  }
+
+  .sublist.show .sublist {
+    display: block;
+  }
+
+  .sublist.show .arrow::after {
+    content: "\f078";
+  }
+
+  .arrow::after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f077";
+    font-weight: 900;
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    transform: rotate(90deg);
+  }
+
+  /* Main content */
+
+  #main-content {
+    margin-left: 250px;
+    padding: 1rem;
+  }
+
+  /* Footer */
+
+  #footer {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    text-align: center;
+  }

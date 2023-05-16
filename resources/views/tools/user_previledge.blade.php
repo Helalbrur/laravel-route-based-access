@@ -1,0 +1,75 @@
+@extends('layouts.app')
+@section('content_header')
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0 align-center">Permission Page</h1>
+        </div>
+        <!-- <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Starter Page</li>
+            </ol>
+        </div> -->
+    </div><!-- /.row -->
+@endsection()
+@section('content')
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+
+            <h5 class="card-title"></h5>
+            <div class="card-text">
+                <form name="userpriv_1" id="userpriv_1" autocomplete="off">
+                    <fieldset style="width:1030px;">
+                        <legend>Select user and module</legend>
+                        <table width="100%">
+                            <tr>
+                                <td width="70">User ID</td>
+                                <td width="200"><?=create_drop_down("cbo_user_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--- Select User ---', 0, "" ); ?></td>
+                                <td width="120">Main Module Name</td>
+                                <td width="200"><?=create_drop_down("cbo_main_module", 180, "select main_module,m_mod_id from main_module where status=1 order by main_module",'m_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'load_priviledge_list', 'load_priviledge')" ); ?></td>
+
+
+                                <td width="100">Copy To User ID</td>
+                                <td  width="200"><?=create_drop_down("cbo_copyuser_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--Select To User--', 0, "","","","","","","","","","");//combo_boxes_search ?></td>
+                                <td><input type="button" name="btnPreviledgeCopy" id="btnPreviledgeCopy" class="formbutton" value="Copy Previledge for New User" onClick="fnc_copy_previledge(0);" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" height="20"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" id="load_priviledge"></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('script')
+<script>
+    function openmypage_item()
+	{
+
+		var user_id = $("#txt_user_id").val();
+		var title = 'Email Window Popup';
+		var page_link='/popup?user_id='+user_id+'&about='+$('#sys_no').val();
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=600px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			var theform=this.contentDoc.forms[0];
+			var user_id=this.contentDoc.getElementById("txt_selected_id").value; // product ID
+			var user_description=this.contentDoc.getElementById("txt_selected").value; // product Description
+			$("#txt_user").val(user_description);
+			$("#txt_user_id").val(user_id);
+		}
+	}
+</script>
+<script>set_multiselect('cbo_user_name','0','0','','0');</script>
+@endsection

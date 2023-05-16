@@ -7,6 +7,29 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{URL::to('/')}}" class="nav-link">Home</a>
       </li>
+      <?php
+       if (Auth::check())
+       {
+            //DB::enableQueryLog();
+            $modules = DB::table('main_module as a')
+            ->join('user_priv_module as b', 'a.m_mod_id', '=', 'b.module_id')
+            ->select('a.m_mod_id', 'a.main_module')
+            ->where('b.user_id', Auth::user()->id)
+            ->where('b.valid', 1)
+            ->where('a.status', 1)
+            ->orderBy('a.mod_slno','ASC')
+            ->get();
+            //dd(DB::getQueryLog());
+            foreach ($modules as $module)
+            {
+                ?>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{route('dashboard', ['module_id' => $module->m_mod_id])}}" class="nav-link">{{$module->main_module}}</a>
+                </li>
+                <?php
+            }
+       }
+      ?>
       @if (Auth::check() && Auth::user()->hasAccess('View Permission'))
         <li class="nav-item d-none d-sm-inline-block">
             <a href="{{route('permission.index')}}" class="nav-link">{{__('Permission')}}</a>
