@@ -75,6 +75,9 @@
 <pre><code>php artisan serve
 </code></pre>
 
+<pre><code>npm run dev
+</code></pre>
+
 <p>This will start the development server, and you can access the application by visiting <a href="http://localhost:8000">http://localhost:8000</a> in your web browser.</p>
 
 <h2>Docker</h2>
