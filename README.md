@@ -1,7 +1,7 @@
 <h1 align="center">Laravel Route-based Access</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Laravel-8.0-orange" alt="Laravel Version">
+  <img src="https://img.shields.io/badge/Laravel-10.0-orange" alt="Laravel Version">
   <img src="https://img.shields.io/badge/PHP-8.1-blue" alt="PHP Version">
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
 </p>
