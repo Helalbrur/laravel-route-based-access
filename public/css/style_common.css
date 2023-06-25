@@ -333,20 +333,17 @@ hr
 .ui-datepicker-calendar > tbody td:nth-child(6) {
     background-color: red;
 }
- fieldset {
-	border-left:1px solid #8DAFDA;
-	border-right:1px solid #8DAFDA;
-	border-bottom:3px solid #99B9E2;
-	border-top:1px solid #8DAFDA;
+
+fieldset
+{
+	border-left: 2px dashed #EDE9F2;
+	border-right: 2px dashed #EDE9F2;
+	border-bottom: 4px solid #F5E5F0;
+	border-top: 1px solid #F8E7F3;
 	border-radius: .5em;
-	padding:2px;
-	margin:0;
-	background-image: -moz-linear-gradient(bottom, rgb(179, 183, 184) 15%, rgb(230, 230, 216,.5) 5%, rgb(194,220,255,.5) 80%);
-	background-image: -webkit-linear-gradient(bottom, rgb(179, 183, 184) 5%, rgba(171, 183, 184, 0.822) 15%, rgb(194,220,255,.2) 80%);
-	-webkit-border-radius: .5em;
-	-moz-border-radius: .5em;
-	-ms-border-radius: .5em;
-	-o-border-radius: .5em;
+	padding: 10px;
+	margin: 20px;
+	background: linear-gradient(to bottom, #FDF8FE, #EDE9F2);
 }
 .messagebox
 {
@@ -398,23 +395,26 @@ hr
 	-o-border-radius: .7em;
 }
 legend {
-	margin-left:0px;
-	padding-left:0px;
-	padding:2px;
-	background-image: -moz-linear-gradient(bottom, rgb(136,170,214) 7%, rgb(194,220,255,.5) 10%, rgb(136,170,214) 96%);
-	background-image: -webkit-linear-gradient(bottom, rgb(136,170,214) 7%, rgb(194,220,255,.7) 10%, rgb(136,170,214) 96%);
-	font-weight:bold;
-	color:#0067B2;
-	height:38px;
+	
+	margin-left: 0;
+	padding-left: 0;
+	padding: 2px;
+	background-color: #E8F0FF;
+	background-image: -moz-linear-gradient(bottom, #E8F0FF 7%, rgba(194, 220, 255, 0.5) 10%, #E8F0FF 96%);
+	background-image: -webkit-linear-gradient(bottom, #E8F0FF 7%, rgba(194, 220, 255, 0.7) 10%, #E8F0FF 96%);
+	font-weight: bold;
+	color: #365870;
+	height: 38px;
 	border: 1px solid gray;
 	border-radius: .7em;
-	vertical-align:middle;
-	width:100%;
-	text-align:left;
+	vertical-align: middle;
+	width: 100%;
+	text-align: left;
 	-webkit-border-radius: .7em;
 	-moz-border-radius: .7em;
 	-ms-border-radius: .7em;
 	-o-border-radius: .7em;
+
 }
 h2 { margin-top:0; }
 

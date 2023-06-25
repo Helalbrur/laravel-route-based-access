@@ -116,20 +116,19 @@
         {
             var method ="";
             if(operation==0)  method ="POST";
-            else if(operation==1)  method ="PUT";
+            else if(operation==1)  method ="PATCH";
             else if(operation==2)  method ="DELETE";
             var param = "";
             if(operation == 1 || operation == 2)
             {
                 param = `/${document.getElementById('update_id').value}`;
+                console.log(`param = ${param} and id = ${document.getElementById('update_id').value}`);
             }
 
             if( $("#chk_report_menu").attr("checked") ) var chk_report_menu=1; else var chk_report_menu=0;
 
 		    if( $("#chk_mobile_menu").attr("checked") ) var chk_mobile_menu=1; else var chk_mobile_menu=0;
 
-            var data=get_submitted_data_string('cbo_module_name*cbo_root_menu*txt_menu_name*txt_menu_link*cbo_root_menu_under*txt_menu_seq*txt_page_link*txt_short_name*cbo_menu_sts*cbo_fabric_nature*update_id');
-            console.log(data);
             fetch(`/tools/create_menu${param}`, {
                 method: method ,
                 headers: {
@@ -162,7 +161,7 @@
             })
             .then(data => {
                 load_php_data_to_form(data.m_menu_id,'tools/create_menu/get_data_by_id');
-                loadList(search);
+                loadList();
             })
             .catch(error => {
                 console.error(error);
@@ -173,7 +172,7 @@
 
     setFilterGrid("list_view",-1);
 
-    function loadList(search)
+    function loadList(search='')
     {
 
         show_list_view (search+'_'+document.getElementById('cbo_module_name').value, 'create_menu_search_list_view', 'search_div', '/tools/create_menu_search_list_view', '');
@@ -204,8 +203,9 @@
                     document.getElementById('cbo_root_menu_under').value = data.sub_root_menu;
                     document.getElementById('txt_menu_seq').value = data.slno;
                     document.getElementById('cbo_menu_sts').value = data.status;
-                    document.getElementById('update_id').value = data.m_menu_id;
+                    document.getElementById('update_id').value = menuId;
                     document.getElementById('cbo_fabric_nature').value = data.fabric_nature;
+                    console.log(`id = ${document.getElementById('update_id').value}`);
                     set_button_status(1, permission, 'fnc_menu_create',1);
                 } catch (error) {
                     console.log(error);

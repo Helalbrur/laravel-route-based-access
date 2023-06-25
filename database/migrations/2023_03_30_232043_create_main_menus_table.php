@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('root_menu')->default(0);
             $table->unsignedBigInteger('sub_root_menu')->default(0);
             $table->string('menu_name', 100)->charset('utf8')->collation('utf8_bin');
-            $table->string('f_location', 200)->charset('utf8')->collation('utf8_bin');
-            $table->string('route_name', 200)->charset('utf8')->collation('utf8_bin')->unique();
+            $table->string('f_location', 200)->charset('utf8')->collation('utf8_bin')->nullable();
+            $table->string('route_name', 200)->charset('utf8')->collation('utf8_bin')->nullable();
             $table->integer('fabric_nature')->default(0);
             $table->integer('position')->default(0);
             $table->integer('status')->default(0);

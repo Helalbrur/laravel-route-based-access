@@ -44,7 +44,7 @@
   <li>Create a copy of the <code>.env-example</code> file and rename it to <code>.env</code>:</li>
 </ol>
 
-<pre><code>cp .env-example .env
+<pre><code>cp .env.example .env
 </code></pre>
 
 <ol start="6">
@@ -58,15 +58,10 @@
   <li>Run the database migrations:</li>
 </ol>
 
-<pre><code>php artisan migrate
+<pre><code>php artisan migrate:fresh --seed
 </code></pre>
 
-<ol start="8">
-  <li>Seed the database (optional):</li>
-</ol>
 
-<pre><code>php artisan db:seed
-</code></pre>
 
 <h2>Usage</h2>
 
@@ -79,6 +74,11 @@
 </code></pre>
 
 <p>This will start the development server, and you can access the application by visiting <a href="http://localhost:8000">http://localhost:8000</a> in your web browser.</p>
+
+<h2>Login Info</h2>
+<pre><code>Email: admin@gmail.com</code></pre>
+<pre><code>Password: 12345678</code></pre>
+
 
 <h2>Docker</h2>
 

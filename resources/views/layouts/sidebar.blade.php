@@ -225,7 +225,7 @@
                             $approve_priv 	= $r_sql2[6];
                             $fabric_nature 	= $r_sql2[7];
 
-                            $level3 = $child_menu2_arr[$m_id][$uid][$r_sql[csf('M_MENU_ID')]][$menu_id];
+                            $level3 = $child_menu2_arr[$m_id][$uid][$r_sql[csf('M_MENU_ID')]][$menu_id] ?? array();
                             if( count( $level3 ) < 1)
                             {
                                 $men=$menu_name."__".$fabric_nature;

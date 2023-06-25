@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MainMenuController;
-use App\Http\Controllers\MainModuleController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserPrivMstController;
 use App\Models\UserPrivMst;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MainMenuController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MainModuleController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserPrivMstController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,12 @@ Route::prefix('/tools')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/create_menu', MainMenuController::class);
     Route::resource('/user_previledge', UserPrivMstController::class);
     Route::resource('/create_main_module', MainModuleController::class);
+});
+
+Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () {
+
+    //permision route = > only admin user can access
+    Route::resource('/company', CompanyController::class);
 });
 
 Route::middleware(['auth'])->group(function () {

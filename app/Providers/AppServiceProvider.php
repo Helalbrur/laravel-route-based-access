@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Events\QueryExecuted;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
 
             // $query->bindings
             // $query->time
+        });
+        DB::whenQueryingForLongerThan(500, function (Connection $connection, QueryExecuted $event) {
+            // Notify development team...
+            //Log::create(['user_id'=>Auth::user()->id ?? 0,'query'=>$query->sql]);
         });
     }
 }

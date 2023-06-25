@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Database\Seeders\MainModuleSeeder;
 use Database\Seeders\UserPrivMstSeeder;
 use Database\Seeders\UserPrivModuleSeeder;
+use Database\Seeders\LibItemCategoryListSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,24 +32,26 @@ class DatabaseSeeder extends Seeder
                 'password'=>Hash::make('12345678')
             ]);
 
+            $this->call(LibItemCategoryListSeeder::class);
             $this->call(MainModuleSeeder::class);
             $this->call(MainMenuSeeder::class);
             $this->call(UserPrivModuleSeeder::class);
             $this->call(UserPrivMstSeeder::class);
 
-            $permision1=Permission::factory()->create([
-                'name' => 'View Permission',
-                'route_name' => 'permission.index',
-            ]);
+            // $permision1=Permission::factory()->create([
+            //     'name' => 'View Permission',
+            //     'route_name' => 'permission.index',
+            // ]);
 
-            $permision2=Permission::factory()->create([
-                'name' => 'Save Permission',
-                'route_name' => 'permission.store',
-            ]);
-            $permissionIdArr = array();
-            $permissionIdArr[$permision1->id]=$permision1->id;
-            $permissionIdArr[$permision2->id]=$permision2->id;
-            $user->permissions()->sync($permissionIdArr);
+            // $permision2=Permission::factory()->create([
+            //     'name' => 'Save Permission',
+            //     'route_name' => 'permission.store',
+            // ]);
+            // $permissionIdArr = array();
+            // $permissionIdArr[$permision1->id]=$permision1->id;
+            // $permissionIdArr[$permision2->id]=$permision2->id;
+            // $user->permissions()->sync($permissionIdArr);
+
             DB::commit();
         }
         catch (Exception $e) {

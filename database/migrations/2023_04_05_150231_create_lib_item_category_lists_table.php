@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('is_deleted')->default(0);
             $table->integer('is_inventory')->default(0);
             $table->integer('ac_period_dtls_id')->default(0);
-            $table->date('period_ending_date');
+            $table->date('period_ending_date')->nullable();
             $table->softDeletes();
         });
     }

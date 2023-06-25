@@ -137,15 +137,26 @@ function load_submit_buttons($permission, $sub_func, $is_update, $is_show_print 
     return $perm_str;die;
 }
 
-function getPagePermission()
+function getPagePermission($menu_id = 0)
 {
     $permission = "";
     DB::enableQueryLog();
-    $userPermission = DB::table('main_menu as a')
+    if(!empty($menu_id))
+    {
+        $userPermission = DB::table('main_menu as a')
+                      ->join('user_priv_mst as b','a.m_menu_id','=','b.main_menu_id')
+                      ->select('b.save_priv','b.edit_priv','b.delete_priv','b.approve_priv')
+                      ->where('b.user_id',Auth::user()->id)
+                      ->where('a.m_menu_id',$menu_id)->first();
+    }
+    else
+    {
+        $userPermission = DB::table('main_menu as a')
                       ->join('user_priv_mst as b','a.m_menu_id','=','b.main_menu_id')
                       ->select('b.save_priv','b.edit_priv','b.delete_priv','b.approve_priv')
                       ->where('b.user_id',Auth::user()->id)
                       ->where('a.route_name',explode(".",Route::currentRouteName())[0])->first();
+    }
     //dd(DB::getQueryLog());
     //dd($userPermission);
 
@@ -558,7 +569,7 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
                 //$split = get_split_length($data_array_name_arr[$i][$show_data] ?? "", $td_width[$i] ?? "");
                 if ($field_printed_from_array[$i] == $qry_field_list[$i])
                 {
-                    $table .= '<td ' . $align . ' width="' . $td_width[$i] . '"><p>' . $data_array_name_arr[$i][$show_data] . '</p></td>';
+                    $table .= '<td ' . $align . ' width="' . $td_width[$i] . '"><p>' . $data_array_name_arr[$i][$show_data] ?? '' . '</p></td>';
                 }
                 else
                 {
@@ -724,5 +735,9 @@ function get_button_level_permission($permission)
     return $perm_str; //die;
 }
 
+function execute_query( $strQuery, $commit="" )
+{
+	DB::unprepared($strQuery);
+}
 
 ?>

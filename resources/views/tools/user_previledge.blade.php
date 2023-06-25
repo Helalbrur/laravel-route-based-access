@@ -70,6 +70,71 @@
 			$("#txt_user_id").val(user_id);
 		}
 	}
+    function fnc_set_priviledge(operation)
+    {
+        if (form_validation('cbo_main_module*cbo_main_menu_name','Module Name*Menu Name')==false)
+        {
+            return;
+        }
+        else
+        {
+            var method ="";
+            if(operation==0)  method ="POST";
+            else if(operation==1)  method ="PATCH";
+            else if(operation==2)  method ="DELETE";
+            var param = "";
+            if(operation == 1 || operation == 2)
+            {
+                param = `/${document.getElementById('update_id').value}`;
+                console.log(`param=${param}`);
+            }
+            try {
+                var data = JSON.stringify({
+                    cbo_main_module:$("#cbo_main_module").val(),
+                    cbo_user_name:$("#cbo_user_name").val(),
+                    cbo_set_module_privt:$("#cbo_set_module_privt").val(),
+                    cbo_main_menu_name:$("#cbo_main_menu_name").val(),
+                    cbo_sub_main_menu_name:$("#cbo_root_menu_under").val(),
+                    cbo_sub_menu_name:$("#cbo_sub_menu_name").val(),
+                    cbo_visibility:$("#cbo_visibility").val(),
+                    cbo_insert:$("#cbo_insert").val(),
+                    cbo_edit:$("#cbo_edit").val(),
+                    cbo_delete:$("#cbo_delete").val(),
+                    cbo_approve:$("#cbo_approve").val(),
+                    update_id:$("#update_id").val(),
+                    _token:'{{csrf_token()}}'
+                });
+                console.log(data);
+            } catch (error) {
+                console.log(error);
+                alert(error);
+                return;
+            }
+            fetch(`/tools/user_previledge${param}`, {
+                method: method ,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
+                },
+                body: data
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var param = document.getElementById('cbo_user_name').value+'_'+document.getElementById('cbo_main_module').value
+                //load_php_data_to_form(param,'tools/create_menu/get_data_by_id');
+                //loadList(search);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+    }
 </script>
 <script>set_multiselect('cbo_user_name','0','0','','0');</script>
 @endsection
