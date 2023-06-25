@@ -218,7 +218,7 @@ class MainMenuController extends Controller
         $data = $request->query('data') ?? '';
         $data = explode("_",$data);
         $root_menu = $data[0] ?? 0;
-        $width = $data[1] ?? 250;
+        $width = $data[1] ?? 165;
         echo create_drop_down( "cbo_root_menu_under", $width, "select m_menu_id,menu_name from main_menu where position='2' and root_menu ='$root_menu' order by menu_name","m_menu_id,menu_name", 1, "-- Select Menu Name --", 0, "load_drop_down( 'tools/sub_root_menu_under', this.value, 'sub_root_menu_under', 'sub_subrootdiv' )" );
 	    exit();
     }
@@ -227,7 +227,7 @@ class MainMenuController extends Controller
         $data = $request->query('data') ?? '';
         $data = explode("_",$data);
         $sub_root_menu = $data[0] ?? 0;
-        $width = $data[1] ?? 155;
+        $width = $data[1] ?? 165;
         echo create_drop_down( "cbo_sub_menu_name", $width, "select m_menu_id,menu_name from main_menu where position='3' and sub_root_menu='$sub_root_menu' and status=1 and status_active=1 and is_deleted=0 order by m_menu_id","m_menu_id,menu_name", 1, "-- Select Sub Menu --", 0 , "" );
         exit();
     }

@@ -107,7 +107,7 @@
                 console.log(data);
             } catch (error) {
                 console.log(error);
-                alert(error);
+                showNotification(error,'error');
                 return;
             }
             fetch(`/tools/user_previledge${param}`, {
@@ -126,12 +126,14 @@
                 return response.json();
             })
             .then(data => {
+                showNotification(operation_success_msg[operation]);
                 var param = document.getElementById('cbo_user_name').value+'_'+document.getElementById('cbo_main_module').value
                 //load_php_data_to_form(param,'tools/create_menu/get_data_by_id');
                 //loadList(search);
             })
             .catch(error => {
                 console.error(error);
+                showNotification(error,'error');
             });
         }
     }

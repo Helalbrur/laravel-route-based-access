@@ -10,7 +10,7 @@ $data=explode("_", $data);
         <td colspan="4" align="left">
             <input type="button" name="load_data" id="load_data" class="formbutton" value="Load Data" tabindex="10" onclick="show_list_view(document.getElementById('cbo_user_name').value+'_'+document.getElementById('cbo_main_module').value,'load_priv_list_view','load_list_priv','../tools/requires/user_priviledge_controller','')" />
         </td>
-        <td colspan="3">Permission Level&nbsp;<?=create_drop_down( "cbo_set_module_privt", 162, mod_permission_type(),'', '', '',0 ); ?></td>
+        <td colspan="3">Permission Level&nbsp;<?=create_drop_down( "cbo_set_module_privt", 165, mod_permission_type(),'', '', '',0 ); ?></td>
     </tr>
     <tr><td colspan="9" height="10"></td></tr>
     <tr>
@@ -28,9 +28,9 @@ $data=explode("_", $data);
         <th style="border:thin solid #000000;">Approve</th>
     </tr>
     <tr>
-        <td><?=create_drop_down( "cbo_main_menu_name", 260, "select m_menu_id,menu_name from main_menu where position='1' and m_module_id='".$data[1]."' and status = 1 and status_active=1 and is_deleted=0 order by m_menu_id","m_menu_id,menu_name", 1, "-- Select Menu --", selected(), "load_drop_down( 'tools/root_menu_under', this.value+'_'+260, 'cbo_root_menu_under', 'subrootdiv' )" ); ?></td>
-        <td id="subrootdiv"><?=create_drop_down( "cbo_sub_main_menu_name", 155, blank_array(),'', 1, '--- Select ---',1 ); ?></td>
-        <td id="sub_subrootdiv"><?=create_drop_down( "cbo_sub_menu_name", 155, blank_array(),'', 1, '--- Select ---',1 ); ?></td>
+        <td><?=create_drop_down( "cbo_main_menu_name", 165, "select m_menu_id,menu_name from main_menu where position='1' and m_module_id='".$data[1]."' and status = 1 and status_active=1 and is_deleted=0 order by m_menu_id","m_menu_id,menu_name", 1, "-- Select Menu --", selected(), "load_drop_down( 'tools/root_menu_under', this.value+'_'+165, 'cbo_root_menu_under', 'subrootdiv' )" ); ?></td>
+        <td id="subrootdiv"><?=create_drop_down( "cbo_sub_main_menu_name", 165, blank_array(),'', 1, '--- Select ---',1 ); ?></td>
+        <td id="sub_subrootdiv"><?=create_drop_down( "cbo_sub_menu_name", 165, blank_array(),'', 1, '--- Select ---',1 ); ?></td>
         <td><?=create_drop_down( "cbo_visibility", 85, form_permission_type(),'', '', '',1 ); ?></td>
         <td><?=create_drop_down( "cbo_insert", 85, form_permission_type(),'', '', '',1 ); ?></td>
         <td><?=create_drop_down( "cbo_edit", 85, form_permission_type(),'', '', '',1 ); ?></td>

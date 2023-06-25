@@ -160,10 +160,12 @@
                 return response.json();
             })
             .then(data => {
+                showNotification(operation_success_msg[operation]);
                 load_php_data_to_form(data.m_menu_id,'tools/create_menu/get_data_by_id');
                 loadList();
             })
             .catch(error => {
+                showNotification(error,'error');
                 console.error(error);
             });
         }

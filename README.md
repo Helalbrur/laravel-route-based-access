@@ -76,8 +76,10 @@
 <p>This will start the development server, and you can access the application by visiting <a href="http://localhost:8000">http://localhost:8000</a> in your web browser.</p>
 
 <h2>Login Info</h2>
-<pre><code>Email: admin@gmail.com</code></pre>
-<pre><code>Password: 12345678</code></pre>
+<p>Email: </p>
+<pre><code>admin@gmail.com</code></pre>
+<p>Password: </p>
+<pre><code>12345678</code></pre>
 
 
 <h2>Docker</h2>
