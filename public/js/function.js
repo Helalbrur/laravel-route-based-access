@@ -933,6 +933,117 @@ function getBaseUrl()
 }
 
 
+function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_ids )
+{
+  //alert(forms);
+
+
+  // iterate over all of the inputs for the form
+  // element that was passed in
+
+ // alert(document.getElementById('Delete1').getAttribute('onclick'));
+ // return;
+ //default_val== "id,val*id,val*id,val"
+ if (!extra_func) var extra_func="";
+ if (!non_refresh_ids) var non_refresh_ids="";
+ if (!default_val) var default_val="";
+
+  if (forms.length > 0)
+  {
+	   forms=forms.split('*');
+		for (var i=0; i<forms.length; i++)
+		{
+			var form_id=forms[i].split("_");
+			//alert(form_id)
+			var idd=$('#'+forms[i]).find('.formbutton').attr('id');
+			//alert(forms[i]);
+			//alert(idd);
+			var fnc=document.getElementById(idd).getAttribute('onclick').split('(');
+			set_button_status(0, permission, fnc[0], form_id[1]);
+
+			non_refresh_ids_arr = non_refresh_ids.split('*');
+
+			$('#'+forms[i]).find(':input').each(function()
+			{
+				if(jQuery.inArray(this.id, non_refresh_ids_arr)== -1)
+				{
+					var type = this.type;
+					var tag = this.tagName.toLowerCase(); // normalize case
+					// it's ok to reset the value attr of text inputs,
+					// password inputs, and textareas
+					if (type == 'text' || type == 'password' || type == 'hidden' || tag == 'textarea')
+					  this.value = "";
+					// checkboxes and radios need to have their checked state cleared
+					// but should *not* have their 'value' changed
+					else if (type == 'checkbox' || type == 'radio')
+					  this.checked = false;
+					// select elements need to have their 'selectedIndex' property set to -1
+					// (this works for both single and multiple select elements)
+					else if (type == 'select-one')
+					  this.selectedIndex = 0;
+					else if (type == 'hidden')
+					  this.value = "";
+				}
+			});
+		}
+    }
+	if (divs.length > 0)
+  	{
+	   divs=divs.split('*');
+		for (var i=0; i<divs.length; i++)
+		{
+			document.getElementById(divs[i]).innerHTML="";
+		}
+	}
+	if (fields.length > 0)
+  	{
+
+	   fields=fields.split('*');
+		for (var i=0; i<fields.length; i++)
+		{
+
+			var type = document.getElementById(fields[i]).type;
+			var tag = document.getElementById(fields[i]).tagName.toLowerCase(); // normalize case
+			// it's ok to reset the value attr of text inputs,
+
+			if (type == 'text' || type == 'password' || type == 'textarea')
+			  document.getElementById(fields[i]).value = "";
+			// checkboxes and radios need to have their checked state cleared
+			// but should *not* have their 'value' changed
+			else if (type == 'checkbox' || type == 'radio')
+			  document.getElementById(fields[i]).checked = false;
+			// select elements need to have their 'selectedIndex' property set to -1
+			// (this works for both single and multiple select elements)
+			else if (type == 'select-one')
+			  document.getElementById(fields[i]).selectedIndex = 0;
+			else if (type == 'hidden')
+			  document.getElementById(fields[i]).value = "";
+		}
+	}
+	console.log(`default_val.length=${default_val.length}`);
+	if (default_val.length > 0)
+	{
+		default_val=default_val.split('*');
+		for (var i=0; i<default_val.length; i++)
+		{
+			def=default_val[i].split(',');
+			if (!def[2])
+				document.getElementById(def[0]).value = def[1];
+			else
+			{
+				for (var k=1; k<=def[2]; k++)
+				{
+					document.getElementById(def[0]+k).value = def[1];
+				}
+			}
+
+		}
+	}
+	eval(extra_func);
+	//alert('mm')
+}
+
+
 
 
 

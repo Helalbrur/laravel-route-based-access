@@ -150,7 +150,14 @@
             })
             .then(data => {
                 showNotification(operation_success_msg[operation]);
-                load_php_data_to_form(data.m_mod_id,'tools/create_main_module/get_data_by_id');
+                if(operation < 2)
+                {
+                    load_php_data_to_form(data.m_mod_id,'tools/create_main_module/get_data_by_id');
+                }
+                else if (operation == 2)
+                {
+                    reset_form('mainmodule_1','','',1);
+                }
                 show_list_view(0,'show_module_list_view','list_view_div','/tools/show_module_list_view','setFilterGrid("list_view",-1)');
             })
             .catch(error => {
