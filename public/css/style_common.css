@@ -568,7 +568,7 @@ background-color: #CDDCCD;
 	border-radius:8px;
 	margin-top:4px;
 }
-.rpt_table thead th
+/* .rpt_table thead th
 {
 	background-image: -moz-linear-gradient( rgb(194,220,255) 10%, rgb(136,170,214) 96%);
 	background-image: -webkit-linear-gradient( rgb(194,220,255) 10%, rgb(136,170,214) 96%);
@@ -579,7 +579,20 @@ background-color: #CDDCCD;
 	text-align:center;
 	line-height:12px;
 	height:25px;
+} */
+.rpt_table thead th {
+	background-image: -moz-linear-gradient(rgb(230, 230, 230), rgb(194, 220, 255) 10%, rgb(136, 170, 214) 70%);
+	background-image: -webkit-linear-gradient(rgb(155, 235, 80), rgb(200, 210, 245) 30%, rgb(195, 210, 245) 70%);
+	border: 1px solid #8DAFDA;
+	color: #444;
+	font-size: 13px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 12px;
+	height: 25px;
 }
+
+
 /* .rpt_table tfoot th
 {
 	background-image: -moz-linear-gradient( rgb(194,220,255) 10%, rgb(136,170,214) 96%);
