@@ -45,7 +45,7 @@
                                 <?php
                                     $vissible_arr = array(1=>"Visible",2=>"Not visible");
                                 ?>
-                                <select name="cbo_group_name" id="cbo_group_name" class="form-control">
+                                <select name="cbo_module_sts" id="cbo_module_sts" class="form-control">
                                     <option value="0">SELECT</option>
                                     @foreach($vissible_arr as $key=>$value)
                                         <option value="{{$key}}" {{$key==1 ? 'selected' : ''}}>{{$value}}</option>
@@ -66,7 +66,7 @@
                         </div>
                     </form>
                 </div>
-                <div style="width:750px; float:left; margin:auto;padding:10px;" class="card" align="center" id="list_view_div">
+                <div style="max-width:750px; float:left; margin:auto;padding:10px;" class="card table-responsive table-info" align="center" id="list_view_div">
                     <table class="table-bordered table-striped" >
                         <thead>
                             <tr>
