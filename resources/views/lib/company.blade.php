@@ -2,7 +2,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 align-center">Permission Page</h1>
+            <h1 class="m-0 align-center"><strong>Company Profile</strong></h1>
         </div>
         <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -18,67 +18,97 @@
         <div class="card">
             <div class="card-body">
 
-            <h5 class="card-title"></h5>
-            <div class="card-text">
-                <fieldset style="width:500px">
+                
+                <div class="card-text">
                     <form name="mainmodule_1" id="mainmodule_1" autocomplete="off">
-                        <legend>Main Module</legend>
-                        <table width="480">
-                            <tr>
-                                <td class="must_entry_caption">Main Module Name</td>
-                                <td colspan="3">
-                                    <input type="text" name="txt_module_name" id="txt_module_name" class="form-control" style="width:350px" />
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Main Module Link</td>
-                                <td colspan="3"><input type="text" name="txt_module_link" id="txt_module_link" class="form-control" style="width:350px" /></td>
-                            </tr>
-                            <tr>
-                                <td>Sequence</td>
-                                <td>
-                                    <input type="text" name="txt_module_seq" id="txt_module_seq" class="form-control" onKeyDown="javascript:checkKeycode(this.event,2)" style="width:100px" />
-                                </td>
-                                <td >Status</td>
-                                <td>
-
+                        
+                        <div class="form-group row">
+                            <label for="cbo_group_name"  class="col-sm-2 col-form-label must_entry_caption">Group Name</label>
+                            <div class="col-sm-4">
+                                <select name="cbo_group_name" id="cbo_group_name" class="form-control">
+                                    <option value="0">SELECT</option>
                                     <?php
-                                    $vissible_arr = array(1=>"Visible",2=>"Not visible");
-                                    echo create_drop_down( "cbo_module_sts", 145, $vissible_arr,"", 1, "--Select--","","","","","","","","","","",""); ?>
-
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td align="center"  colspan="2" height="20">
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td align="center"  colspan="2">
-                                    <input type="hidden" value="" name="update_id" id="update_id"/>
-                                    <input type="hidden" value="" name="hidden_m_mod_id" id="hidden_m_mod_id"/>
-                                    <?php
-                                        echo load_submit_buttons( $permission, "fnc_main_module", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                        $groups = array();
                                     ?>
-                                </td>
-                            </tr>
-                        </table>
+                                    @foreach($groups as $group)
+                                        <option value="{{$group->id}}">{{$group->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label for="txt_company_name" class="col-sm-2 col-form-label must_entry_caption">Company Name</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="txt_company_name" class="form-control" name="txt_company_name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_company_short_name" class="col-sm-2 col-form-label must_entry_caption">Company Short Name</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="txt_company_short_name" class="form-control" name="txt_company_short_name">
+                            </div>
+                            <label for="txt_email" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-4">
+                                <input type="email" id="txt_email" class="form-control" name="txt_email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_website_name" class="col-sm-2 col-form-label">Website</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="txt_website_name" class="form-control" name="txt_website_name">
+                            </div>
+                            <label for="txt_contact_no" class="col-sm-2 col-form-label">Contact No</label>
+                            <div class="col-sm-4">
+                                <input type="email" id="txt_contact_no" class="form-control" name="txt_contact_no">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_company_address" class="col-sm-2 col-form-label">Address</label>
+                            <div class="col-sm-6">
+                                <input type="text" id="txt_company_address" class="form-control" name="txt_company_address">
+                            </div>
+                            <label for="txt_logo" class="col-sm-2 col-form-label">Logo</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="txt_logo" class="form-control" name="txt_logo">
+                            </div>
+                        </div>
+                        <div class="from-group row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-8">
+                                <?php
+                                    echo load_submit_buttons( $permission, "fnc_main_module", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                ?>
+                            </div>
+                        </div>
                     </form>
-                </fieldset>
-                <div style="width:650px; float:left; margin:auto;" align="center" id="list_view_div">
-                    <fieldset style="width:650px">
-                        <input type="text" id="txt_search" class="form-control" style="width: 200px;" placeholder="Search" onkeyup="searchTableWithRowspan('list_view', 'txt_search')">
-                            <?php
-                            $yes_no = array(1 => "Yes", 2 => "No");
-                            $arr=array(3=>$yes_no);
-                            echo  create_list_view ( "list_view", " Module Name,File Location,Sequence,Visiblity", "150,100,150","600","220",0, "select  main_module,file_name,mod_slno,status,m_mod_id from main_module order by mod_slno", "load_php_data_to_form", "m_mod_id", "", 1, "0,0,0,status", $arr , "main_module,file_name,mod_slno,status", "tools/create_main_module/get_data_by_id", 'setFilterGrid("list_view",-1);','0,0,0,0' ) ;
-                        ?>
-
-                    </fieldset>
                 </div>
-            </div>
+
+                <div class="card-text"  id="list_view_div">
+                    <input type="text" id="txt_search" class="form-control" style="width: 200px;" placeholder="Search" onkeyup="searchTableWithRowspan('list_view', 'txt_search')">
+                        <table class="table table-bordered table-striped rpt_table" >
+                            <thead>
+                                <tr>
+                                    <th width="3%">Sl</th>
+                                    <th width="12%">Group Name</th>
+                                    <th width="15%">Company Name</th>
+                                    <th width="10%">Short Name</th>
+                                    <th width="12%">Email</th>
+                                    <th width="13%">Website</th>
+                                    <th width="13%">Contact No</th>
+                                    <th >Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    $companies = App\Models\Company::get();
+                                ?>
+                                @foreach($companies as $company)
+                                    <tr>
+                                        <td>{{++$sl}}</td>
+                                        <td>{{$company->company_name}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                </div>
             </div>
         </div>
     </div>

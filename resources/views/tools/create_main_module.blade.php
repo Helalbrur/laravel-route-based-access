@@ -2,7 +2,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 align-center">Permission Page</h1>
+            <h1 class="m-0 align-center"><strong>Main Module</strong></h1>
         </div>
         <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -20,63 +20,81 @@
 
             <h5 class="card-title"></h5>
             <div class="card-text">
-                <fieldset style="width:500px">
-                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off">
-                        <legend>Main Module</legend>
-                        <table width="480">
-                            <tr>
-                                <td class="must_entry_caption">Main Module Name</td>
-                                <td colspan="3">
-                                    <input type="text" name="txt_module_name" id="txt_module_name" class="form-control" style="width:350px" />
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Main Module Link</td>
-                                <td colspan="3"><input type="text" name="txt_module_link" id="txt_module_link" class="form-control" style="width:350px" /></td>
-                            </tr>
-                            <tr>
-                                <td>Sequence</td>
-                                <td>
-                                    <input type="text" name="txt_module_seq" id="txt_module_seq" class="form-control" onKeyDown="javascript:checkKeycode(this.event,2)" style="width:100px" />
-                                </td>
-                                <td >Status</td>
-                                <td>
-
-                                    <?php
+                
+                <div class="card">
+                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off" style="padding: 10px;;">
+                        <div class="form-group row">
+                            <label for="txt_module_name" class="col-sm-2 col-form-label must_entry_caption">Main Module Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="txt_module_name" id="txt_module_name" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_module_link" class="col-sm-2 col-form-label">Main Module Link</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="txt_module_link" id="txt_module_link" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_module_seq" class="col-sm-2 col-form-label">Sequence</label>
+                            <div class="col-sm-2">
+                                <input type="text" name="txt_module_seq" id="txt_module_seq" class="form-control" onKeyDown="javascript:checkKeycode(this.event,2)"  />
+                            </div>
+                            <label for="cbo_module_sts" class="col-sm-2 col-form-label">Status</label>
+                            <div class="col-sm-2">
+                                <?php
                                     $vissible_arr = array(1=>"Visible",2=>"Not visible");
-                                    echo create_drop_down( "cbo_module_sts", 145, $vissible_arr,"", 1, "--Select--","","","","","","","","","","",""); ?>
-
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td align="center"  colspan="2" height="20">
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td align="center"  colspan="2">
-                                    <input type="hidden" value="" name="update_id" id="update_id"/>
-                                    <input type="hidden" value="" name="hidden_m_mod_id" id="hidden_m_mod_id"/>
-                                    <?php
-                                        echo load_submit_buttons( $permission, "fnc_main_module", 0,0 ,"reset_form('mainmodule_1','','',1)");
-                                    ?>
-                                </td>
-                            </tr>
-                        </table>
+                                ?>
+                                <select name="cbo_group_name" id="cbo_group_name" class="form-control">
+                                    <option value="0">SELECT</option>
+                                    @foreach($vissible_arr as $key=>$value)
+                                        <option value="{{$key}}" {{$key==1 ? 'selected' : ''}}>{{$value}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="from-group row">
+                            <div class="col-sm-2">
+                                <input type="hidden" value="" name="update_id" id="update_id"/>
+                                <input type="hidden" value="" name="hidden_m_mod_id" id="hidden_m_mod_id"/>
+                            </div>
+                            <div class="col-sm-8">
+                                <?php
+                                    echo load_submit_buttons( $permission, "fnc_main_module", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                ?>
+                            </div>
+                        </div>
                     </form>
-                </fieldset>
-                <div style="width:650px; float:left; margin:auto;" align="center" id="list_view_div">
-                    <fieldset style="width:650px">
-                        <input type="text" id="txt_search" class="form-control" style="width: 200px;" placeholder="Search" onkeyup="searchTableWithRowspan('list_view', 'txt_search')">
+                </div>
+                <div style="width:750px; float:left; margin:auto;padding:10px;" class="card" align="center" id="list_view_div">
+                    <table class="table-bordered table-striped" >
+                        <thead>
+                            <tr>
+                                <th width="10%">Sl</th>
+                                <th width="40%">Module Name</th>
+                                <th width="20%">File Location</th>
+                                <th width="10%">Sequence</th>
+                                <th >Visiblity</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="list_view">
                             <?php
-                            $yes_no = array(1 => "Yes", 2 => "No");
-                            $arr=array(3=>$yes_no);
-                            echo  create_list_view ( "list_view", " Module Name,File Location,Sequence,Visiblity", "150,100,150","600","220",0, "select  main_module,file_name,mod_slno,status,m_mod_id from main_module order by mod_slno", "load_php_data_to_form", "m_mod_id", "", 1, "0,0,0,status", $arr , "main_module,file_name,mod_slno,status", "tools/create_main_module/get_data_by_id", 'setFilterGrid("list_view",-1);','0,0,0,0' ) ;
-                        ?>
-
-                    </fieldset>
+                                $sl = 1;
+                                $yes_no = array(1 => "Yes", 2 => "No");
+                                $mainModules = App\Models\MainModule::get();
+                            ?>
+                            @foreach($mainModules as $module)
+                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$module->m_mod_id}}','tools/create_main_module/get_data_by_id')" style="cursor:pointer" >
+                                    <td>{{$sl++}}</td>
+                                    <td>{{$module->main_module}}</td>
+                                    <td>{{$module->file_name}}</td>
+                                    <td>{{$module->mod_slno}}</td>
+                                    <td>{{$yes_no[$module->status]}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
             </div>
@@ -133,7 +151,7 @@
             .then(data => {
                 showNotification(operation_success_msg[operation]);
                 load_php_data_to_form(data.m_mod_id,'tools/create_main_module/get_data_by_id');
-                show_list_view(0,'show_module_list_view','list_view_div','tools/show_module_list_view','setFilterGrid("list_view",-1)');
+                show_list_view(0,'show_module_list_view','list_view_div','/tools/show_module_list_view','setFilterGrid("list_view",-1)');
             })
             .catch(error => {
                 showNotification(error,'error');
@@ -162,9 +180,10 @@
                 document.getElementById('hidden_m_mod_id').value = data.m_mod_id;
                 //toastr.success('Data has been fetched successfully!', 'Congrats');
                 set_button_status(1, permission, 'fnc_main_module',1);
+                //showNotification('Data has been fetched successfully!');
             })
             .catch(error => {
-                //toastr.error(error, 'Oops!');
+                showNotification(error,'error');
                 console.log(error);
             });
     }

@@ -10,14 +10,17 @@ function setFilterGrid(id)
 	- Calls fn that generates the grid
 =====================================================*/
 {
+	console.log(`setFilterGrid called with table id ${id}`);
 	var row_c=$('#'+id+' tr').length ;
 	if (row_c>0)
 	{
 		var tbl = grabEBI(id);
 		var ref_row, fObj;
+		console.log(`tbl=${tbl.nodeName.toLowerCase()}`);
+			
 		if(tbl != null && (tbl.nodeName.toLowerCase() == "tbody" || tbl.nodeName.toLowerCase() == "table"))
 		{	
-		
+			console.log(`tbl=${tbl}  , tbl.nodeName.toLowerCase() = ${tbl.nodeName.toLowerCase()}`);
 			if(arguments.length>1)
 			{
 				for(var i=0; i<arguments.length; i++)
@@ -952,8 +955,8 @@ function regexpEscape(s)
 	- Many thanks to Cedric Wartel for this fn
 =====================================================*/
 {
-	// traite les caractères spéciaux [\^$.|?*+()
-	//remplace le carctère c par \c
+	// traite les caractï¿½res spï¿½ciaux [\^$.|?*+()
+	//remplace le carctï¿½re c par \c
 	function escape(e)
 	{
 		a = new RegExp('\\'+e,'g');

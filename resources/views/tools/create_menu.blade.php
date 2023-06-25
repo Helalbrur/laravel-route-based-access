@@ -172,12 +172,10 @@
     }
     var permission ='{{$permission}}';
 
-    setFilterGrid("list_view",-1);
 
     function loadList(search='')
     {
-
-        show_list_view (search+'_'+document.getElementById('cbo_module_name').value, 'create_menu_search_list_view', 'search_div', '/tools/create_menu_search_list_view', '');
+        show_list_view (search+'_'+document.getElementById('cbo_module_name').value, 'create_menu_search_list_view', 'search_div', '/tools/create_menu_search_list_view', '','','list_view');
     }
     const load_php_data_to_form = (menuId,url) =>{
         //toastr.success('Welcome to load_php_data_to_form !', 'Congrats');

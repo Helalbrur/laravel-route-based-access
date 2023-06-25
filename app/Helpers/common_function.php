@@ -413,7 +413,13 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
    // dd($nameArray);
     //return  $nameArray;
 
-    $table = '<div><table width="' . $tbl_width . '" cellpadding="0" cellspacing="0" border="' . $tbl_border . '" class="rpt_table table table-stripped table-bordered" id="rpt_table' . $table_id[0] . '" rules="all"><thead><tr>';
+    $table_id1 = "";
+    if(count($table_id)>1) $table_id1 = $table_id[1];
+
+    $table_id0 = "";
+    if(count($table_id)>0) $table_id0 = $table_id[0];
+
+    $table = '<div><table width="' . $tbl_width . '" cellpadding="0" cellspacing="0" border="' . $tbl_border . '" class="rpt_table" id="rpt_table' .$table_id0. '" rules="all"><thead><tr>';
 
     if ($show_sl == 1) {
         $table .= '<th width="50">SL No</th>';
@@ -431,9 +437,9 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
     //dd('h');
     //return $table;
 
-    $tbl_width1 = $tbl_width - 2;
-    $tbl_width = $tbl_width - 22;
-    $table .= ' <div style="max-height:' . $tbl_height . 'px; width:' . $tbl_width1 . 'px; overflow-y:scroll" id="' . $table_id[0]. '"><table width="' . $tbl_width . '" height="" cellpadding="0" cellspacing="0" border="' . $tbl_border . '" class="rpt_table table table-bordered table-striped" id="' . $table_id[0] . '" rules="all"><tbody>';
+    $tbl_width1 = $tbl_width + 18;
+    $tbl_width = $tbl_width ;
+    $table .= ' <div style="max-height:' . $tbl_height . 'px; width:' . $tbl_width1 . 'px; overflow-y:scroll" id="' . $table_id1. '"><table width="' . $tbl_width . '" height="" cellpadding="0" cellspacing="0" border="' . $tbl_border . '" style="" class="rpt_table" id="' . $table_id0 . '" rules="all"><tbody>';
     $j = 0;
 
     if ($controller_file_path == "") {
