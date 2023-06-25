@@ -62,11 +62,12 @@
 	width:230px;
 	overflow:hidden;
 	font-size:12px;
-	background-color:#88AAD6;
+	background-color:#ddd;
 }
 #jQ-menu ul {
 	list-style-type: none;
-	background-color:#88AAD6
+	background-color:#ddd;
+    border: 5px solid whitesmoke;
 }
 
 #jQ-menu a, #jQ-menu li {
@@ -77,11 +78,10 @@
 	padding-left: 3px;
 	border-radius:2px;
 
-	background-image: -webkit-gradient(linear,left bottom,left top,	color-stop(0.07, rgb(100,188,191)),	color-stop(0.5, rgb(226,235,233)),	color-stop(0.96, rgb(89,171,171)));
-	background-image: -moz-linear-gradient(bottom, rgb(136,170,214) 7%, rgb(194,220,255) 10%, rgb(136,170,214) 96%);
-
-	/*background-image: -moz-linear-gradient(bottom, rgb(136,170,214) 7%, rgb(194,220,255) 10%, rgb(136,170,214) 96%);*/
-	/*background-image:linear-gradient(rgb(194, 220, 255) 10%, rgb(136, 170, 214) 96%)*/
+    /* background-image: linear-gradient(to top, rgb(230, 230, 230), rgb(240, 240, 240));
+    background-image: -webkit-linear-gradient(bottom, rgb(230, 230, 230) 7%, rgb(240, 240, 240) 10%, rgb(230, 230, 230) 96%); */
+    background-image: linear-gradient(to top, rgb(240, 240, 240), rgb(250, 250, 250));
+    background-image: -webkit-linear-gradient(bottom, rgb(240, 240, 240) 7%, rgb(250, 250, 250) 10%, rgb(240, 240, 240) 96%);
 
 }
 
