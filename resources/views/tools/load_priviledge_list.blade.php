@@ -8,7 +8,7 @@ $data=explode("_", $data);
             <input type="checkbox" style="visibility:hidden" name="admin_privilege_all" id="admin_privilege_all" value="1">
         </td>
         <td colspan="4" align="left">
-            <input type="button" name="load_data" id="load_data" class="formbutton" value="Load Data" tabindex="10" onclick="show_list_view(document.getElementById('cbo_user_name').value+'_'+document.getElementById('cbo_main_module').value,'load_priv_list_view','load_list_priv','../tools/requires/user_priviledge_controller','')" />
+            <input type="button" name="load_data" id="load_data" class="formbutton" value="Load Data" tabindex="10" onclick="show_list_view(document.getElementById('cbo_user_name').value+'_'+document.getElementById('cbo_main_module').value,'load_priv_list_view','load_list_priv','/tools/load_priv_list_view','')" />
         </td>
         <td colspan="3">Permission Level&nbsp;<?=create_drop_down( "cbo_set_module_privt", 165, mod_permission_type(),'', '', '',0 ); ?></td>
     </tr>

@@ -334,6 +334,71 @@ class UserPrivMstController extends Controller
         }
     }
 
+    public function copyUserPreviledge(Request $request)
+    {
+        DB::beginTransaction();
+        try
+        {
+            $user_name=str_replace("'","",$request->cbo_user_name);
+            $cbo_main_module=str_replace("'","",$request->cbo_main_module);
+            $copyuser_name_arr=explode(',',str_replace("'","",$request->cbo_copyuser_name));
+            
+            foreach($copyuser_name_arr as $copyuser_name)
+            {
+                execute_query( "delete from user_priv_module where user_id ='".$copyuser_name."' and module_id =  $cbo_main_module " );
+                execute_query( "delete from user_priv_mst where user_id='".$copyuser_name."' and m_module_id = $cbo_main_module");
+            
+                $sqlPreModule = sql_select("select id, user_id, module_id, user_only, valid, entry_date from user_priv_module where user_id in($user_name) and module_id =  $cbo_main_module and valid=1");
+                
+                foreach($sqlPreModule as $rowmd)
+                {
+                    UserPrivModule::create([
+                        'user_id' => $copyuser_name,
+                        'module_id' => $rowmd[csf('module_id')],
+                        'user_only' => $rowmd[csf('user_only')],
+                        'valid' => $rowmd[csf('valid')],
+                        'entry_date' => $rowmd[csf('entry_date')],
+                    ]);
+                }
+            
+                
+                
+                $sqlPreMst=sql_select("select id, user_id, main_menu_id, show_priv, delete_priv, save_priv, edit_priv, approve_priv, entry_date, user_only, last_updated_by, inserted_by, last_update_date, valid from user_priv_mst where user_id in($user_name) and m_module_id = $cbo_main_module and valid=1");
+               
+                foreach($sqlPreMst as $rowmst)
+                {
+                    UserPrivMst::create([
+                        'user_id' => $copyuser_name,
+                        'main_menu_id' => $rowmst[csf('main_menu_id')],
+                        'show_priv' => $rowmst[csf('show_priv')],
+                        'delete_priv' => $rowmst[csf('delete_priv')],
+                        'save_priv' => $rowmst[csf('save_priv')],
+                        'edit_priv' => $rowmst[csf('edit_priv')],
+                        'approve_priv' => $rowmst[csf('approve_priv')],
+                        'last_updated_by' => $rowmst[csf('last_updated_by')],
+                        'inserted_by' => Auth::user()->id,
+                        'entry_date' => $rowmst[csf('entry_date')],
+                        'user_only' => $rowmst[csf('user_only')],
+                        'last_update_date' => $rowmst[csf('last_update_date')],
+                        'valid' => $rowmst[csf('valid')]
+                    ]);
+                }
+            }
+            DB::commit();
+            return response()->json(
+                [
+                    'user_id' => $user_name,
+                    'response_no' => 0
+                ]
+            );
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            return response()->json($e->getMessage());
+        }
+    }
+
     /**
      * Display the specified resource.
      */
@@ -369,5 +434,10 @@ class UserPrivMstController extends Controller
     {
         $data = $request->query('data') ?? 0;
         return view('tools.load_priviledge_list',compact('data'));
+    }
+    public function load_priv_list_view(Request $request)
+    {
+        $data = $request->query('data') ?? 0;
+        return view('ajax.load_priv_list_view',compact('data'));
     }
 }

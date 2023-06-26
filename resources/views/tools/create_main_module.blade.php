@@ -20,9 +20,9 @@
 
             <h5 class="card-title"></h5>
             <div class="card-text">
-                
-                <div class="card">
-                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off" style="padding: 10px;;">
+                <!-- #EBF4FA; -->
+                <div class="card" style="background-color: #F5FFFA">
+                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off" style="padding: 10px;">
                         <div class="form-group row">
                             <label for="txt_module_name" class="col-sm-2 col-form-label must_entry_caption">Main Module Name</label>
                             <div class="col-sm-6">
@@ -66,8 +66,8 @@
                         </div>
                     </form>
                 </div>
-                <div style="max-width:750px; float:left; margin:auto;padding:10px;" class="card table-responsive table-info" align="center" id="list_view_div">
-                    <table class="table-bordered table-striped" >
+                <div style="max-width:750px; float:left; margin:auto;padding:10px;background-color:#F5FFFA" class="card table-responsive table-info" align="center" id="list_view_div">
+                    <table class="table table-bordered table-striped" >
                         <thead>
                             <tr>
                                 <th width="10%">Sl</th>

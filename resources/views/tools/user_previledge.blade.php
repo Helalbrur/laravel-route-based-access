@@ -28,12 +28,14 @@
                                 <td width="70">User ID</td>
                                 <td width="200"><?=create_drop_down("cbo_user_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--- Select User ---', 0, "" ); ?></td>
                                 <td width="120">Main Module Name</td>
-                                <td width="200"><?=create_drop_down("cbo_main_module", 180, "select main_module,m_mod_id from main_module where status=1 order by main_module",'m_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'load_priviledge_list', 'load_priviledge')" ); ?></td>
+                                <td width="200"><?=create_drop_down("cbo_main_module", 180, "select main_module,m_mod_id from main_module where status=1 order by main_module",'m_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();" ); ?></td>
 
 
                                 <td width="100">Copy To User ID</td>
-                                <td  width="200"><?=create_drop_down("cbo_copyuser_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--Select To User--', 0, "","","","","","","","","","");//combo_boxes_search ?></td>
-                                <td><input type="button" name="btnPreviledgeCopy" id="btnPreviledgeCopy" class="formbutton" value="Copy Previledge for New User" onClick="fnc_copy_previledge(0);" /></td>
+                                <td  width="200"><?=create_drop_down("cbo_copyuser_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--Select To User--', 0, ""); ?></td>
+                                <td>
+                                    <input type="button" name="btnPreviledgeCopy" id="btnPreviledgeCopy" class="formbutton" value="Copy Previledge for New User" onClick="fnc_copy_previledge(0);" />
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="7" height="20"></td>
@@ -137,6 +139,60 @@
             });
         }
     }
+    function fnc_copy_previledge(operation)
+    {
+        if (form_validation('cbo_user_name*cbo_copyuser_name','User Name*Copy To User ID')==false)
+		{
+			return;
+		}
+        else
+        {
+            try {
+                var data = JSON.stringify({
+                    cbo_main_module:$("#cbo_main_module").val(),
+                    cbo_user_name:$("#cbo_user_name").val(),
+                    cbo_copyuser_name:$("#cbo_copyuser_name").val(),
+                    _token:'{{csrf_token()}}'
+                });
+                console.log(data);
+            } catch (error) {
+                console.log(error);
+                showNotification(error,'error');
+                return;
+            }
+            fetch(`/tools/copy_user_previledge`, {
+                method: 'POST' ,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
+                },
+                body: data
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                showNotification(operation_success_msg[operation]);
+                var param = document.getElementById('cbo_user_name').value+'_'+document.getElementById('cbo_main_module').value;
+            })
+            .catch(error => {
+                console.error(error);
+                showNotification(error,'error');
+            });
+        }
+    }
+    function load_prev_list()
+    {
+        try {
+            $("#load_list_priv").html("");
+        } catch (error) {
+            console.log(error);
+        }
+    }
 </script>
-<script>set_multiselect('cbo_user_name','0','0','','0');</script>
+<script>set_multiselect('cbo_user_name*cbo_copyuser_name','0*0','0*0','','0');</script>
 @endsection

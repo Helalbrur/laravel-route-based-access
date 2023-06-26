@@ -98,7 +98,8 @@
                             </thead>
                             <tbody>
                                 <?php
-                                    $companies = App\Models\Company::get();
+                                    //$companies = App\Models\Company::get();
+                                    $companies = array();
                                 ?>
                                 @foreach($companies as $company)
                                     <tr>

@@ -1,4 +1,11 @@
 @extends('layouts.app')
+@section('content_header')
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0 align-center"><strong>Menu Management</strong></h1>
+        </div>
+    </div><!-- /.row -->
+@endsection()
 @section('content')
 <?php $selected = 0; ?>
 <div class="row">
@@ -8,86 +15,139 @@
 
             <h5 class="card-title"></h5>
             <div class="card-text">
-                <fieldset style="width:500px">
-                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off">
-                        <legend>Menu Management</legend>
-                        <table width="480">
-                            <tr>
-                                <td width="100" class="must_entry_caption">Main Module Name</td>
-                                <td >
-                                    <?php echo create_drop_down( "cbo_module_name", 150, "select m_mod_id, main_module from main_module where status=1 order by main_module","m_mod_id,main_module", 1, "-- Select Module --", '0', "" );
-                                    //load_drop_down( 'requires/menu_create_controller', this.value, 'cbo_root_menu', 'root_menu_div' )
-                                    ?>
-
-                                </td>
-                                <td width="100"> Approval Menu</td>
-                                <td width="130"><input type="checkbox" id="chk_report_menu" name="chk_report_menu" ></td>
-                            </tr>
-                            <tr>
-                                <td>Menu Name</td>
-                                <td colspan="3"><input type="text" name="txt_menu_name" id="txt_menu_name" class="text_boxes" style="width:250px" /></td>
-                            </tr>
-                            <tr>
-                                <td>Menu Link</td>
-                                <td colspan="3"><input type="text" name="txt_menu_link" id="txt_menu_link" class="text_boxes" style="width:250px" /></td>
-                            </tr>
-                            <tr>
-                                <td>Root Menu</td>
-                                <td id="root_menu_div" colspan="3"><?php echo create_drop_down( "cbo_root_menu", 250, "select m_menu_id,menu_name from main_menu where position='1' order by menu_name","m_menu_id,menu_name", 1, "-- Select Menu Name --", $selected, "load_drop_down( 'tools/root_menu_under', this.value, 'tools/root_menu_under', 'subrootdiv' )" ); ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Root Menu Under</td>
-                                <td id="subrootdiv" colspan="3"><?php echo create_drop_down( "cbo_root_menu_under", 250, "select m_menu_id,menu_name from main_menu where position='2' order by menu_name","m_menu_id,menu_name", 1, "-- Select Menu Name --", $selected, "" ); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Product Nature</td>
-                                <td id="subrootdiv" colspan="3"><?php echo create_drop_down( "cbo_fabric_nature", 250, get_item_category(),"", 1,"--All Fabrics--",$selected, "","","113" ); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Sequence</td>
-                                <td colspan="2">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <input type="text" name="txt_menu_seq" id="txt_menu_seq" class="text_boxes_numeric" style="width:115px" />
-                                            </td>
-                                            <td>Status</td>
-                                            <td><?php echo create_drop_down( "cbo_menu_sts", 103, get_row_status(),'', '', '', 1 ); ?></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td >
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Mobile Menu</td>
-                                <td colspan="3"><input type="checkbox" id="chk_mobile_menu" name="chk_mobile_menu" ></td>
-                            </tr>
-                            <tr>
-                                <td>Page Link</td>
-                                <td colspan="3"><input type="text" name="txt_page_link" id="txt_page_link" class="text_boxes" style="width:238px" /></td>
-                            </tr>
-                            <tr>
-                                <td>Page Short Name</td>
-                                <td colspan="3"><input type="text" name="txt_short_name" id="txt_short_name" class="text_boxes" style="width:238px" /></td>
-                            </tr>
-
-                            <tr>
-
-                                <td align="center"  colspan="4">
-                                    <input type="hidden" value="" name="update_id" id="update_id"/>
-                                    <input type="hidden" value="" name="hidden_m_mod_id" id="hidden_m_mod_id"/>
-                                    <input type="hidden" value="" name="id" id="id"/>
+                <div class="card" style="background-color: #F5FFFA">
+                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off" style="padding: 10px;;">
+                        <div class="form-group row">
+                            <label for="cbo_module_name" class="col-sm-2 col-form-label must_entry_caption">Main Module Name</label>
+                            <div class="col-sm-4">
+                                <select name="cbo_module_name" id="cbo_module_name" class="form-control" onchange="load_drop_down( 'tools/load_main_menu', this.value, 'tools/load_main_menu', 'root_menu_div' )">
                                     <?php
-                                        echo load_submit_buttons( $permission, "fnc_menu_create", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                        $modules = App\Models\MainModule::get();
                                     ?>
-                                </td>
-                            </tr>
-                        </table>
+                                    <option value="0">SELECT</option>
+                                    @foreach($modules as $module)
+                                        <option value="{{$module->m_mod_id}}" >{{$module->main_module}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="col-sm-2">
+                                <div class="row inline">
+                                    <label for="chk_report_menu" class="form-label">Approval Menu&nbsp;&nbsp;</label>
+                                    <input type="checkbox" id="chk_report_menu" name="chk_report_menu">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="txt_menu_name" class="col-sm-2 col-form-label">Menu Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="txt_menu_name" id="txt_menu_name" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_menu_link" class="col-sm-2 col-form-label">Menu Link</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="txt_menu_link" id="txt_menu_link" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="cbo_root_menu" class="col-sm-2 col-form-label">Root Menu</label>
+                            <div class="col-sm-6" id="root_menu_div">
+                                <select name="cbo_root_menu" id="cbo_root_menu" class="form-control" onchange="load_drop_down( 'tools/load_sub_menu_under_menu', this.value, 'tools/load_sub_menu_under_menu', 'subrootdiv' )">
+                                    <?php
+                                        $menus = DB::table('main_menu')->where('position',1)->orderBy('menu_name','asc')->get();
+                                    ?>
+                                    <option value="0">SELECT</option>
+                                    @foreach($menus as $menu)
+                                        <option value="{{$menu->m_menu_id}}" >{{$menu->menu_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="cbo_root_menu" class="col-sm-2 col-form-label">Root Menu Under</label>
+                            <div class="col-sm-6" id="subrootdiv">
+                                <select name="cbo_root_menu_under" id="cbo_root_menu_under" class="form-control" >
+                                    <?php
+                                        $sub_menus = DB::table('main_menu')->where('position',2)->orderBy('menu_name','asc')->get();
+                                    ?>
+                                    <option value="0">SELECT</option>
+                                    @foreach($sub_menus as $menu)
+                                        <option value="{{$menu->m_menu_id}}" >{{$menu->menu_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="cbo_fabric_nature" class="col-sm-2 col-form-label">Product Nature</label>
+                            <div class="col-sm-6">
+                                <select name="cbo_fabric_nature" id="cbo_fabric_nature" class="form-control" >
+                                    <?php
+                                        $sub_menus = DB::table('main_menu')->where('position',2)->orderBy('menu_name','asc')->get();
+                                    ?>
+                                    <option value="0">SELECT</option>
+                                    @foreach(get_item_category() as $category_id =>$category_name)
+                                        <option value="{{$category_id}}" >{{$category_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="txt_menu_seq" class="col-sm-2 col-form-label">Sequence</label>
+                            <div class="col-sm-3">
+                                <input type="number" name="txt_menu_seq" id="txt_menu_seq" class="form-control" />
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                <div class="row inline">
+                                    <label for="cbo_menu_sts" class="col-sm-4 col-form-label">Status</label>
+                                    <div class="col-sm-8">
+                                        <select name="cbo_menu_sts" id="cbo_menu_sts"  class="form-control">
+                                            
+                                            <option value="0">SELECT</option>
+                                            @foreach(get_row_status() as $status_id =>$status_name)
+                                                <option value="{{$status_id}}" {{ $status_id == 1 ? 'selected' : ''}} >{{$status_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="chk_mobile_menu" class="col-sm-2 col-form-label">Mobile Menu</label>
+                            <div class="col-sm-6">
+                                <input type="checkbox" id="chk_mobile_menu" name="chk_mobile_menu" >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="chk_mobile_menu" class="col-sm-2 col-form-label">Page Link</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="txt_page_link" id="txt_page_link" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txt_short_name" class="col-sm-2 col-form-label">Page Short Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="txt_short_name" id="txt_short_name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2">
+                                <input type="hidden" value="" name="update_id" id="update_id"/>
+                                <input type="hidden" value="" name="hidden_m_mod_id" id="hidden_m_mod_id"/>
+                                <input type="hidden" value="" name="id" id="id"/>
+                            </div>
+                            <div class="col-sm-6">
+                                <?php
+                                    echo load_submit_buttons( $permission, "fnc_menu_create", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                ?>
+                            </div>
+                        </div>
                     </form>
-                </fieldset>
+                </div>
                 <div style="width:750px; float:left; margin:auto;" align="center" id="list_view_div">
                     <fieldset style="width:750px">
                         <input type="text" id="txt_search" class="form-control" style="width: 200px;" placeholder="Search" onkeyup="loadList(this.value)">

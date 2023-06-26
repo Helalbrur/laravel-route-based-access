@@ -57,7 +57,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tools/create_menu_search_list_view',[MainMenuController::class,'create_menu_search_list_view']);
     Route::get('tools/root_menu_under',[MainMenuController::class,'root_menu_under']);
     Route::get('tools/sub_root_menu_under',[MainMenuController::class,'sub_root_menu_under']);
+    Route::get('tools/load_main_menu',[MainMenuController::class,'load_main_menu']);
+    Route::get('tools/load_sub_menu_under_menu',[MainMenuController::class,'load_sub_menu_under_menu']);
     Route::get('tools/load_priviledge_list',[UserPrivMstController::class,'load_priviledge_list']);
+    Route::get('tools/load_priv_list_view',[UserPrivMstController::class,'load_priv_list_view']);
+    Route::post('tools/copy_user_previledge',[UserPrivMstController::class,'copyUserPreviledge']);
     //permision route = > only admin user can access
     Route::middleware(['CheckPermission:View Permission'])->group(function () {
        Route::get('/permission', [PermissionController::class,'index'])->name('permission.index');

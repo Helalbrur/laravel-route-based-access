@@ -916,7 +916,7 @@ function load_drop_down( plink, data, action, container ) {
         document.getElementById(container).innerHTML = html;
     })
     .catch(error => {
-        //toastr.error(error, 'Oops!');
+        showNotification(error,'error');
         console.log(error);
     });
 }
@@ -1043,6 +1043,14 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 	//alert('mm')
 }
 
+function get_php_form_data( id, type, path )
+{
+	console.log(id,type,path);
+	// //alert(id);return;
+	// ajax.requestFile = path+'.php?data=' + id + '&action=' + type;	// Specifying which file to get
+	// ajax.onCompletion = eval_result;	// Specify function that will be executed after file has been found
+	// ajax.runAJAX();
+}
 
 
 

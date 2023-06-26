@@ -4,6 +4,9 @@
 	height:20px;
 	background-color:#B8C7B9;
 }
+.fltrow>td{
+	padding: 0px;
+}
 .btnflt{ /* button appearance */
 	font-size:11px;
 	margin:0 2px 0 2px; padding:0 1px 0 1px;

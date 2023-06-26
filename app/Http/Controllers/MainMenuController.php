@@ -60,7 +60,7 @@ class MainMenuController extends Controller
                 'root_menu'=>$request->cbo_root_menu,
                 'sub_root_menu'=>$request->cbo_root_menu_under ?? '',
                 'menu_name'=>$request->txt_menu_name,
-                'm_menu_id'=>$request->m_menu_id,
+                'm_menu_id'=>$m_menu_id,
                 'f_location'=>$request->txt_menu_link ?? '',
                 'position'=>$position,
                 'status'=>$request->cbo_menu_sts,
@@ -229,6 +229,25 @@ class MainMenuController extends Controller
         $sub_root_menu = $data[0] ?? 0;
         $width = $data[1] ?? 165;
         echo create_drop_down( "cbo_sub_menu_name", $width, "select m_menu_id,menu_name from main_menu where position='3' and sub_root_menu='$sub_root_menu' and status=1 and status_active=1 and is_deleted=0 order by m_menu_id","m_menu_id,menu_name", 1, "-- Select Sub Menu --", 0 , "" );
+        exit();
+    }
+
+    function load_main_menu(Request $request)
+    {
+        $data = $request->query('data') ?? '';
+        $data = explode("_",$data);
+        $module_id = $data[0] ?? 0;
+        $menus = DB::table('main_menu')->where('m_module_id',$module_id)->where('position',1)->orderBy('menu_name','asc')->get();
+        return view('ajax.load_main_menu',compact('menus'));
+        
+    }
+    function load_sub_menu_under_menu(Request $request)
+    {
+        $data = $request->query('data') ?? '';
+        $data = explode("_",$data);
+        $root_menu = $data[0] ?? 0;
+        $sub_menus = DB::table('main_menu')->where('root_menu',$root_menu)->where('position',2)->orderBy('menu_name','asc')->get();
+        return view('ajax.sub_root_menu_under',compact('sub_menus'));
         exit();
     }
 }

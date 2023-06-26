@@ -1733,5 +1733,6 @@ div.alert-error
 	overflow: hidden !important;
 	z-index: 999 !important;
 }
-
-
+.form-group {
+	margin-bottom: .1rem;
+}
