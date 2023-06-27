@@ -34,7 +34,7 @@
                                 <td width="100">Copy To User ID</td>
                                 <td  width="200"><?=create_drop_down("cbo_copyuser_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--Select To User--', 0, ""); ?></td>
                                 <td>
-                                    <input type="button" name="btnPreviledgeCopy" id="btnPreviledgeCopy" class="formbutton" value="Copy Previledge for New User" onClick="fnc_copy_previledge(0);" />
+                                    <input type="button" name="btnPreviledgeCopy" id="btnPreviledgeCopy" class="btn btn-sm btn-info" value="Copy Previledge for New User" onClick="fnc_copy_previledge(0);" />
                                 </td>
                             </tr>
                             <tr>

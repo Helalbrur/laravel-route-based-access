@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\CommonController;
 use App\Models\UserPrivMst;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MainModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserPrivMstController;
@@ -47,9 +49,12 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 
     //permision route = > only admin user can access
     Route::resource('/company', CompanyController::class);
+    Route::resource('/group', GroupController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/populate_common_data',[CommonController::class,'populateCommonData']);
+    Route::get('show_common_list_view',[CommonController::class,'show_common_list_view']);
     Route::post('/tools/create_main_module/update', [MainModuleController::class,'create_main_module_update']);
     Route::get('/tools/create_main_module/get_data_by_id/{id}',[MainModuleController::class,'get_data_by_id']);
     Route::get('tools/create_menu/get_data_by_id/{id}',[MainMenuController::class,'get_data_by_id']);
@@ -62,6 +67,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('tools/load_priviledge_list',[UserPrivMstController::class,'load_priviledge_list']);
     Route::get('tools/load_priv_list_view',[UserPrivMstController::class,'load_priv_list_view']);
     Route::post('tools/copy_user_previledge',[UserPrivMstController::class,'copyUserPreviledge']);
+
+    Route::get('lib/get_lib_group/{id}',[GroupController::class,'get_lib_group']);
+
     //permision route = > only admin user can access
     Route::middleware(['CheckPermission:View Permission'])->group(function () {
        Route::get('/permission', [PermissionController::class,'index'])->name('permission.index');

@@ -38,6 +38,7 @@ operation_success_msg[33]="Data is Un-Acknowledged Successfully";
 operation_success_msg[34]="Data is Not Acknowledged Successfully";
 operation_success_msg[35]="Data is Not Un-Acknowledged Successfully";
 operation_success_msg[36]="Copy Successfully";
+operation_success_msg[37]="Data is not Populated";
 
 function  showNotification(message,type='success',second = 5)
 {
@@ -49,16 +50,16 @@ function  showNotification(message,type='success',second = 5)
 		showConfirmButton: false,
 		timer: second * 1000,
 		willOpen: () => {
-		console.log('Modal will open'); // Perform actions before the modal opens
+			//console.log('Modal will open'); // Perform actions before the modal opens
 		},
 		didOpen: () => {
-		console.log('Modal is open'); // Perform actions after the modal opens
+			//console.log('Modal is open'); // Perform actions after the modal opens
 		},
 		willClose: () => {
-		//error();
+			//error();
 		},
 		didClose: () => {
-		console.log('Modal is closed'); // Perform actions after the modal closes
+			//console.log('Modal is closed'); // Perform actions after the modal closes
 		}
 	});
 }
@@ -559,13 +560,13 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
     var base_url = getBaseUrl();
 
     var url = `${base_url}${path}?data=${data}&action=${action}`;
-	console.log(`list view url : ${url}`);
+	//console.log(`list view url : ${url}`);
     fetch(url, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'text/plain',
-        'Access-Control-Allow-Origin': '*'
-    }
+		method: 'GET',
+		headers: {
+			'Content-Type': 'text/plain',
+			'Access-Control-Allow-Origin': '*'
+		}
     })
     .then(response => response.text())
     .then(html => {
@@ -582,7 +583,7 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
     })
     .catch(error => {
 		showNotification(error,'error');
-    	console.log(error);
+    	//console.log(error);
     });
 
 
@@ -917,7 +918,7 @@ function load_drop_down( plink, data, action, container ) {
     })
     .catch(error => {
         showNotification(error,'error');
-        console.log(error);
+        //console.log(error);
     });
 }
 
@@ -936,17 +937,14 @@ function getBaseUrl()
 function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_ids )
 {
   //alert(forms);
-
-
   // iterate over all of the inputs for the form
   // element that was passed in
-
- // alert(document.getElementById('Delete1').getAttribute('onclick'));
- // return;
- //default_val== "id,val*id,val*id,val"
- if (!extra_func) var extra_func="";
- if (!non_refresh_ids) var non_refresh_ids="";
- if (!default_val) var default_val="";
+	// alert(document.getElementById('Delete1').getAttribute('onclick'));
+	// return;
+	//default_val== "id,val*id,val*id,val"
+	if (!extra_func) var extra_func="";
+	if (!non_refresh_ids) var non_refresh_ids="";
+	if (!default_val) var default_val="";
 
   if (forms.length > 0)
   {
@@ -1020,7 +1018,7 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 			  document.getElementById(fields[i]).value = "";
 		}
 	}
-	console.log(`default_val.length=${default_val.length}`);
+	//console.log(`default_val.length=${default_val.length}`);
 	if (default_val.length > 0)
 	{
 		default_val=default_val.split('*');
@@ -1045,15 +1043,176 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 
 function get_php_form_data( id, type, path )
 {
-	console.log(id,type,path);
+	//console.log(id,type,path);
 	// //alert(id);return;
 	// ajax.requestFile = path+'.php?data=' + id + '&action=' + type;	// Specifying which file to get
 	// ajax.onCompletion = eval_result;	// Specify function that will be executed after file has been found
 	// ajax.runAJAX();
 }
+function get_form_data(data,files ='')
+{
+	try
+	{
+		const formData = new FormData();
+		if(files.length > 0 )
+		{
+			var exp_files = files.split(',');
+			for(var ex_f of exp_files)
+			{
+				var fileInput = document.getElementById(ex_f);
+				if (fileInput.files.length > 0)
+				{
+					for (let i = 0; i < fileInput.files.length; i++) {
+						var file = fileInput.files[i];
+						formData.append('files[]', file);
+					}
+				}
+			}
+		}
 
+		if(data.length > 0 )
+		{
+			var exp = data.split(",");
+			for(var ex of exp)
+			{
+				formData.append(ex, $("#"+ex).val());
+			}
+		}
 
+		return formData;
+	} catch (error) {
+		//console.log(`error = ${error}`);
+		return "";
+	}
+}
 
+function readImage(input,displayImage)
+{
+	if (input.files && input.files[0])
+	{
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			$(`#${displayImage}`).css('display','block');
+			$(`#${displayImage}`).attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
 
+async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='')
+{
+	var return_value = -1 ;
+	var url = `/populate_common_data`;
+	await fetch(url,{
+		method: "POST" ,
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRF-TOKEN': _token
+		},
+		body: JSON.stringify({
+			filter_column_name:filter_column_name,
+			filter_column_value:filter_column_value,
+			table_name:table_name,
+			column_names:database_column_name,
+			_token:_token,
+			others: others
+		})
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		return response.json();
+	})
+	.then(data => {
+		if(data.code == 18)
+		{
+			if(database_column_name.length > 0 && form_field_name.length > 0)
+			{
+				var db_columns = database_column_name.split("*");
+				var form_columns = form_field_name.split("*");
 
+				for( var row_no = 0 ; row_no < Math.min(db_columns.length,form_columns.length); row_no++)
+				{
+					var db_col = db_columns[row_no];
+					//console.log(`${form_columns[row_no]} = ${data.data[db_col]}`);
+					document.getElementById(form_columns[row_no]).value = data.data[db_col];
+				}
+				return_value = 1 ;
+				showNotification(operation_success_msg[data.code]);
+			}
+			if (Object.keys(data.others_data).length > 0) {
+				for (var key in data.others_data) {
+				  if (data.others_data.hasOwnProperty(key)) {
+					var value = data.others_data[key];
+					var element = document.getElementById(key);
+					if (element) {
+					  // Check if the element exists before setting its value
+					  if (element.tagName === 'IMG') {
+						// If the element is an image tag, set the src attribute
+						element.src = value;
+						element.style.display = 'block'; // Set display to block
+					  } else {
+						// For other types of elements, set the value attribute
+						element.value = value;
+					  }
+					}
+				  }
+				}
+			}  
+		}
+		else
+		{
+			showNotification(operation_success_msg[data.code],'error');
+		}
+	})
+	.catch(error => {
 
+		showNotification(error,'error');
+		//console.log(error);
+	});
+	return return_value;
+}
+
+function save_update_delete(operation,url,request_data,column_name='',show_list_view_name='',show_list_view_div_id ='',reset_form_id='')
+{
+	
+
+	fetch(url,request_data)
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		return response.json();
+	})
+	.then(data => {
+		showNotification(operation_success_msg[data.code]);
+		if(operation < 2)
+		{
+			if(column_name.length > 0)
+			{
+				if(reset_form_id.length > 0)
+				{
+					reset_form(reset_form_id,'','',1);
+				}
+				load_php_data_to_form(data.data[column_name]);
+			}
+		}
+		else if (operation == 2)
+		{
+			if(reset_form_id.length > 0)
+			{
+				reset_form(reset_form_id,'','',1);
+			}
+		}
+		if(show_list_view_name.length > 0 && show_list_view_div_id.length > 0)
+		{
+			show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
+		}
+	})
+	.catch(error => {
+		showNotification(error,'error');
+		console.error(error);
+	});
+}

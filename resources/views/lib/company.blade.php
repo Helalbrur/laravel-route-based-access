@@ -28,10 +28,10 @@
                                 <select name="cbo_group_name" id="cbo_group_name" class="form-control">
                                     <option value="0">SELECT</option>
                                     <?php
-                                        $groups = array();
+                                        $groups = App\Models\Group::pluck('group_name', 'id');
                                     ?>
-                                    @foreach($groups as $group)
-                                        <option value="{{$group->id}}">{{$group->name}}</option>
+                                    @foreach($groups as $id => $group_name)
+                                        <option value="{{ $id }}">{{ $group_name }}</option>
                                     @endforeach
                                 </select>
                             </div>

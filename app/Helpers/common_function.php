@@ -174,7 +174,7 @@ function return_library_array($query, $id_fld_name, $data_fld_name, $new_conn = 
     /*$query=explode("where", $query);
     $nameArray=sql_select( $query[0] );*/
     $new_array = array();
-    $nameArray = sql_select($query, '', $new_conn);
+    $nameArray = sql_select($query);
     foreach ($nameArray as $result) {
 
         if ($result[csf($data_fld_name)] == "MnS") {
@@ -575,7 +575,12 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
                 //$split = get_split_length($data_array_name_arr[$i][$show_data] ?? "", $td_width[$i] ?? "");
                 if ($field_printed_from_array[$i] == $qry_field_list[$i])
                 {
-                    $table .= '<td ' . $align . ' width="' . $td_width[$i] . '"><p>' . $data_array_name_arr[$i][$show_data] ?? '' . '</p></td>';
+                    $name_from_array = "";
+                    if(!empty($data_array_name_arr[$i][$show_data]))
+                    {
+                        $name_from_array = $data_array_name_arr[$i][$show_data];
+                    }
+                    $table .= '<td ' . $align . ' width="' . $td_width[$i] . '"><p>' . $name_from_array . '</p></td>';
                 }
                 else
                 {

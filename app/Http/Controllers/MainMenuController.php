@@ -173,11 +173,30 @@ class MainMenuController extends Controller
         else
         {
             $sql= "select m_menu_id,m_module_id,menu_name,root_menu,sub_root_menu,position,fabric_nature,slno from main_menu  where lower(menu_name) like '$menu_name' and m_module_id='$m_module_id' and status !=0 and status_active=1 and is_deleted=0 order by root_menu,sub_root_menu,slno ASC";
-           // echo $sql;die;
+            $result = sql_select($sql);
+            $menu_sub_menu_ids = array();
+            foreach($result as $row)
+            {
+                if(!empty($row[csf('root_menu')]))
+                {
+                    $menu_sub_menu_ids[$row[csf('root_menu')]] = $row[csf('root_menu')];
+                }
+                else if(!empty($row[csf('sub_root_menu')]))
+                {
+                    $menu_sub_menu_ids[$row[csf('sub_root_menu')]] = $row[csf('sub_root_menu')];
+                }
+            }
+           //echo $sql;die;
             $m_module_id=return_library_array( "select m_mod_id, main_module from main_module",'m_mod_id','main_module');
-            $arr=array (1=>$m_module_id,5=>get_item_category());
+            $main_menu_arr= array();
+            if(count($menu_sub_menu_ids))
+            {
+                $main_menu_arr=return_library_array( "select m_menu_id, menu_name from main_menu where m_menu_id in (".implode(",",$menu_sub_menu_ids).")",'m_menu_id','menu_name');
+            }
+            
+            $arr=array (1=>$m_module_id,3=>$main_menu_arr,4=>$main_menu_arr,5=>get_item_category());
             //print_r( get_item_category());
-            echo  create_list_view ( "list_view", "ID,Module Name,Menu Name,Root Menu,Sub Root Menu,Fabric Nature,Position,Seq.", "60,120,200,50,50,75,50,50","720","300",1, $sql, "load_php_data_to_form", "m_menu_id","", 1, "0,m_module_id,0,0,0,fabric_nature,0,0", $arr , "m_menu_id,m_module_id,menu_name,root_menu,sub_root_menu,fabric_nature,position,slno", "tools/create_menu/get_data_by_id", 'setFilterGrid("list_view",-1);',"0,0,0,0,1,0,1,1" ) ;
+            echo  create_list_view ( "list_view", "ID,Module Name,Menu Name,Root Menu,Sub Root Menu,Fabric Nature,Position,Seq.", "60,100,150,100,100,75,50,50","720","300",1, $sql, "load_php_data_to_form", "m_menu_id","", 1, "0,m_module_id,0,root_menu,sub_root_menu,fabric_nature,0,0", $arr , "m_menu_id,m_module_id,menu_name,root_menu,sub_root_menu,fabric_nature,position,slno", "tools/create_menu/get_data_by_id", 'setFilterGrid("list_view",-1);',"0,0,0,0,1,0,1,1" ) ;
         }
         exit();
     }
