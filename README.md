@@ -1,12 +1,26 @@
-<h1 align="center">Laravel Route-based Access</h1>
+# Laravel User-based Page Permissions
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Laravel-10.0-orange" alt="Laravel Version">
-  <img src="https://img.shields.io/badge/PHP-8.1-blue" alt="PHP Version">
-  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
-</p>
+[![Laravel Version](https://img.shields.io/badge/Laravel-10.0-orange)](#)
+[![PHP Version](https://img.shields.io/badge/PHP-8.1-blue)](#)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-<p align="center">A Laravel project demonstrating route-based access control for role-based permissions.</p>
+A Laravel project demonstrating user-based page permissions for controlling access to different pages and their associated actions.
+
+## Overview
+
+The Laravel User-based Page Permissions project provides a flexible solution for managing user permissions at the page level. It allows you to define permissions for each user, specifying which pages they can access and what actions they can perform (e.g., show, save, update, delete). This fine-grained access control ensures that users only have access to the pages and actions relevant to their role or responsibilities.
+
+With this project, you can easily set up user management, define page-level permissions, and enforce access restrictions throughout your application. It provides a secure environment by allowing you to control user access to specific pages and actions, enhancing data protection and maintaining data integrity.
+
+## Features
+
+- User management with role assignment
+- Page-level permissions for show, save, update, and delete actions
+- Secure authentication and authorization mechanisms
+- Easy configuration and customization
+- Integration with Laravel's authentication system
+
+
 
 <h2>Installation</h2>
 
