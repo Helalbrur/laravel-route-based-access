@@ -15,7 +15,7 @@ With this project, you can easily set up user management, define page-level perm
 ## Features
 
 - User management with role assignment
-- Page-level permissions for show, save, update, and delete actions
+- Fine-grained User-based Page Permissions with Show, Save, Update, and Delete Actions
 - Secure authentication and authorization mechanisms
 - Easy configuration and customization
 - Integration with Laravel's authentication system
