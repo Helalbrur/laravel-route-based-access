@@ -61,6 +61,9 @@
 <pre><code>php artisan migrate:fresh --seed
 </code></pre>
 
+<p>To load Helper functions run : </p>
+<pre><code>composer dump-autoload
+</code></pre>
 
 
 <h2>Usage</h2>
