@@ -67,6 +67,7 @@ function set_button_status(is_update, permission, submit_func, btn_id, show_prin
 {
     if(!show_print) var show_print="";
 	permission=permission.split('_');
+	console.log(`permission=${permission} , is_update = ${is_update} , btn_id = ${btn_id}`)
 
 	if (is_update==1)   //Update Mode
 	{
@@ -227,138 +228,6 @@ function set_date_range(mon)
 function daysInMonth( month, year )
 {
 	return new Date(year, month, 0).getDate();
-}
-
-function set_button_status(is_update, permission, submit_func, btn_id, show_print)
-{
-    if(!show_print) var show_print="";
-	permission=permission.split('_');
-
-	if (is_update==1)   //Update Mode
-	{
-		 if (permission[0] == 2 )
-		 {
-		 	$('#save'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#save'+btn_id).attr('onclick', 'show_no_permission_msg(0)');
-		 }
-		 else
-		 {
-			 $('#save'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#save'+btn_id).attr('onclick', 'show_button_disable_msg(0)');
-		 }
-		if( permission[1] == 2 )
-		{
-			 $('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#update'+btn_id).attr('onclick', 'show_no_permission_msg(1)');
-		}
-		else
-		{
-			 $('#update'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#update'+btn_id).attr('onclick', submit_func+'(1)');
-		}
-		if( permission[2] == 2 )
-		{
-			 $('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#Delete'+btn_id).attr('onclick', 'show_no_permission_msg(2)');
-		}
-		else
-		{
-			 $('#Delete'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#Delete'+btn_id).attr('onclick', submit_func+'(2)');
-		}
-		if(permission[3] == 2)
-		 {
-			  $('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			  $('#approve'+btn_id).attr('onclick', 'show_no_permission_msg(3)');
-		 }
-		 else
-		 {
-			  $('#approve'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			  $('#approve'+btn_id).attr('onclick', submit_func+'(3)');
-		 }
-
-		if( permission[4] == 2 )
-		{
-			 $('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#Print').attr('onclick', 'show_no_permission_msg(4)');
-		}
-		else
-		{
-			 $('#Print'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#Print'+btn_id).attr('onclick', submit_func+'(4)');
-		}
-	}
-	else   //New Insert Mode
-	{
-		 if (permission[0] == 2 )
-		 {
-		 	$('#save'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#save'+btn_id).attr('onclick', 'show_no_permission_msg(0)');
-		 }
-		 else
-		 {
-			 $('#save'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#save'+btn_id).attr('onclick', submit_func+'(0)');
-		 }
-		 if (permission[1] == 2 )
-		 {
-		 	$('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#update'+btn_id).attr('onclick', 'show_no_permission_msg(1)');
-		 }
-		 else
-		 {
-			 $('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#update'+btn_id).attr('onclick', 'show_button_disable_msg(1)');
-		 }
-		 if (permission[2] == 2 )
-		 {
-		 	$('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#Delete'+btn_id).attr('onclick', 'show_no_permission_msg(2)');
-		 }
-		 else
-		 {
-			 $('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#Delete'+btn_id).attr('onclick', 'show_button_disable_msg(2)');
-		 }
-		 if (permission[3] == 2 )
-		 {
-		 	$('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#approve'+btn_id).attr('onclick', 'show_no_permission_msg(3)');
-		 }
-		 else
-		 {
-			 $('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#approve'+btn_id).attr('onclick', 'show_button_disable_msg(3)');
-		 }
-
-		 if(show_print==1)
-		 {
-			if( permission[4] == 2 )
-			{
-				 $('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-				 $('#Print').attr('onclick', 'show_no_permission_msg(4)');
-			}
-			else
-			{
-				 $('#Print'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-				 $('#Print'+btn_id).attr('onclick', submit_func+'(4)');
-			}
-		 }
-		 else
-		 {
-			 if ( permission[4] == 2 )
-			 {
-				$('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-				$('#Print'+btn_id).attr('onclick', 'show_no_permission_msg(4)');
-			 }
-			 else
-			 {
-				 $('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-				 $('#Print'+btn_id).attr('onclick', 'show_button_disable_msg(4)');
-			 }
-		 }
-	}
-	return;
 }
 
 function form_validation(control,msg_text)
@@ -934,14 +803,8 @@ function getBaseUrl()
 }
 
 
-function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_ids )
+function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_ids)
 {
-  //alert(forms);
-  // iterate over all of the inputs for the form
-  // element that was passed in
-	// alert(document.getElementById('Delete1').getAttribute('onclick'));
-	// return;
-	//default_val== "id,val*id,val*id,val"
 	if (!extra_func) var extra_func="";
 	if (!non_refresh_ids) var non_refresh_ids="";
 	if (!default_val) var default_val="";
@@ -954,8 +817,8 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 			var form_id=forms[i].split("_");
 			//alert(form_id)
 			var idd=$('#'+forms[i]).find('.formbutton').attr('id');
-			//alert(forms[i]);
-			//alert(idd);
+			console.log(`idd=${idd}`);
+			console.log(`permission=${permission}`);
 			var fnc=document.getElementById(idd).getAttribute('onclick').split('(');
 			set_button_status(0, permission, fnc[0], form_id[1]);
 
@@ -982,6 +845,12 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 					else if (type == 'hidden')
 					  this.value = "";
 				}
+			});
+			$('#' + forms[i]).find('img').each(function() {
+				$(this).css('display', 'none');
+			});
+			$('#' + forms[i]).find(':file').each(function() {
+				$(this).val(''); // Clear the value of the input file element
 			});
 		}
     }
@@ -1054,17 +923,19 @@ function get_form_data(data,files ='')
 	try
 	{
 		const formData = new FormData();
-		if(files.length > 0 )
+		if (files.length > 0)
 		{
 			var exp_files = files.split(',');
-			for(var ex_f of exp_files)
+			for (var ex_f of exp_files)
 			{
 				var fileInput = document.getElementById(ex_f);
 				if (fileInput.files.length > 0)
 				{
-					for (let i = 0; i < fileInput.files.length; i++) {
+					for (let i = 0; i < fileInput.files.length; i++)
+					{
 						var file = fileInput.files[i];
 						formData.append('files[]', file);
+						console.log(`file=${file}`);
 					}
 				}
 			}
@@ -1137,10 +1008,18 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 				{
 					var db_col = db_columns[row_no];
 					//console.log(`${form_columns[row_no]} = ${data.data[db_col]}`);
-					document.getElementById(form_columns[row_no]).value = data.data[db_col];
+					var element = document.getElementById(form_columns[row_no]);
+					if (element)
+					{
+						element.value = data.data[db_col];
+					}
+					else
+					{
+						throw new Error(`${form_columns[row_no]} not found.`);
+					}
 				}
 				return_value = 1 ;
-				showNotification(operation_success_msg[data.code]);
+				showNotification(operation_success_msg[data.code],'info',2);
 			}
 			if (Object.keys(data.others_data).length > 0) {
 				for (var key in data.others_data) {
@@ -1158,6 +1037,10 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 						element.value = value;
 					  }
 					}
+					else
+					{
+						throw new Error(`${key} not found.`);
+					}
 				  }
 				}
 			}  
@@ -1169,7 +1052,7 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 	})
 	.catch(error => {
 
-		showNotification(error,'error');
+		showNotification(error,'warning');
 		//console.log(error);
 	});
 	return return_value;
@@ -1177,8 +1060,6 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 
 function save_update_delete(operation,url,request_data,column_name='',show_list_view_name='',show_list_view_div_id ='',reset_form_id='')
 {
-	
-
 	fetch(url,request_data)
 	.then(response => {
 		if (!response.ok) {
@@ -1203,6 +1084,7 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		{
 			if(reset_form_id.length > 0)
 			{
+				console.log(`reset_form_id=${reset_form_id}`);
 				reset_form(reset_form_id,'','',1);
 			}
 		}
@@ -1213,6 +1095,28 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	})
 	.catch(error => {
 		showNotification(error,'error');
-		console.error(error);
 	});
+}
+
+function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_list_view_div_id='')
+{
+	if(form_validation(sys_no,'Sys No/Id')==false)
+	{
+		showNotification("Sys No/Id Can't be empty",'error');
+		return;
+	}
+	else
+	{
+		sys_no = $(`#${sys_no}`).val();
+		var title = 'File List View';
+		var page_link='/common_file_popup?sys_no='+sys_no+'&page_name='+page_name+'&file_type='+file_type;
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=600px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			if(show_list_view_name.length > 0 && show_list_view_div_id.length > 0)
+			{
+				show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
+			}
+		}
+	}
 }

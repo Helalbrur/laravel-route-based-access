@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MainMenu extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'main_menu';
     protected $fillable = [
         'm_menu_id','m_module_id','root_menu','sub_root_menu','menu_name','f_location','fabric_nature','position','status','slno','report_menu','is_mobile_menu','m_page_name','m_page_short_name','inserted_by','insert_date','updated_by','update_date','status_active','is_deleted'

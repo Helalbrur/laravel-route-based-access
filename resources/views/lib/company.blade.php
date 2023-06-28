@@ -20,7 +20,7 @@
 
                 
                 <div class="card-text">
-                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off">
+                    <form name="mainform_1" id="mainform_1" autocomplete="off">
                         
                         <div class="form-group row">
                             <label for="cbo_group_name"  class="col-sm-2 col-form-label must_entry_caption">Group Name</label>
@@ -67,48 +67,62 @@
                             </div>
                             <label for="txt_logo" class="col-sm-2 col-form-label">Logo</label>
                             <div class="col-sm-2">
-                                <input type="file" id="txt_logo" class="form-control" name="txt_logo">
+                                <input type="file" name="files[]" id="txt_file" multiple   class="form-control" >
                             </div>
                         </div>
                         <div class="from-group row">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-2">
+                                <input type="hidden" name="update_id" id="update_id">
+                            </div>
+                            <div class="col-sm-5">
                                 <?php
-                                    echo load_submit_buttons( $permission, "fnc_main_module", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                    echo load_submit_buttons( $permission, "fnc_company_name", 0,0 ,"reset_form('mainform_1','','',1)");
                                 ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="button" class="btn btn-sm btn-info" value="Show Files" onclick="show_files('update_id','company_profile','','show_company_list_view','list_view_div');">
+                            </div>
+                            <div class="col-sm-3">
+                                <img src="" width="150" height="150" id="displayImage" style="display: none;">
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <div class="card-text"  id="list_view_div">
-                    <input type="text" id="txt_search" class="form-control" style="width: 200px;" placeholder="Search" onkeyup="searchTableWithRowspan('list_view', 'txt_search')">
-                        <table class="table table-bordered table-striped rpt_table" >
-                            <thead>
-                                <tr>
-                                    <th width="3%">Sl</th>
-                                    <th width="12%">Group Name</th>
-                                    <th width="15%">Company Name</th>
-                                    <th width="10%">Short Name</th>
-                                    <th width="12%">Email</th>
-                                    <th width="13%">Website</th>
-                                    <th width="13%">Contact No</th>
-                                    <th >Address</th>
+                <div class="card table-responsive table-info"  id="list_view_div" style="background-color:#F5FFFA">
+                    <table class="table table-bordered table-striped" >
+                        <thead>
+                            <tr>
+                                <th width="3%">Sl</th>
+                                <th width="12%">Group Name</th>
+                                <th width="15%">Company Name</th>
+                                <th width="10%">Short Name</th>
+                                <th width="12%">Email</th>
+                                <th width="13%">Website</th>
+                                <th width="13%">Contact No</th>
+                                <th >Address</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list_view">
+                            <?php
+                                $sl = 1;
+                                $companies = App\Models\Company::get();
+                            
+                            ?>
+                            @foreach($companies as $company)
+                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$company->id}}')" style="cursor:pointer">
+                                    <td>{{$sl++}}</td>
+                                    <td>{{$company->company_name}}</td>
+                                    <td>{{$company->group->group_name}}</td>
+                                    <td>{{$company->company_short_name}}</td>
+                                    <td>{{$company->email}}</td>
+                                    <td>{{$company->website}}</td>
+                                    <td>{{$company->contact_no}}</td>
+                                    <td>{{$company->address}}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                    //$companies = App\Models\Company::get();
-                                    $companies = array();
-                                ?>
-                                @foreach($companies as $company)
-                                    <tr>
-                                        <td>{{++$sl}}</td>
-                                        <td>{{$company->company_name}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -119,84 +133,54 @@
 
 @section('script')
 <script>
-    function fnc_main_module( operation )
+     var permission ='{{$permission}}';
+    function fnc_company_name( operation )
     {
-        if (form_validation('txt_module_name*txt_module_seq','Module Name*Module Sequence')==false)
+        if (form_validation('cbo_group_name*txt_company_name*txt_company_short_name','Group Name*Company Name*Company Short Name')==false)
         {
             return;
         }
         else
         {
-            var method ="";
-            if(operation==0)  method ="POST";
-            else if(operation==1)  method ="PUT";
-            else if(operation==2)  method ="DELETE";
+            var formData = get_form_data('cbo_group_name,txt_company_name,txt_company_short_name,txt_email,txt_website_name,txt_contact_no,txt_company_address,update_id','txt_file');
+            var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
             {
                 param = `/${document.getElementById('update_id').value}`;
+                if(operation == 1) formData.append('_method', 'PUT');
+                else formData.append('_method', 'DELETE');
             }
-            var data=get_submitted_data_string('txt_module_name*txt_module_link*txt_module_seq*cbo_module_sts*update_id');
-            console.log(data);
-            fetch(`/tools/create_main_module${param}`, {
-                method: method ,
+            formData.append('_token', '{{csrf_token()}}');
+            var url = `/lib/company${param}`;
+            var requestData = {
+                method: method,
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
                 },
-                body: JSON.stringify({
-                    txt_module_name:$("#txt_module_name").val(),
-                    txt_module_link:$("#txt_module_link").val(),
-                    txt_module_seq:$("#txt_module_seq").val(),
-                    cbo_module_sts:$("#cbo_module_sts").val(),
-                    update_id:$("#update_id").val(),
-                    hidden_m_mod_id:$("#hidden_m_mod_id").val(),
-                    _token:'{{csrf_token()}}'
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                load_php_data_to_form(data.m_mod_id,'tools/create_main_module/get_data_by_id');
-                show_list_view(0,'show_module_list_view','list_view_div','tools/show_module_list_view','setFilterGrid("list_view",-1)');
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                body: formData
+            };
+
+            save_update_delete(operation,url,requestData,'id','show_company_list_view','list_view_div','mainform_1');
         }
     }
-    var permission ='{{$permission}}';
-    const load_php_data_to_form = (menuId,url) =>{
-        //toastr.success('Welcome to load_php_data_to_form !', 'Congrats');
-          var url = `/${url}/${menuId}`;
-          fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Do something with the response data
-                document.getElementById('txt_module_name').value = data.main_module;
-                document.getElementById('txt_module_link').value = data.file_name;
-                document.getElementById('txt_module_seq').value = data.mod_slno;
-                document.getElementById('cbo_module_sts').value = data.status;
-                document.getElementById('update_id').value = data.id;
-                document.getElementById('hidden_m_mod_id').value = data.m_mod_id;
-                //toastr.success('Data has been fetched successfully!', 'Congrats');
-                set_button_status(1, permission, 'fnc_main_module',1);
-            })
-            .catch(error => {
-                //toastr.error(error, 'Oops!');
-                console.log(error);
-            });
+
+    const load_php_data_to_form =async (menuId) =>
+    {
+        var columns = 'group_id*comapnay_name*company_short_name*email*website*contact_no*address*id';
+        var fields = 'cbo_group_name*txt_company_name*txt_company_short_name*txt_email*txt_website_name*txt_contact_no*txt_company_address*update_id';
+        var others = 'image_uploads,sys_no,id,file_name,displayImage,company_profile';
+       var get_return_value = await populate_form_data('id',menuId,'lib_company',columns,fields,'{{csrf_token()}}');
+       if(get_return_value == 1)
+       {
+         set_button_status(1, permission, 'fnc_company_name',1);
+       }
     }
+
+    $("#txt_file").change(function() {
+        readImage(this,'displayImage');
+    });
     setFilterGrid("list_view",-1);
 </script>
 @endsection

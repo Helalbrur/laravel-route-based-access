@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -93,9 +94,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </footer>
 </div>
 <!-- ./wrapper -->
-
-<!-- REQUIRED SCRIPTS -->
-@yield('script')
 <script>
   $(".must_entry_caption").each(function( index ) {
     var ht=" <font color='blue'>"+$(this).html()+"</font>";
@@ -103,5 +101,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $(this).attr('title','Must Entry Field.');
   });
 </script>
+<!-- REQUIRED SCRIPTS -->
+@yield('script')
+
 </body>
 </html>

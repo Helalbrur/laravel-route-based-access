@@ -16,7 +16,7 @@
             <div class="card-text">
                 <!-- #EBF4FA; -->
                 <div class="card" style="background-color: #F5FFFA">
-                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off" style="padding: 10px;">
+                    <form name="groupprofile_1" id="groupprofile_1" autocomplete="off" style="padding: 10px;">
                         
                         <div class="form-group row">
                             <label for="txt_group_name" class="col-sm-2 col-form-label must_entry_caption">Group Name</label>
@@ -78,15 +78,15 @@
                         </div>
                         
                         <div class="from-group row" style="margin-top: 20px;">
-                            <div class="col-sm-2">
+                            <div class="col-sm-1">
                                 <input type="hidden" value="" name="update_id" id="update_id"/>
-                                <input type="hidden" value="" name="hidden_m_mod_id" id="hidden_m_mod_id"/>
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-5">
                                 <?php
-                                    echo load_submit_buttons( $permission, "fnc_lib_group", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                    echo load_submit_buttons( $permission, "fnc_lib_group", 0,0 ,"reset_form('groupprofile_1','','',1)");
                                 ?>
                             </div>
+                            <div class="col-sm-2"> <input type="button" class="btn btn-sm btn-info" value="Show Files" onclick="show_files('update_id','group_profile','','show_group_list_view','list_view_div');"></div>
                         </div>
                     </form>
                 </div>
@@ -106,28 +106,43 @@
                         <tbody id="list_view">
                             <?php
                                 $sl = 1;
+                                $images = DB::table('image_uploads as b')
+                                            ->where('b.page_name', '=', 'group_profile')
+                                            ->select('b.sys_no', 'b.file_name', 'b.file_type','b.id')
+                                            ->get();
+                                $group_images = array();
+                                foreach($images as $image)
+                                {
+                                    $group_images[$image->sys_no][$image->id]['file_name'] = $image->file_name;
+                                    $group_images[$image->sys_no][$image->id]['file_type'] = $image->file_type;
+                                }
+                                
                                 $groups = DB::table('lib_group as a')
-                                                ->leftJoin('image_uploads as b', function ($join) {
-                                                    $join->on('a.id', '=', 'b.sys_no')
-                                                        ->where('b.page_name', '=', 'group_profile')
-                                                        ->where('b.file_type', '=', 1);
-                                                })
-                                                ->whereNull('a.deleted_at')
-                                                ->select('a.*', 'b.file_name','b.file_type')
-                                                ->get();
+                                            ->whereNull('a.deleted_at')
+                                            ->select('a.*')
+                                            ->get();
                             ?>
+
                             @foreach($groups as $group)
-                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$group->id}}')" style="cursor:pointer" >
+                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$group->id}}')" style="cursor:pointer">
                                     <td>{{$sl++}}</td>
                                     <td>{{$group->group_name}}</td>
                                     <td>{{$group->group_short_name}}</td>
                                     <td>{{$group->contact_no}}</td>
                                     <td>{{$group->address}}</td>
                                     <td>
-                                        @if(!empty($group->file_name) && $group->file_type==1)
-                                            <a href="{{asset($group->file_name)}}" download><img src="{{asset($group->file_name)}}" height="100" width="100" download></a>
-                                        @elseif(!empty($group->file_name))
-                                            <a href="{{asset($group->file_name)}}" download><img src="{{asset('image/download.png')}}" height="45" width="55"></a>
+                                        @if(isset($group_images[$group->id]) && count($group_images[$group->id]) > 0)
+                                            @foreach($group_images[$group->id] as $imageUpload)
+                                                @if(!empty($imageUpload['file_name']) && $imageUpload['file_type'] == 1) 
+                                                    <a href="{{asset($imageUpload['file_name'])}}" download>
+                                                        <img src="{{asset($imageUpload['file_name'])}}" height="100" width="100" download>
+                                                    </a>
+                                                @elseif(!empty($imageUpload['file_name']))
+                                                    <a href="{{asset($imageUpload['file_name'])}}" download>
+                                                        <img src="{{asset('image/download.png')}}" height="45" width="55">
+                                                    </a>
+                                                @endif
+                                            @endforeach
                                         @endif
                                     </td>
                                 </tr>
@@ -175,16 +190,17 @@
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_group_list_view','list_view_div');
+            save_update_delete(operation,url,requestData,'id','show_group_list_view','list_view_div','groupprofile_1');
         }
     }
 
     const load_php_data_to_form =async (menuId) =>
     {
+        reset_form('groupprofile_1','','',1);
         var columns = 'group_name*group_short_name*website*address*email*contact_no*contact_person*country_id*id';
         var fields = 'txt_group_name*txt_group_short*txt_website*txt_address*txt_email*txt_contact_no*txt_contact_person*cbo_country_id*update_id';
-        var others = 'image_uploads,sys_no,id,file_name,displayImage,group_profile';
-       var get_return_value = await populate_form_data('id',menuId,'lib_group',columns,fields,'{{csrf_token()}}',others);
+        var others =  'image_uploads,sys_no,id,file_name,displayImage,group_profile';
+       var get_return_value = await populate_form_data('id',menuId,'lib_group',columns,fields,'{{csrf_token()}}');
        if(get_return_value == 1)
        {
          set_button_status(1, permission, 'fnc_lib_group',1);

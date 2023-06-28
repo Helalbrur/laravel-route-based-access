@@ -8,9 +8,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\LibColorController;
+use App\Http\Controllers\LibCountryController;
+use App\Http\Controllers\LibSizeController;
 use App\Http\Controllers\MainModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserPrivMstController;
+use App\Models\ImageUpload;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,11 +55,20 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     //permision route = > only admin user can access
     Route::resource('/company', CompanyController::class);
     Route::resource('/group', GroupController::class);
+
+    Route::resource('/general/color', LibColorController::class);
+    Route::resource('/general/size', LibSizeController::class);
+    Route::resource('/general/country', LibCountryController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/populate_common_data',[CommonController::class,'populateCommonData']);
     Route::get('show_common_list_view',[CommonController::class,'show_common_list_view']);
+    Route::get('common_file_popup',[CommonController::class,'common_file_popup']);
+
+    Route::delete('/file_delete/{id}', [ImageUploadController::class,'destroy']);
+
+
     Route::post('/tools/create_main_module/update', [MainModuleController::class,'create_main_module_update']);
     Route::get('/tools/create_main_module/get_data_by_id/{id}',[MainModuleController::class,'get_data_by_id']);
     Route::get('tools/create_menu/get_data_by_id/{id}',[MainMenuController::class,'get_data_by_id']);

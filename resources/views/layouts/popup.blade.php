@@ -16,6 +16,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('adminlte/css/adminlte.min.css')}}">
   <link rel="stylesheet" href="{{asset('modal_window/modal_window.css')}}">
+
+  {{-- filtergrid style --}}
+   <link rel="stylesheet" href="{{asset('css/filtergrid.css')}}">
+
+  <link href="{{asset('sweetalert2/sweetalert2.css')}}" rel="stylesheet" type="text/css" />
+  <script src="{{asset('sweetalert2/sweetalert2.all.js')}}" type="text/javascript"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -57,6 +63,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/js/adminlte.min.js')}}"></script>
 <script src="{{asset('modal_window/modal_window.js')}}"></script>
+<script src="{{asset('js/tablefilter.js')}}"></script>
+<script src="{{asset('js/function.js')}}"></script>
 @yield('script')
 </body>
 </html>

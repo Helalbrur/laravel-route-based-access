@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('website')->nullable();
             $table->string('email')->nullable();
-            $table->string('image')->nullable();
+            $table->string('contact_no')->nullable();
+            $table->string('logo')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

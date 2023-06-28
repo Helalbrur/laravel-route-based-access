@@ -14,29 +14,83 @@ class ImageUpload extends Model
 {
     use HasFactory;
     protected $fillable = ['file_name','file_type','sys_no','page_name','created_by'];
-    public static function fileUploads($query,$sys_no,$page_name,$file_type=1) // Taking input image as parameter
+    
+    public static function fileUpload($files, $sys_no, $page_name,$ex='')
     {
-        try
-        {
-            $image_name = time();
-            $ext = strtolower($query->getClientOriginalExtension()); // You can use also getClientOriginalName()
-            $image_full_name = $image_name.'.'.$ext;
-            $upload_path = 'common_uploads/';    //Creating Sub directory in Public folder to put image
-            $image_url = $upload_path.$image_full_name;
-            $success = $query->move($upload_path,$image_full_name);
-            ImageUpload::create([
-                'file_name' => $image_url,
-                'file_type' => $file_type,
-                'sys_no' => $sys_no,
-                'page_name' => $page_name,
-                'created_by' =>Auth::user()->id
-            ]);
-        }
-        catch(Exception $e)
-        {
+        try {
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+            foreach ($files as $file)
+            {
+                $original_name = $file->getClientOriginalName();
+                $file_size = $file->getSize();
+                $ext = strtolower($file->getClientOriginalExtension());
+                $image_full_name = $original_name . '_' . $file_size . '_' . $page_name . '.' . $ext;
+                $upload_path = 'common_uploads/';
+                $image_url = $upload_path . $image_full_name;
 
+                // Check if the file already exists in the target directory
+                if (!file_exists($upload_path . $image_full_name)) {
+                    $success = $file->move($upload_path, $image_full_name);
+
+                    // Determine the file type based on the extension
+                    if (in_array(strtolower($ext), $imageExtensions)) {
+                        $file_type = 1; // Image file type
+                    } else {
+                        $file_type = 2; // Other file types (e.g., PDF)
+                    }
+
+                    ImageUpload::create([
+                        'file_name' => $image_url,
+                        'file_type' => $file_type,
+                        'sys_no' => $sys_no,
+                        'page_name' => $page_name,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+        } catch (Exception $e) {
+            // Handle the exception appropriately
         }
     }
+
+    public static function fileUploads($files, $sys_no, $page_name,$ex='')
+    {
+        try {
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+            foreach ($files as $file)
+            {
+                $original_name = $file->getClientOriginalName();
+                $file_size = $file->getSize();
+                $ext = strtolower($file->getClientOriginalExtension());
+                $image_full_name = $original_name . '_' . $file_size . '_' . $page_name . '.' . $ext;
+                $upload_path = 'common_uploads/';
+                $image_url = $upload_path . $image_full_name;
+
+                // Check if the file already exists in the target directory
+                if (!File::exists($image_url)) {
+                    $success = $file->move($upload_path, $image_full_name);
+
+                    // Determine the file type based on the extension
+                    if (in_array(strtolower($ext), $imageExtensions)) {
+                        $file_type = 1; // Image file type
+                    } else {
+                        $file_type = 2; // Other file types (e.g., PDF)
+                    }
+
+                    ImageUpload::create([
+                        'file_name' => $image_url,
+                        'file_type' => $file_type,
+                        'sys_no' => $sys_no,
+                        'page_name' => $page_name,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+        } catch (Exception $e) {
+            dd($e);
+        }
+    }
+
     public static function removeFiles($sys_no,$page_name,$file_type=1)
     {
         try

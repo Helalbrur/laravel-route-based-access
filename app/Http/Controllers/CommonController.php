@@ -75,36 +75,42 @@ class CommonController extends Controller
                 ->first();
             $others = explode("*",$request->input('others'));
             $other_data = [];
-            foreach($others as $other)
+            if(count($others) > 0)
             {
-               $od = explode(",",$other);
-               $table = $od[0];
-                $joinColumn = $od[1];
-                $columnToRetrieve = $od[3];
-                $alias = $od[4];
-                
-                $condition_value = $common_data->{$od[2]};
-
-                $ord = DB::table($table)
-                    ->where($joinColumn, $condition_value);
-
-                    if($table == 'image_uploads')
-                    {
-                        $ord =  $ord->where('page_name', $od[5]);
-                    }
-                $ord  = $ord->select(DB::raw($columnToRetrieve))
-                            ->first();
-                
-                if (!empty($ord->{$columnToRetrieve}))
+                foreach($others as $other)
                 {
-                    if($table == 'image_uploads')
-                    {
-                        $other_data[$alias] = asset($ord->{$columnToRetrieve});
-                    }
-                    else
-                    {
-                        $other_data[$alias] =$ord->{$columnToRetrieve};
-                    }
+                $od = explode(",",$other);
+                if(count($od) > 4)
+                {
+                        $table = $od[0];
+                        $joinColumn = $od[1];
+                        $columnToRetrieve = $od[3];
+                        $alias = $od[4];
+                        
+                        $condition_value = $common_data->{$od[2]};
+
+                        $ord = DB::table($table)
+                            ->where($joinColumn, $condition_value);
+
+                            if($table == 'image_uploads')
+                            {
+                                $ord =  $ord->where('page_name', $od[5]);
+                            }
+                        $ord  = $ord->select(DB::raw($columnToRetrieve))
+                                    ->first();
+                        
+                        if (!empty($ord->{$columnToRetrieve}))
+                        {
+                            if($table == 'image_uploads')
+                            {
+                                $other_data[$alias] = asset($ord->{$columnToRetrieve});
+                            }
+                            else
+                            {
+                                $other_data[$alias] =$ord->{$columnToRetrieve};
+                            }
+                        }
+                }
                 }
             }
 
@@ -117,9 +123,10 @@ class CommonController extends Controller
         }
         catch(Exception $e)
         {
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
             return response()->json([
                 'code'=>37,
-                'message'=>$e->getMessage(),
+                'message'=>$error_message,
                 'data'=> [
                 ]
             ]);
@@ -129,5 +136,12 @@ class CommonController extends Controller
     {
         $show_list_view = $request->query('data') ?? 'show_common_list_view';
         return view('ajax.'.$show_list_view);
+    }
+    public function common_file_popup(Request $request)
+    {
+        $sys_no = $request->query('sys_no') ?? '';
+        $page_name = $request->query('page_name') ?? '';
+        $file_type = $request->query('file_type') ?? '';
+        return view('ajax.common_file_popup',compact('sys_no','page_name','file_type'));
     }
 }

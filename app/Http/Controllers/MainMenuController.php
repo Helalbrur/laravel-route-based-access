@@ -155,9 +155,30 @@ class MainMenuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MainMenu $mainMenu)
+    public function destroy(Request $request,MainMenu $mainMenu)
     {
-        //
+        //dd($request->all());
+        try
+        {
+            $menu = MainMenu::find($request->update_id);
+            $menu->delete();
+            return response()->json([
+                'code'=>2,
+                'message'=>'success',
+                'data'=>$menu
+            ]);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            return response()->json([
+                'code'=>37,
+                'message'=>$error_message,
+                'data'=> [
+                ]
+            ]);
+        }
     }
     public function create_menu_search_list_view(Request $request)
     {
@@ -238,7 +259,7 @@ class MainMenuController extends Controller
         $data = explode("_",$data);
         $root_menu = $data[0] ?? 0;
         $width = $data[1] ?? 165;
-        echo create_drop_down( "cbo_root_menu_under", $width, "select m_menu_id,menu_name from main_menu where position='2' and root_menu ='$root_menu' order by menu_name","m_menu_id,menu_name", 1, "-- Select Menu Name --", 0, "load_drop_down( 'tools/sub_root_menu_under', this.value, 'sub_root_menu_under', 'sub_subrootdiv' )" );
+        echo create_drop_down( "cbo_root_menu_under", $width, "select m_menu_id,menu_name from main_menu where position='2' and root_menu ='$root_menu' and status_active = 1 and is_deleted = 0 order by menu_name","m_menu_id,menu_name", 1, "-- Select Menu Name --", 0, "load_drop_down( 'tools/sub_root_menu_under', this.value, 'sub_root_menu_under', 'sub_subrootdiv' )" );
 	    exit();
     }
     function sub_root_menu_under(Request $request)

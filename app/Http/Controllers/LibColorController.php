@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\LibColor;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreLibColorRequest;
 use App\Http\Requests\UpdateLibColorRequest;
 
@@ -11,9 +14,11 @@ class LibColorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $menu_id = $request->query('mid') ?? 0;
+        $permission = getPagePermission($menu_id);
+        return view('lib.general.color',compact('permission'));
     }
 
     /**
@@ -27,9 +32,33 @@ class LibColorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLibColorRequest $request)
+    public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try
+        {
+            $lib_color=LibColor::create([
+                'color_name'=>$request->input('txt_color_name')
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'code'=>0,
+                'message'=>'success',
+                'data'=>$lib_color
+            ]);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            return response()->json([
+                'code'=>10,
+                'message'=>$error_message,
+                'data'=> [
+                ]
+            ]);
+        }
     }
 
     /**
@@ -51,16 +80,60 @@ class LibColorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLibColorRequest $request, LibColor $libColor)
+    public function update(Request $request, LibColor $color)
     {
-        //
+        DB::beginTransaction();
+        try
+        {
+            $color->update([
+                'color_name'=>$request->input('txt_color_name')
+            ]);
+    
+            DB::commit();
+            return response()->json([
+                'code'=>1,
+                'message'=>'success',
+                'data'=>$color
+            ]);
+        }
+        catch(Exception $e)
+        {
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            return response()->json([
+                'code'=>10,
+                'message'=>$error_message,
+                'data'=> [
+                ]
+            ]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibColor $libColor)
+    public function destroy(LibColor $color)
     {
-        //
+        DB::beginTransaction();
+        try
+        {
+            $color->delete();
+            DB::commit();
+            return response()->json([
+                'code'=>2,
+                'message'=>'success',
+                'data'=>[]
+            ]);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            return response()->json([
+                'code'=>10,
+                'message'=>$error_message,
+                'data'=> [
+                ]
+            ]);
+        }
     }
 }

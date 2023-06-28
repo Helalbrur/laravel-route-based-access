@@ -56,10 +56,7 @@ class GroupController extends Controller
             if ($request->hasFile('files'))
             {
                 $files = $request->file('files');
-                foreach ($files as $file) 
-                {
-                    ImageUpload::fileUploads($file,$lib_group->id,'group_profile');
-                }
+                ImageUpload::fileUploads($files,$lib_group->id,'group_profile');
             }
 
             DB::commit();
@@ -132,10 +129,7 @@ class GroupController extends Controller
             if ($request->hasFile('files'))
             {
                 $files = $request->file('files');
-                foreach ($files as $file) 
-                {
-                    ImageUpload::fileUploads($file,$group->id,'group_profile');
-                }
+                ImageUpload::fileUploads($files,$group->id,'group_profile');
             }
 
             DB::commit();

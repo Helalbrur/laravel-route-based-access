@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use File;
+use Exception;
 use App\Models\ImageUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ImageUploadController extends Controller
 {
@@ -58,8 +60,31 @@ class ImageUploadController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ImageUpload $imageUpload)
+    public function destroy(Request $request,ImageUpload $image)
     {
-        //
+        DB::beginTransaction();
+        try
+        {
+            $record = ImageUpload::find($request->id);
+            if(File::exists($record->file_name)) {
+                File::delete($record->file_name);
+            }
+            $record->delete();
+            DB::commit();
+            return response()->json([
+                'code'=>2,
+                'message'=>'success',
+                'data'=>$record
+            ]);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            return response()->json([
+                'code'=>10,
+                'message'=>$e->getMessage(),
+                'data'=> $image
+            ]);
+        }
     }
 }

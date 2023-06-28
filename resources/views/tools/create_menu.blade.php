@@ -12,11 +12,10 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-
             <h5 class="card-title"></h5>
             <div class="card-text">
                 <div class="card" style="background-color: #F5FFFA">
-                    <form name="mainmodule_1" id="mainmodule_1" autocomplete="off" style="padding: 10px;;">
+                    <form name="main_menu_1" id="main_menu_1" autocomplete="off" style="padding: 10px;;">
                         <div class="form-group row">
                             <label for="cbo_module_name" class="col-sm-2 col-form-label must_entry_caption">Main Module Name</label>
                             <div class="col-sm-4">
@@ -142,7 +141,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <?php
-                                    echo load_submit_buttons( $permission, "fnc_menu_create", 0,0 ,"reset_form('mainmodule_1','','',1)");
+                                    echo load_submit_buttons( $permission, "fnc_menu_create", 0,0 ,"reset_form('main_menu_1','','',1)");
                                 ?>
                             </div>
                         </div>
@@ -176,13 +175,16 @@
         {
             var method ="";
             if(operation==0)  method ="POST";
-            else if(operation==1)  method ="PATCH";
-            else if(operation==2)  method ="DELETE";
+            else if(operation==1)  method ="POST";
+            else if(operation==2)  method ="POST";
             var param = "";
+            var input_method ="POST";
             if(operation == 1 || operation == 2)
             {
                 param = `/${document.getElementById('update_id').value}`;
                 console.log(`param = ${param} and id = ${document.getElementById('update_id').value}`);
+                if(operation == 1) input_method ="PATCH";
+                else input_method ="DELETE";
             }
 
             if( $("#chk_report_menu").attr("checked") ) var chk_report_menu=1; else var chk_report_menu=0;
@@ -210,7 +212,8 @@
                     update_id:$("#update_id").val(),
                     chk_report_menu:chk_report_menu,
                     chk_mobile_menu:chk_mobile_menu,
-                    _token:'{{csrf_token()}}'
+                    _token:'{{csrf_token()}}',
+                    _method: input_method
                 })
             })
             .then(response => {
@@ -221,7 +224,15 @@
             })
             .then(data => {
                 showNotification(operation_success_msg[operation]);
-                load_php_data_to_form(data.m_menu_id,'tools/create_menu/get_data_by_id');
+                if(operation ==2)
+                {
+                    reset_form('main_menu_1','','',1);
+                    set_button_status(1, permission, 'fnc_menu_create',1);
+                }
+                else 
+                {
+                    load_php_data_to_form(data.m_menu_id,'tools/create_menu/get_data_by_id');
+                }
                 loadList();
             })
             .catch(error => {

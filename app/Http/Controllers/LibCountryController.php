@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\LibSize;
+use App\Models\LibCountry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreLibSizeRequest;
-use App\Http\Requests\UpdateLibSizeRequest;
+use App\Http\Requests\StoreLibCountryRequest;
+use App\Http\Requests\UpdateLibCountryRequest;
 
-class LibSizeController extends Controller
+class LibCountryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class LibSizeController extends Controller
     {
         $menu_id = $request->query('mid') ?? 0;
         $permission = getPagePermission($menu_id);
-        return view('lib.general.size',compact('permission'));
+        return view('lib.general.country',compact('permission'));
     }
 
     /**
@@ -37,15 +37,15 @@ class LibSizeController extends Controller
         DB::beginTransaction();
         try
         {
-            $lib_size=LibSize::create([
-                'size_name'=>$request->input('txt_size_name')
+            $lib_country=LibCountry::create([
+                'country_name'=>$request->input('txt_country_name')
             ]);
 
             DB::commit();
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
-                'data'=>$lib_size
+                'data'=>$lib_country
             ]);
         }
         catch(Exception $e)
@@ -64,7 +64,7 @@ class LibSizeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LibSize $libSize)
+    public function show(LibCountry $libCountry)
     {
         //
     }
@@ -72,7 +72,7 @@ class LibSizeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LibSize $libSize)
+    public function edit(LibCountry $libCountry)
     {
         //
     }
@@ -80,20 +80,20 @@ class LibSizeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibSize $size)
+    public function update(Request $request, LibCountry $country)
     {
         DB::beginTransaction();
         try
         {
-            $size->update([
-                'size_name'=>$request->input('txt_size_name')
+            $country->update([
+                'country_name'=>$request->input('txt_country_name')
             ]);
     
             DB::commit();
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
-                'data'=>$size
+                'data'=>$country
             ]);
         }
         catch(Exception $e)
@@ -111,12 +111,12 @@ class LibSizeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibSize $size)
+    public function destroy(LibCountry $country)
     {
         DB::beginTransaction();
         try
         {
-            $size->delete();
+            $country->delete();
             DB::commit();
             return response()->json([
                 'code'=>2,
