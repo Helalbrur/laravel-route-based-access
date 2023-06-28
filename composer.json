@@ -9,6 +9,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/tinker": "^2.8",
+        "spatie/laravel-backup": "^8.1",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {

@@ -113,7 +113,7 @@
                                 <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$company->id}}')" style="cursor:pointer">
                                     <td>{{$sl++}}</td>
                                     <td>{{$company->company_name}}</td>
-                                    <td>{{$company->group->group_name}}</td>
+                                    <td>{{$company->group->group_name ?? ''}}</td>
                                     <td>{{$company->company_short_name}}</td>
                                     <td>{{$company->email}}</td>
                                     <td>{{$company->website}}</td>

@@ -36,12 +36,12 @@
                             <label for="cbo_country_id" class="col-sm-2 col-form-label"> Country</label>
                             <div class="col-sm-3">
                                 <?php
-                                    $country_arr = array();
+                                    $countryies = App\Models\LibCountry::get();
                                 ?>
                                 <select name="cbo_country_id" id="cbo_country_id" class="form-control">
                                     <option value="0">SELECT</option>
-                                    @foreach($country_arr as $key=>$value)
-                                        <option value="{{$key}}" {{$key==1 ? 'selected' : ''}}>{{$value}}</option>
+                                    @foreach($countryies as $country)
+                                        <option value="{{$country->id}}" {{$country->id==1 ? 'selected' : ''}}>{{$country->country_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
