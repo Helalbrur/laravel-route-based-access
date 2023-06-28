@@ -65,16 +65,6 @@ class EventServiceProvider extends ServiceProvider
         );
     }
     
-    
-       
-    private function extractTableNameFromQuery($sql)
-    {
-        $matches = [];
-        preg_match('/(?:FROM|from|INSERT INTO|insert into|UPDATE|update) `(.+?)`/i', $sql, $matches);
-        return $matches[1] ?? null;
-    }
-
-        
     private function extractTableName($queryType, $sql, $bindings)
     {
         $tableName = '';
