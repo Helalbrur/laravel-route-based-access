@@ -101,25 +101,6 @@ class EventServiceProvider extends ServiceProvider
         return $tableName;
     }
 
-    private function isInsertQuery($sql)
-    {
-        $lowerSql = trim(strtolower($sql));
-        return str_contains($lowerSql, 'insert into');
-    }
-
-    private function isUpdateQuery($sql)
-    {
-        $lowerSql = trim(strtolower($sql));
-        return str_contains($lowerSql, 'update set');
-    }
-
-    private function isDeleteQuery($sql)
-    {
-        $lowerSql = trim(strtolower($sql));
-        return str_contains($lowerSql, 'delete from');
-    }
-
-
     private function isLogsQuery($sql)
     {
         $lowerSql = strtolower($sql);
