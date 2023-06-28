@@ -65,31 +65,15 @@ class EventServiceProvider extends ServiceProvider
         );
     }
     
-    private function extractTableName($queryType, $sql, $bindings)
+    
+       
+    private function extractTableNameFromQuery($sql)
     {
-        $tableName = '';
-    
-        if ($queryType === 'DELETE') {
-            preg_match('/from `(.+?)`/i', $sql, $matches);
-            if (isset($matches[1])) {
-                $tableName = $matches[1];
-            }
-        } else {
-            if (!empty($bindings)) {
-                $firstBinding = $bindings[0];
-    
-                if (is_string($firstBinding)) {
-                    preg_match('/from `(.+?)`/i', $firstBinding, $matches);
-    
-                    if (isset($matches[1])) {
-                        $tableName = $matches[1];
-                    }
-                }
-            }
-        }
-    
-        return $tableName;
+        $matches = [];
+        preg_match('/(?:FROM|from|INSERT INTO|insert into|UPDATE|update) `(.+?)`/i', $sql, $matches);
+        return $matches[1] ?? null;
     }
+
 
     private function isLogsQuery($sql)
     {
