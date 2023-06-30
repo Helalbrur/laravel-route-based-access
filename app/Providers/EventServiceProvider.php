@@ -2,13 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Events\QueryExecuted;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -37,6 +36,7 @@ class EventServiceProvider extends ServiceProvider
                 $table_name = $this->extractTableNameFromQuery($sql);
                 if($this->isInsertOrUpdateQuery($sql) && !$this->isLogsQuery($sql))
                 {
+                    $this->deleteLog();
                     $createdBy = Auth::check() ? Auth::user()->id : null;
                      // Replace the placeholders in the SQL statement with actual values from bindings
                     foreach ($bindings as $binding) {
@@ -44,7 +44,7 @@ class EventServiceProvider extends ServiceProvider
                         $sql = preg_replace('/\?/', $value, $sql, 1);
                     }
                     //$bindingsData = json_encode($bindings);
-                    \App\Models\Log::create([
+                    Log::create([
                         'query' => $sql, 
                         'table_name' => $table_name ?? '',
                         'created_by' => $createdBy,
@@ -55,6 +55,15 @@ class EventServiceProvider extends ServiceProvider
         }         
     }
 
+    private function deleteLog()
+    {
+        if (Log::count() > 25) {
+            $oldestLogs = Log::orderBy('id','DESC')->take(Log::count() - 25)->get();
+            foreach ($oldestLogs as $log) {
+                $log->delete();
+            }
+        }
+    }
     private function isInsertOrUpdateQuery($sql)
     {
         $lowerSql = strtolower($sql);
@@ -65,22 +74,18 @@ class EventServiceProvider extends ServiceProvider
         );
     }
     
-    
-       
     private function extractTableNameFromQuery($sql)
     {
         $matches = [];
-        preg_match('/(?:FROM|from|INSERT INTO|insert into|UPDATE|update) `(.+?)`/i', $sql, $matches);
+        preg_match('/(?:FROM|from|INSERT INTO|insert into|UPDATE|update|delete from|DELETE FROM) `(.+?)`/i', $sql, $matches);
         return $matches[1] ?? null;
     }
-
 
     private function isLogsQuery($sql)
     {
         $lowerSql = strtolower($sql);
         return str_contains($lowerSql, 'log_table');
     }
-
 
     /**
      * Determine if events and listeners should be automatically discovered.

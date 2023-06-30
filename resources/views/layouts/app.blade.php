@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -84,14 +83,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- /.control-sidebar -->
 
   <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
+
+  <!-- <footer class="main-footer">
     <div class="float-right d-none d-sm-inline">
       Anything you want
     </div>
-    <!-- Default to the left -->
     <strong>Copyright &copy; {{date('Y')}} <a href="https://sait.com">Sait</a>.</strong> All rights reserved.
-  </footer>
+  </footer> -->
+
 </div>
 <!-- ./wrapper -->
 <script>

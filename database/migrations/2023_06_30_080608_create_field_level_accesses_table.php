@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lib_category', function (Blueprint $table) {
+        Schema::create('field_level_accesses', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name');
-            $table->string('short_name');
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_item_category_list');
+        Schema::dropIfExists('field_level_accesses');
     }
 };

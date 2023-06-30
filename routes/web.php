@@ -9,13 +9,19 @@ use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\LibCategoryController;
 use App\Http\Controllers\LibColorController;
 use App\Http\Controllers\LibCountryController;
+use App\Http\Controllers\LibItemGroupController;
+use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\LibSizeController;
 use App\Http\Controllers\MainModuleController;
+use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserPrivMstController;
 use App\Models\ImageUpload;
+use App\Models\LibItemGroup;
+use App\Models\LibItemSubGroup;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +54,7 @@ Route::prefix('/tools')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/create_menu', MainMenuController::class);
     Route::resource('/user_previledge', UserPrivMstController::class);
     Route::resource('/create_main_module', MainModuleController::class);
+    Route::resource('/mandatory_field', MandatoryFieldController::class);
 });
 
 Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () {
@@ -59,6 +66,14 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/size', LibSizeController::class);
     Route::resource('/general/country', LibCountryController::class);
+
+    Route::resource('/item_details/item_category', LibCategoryController::class);
+    Route::resource('/item_details/item_group', LibItemGroupController::class);
+    Route::resource('/item_details/item_sub_group', LibItemSubGroupController::class);
+});
+
+Route::prefix('/tools')->middleware(['auth'])->group(function(){
+    Route::get('mandatory_field_entry_form',[MandatoryFieldController::class,'entry_form_popup']);
 });
 
 Route::middleware(['auth'])->group(function () {

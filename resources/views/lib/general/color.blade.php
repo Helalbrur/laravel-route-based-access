@@ -1,73 +1,73 @@
+<?php
+$permission = getPagePermission(request('mid') ?? 0);
+?>
 @extends('layouts.app')
 @section('content_header')
     <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0 align-center"><strong>Color Entry</strong></h1>
+        <div class="col-sm-12">
+            <center><h1 class="m-0 align-center"><strong>Color Entry</strong></h1></center>
         </div>
     </div><!-- /.row -->
 @endsection()
 @section('content')
 <div class="row">
     <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-
-            <h5 class="card-title"></h5>
-            <div class="card-text">
-                <!-- #EBF4FA; -->
-                <div class="card" style="background-color: #F5FFFA">
-                    <form name="colorentry_1" id="colorentry_1" autocomplete="off" style="padding: 10px;">
-                        
-                        <div class="form-group row">
-                            <label for="txt_color_name" class="col-sm-2 col-form-label must_entry_caption">Color Name</label>
-                            <div class="col-sm-3">
-                                <input type="text" name="txt_color_name" id="txt_color_name" class="form-control"  />
-                            </div>
+        <center>
+            <div class="card" style="justify-content:center;width: 60%;">
+                <div class="card-body" style="justify-content:center;">
+                    <div class="card-text" style="justify-content:center;">
+                        <!-- #EBF4FA; -->
+                        <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">
+                            <form name="colorentry_1" id="colorentry_1" autocomplete="off" style="padding: 10px;">
+                                
+                                <div class="form-group row">
+                                    <label for="txt_color_name" class="col-sm-5 col-form-label must_entry_caption">Color Name</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="txt_color_name" id="txt_color_name" class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="from-group row" style="margin-top: 20px;">
+                                    <div class="col-sm-12">
+                                        <input type="hidden" value="" name="update_id" id="update_id"/>
+                                    
+                                        <?php
+                                            echo load_submit_buttons( $permission, "fnc_lib_color", 0,0 ,"reset_form('colorentry_1','','',1,'')");
+                                        ?>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="from-group row" style="margin-top: 20px;">
-                            <div class="col-sm-1">
-                                <input type="hidden" value="" name="update_id" id="update_id"/>
-                            </div>
-                            <div class="col-sm-5">
-                                <?php
-                                    echo load_submit_buttons( $permission, "fnc_lib_color", 0,0 ,"reset_form('colorentry_1','','',1,'')");
-                                ?>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div style="max-width:350px; float:left; margin:auto;padding:10px;background-color:#F5FFFA" class="card table-responsive table-info" align="center" id="list_view_div">
-                    <table class="table table-bordered table-striped" >
-                        <thead>
-                            <tr>
-                                <th width="10%">Sl</th>
-                                <th >Color Name</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody id="list_view">
-                            <?php
-                                $sl = 1;
-                                
-                                
-                                $colors = DB::table('lib_color as a')
-                                            ->whereNull('a.deleted_at')
-                                            ->select('a.*')
-                                            ->get();
-                            ?>
+                        <div style="margin:auto;padding:10px;background-color:#F5FFFA;justify-content:center;text-align:center" class="card table-responsive table-info" align="center" id="list_view_div">
+                            <table class="table table-bordered table-striped" >
+                                <thead>
+                                    <tr>
+                                        <th width="10%">Sl</th>
+                                        <th >Color Name</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody id="list_view">
+                                    <?php
+                                        $sl = 1;
+                                        $colors = DB::table('lib_color as a')
+                                                    ->whereNull('a.deleted_at')
+                                                    ->select('a.*')
+                                                    ->get();
+                                    ?>
 
-                            @foreach($colors as $color)
-                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$color->id}}')" style="cursor:pointer">
-                                    <td>{{$sl++}}</td>
-                                    <td>{{$color->color_name}}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    @foreach($colors as $color)
+                                        <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$color->id}}')" style="cursor:pointer">
+                                            <td>{{$sl++}}</td>
+                                            <td>{{$color->color_name}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-        </div>
+        </center>
     </div>
 </div>
 

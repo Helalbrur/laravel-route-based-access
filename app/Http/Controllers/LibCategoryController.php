@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\LibCountry;
+use App\Models\LibCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreLibCountryRequest;
-use App\Http\Requests\UpdateLibCountryRequest;
+use Illuminate\Support\Facades\Auth;
 
-class LibCountryController extends Controller
+class LibCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('lib.general.country');
+
+        return view('lib.item_details.item_category');
     }
 
     /**
@@ -35,15 +35,17 @@ class LibCountryController extends Controller
         DB::beginTransaction();
         try
         {
-            $lib_country=LibCountry::create([
-                'country_name'=>$request->input('txt_country_name')
+            $category=LibCategory::create([
+                'category_name'=>$request->input('txt_category_name'),
+                'short_name'=>$request->input('txt_category_short_name'),
+                'created_by'=>Auth::user()->id,
             ]);
 
             DB::commit();
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
-                'data'=>$lib_country
+                'data'=>$category
             ]);
         }
         catch(Exception $e)
@@ -62,7 +64,7 @@ class LibCountryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LibCountry $libCountry)
+    public function show(LibCategory $category)
     {
         //
     }
@@ -70,7 +72,7 @@ class LibCountryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LibCountry $libCountry)
+    public function edit(LibCategory $category)
     {
         //
     }
@@ -78,20 +80,22 @@ class LibCountryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibCountry $country)
+    public function update(Request $request, LibCategory $category)
     {
         DB::beginTransaction();
         try
         {
-            $country->update([
-                'country_name'=>$request->input('txt_country_name')
+            $category->update([
+                'category_name'=>$request->input('txt_category_name'),
+                'short_name'=>$request->input('txt_category_short_name'),
+                'updated_by'=>Auth::user()->id,
             ]);
     
             DB::commit();
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
-                'data'=>$country
+                'data'=>$category
             ]);
         }
         catch(Exception $e)
@@ -109,12 +113,12 @@ class LibCountryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibCountry $country)
+    public function destroy(LibCategory $category)
     {
         DB::beginTransaction();
         try
         {
-            $country->delete();
+            $category->delete();
             DB::commit();
             return response()->json([
                 'code'=>2,

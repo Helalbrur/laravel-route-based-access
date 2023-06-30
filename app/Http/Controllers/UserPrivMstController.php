@@ -16,11 +16,9 @@ class UserPrivMstController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $menu_id = $request->query('mid') ?? 0;
-        $permission = getPagePermission($menu_id);
-        return view('tools.user_previledge',compact('permission'));
+        return view('tools.user_previledge');
     }
 
     /**

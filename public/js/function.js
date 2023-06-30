@@ -621,8 +621,6 @@ function set_all_onclick()
 	});
 }
 
-
-
 function searchTable(tableId, inputFieldId, footer_table_id = '', columnPositions = '', operations = '')
 {
     let input = document.getElementById(inputFieldId);
@@ -776,8 +774,8 @@ function searchTableWithRowspan(tableId, inputFieldId, footer_table_id = '', col
     }
 }
 
-
-function load_drop_down( plink, data, action, container ) {
+function load_drop_down( plink, data, action, container )
+{
 	//alert(data);
     var url = `/${plink}?data=${data}&action=${action}`;
     fetch(url)
@@ -801,7 +799,6 @@ function getBaseUrl()
     const BASE_URL = isDefaultPort ? `${protocol}//${hostname}` : `${protocol}//${hostname}:${port}`;
     return BASE_URL;
 }
-
 
 function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_ids)
 {
@@ -1019,7 +1016,7 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 					}
 				}
 				return_value = 1 ;
-				showNotification(operation_success_msg[data.code],'info',2);
+				//showNotification(operation_success_msg[data.code],'info',2);
 			}
 			if (Object.keys(data.others_data).length > 0) {
 				for (var key in data.others_data) {
@@ -1069,18 +1066,19 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	})
 	.then(data => {
 		showNotification(operation_success_msg[data.code]);
-		if(operation < 2)
+		if(data.code < 2)
 		{
-			if(column_name.length > 0)
+			if(reset_form_id.length > 0)
 			{
-				if(reset_form_id.length > 0)
-				{
-					reset_form(reset_form_id,'','',1);
-				}
+				reset_form(reset_form_id,'','',1);
+			}
+			if(column_name.length > 0 && data.data.length > 0)
+			{
+				
 				load_php_data_to_form(data.data[column_name]);
 			}
 		}
-		else if (operation == 2)
+		else if (data.code == 2)
 		{
 			if(reset_form_id.length > 0)
 			{
@@ -1090,6 +1088,10 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		}
 		if(show_list_view_name.length > 0 && show_list_view_div_id.length > 0)
 		{
+			if(reset_form_id.length > 0)
+			{
+				reset_form(reset_form_id,'','',1);
+			}
 			show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
 		}
 	})

@@ -6,6 +6,7 @@ use Exception;
 use App\Models\LibColor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLibColorRequest;
 use App\Http\Requests\UpdateLibColorRequest;
 
@@ -14,11 +15,9 @@ class LibColorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $menu_id = $request->query('mid') ?? 0;
-        $permission = getPagePermission($menu_id);
-        return view('lib.general.color',compact('permission'));
+        return view('lib.general.color');
     }
 
     /**
@@ -38,7 +37,8 @@ class LibColorController extends Controller
         try
         {
             $lib_color=LibColor::create([
-                'color_name'=>$request->input('txt_color_name')
+                'color_name'=>$request->input('txt_color_name'),
+                'created_by'=>Auth::user()->id
             ]);
 
             DB::commit();
@@ -86,7 +86,8 @@ class LibColorController extends Controller
         try
         {
             $color->update([
-                'color_name'=>$request->input('txt_color_name')
+                'color_name'=>$request->input('txt_color_name'),
+                'updated_by'=>Auth::user()->id
             ]);
     
             DB::commit();

@@ -3,17 +3,17 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\LibItemCategoryList;
+use App\Models\LibCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class LibItemCategoryListSeeder extends Seeder
+class LibCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        LibItemCategoryList::factory()->create([
+        LibCategory::factory()->create([
             'category_id' => 113,
             'actual_category_name' => 'Leather',
             'short_name'=>'Leather'

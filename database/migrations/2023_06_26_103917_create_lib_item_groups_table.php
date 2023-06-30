@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('item_name');
             $table->unsignedBigInteger('item_category_id');
             $table->float('conversion_factor')->default(1);
-            $table->integer('cons_uom');
+            $table->integer('cons_uom')->nullable();
             $table->string('item_group_code')->nullable();
             $table->integer('order_uom')->nullable();
             $table->integer('item_type')->nullable();

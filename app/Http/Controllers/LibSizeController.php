@@ -6,6 +6,7 @@ use Exception;
 use App\Models\LibSize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLibSizeRequest;
 use App\Http\Requests\UpdateLibSizeRequest;
 
@@ -14,11 +15,9 @@ class LibSizeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $menu_id = $request->query('mid') ?? 0;
-        $permission = getPagePermission($menu_id);
-        return view('lib.general.size',compact('permission'));
+        return view('lib.general.size');
     }
 
     /**
@@ -38,7 +37,8 @@ class LibSizeController extends Controller
         try
         {
             $lib_size=LibSize::create([
-                'size_name'=>$request->input('txt_size_name')
+                'size_name'=>$request->input('txt_size_name'),
+                'created_by'=>Auth::user()->id
             ]);
 
             DB::commit();
@@ -86,7 +86,8 @@ class LibSizeController extends Controller
         try
         {
             $size->update([
-                'size_name'=>$request->input('txt_size_name')
+                'size_name'=>$request->input('txt_size_name'),
+                'updated_by'=>Auth::user()->id
             ]);
     
             DB::commit();

@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LibItemCategoryList;
+use App\Models\MandatoryField;
 use Illuminate\Http\Request;
 
-class LibItemCategoryListController extends Controller
+class MandatoryFieldController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('tools.mandatory_field');
     }
 
     /**
@@ -34,7 +34,7 @@ class LibItemCategoryListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LibItemCategoryList $libItemCategoryList)
+    public function show(MandatoryField $mandatory)
     {
         //
     }
@@ -42,7 +42,7 @@ class LibItemCategoryListController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LibItemCategoryList $libItemCategoryList)
+    public function edit(MandatoryField $mandatory)
     {
         //
     }
@@ -50,7 +50,7 @@ class LibItemCategoryListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibItemCategoryList $libItemCategoryList)
+    public function update(Request $request, MandatoryField $mandatory)
     {
         //
     }
@@ -58,8 +58,13 @@ class LibItemCategoryListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibItemCategoryList $libItemCategoryList)
+    public function destroy(MandatoryField $mandatory)
     {
         //
+    }
+
+    public function entry_form_popup()
+    {
+        return view('ajax.entry_form_popup');
     }
 }

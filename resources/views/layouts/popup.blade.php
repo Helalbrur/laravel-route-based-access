@@ -16,6 +16,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('adminlte/css/adminlte.min.css')}}">
   <link rel="stylesheet" href="{{asset('modal_window/modal_window.css')}}">
+  
+  {{-- common style --}}
+  <link rel="stylesheet" href="{{asset('css/style_common.css')}}">
 
   {{-- filtergrid style --}}
    <link rel="stylesheet" href="{{asset('css/filtergrid.css')}}">

@@ -13,13 +13,13 @@ class MainModuleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $menu_id = $request->query('mid') ?? 0;
-        //dd($menu_id);
-        $permission = getPagePermission($menu_id);
+        // $menu_id = $request->query('mid') ?? 0;
+        // //dd($menu_id);
+        // $permission = getPagePermission($menu_id);
         //dd($permission);
-        return view('tools.create_main_module',compact('permission'));
+        return view('tools.create_main_module');
     }
 
     /**
