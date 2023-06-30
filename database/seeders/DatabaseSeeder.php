@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Database\Seeders\MainModuleSeeder;
 use Database\Seeders\UserPrivMstSeeder;
 use Database\Seeders\UserPrivModuleSeeder;
-use Database\Seeders\LibItemCategoryListSeeder;
+use Database\Seeders\LibCategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         DB::beginTransaction();
         try
         {
-            $filePath = storage_path('app/database/backup.sql');
+            $filePath = database_path('seeders/backup.sql');
 
             if (file_exists($filePath)) {
                 $sql = file_get_contents($filePath);

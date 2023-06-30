@@ -14,8 +14,7 @@ class LibCategorySeeder extends Seeder
     public function run(): void
     {
         LibCategory::factory()->create([
-            'category_id' => 113,
-            'actual_category_name' => 'Leather',
+            'category_name' => 'Leather',
             'short_name'=>'Leather'
         ]);
     }

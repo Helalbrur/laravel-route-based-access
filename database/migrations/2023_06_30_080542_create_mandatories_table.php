@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('mandatory_field', function (Blueprint $table) {
             $table->id();
+            $table->string('field_name');
+            $table->string('field_message')->nullable();
+            $table->unsignedBigInteger('page_id');
+            $table->unsignedBigInteger('field_id');
+            $table->unsignedBigInteger('is_mandatory');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }
