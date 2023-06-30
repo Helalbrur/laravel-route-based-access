@@ -23,22 +23,31 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
+
         DB::beginTransaction();
         try
         {
-            $user= User::factory()->create([
-                'name' => 'Admin',
-                'email' => 'admin@gmail.com',
-                'password'=>Hash::make('12345678')
-            ]);
+            $filePath = storage_path('app/database/backup.sql');
 
-            $this->call(LibCategorySeeder::class);
-            $this->call(MainModuleSeeder::class);
-            $this->call(MainMenuSeeder::class);
-            $this->call(UserPrivModuleSeeder::class);
-            $this->call(UserPrivMstSeeder::class);
+            if (file_exists($filePath)) {
+                $sql = file_get_contents($filePath);
+                DB::unprepared($sql);
+            }
+            else
+            {
+                User::factory()->create([
+                    'name' => 'Admin',
+                    'email' => 'admin@gmail.com',
+                    'password'=>Hash::make('12345678')
+                ]);
+                $this->call(LibCategorySeeder::class);
+                $this->call(MainModuleSeeder::class);
+                $this->call(MainMenuSeeder::class);
+                $this->call(UserPrivModuleSeeder::class);
+                $this->call(UserPrivMstSeeder::class);
+                DB::commit();
+            }
 
-            DB::commit();
         }
         catch (Exception $e) {
             DB::rollBack();
