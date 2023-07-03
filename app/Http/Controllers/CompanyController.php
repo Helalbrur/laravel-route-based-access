@@ -40,7 +40,7 @@ class CompanyController extends Controller
         {
             $lib_company=Company::create([
                 'group_id'=>$request->input('cbo_group_name'),
-                'comapnay_name'=>$request->input('txt_company_name'),
+                'company_name'=>$request->input('txt_company_name'),
                 'company_short_name'=>$request->input('txt_company_short_name'),
                 'website'=>$request->input('txt_website_name'),
                 'address'=>$request->input('txt_company_address'),
@@ -71,7 +71,7 @@ class CompanyController extends Controller
                 'message'=>$e->getMessage(),
                 'data'=> [
                     'group_id'=>$request->input('cbo_group_name'),
-                    'comapnay_name'=>$request->input('txt_company_name'),
+                    'company_name'=>$request->input('txt_company_name'),
                     'company_short_name'=>$request->input('txt_company_short_name'),
                     'website'=>$request->input('txt_website_name'),
                     'address'=>$request->input('txt_company_address'),
@@ -109,7 +109,7 @@ class CompanyController extends Controller
         {
             $company->update([
                 'group_id'=>$request->input('cbo_group_name'),
-                'comapnay_name'=>$request->input('txt_company_name'),
+                'company_name'=>$request->input('txt_company_name'),
                 'company_short_name'=>$request->input('txt_company_short_name'),
                 'website'=>$request->input('txt_website_name'),
                 'address'=>$request->input('txt_company_address'),

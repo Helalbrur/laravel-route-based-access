@@ -30,7 +30,9 @@
         "files": [
             "app/Helpers/array_function.php",
             "app/Helpers/common.php",
-            "app/Helpers/common_function.php"
+            "app/Helpers/common_function.php",
+            "app/Helpers/mandatory_field_list_array.php",
+            "app/Helpers/field_list_array.php"
         ]
     },
     "autoload-dev": {

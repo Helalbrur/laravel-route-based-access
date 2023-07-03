@@ -67,7 +67,7 @@ function set_button_status(is_update, permission, submit_func, btn_id, show_prin
 {
     if(!show_print) var show_print="";
 	permission=permission.split('_');
-	console.log(`permission=${permission} , is_update = ${is_update} , btn_id = ${btn_id}`)
+	//console.log(`permission=${permission} , is_update = ${is_update} , btn_id = ${btn_id}`)
 
 	if (is_update==1)   //Update Mode
 	{
@@ -232,14 +232,6 @@ function daysInMonth( month, year )
 
 function form_validation(control,msg_text)
 {
-  // iterate over all of the inputs for the form
-  // element that was passed in
- // alert(control);
- //alert(parent.document.getElementById('messagebox_main').innerHTML);
-
-	//parent.document.getElementById('messagebox_main').innerHTML=;
-	//$('#messagebox_main', window.parent.document).html("sumon");
-
   control=control.split("*");
   msg_text=msg_text.split("*");
   var bgcolor='-moz-linear-gradient(bottom, rgb(254,151,174) 0%, rgb(255,255,255) 10%, rgb(254,151,174) 96%)';
@@ -334,7 +326,6 @@ function form_validation(control,msg_text)
 
   }
   return 1;
-
 }
 
 function get_submitted_variables( flds )
@@ -814,8 +805,8 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 			var form_id=forms[i].split("_");
 			//alert(form_id)
 			var idd=$('#'+forms[i]).find('.formbutton').attr('id');
-			console.log(`idd=${idd}`);
-			console.log(`permission=${permission}`);
+			//console.log(`idd=${idd}`);
+			//console.log(`permission=${permission}`);
 			var fnc=document.getElementById(idd).getAttribute('onclick').split('(');
 			set_button_status(0, permission, fnc[0], form_id[1]);
 
@@ -932,7 +923,7 @@ function get_form_data(data,files ='')
 					{
 						var file = fileInput.files[i];
 						formData.append('files[]', file);
-						console.log(`file=${file}`);
+						//console.log(`file=${file}`);
 					}
 				}
 			}
@@ -1082,7 +1073,7 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		{
 			if(reset_form_id.length > 0)
 			{
-				console.log(`reset_form_id=${reset_form_id}`);
+				//console.log(`reset_form_id=${reset_form_id}`);
 				reset_form(reset_form_id,'','',1);
 			}
 		}
@@ -1120,5 +1111,133 @@ function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_li
 				show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
 			}
 		}
+	}
+}
+
+function fetchData(data, route,form_field_name)
+{
+  const url = `${route}?data=${data}`;
+  fetch(url,{
+		method: 'GET' ,
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
+		}
+	})
+	.then(response => response.text())
+	.then(data => {
+		try {
+			if(data.length > 0 && form_field_name.length > 0)
+			{
+				var exp = form_field_name.split(",");
+				for(var i = 0; i < exp.length; i++)
+				{
+					$(`#${exp[i]}`).val(data[i]);
+				}
+			}
+		} catch (error) {
+			throw new Error(error);
+		}
+	})
+    .catch(error => {
+		showNotification(error,'error');
+    });
+}
+
+jQuery(document).on('change', '.field_level_access', function() {
+	var str = $(this).attr('id');
+	if (str.indexOf("company") > -1)
+	{
+		if (str != avoidCompany[0])
+		{
+			set_field_level_access($(this).val());
+		}
+	}
+});
+
+
+var first_values=new Array;
+var first_sts = new Array;
+var check_disable=new Array;
+var check_value = new Array;
+
+function set_field_level_access( company )
+{
+	try
+	{
+		if(field_level_data['action_company_id']!=undefined)
+		{
+			var company=$('#'+field_level_data['action_company_id']).val();
+		}
+	}
+	catch(error)
+	{
+		return true;
+	}
+	
+	$.each( first_sts, function( keys, values )
+	{
+		if(jQuery.inArray(values.f_titles, check_disable) == -1)
+		{
+			check_disable.push(values.f_titles);
+			if(values.f_vals==undefined)
+				$('#'+values.f_titles).attr('disabled',false);
+			else
+				$('#'+values.f_titles).attr('disabled',true);
+		}
+	});
+	$.each( first_values, function( keys, values )
+	{
+		if(jQuery.inArray(values.f_title, check_value) == -1)
+		{
+			check_value.push(values.f_title);
+			$('#'+values.f_title).val(values.f_val);
+		}
+	});
+	check_value.length=0;
+	check_disable.length=0;
+
+	if( field_level_data[company]==undefined){
+		return;
+	}
+
+	if(company!=0)
+	{
+		$.each( field_level_data[company], function( key, value )
+		{
+			if( value['is_disable']==1) {
+				first_sts.push({
+					f_titles: key,
+					f_vals:  $('#'+key).attr('disabled')
+				});
+				$('#'+key).attr('disabled',true);
+			}
+			else
+			{
+				first_sts.push({
+					f_titles: key,
+					f_vals:  $('#'+key).attr('disabled')
+				});
+				$('#'+key).attr('disabled',false);
+			}
+			
+			if(value['defalt_value']==null || value['defalt_value']=="undefined"){value['defalt_value']='';}
+			
+			if(value['defalt_value']!='')
+			{ 
+				if(value['defalt_value']=="") return;
+				first_values.push({
+					f_title: key,
+					f_val:  $('#'+key).val()
+				});
+				
+				 if(value['defalt_value']!='')
+				 { 
+					$('#'+key).val(value['defalt_value']);
+					$('#'+key).change();
+				 }
+			}
+		});
 	}
 }

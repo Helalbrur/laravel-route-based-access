@@ -13,7 +13,7 @@ class Company extends Model
     use SoftDeletes;
     protected $table = 'lib_company';
     protected $fillable = [
-       'group_id', 'comapnay_name','company_short_name','address','website','email','contact_no','created_by','updated_by'
+       'group_id', 'company_name','company_short_name','address','website','email','contact_no','created_by','updated_by'
     ];
     public function group()
     {

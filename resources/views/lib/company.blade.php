@@ -171,7 +171,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 
     const load_php_data_to_form =async (menuId) =>
     {
-        var columns = 'group_id*comapnay_name*company_short_name*email*website*contact_no*address*id';
+        var columns = 'group_id*company_name*company_short_name*email*website*contact_no*address*id';
         var fields = 'cbo_group_name*txt_company_name*txt_company_short_name*txt_email*txt_website_name*txt_contact_no*txt_company_address*update_id';
         var others = 'image_uploads,sys_no,id,file_name,displayImage,company_profile';
        var get_return_value = await populate_form_data('id',menuId,'lib_company',columns,fields,'{{csrf_token()}}');

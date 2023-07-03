@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Session;
 $permission = getPagePermission(request('mid') ?? 0);
 ?>
 @extends('layouts.app')
@@ -100,14 +101,39 @@ $permission = getPagePermission(request('mid') ?? 0);
 @section('script')
 <script>
      var permission ='{{$permission}}';
+     var field_level_data = "";
+     @if(session()->has('logic_erp.data_arr.3'))
+        @php
+            $dataArr = json_encode(session('logic_erp.data_arr.3'));
+            echo "field_level_data = ".$dataArr.";\n";
+        @endphp
+    @endif
+
     function fnc_lib_item_group( operation )
     {
-        if (form_validation('cbo_category_id*txt_item_group_name','Category Name*Item Group Name')==false)
+        if(form_validation('cbo_category_id*txt_item_group_name','Category Name*Item Group Name')==false)
         {
             return;
         }
         else
         {
+            var mandatoryField = "";
+            var mandatoryMessage = "";
+            @if(session()->has('laravel_stater.mandatory_field.3'))
+                mandatoryField = '<?php echo implode('*', session('laravel_stater.mandatory_field.3')); ?>';
+                mandatoryMessage = '<?php echo implode('*', session('laravel_stater.mandatory_message.3')); ?>';
+            @endif
+
+            // Check if mandatoryField is not empty
+            if (mandatoryField)
+            {
+                // Call the form_validation function passing mandatoryField and mandatoryMessage
+                if (form_validation(mandatoryField, mandatoryMessage) == false)
+                {
+                    return;
+                }
+            }
+
             var formData = get_form_data('cbo_category_id,txt_item_group_name,txt_item_group_code,update_id');
             var method ="POST";
             var param = "";

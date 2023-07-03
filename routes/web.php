@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\LibCategoryController;
@@ -55,6 +56,7 @@ Route::prefix('/tools')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/user_previledge', UserPrivMstController::class);
     Route::resource('/create_main_module', MainModuleController::class);
     Route::resource('/mandatory_field', MandatoryFieldController::class);
+    Route::resource('/field_level_access', FieldLevelAccessController::class);
 });
 
 Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () {
@@ -74,6 +76,11 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 
 Route::prefix('/tools')->middleware(['auth'])->group(function(){
     Route::get('mandatory_field_entry_form',[MandatoryFieldController::class,'entry_form_popup']);
+    Route::get('load_drop_down_mandatory_field_item',[MandatoryFieldController::class,'load_drop_down_mandatory_field_item']);
+    Route::get('mandatory_action_user_data',[MandatoryFieldController::class,'mandatory_action_user_data']);
+    Route::get('field_level_access_user',[FieldLevelAccessController::class,'field_level_access_user']);
+    Route::get('field_level_action_user_data',[FieldLevelAccessController::class,'field_level_action_user_data']);
+    Route::get('load_drop_down_field_level_access',[FieldLevelAccessController::class,'load_drop_down_field_level_access']);
 });
 
 Route::middleware(['auth'])->group(function () {

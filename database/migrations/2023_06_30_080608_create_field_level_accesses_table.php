@@ -13,7 +13,7 @@ return new class extends Migration
     {
         // 'mst_id','company_id','user_id','field_id','page_id','field_name','is_disable','defalt_value','created_by','updated_by'
    
-        Schema::create('field_level_accesses', function (Blueprint $table) {
+        Schema::create('field_level_access', function (Blueprint $table) {
             $table->id();
             $table->string('field_name');
             $table->string('defalt_value')->nullable();
