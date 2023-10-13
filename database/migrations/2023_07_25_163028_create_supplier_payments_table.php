@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('compoany_id');
-            $table->date('date')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date')->default(Carbon::now());
             $table->double('amount',15,6)->default(0);
             $table->softDeletes();
             $table->timestamps();

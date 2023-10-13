@@ -72,7 +72,7 @@ With this project, you can easily set up user management, define page-level perm
   <li>Run the database migrations:</li>
 </ol>
 
-<pre><code>php artisan migrate:fresh --seed
+<pre><code>php artisan migrate --seed
 </code></pre>
 
 <p>To load Helper functions run : </p>
