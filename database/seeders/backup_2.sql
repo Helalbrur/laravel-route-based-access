@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 13, 2023 at 05:25 AM
--- Server version: 8.0.27
--- PHP Version: 7.4.26
+-- Generation Time: Jun 30, 2023 at 01:27 PM
+-- Server version: 8.0.31
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,41 +27,30 @@ SET time_zone = "+00:00";
 -- Table structure for table `failed_jobs`
 --
 
+DROP TABLE IF EXISTS `log_table`;
+CREATE TABLE IF NOT EXISTS `log_table` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `query` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `table_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `log_table_created_by_foreign` (`created_by`)
+) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `field_level_access`
---
-
-DROP TABLE IF EXISTS `field_level_access`;
-CREATE TABLE IF NOT EXISTS `field_level_access` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `field_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `defalt_value` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mst_id` bigint UNSIGNED NOT NULL,
-  `company_id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `page_id` bigint UNSIGNED NOT NULL,
-  `field_id` bigint UNSIGNED NOT NULL,
-  `is_disable` bigint UNSIGNED NOT NULL,
-  `created_by` bigint UNSIGNED DEFAULT NULL,
-  `updated_by` bigint UNSIGNED DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -73,23 +62,27 @@ CREATE TABLE IF NOT EXISTS `field_level_access` (
 DROP TABLE IF EXISTS `image_uploads`;
 CREATE TABLE IF NOT EXISTS `image_uploads` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `file_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `file_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `file_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `sys_no` bigint UNSIGNED NOT NULL,
-  `page_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `image_uploads`
 --
 
 INSERT INTO `image_uploads` (`id`, `file_name`, `file_type`, `sys_no`, `page_name`, `created_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(20, 'common_uploads/lgoin_pg_bg_white22.png_1402091_group_profile.png', '1', 1, 'group_profile', 1, NULL, '2023-06-28 08:24:03', '2023-06-28 08:24:03'),
 (31, 'common_uploads/lgoin_pg_bg_white.png_1402091_company_profile.png', '1', 1, 'company_profile', 1, NULL, '2023-06-28 16:07:56', '2023-06-28 16:07:56'),
+(17, 'common_uploads/Logic 01 copy.png_11244_group_profile.png', '1', 1, 'group_profile', 1, NULL, '2023-06-28 07:30:23', '2023-06-28 07:30:23'),
+(21, 'common_uploads/lcation.png_4025_group_profile.png', '1', 1, 'group_profile', 1, NULL, '2023-06-28 08:24:34', '2023-06-28 08:24:34'),
+(22, 'common_uploads/phone.png_3185_group_profile.png', '1', 1, 'group_profile', 1, NULL, '2023-06-28 08:27:16', '2023-06-28 08:27:16'),
 (29, 'common_uploads/lgoin_pg_bg.png_509596_group_profile.png', '1', 5, 'group_profile', 1, NULL, '2023-06-28 16:00:44', '2023-06-28 16:00:44');
 
 -- --------------------------------------------------------
@@ -101,15 +94,15 @@ INSERT INTO `image_uploads` (`id`, `file_name`, `file_type`, `sys_no`, `page_nam
 DROP TABLE IF EXISTS `lib_buyer`;
 CREATE TABLE IF NOT EXISTS `lib_buyer` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `buyer_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `party_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tag_company` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact_person` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `web_site` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `buyer_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `party_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tag_company` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_person` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `web_site` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` longtext COLLATE utf8mb4_unicode_ci,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -127,8 +120,8 @@ CREATE TABLE IF NOT EXISTS `lib_buyer` (
 DROP TABLE IF EXISTS `lib_category`;
 CREATE TABLE IF NOT EXISTS `lib_category` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `category_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -154,7 +147,7 @@ INSERT INTO `lib_category` (`id`, `category_name`, `short_name`, `created_by`, `
 DROP TABLE IF EXISTS `lib_color`;
 CREATE TABLE IF NOT EXISTS `lib_color` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `color_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `entry_form` int DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
@@ -181,14 +174,14 @@ INSERT INTO `lib_color` (`id`, `color_name`, `entry_form`, `created_by`, `update
 DROP TABLE IF EXISTS `lib_company`;
 CREATE TABLE IF NOT EXISTS `lib_company` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `comapnay_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `comapnay_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_short_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `group_id` bigint UNSIGNED NOT NULL,
-  `address` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `website` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `logo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `logo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -213,7 +206,7 @@ INSERT INTO `lib_company` (`id`, `comapnay_name`, `company_short_name`, `group_i
 DROP TABLE IF EXISTS `lib_country`;
 CREATE TABLE IF NOT EXISTS `lib_country` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `country_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -237,20 +230,20 @@ INSERT INTO `lib_country` (`id`, `country_name`, `deleted_at`, `created_at`, `up
 DROP TABLE IF EXISTS `lib_employee`;
 CREATE TABLE IF NOT EXISTS `lib_employee` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `company_id` bigint UNSIGNED NOT NULL,
-  `id_card_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `employee_code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `national_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_card_no` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `employee_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `national_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gender` int NOT NULL,
   `designation_id` bigint UNSIGNED NOT NULL,
-  `contact_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `father_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mother_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `contact_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `father_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mother_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` longtext COLLATE utf8mb4_unicode_ci,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
-  `image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -293,7 +286,7 @@ DROP TABLE IF EXISTS `lib_floor_room_rack_mst`;
 CREATE TABLE IF NOT EXISTS `lib_floor_room_rack_mst` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `company_id` bigint UNSIGNED NOT NULL,
-  `floor_room_rack_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `floor_room_rack_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -311,17 +304,17 @@ CREATE TABLE IF NOT EXISTS `lib_floor_room_rack_mst` (
 DROP TABLE IF EXISTS `lib_group`;
 CREATE TABLE IF NOT EXISTS `lib_group` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `group_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `group_short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group_short_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `country_id` bigint UNSIGNED DEFAULT NULL,
-  `website` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_person` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_person` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
-  `image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -344,11 +337,11 @@ INSERT INTO `lib_group` (`id`, `group_name`, `group_short_name`, `country_id`, `
 DROP TABLE IF EXISTS `lib_item_group`;
 CREATE TABLE IF NOT EXISTS `lib_item_group` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `item_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `item_category_id` bigint UNSIGNED NOT NULL,
   `conversion_factor` double(8,2) NOT NULL DEFAULT '1.00',
   `cons_uom` int DEFAULT NULL,
-  `item_group_code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `item_group_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `order_uom` int DEFAULT NULL,
   `item_type` int DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
@@ -376,10 +369,10 @@ INSERT INTO `lib_item_group` (`id`, `item_name`, `item_category_id`, `conversion
 DROP TABLE IF EXISTS `lib_item_sub_group`;
 CREATE TABLE IF NOT EXISTS `lib_item_sub_group` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `sub_group_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sub_group_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `item_category_id` bigint UNSIGNED NOT NULL,
   `item_group_id` bigint UNSIGNED NOT NULL,
-  `sub_group_code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sub_group_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -404,14 +397,14 @@ INSERT INTO `lib_item_sub_group` (`id`, `sub_group_name`, `item_category_id`, `i
 DROP TABLE IF EXISTS `lib_location`;
 CREATE TABLE IF NOT EXISTS `lib_location` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `location_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `company_id` bigint UNSIGNED NOT NULL,
   `country_id` bigint UNSIGNED DEFAULT NULL,
-  `contact_person` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `website` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `contact_person` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` longtext COLLATE utf8mb4_unicode_ci,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -429,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `lib_location` (
 DROP TABLE IF EXISTS `lib_size`;
 CREATE TABLE IF NOT EXISTS `lib_size` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `size_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `size_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `entry_form` int DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
@@ -458,11 +451,11 @@ INSERT INTO `lib_size` (`id`, `size_name`, `entry_form`, `created_by`, `updated_
 DROP TABLE IF EXISTS `lib_store_location`;
 CREATE TABLE IF NOT EXISTS `lib_store_location` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `store_location` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `store_location` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `company_id` bigint UNSIGNED NOT NULL,
   `location_id` bigint UNSIGNED NOT NULL,
-  `item_category_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_category_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -480,15 +473,15 @@ CREATE TABLE IF NOT EXISTS `lib_store_location` (
 DROP TABLE IF EXISTS `lib_supplier`;
 CREATE TABLE IF NOT EXISTS `lib_supplier` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `supplier_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `party_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tag_company` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact_person` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_no` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `web_site` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `supplier_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `party_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tag_company` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_person` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `web_site` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` longtext COLLATE utf8mb4_unicode_ci,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -503,19 +496,8 @@ CREATE TABLE IF NOT EXISTS `lib_supplier` (
 -- Table structure for table `log_table`
 --
 
-DROP TABLE IF EXISTS `log_table`;
-CREATE TABLE IF NOT EXISTS `log_table` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `query` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `table_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_by` bigint UNSIGNED DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `log_table_created_by_foreign` (`created_by`)
-) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+
 
 --
 -- Table structure for table `main_menu`
@@ -528,17 +510,17 @@ CREATE TABLE IF NOT EXISTS `main_menu` (
   `m_module_id` bigint UNSIGNED NOT NULL DEFAULT '0',
   `root_menu` bigint UNSIGNED NOT NULL DEFAULT '0',
   `sub_root_menu` bigint UNSIGNED NOT NULL DEFAULT '0',
-  `menu_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `f_location` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `route_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `menu_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `f_location` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `route_name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
   `fabric_nature` int NOT NULL DEFAULT '0',
   `position` int NOT NULL DEFAULT '0',
   `status` int NOT NULL DEFAULT '0',
   `slno` int NOT NULL DEFAULT '0',
   `report_menu` int NOT NULL DEFAULT '0',
   `is_mobile_menu` int NOT NULL DEFAULT '0',
-  `m_page_name` varchar(300) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `m_page_short_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `m_page_name` varchar(300) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `m_page_short_name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
   `inserted_by` bigint UNSIGNED DEFAULT NULL,
   `insert_date` timestamp NULL DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
@@ -580,8 +562,8 @@ DROP TABLE IF EXISTS `main_module`;
 CREATE TABLE IF NOT EXISTS `main_module` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `m_mod_id` bigint UNSIGNED NOT NULL,
-  `main_module` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `file_name` varchar(333) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `main_module` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `file_name` varchar(333) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
   `status` int NOT NULL DEFAULT '0',
   `mod_slno` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -601,34 +583,13 @@ INSERT INTO `main_module` (`id`, `m_mod_id`, `main_module`, `file_name`, `status
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mandatory_field`
---
-
-DROP TABLE IF EXISTS `mandatory_field`;
-CREATE TABLE IF NOT EXISTS `mandatory_field` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `field_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `field_message` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `page_id` bigint UNSIGNED NOT NULL,
-  `field_id` bigint UNSIGNED NOT NULL,
-  `is_mandatory` bigint UNSIGNED NOT NULL,
-  `created_by` bigint UNSIGNED DEFAULT NULL,
-  `updated_by` bigint UNSIGNED DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `migrations`
 --
 
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `migration` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -674,8 +635,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -689,8 +650,8 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE IF NOT EXISTS `permissions` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `route_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `route_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -723,11 +684,11 @@ CREATE TABLE IF NOT EXISTS `permission_user` (
 DROP TABLE IF EXISTS `personal_access_tokens`;
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -746,9 +707,9 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 DROP TABLE IF EXISTS `product_details_master`;
 CREATE TABLE IF NOT EXISTS `product_details_master` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `item_description` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `product_name_details` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `uom` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_description` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_name_details` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `company_id` bigint UNSIGNED NOT NULL,
   `item_category_id` bigint UNSIGNED NOT NULL,
   `item_group_id` bigint UNSIGNED NOT NULL,
@@ -758,10 +719,10 @@ CREATE TABLE IF NOT EXISTS `product_details_master` (
   `avg_rate_per_unit` double(15,6) NOT NULL DEFAULT '0.000000',
   `current_stock` double(15,6) NOT NULL DEFAULT '0.000000',
   `stock_value` double(15,6) NOT NULL DEFAULT '0.000000',
-  `item_code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `item_account` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `packing_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `lot` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `item_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `item_account` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `packing_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `lot` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `updated_by` bigint UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -779,11 +740,11 @@ CREATE TABLE IF NOT EXISTS `product_details_master` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -795,7 +756,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', '2023-06-24 03:23:52', '$2y$10$fm6ccsFPqIPTq8LG6qeub.Qsofm3gZx46BQCy5FyMkw3DjiGAY1H2', 'Y9bsiozvNYEkxDT68lLPuoRhwIgz6A0ZXcgkmCeZncaS2rP0jRj7IFyFCkwC', '2023-06-24 03:23:52', '2023-06-24 03:23:52'),
+(1, 'Admin', 'admin@gmail.com', '2023-06-24 03:23:52', '$2y$10$fm6ccsFPqIPTq8LG6qeub.Qsofm3gZx46BQCy5FyMkw3DjiGAY1H2', 'X3b2dOWEACepJfoOfnqNiOnFp16JsKp6HBu1sI5tSvkc6AieXs75cX8FVK0X', '2023-06-24 03:23:52', '2023-06-24 03:23:52'),
 (2, 'Helal Uddin', 'helal@gmail.com', NULL, '$2y$10$vrUWyBfwKL0AeKzKf0C/5OkivLRmS.qLVA.Kcb.nXwQHz.UIx8Rpq', NULL, '2023-06-26 02:19:33', '2023-06-26 02:19:33');
 
 -- --------------------------------------------------------
@@ -809,7 +770,7 @@ CREATE TABLE IF NOT EXISTS `user_priv_module` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint UNSIGNED NOT NULL DEFAULT '0',
   `module_id` bigint UNSIGNED NOT NULL,
-  `user_only` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `user_only` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
   `valid` int NOT NULL DEFAULT '0',
   `entry_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -844,15 +805,15 @@ CREATE TABLE IF NOT EXISTS `user_priv_mst` (
   `edit_priv` bigint UNSIGNED NOT NULL DEFAULT '2',
   `approve_priv` bigint UNSIGNED NOT NULL DEFAULT '2',
   `entry_date` int NOT NULL DEFAULT '0',
-  `user_only` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `last_updated_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `inserted_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `user_only` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `last_updated_by` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `inserted_by` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
   `valid` int NOT NULL DEFAULT '0',
   `last_update_date` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user_priv_mst`
@@ -874,8 +835,8 @@ INSERT INTO `user_priv_mst` (`id`, `user_id`, `main_menu_id`, `show_priv`, `dele
 (25, 2, 9, 1, 2, 1, 2, 2, 1687824000, NULL, NULL, '2', 1, 0, '2023-06-27 01:01:15', '2023-06-27 01:01:15'),
 (27, 2, 10, 1, 2, 2, 2, 2, 1687824000, NULL, NULL, '2', 1, 0, '2023-06-27 01:03:19', '2023-06-27 01:03:19'),
 (29, 1, 11, 1, 1, 1, 1, 1, 1687910400, NULL, NULL, '1', 1, 0, '2023-06-28 08:36:32', '2023-06-28 08:36:32'),
-(60, 2, 7, 1, 2, 1, 2, 2, 1690329600, NULL, NULL, '1', 1, 0, '2023-07-26 10:55:04', '2023-07-26 10:55:04'),
-(61, 2, 11, 1, 2, 1, 2, 2, 1690329600, NULL, NULL, '1', 1, 0, '2023-07-26 10:55:04', '2023-07-26 10:55:04'),
+(31, 2, 11, 1, 1, 1, 1, 1, 1687910400, NULL, NULL, '1', 1, 0, '2023-06-28 08:36:45', '2023-06-28 08:36:45'),
+(38, 2, 7, 1, 1, 1, 1, 1, 1687910400, NULL, NULL, '1', 1, 0, '2023-06-28 11:30:41', '2023-06-28 11:30:41'),
 (39, 2, 13, 1, 1, 1, 1, 1, 1687910400, NULL, NULL, '1', 1, 0, '2023-06-28 11:30:41', '2023-06-28 11:30:41'),
 (43, 2, 15, 1, 1, 1, 1, 1, 1687996800, NULL, NULL, '1', 1, 0, '2023-06-29 03:35:44', '2023-06-29 03:35:44'),
 (47, 1, 16, 1, 1, 1, 1, 1, 1687996800, NULL, NULL, '1', 1, 0, '2023-06-29 06:05:06', '2023-06-29 06:05:06'),
