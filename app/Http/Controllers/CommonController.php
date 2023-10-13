@@ -67,12 +67,14 @@ class CommonController extends Controller
     {
         try
         {
+            DB::enableQueryLog();
             $columnNames = implode(",",explode("*",str_replace("'","",$request->input('column_names'))));
 
             $common_data = DB::table($request->input('table_name'))
                 ->where($request->input('filter_column_name'), $request->input('filter_column_value'))
                 ->select(DB::raw($columnNames))
                 ->first();
+            //dd(DB::getQueryLog());
             $others = explode("*",$request->input('others'));
             $other_data = [];
             if(count($others) > 0)
