@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->double('quantity',15,6)->default(0);
             $table->double('rate',15,6)->default(0);
             $table->double('amount',15,6)->default(0);
-            $table->date('date')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date')->default(Carbon::now());
             $table->softDeletes();
             $table->timestamps();
         });
