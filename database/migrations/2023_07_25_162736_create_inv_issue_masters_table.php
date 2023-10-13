@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('sys_number_prefix_num');
             $table->string('sys_number');
             $table->unsignedBigInteger('buyer_id')->nullable();
-            $table->date('date')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date')->default(Carbon::now());
             $table->timestamps();
         });
     }
