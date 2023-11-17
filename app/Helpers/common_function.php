@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\UserPrivMst;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -137,7 +138,7 @@ function load_submit_buttons($permission, $sub_func, $is_update, $is_show_print 
     return $perm_str;die;
 }
 
-function getPagePermission($menu_id = 0)
+function getPagePermission($menu_id = '')
 {
     $permission = "";
     DB::enableQueryLog();
@@ -151,11 +152,27 @@ function getPagePermission($menu_id = 0)
     }
     else
     {
+        /*
+        $array = explode(".", Route::currentRouteName());
+        // Get the subset of the array without the last element
+        $subset = array_slice($array, 0,count($array)-1);
         $userPermission = DB::table('main_menu as a')
                       ->join('user_priv_mst as b','a.m_menu_id','=','b.main_menu_id')
                       ->select('b.save_priv','b.edit_priv','b.delete_priv','b.approve_priv')
                       ->where('b.user_id',Auth::user()->id)
-                      ->where('a.route_name',explode(".",Route::currentRouteName())[0])->first();
+                      ->where(function (Builder $query) use ($subset) {
+                        $query->where('a.route_name', implode(".", $subset))
+                        ->orWhere('a.f_location', Route::getCurrentRoute()->uri);
+                      })
+                      ->first();
+                     // ->ddRawSql();
+        */
+        $userPermission = DB::table('main_menu as a')
+        ->join('user_priv_mst as b','a.m_menu_id','=','b.main_menu_id')
+        ->select('b.save_priv','b.edit_priv','b.delete_priv','b.approve_priv')
+        ->where('b.user_id',Auth::user()->id)
+        ->where('a.f_location', Route::getCurrentRoute()->uri)
+        ->first();
     }
     //dd(DB::getQueryLog());
     //dd($userPermission);
