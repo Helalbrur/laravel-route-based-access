@@ -66,7 +66,7 @@ CREATE TABLE `field_level_access` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,6 @@ CREATE TABLE `field_level_access` (
 
 LOCK TABLES `field_level_access` WRITE;
 /*!40000 ALTER TABLE `field_level_access` DISABLE KEYS */;
-INSERT INTO `field_level_access` VALUES (6,'txt_item_group_code','12345',6,1,1,3,1,1,1,NULL,'2023-11-17 02:31:50','2023-11-17 02:31:50');
 /*!40000 ALTER TABLE `field_level_access` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1020,7 +1019,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','admin@gmail.com','2023-06-24 03:23:52','$2y$10$fm6ccsFPqIPTq8LG6qeub.Qsofm3gZx46BQCy5FyMkw3DjiGAY1H2','9DlT6esOVJXkC2tsmmAKRmsOQhlzgiKVtowwUx1tEd9c2Y8SQbvJNjJgP3xc','2023-06-24 03:23:52','2023-06-24 03:23:52'),(2,'Helal Uddin','helal@gmail.com',NULL,'$2y$10$vrUWyBfwKL0AeKzKf0C/5OkivLRmS.qLVA.Kcb.nXwQHz.UIx8Rpq',NULL,'2023-06-26 02:19:33','2023-06-26 02:19:33');
+INSERT INTO `users` VALUES (1,'Admin','admin@gmail.com','2023-06-24 03:23:52','$2y$10$fm6ccsFPqIPTq8LG6qeub.Qsofm3gZx46BQCy5FyMkw3DjiGAY1H2','RXInqEX1xR9f88iMLpa2fi6IQ4B4okRHZXCl7RzFnfgNEFuLxf24MAxWTdnU','2023-06-24 03:23:52','2023-06-24 03:23:52'),(2,'Helal Uddin','helal@gmail.com',NULL,'$2y$10$vrUWyBfwKL0AeKzKf0C/5OkivLRmS.qLVA.Kcb.nXwQHz.UIx8Rpq',NULL,'2023-06-26 02:19:33','2023-06-26 02:19:33');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1033,4 +1032,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-17 15:36:01
+-- Dump completed on 2023-11-17 13:06:04
