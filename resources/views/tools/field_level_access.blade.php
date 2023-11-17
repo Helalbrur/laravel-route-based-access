@@ -108,7 +108,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 		
 			var field_id_arr=new Array();
 			var row_num=$('#tbl_dtls tbody tr').length;
-			var field='cbo_page_id';
+			var field='cbo_page_id,cbo_company_name,text_user_id';
 			for (var i=1; i<=row_num; i++)
 			{
 				var cboFieldId=$('#cboFieldId_'+i).val();
@@ -123,15 +123,16 @@ $permission = getPagePermission(request('mid') ?? 0);
 						alert("Duplicate Field Name Not Allow");return;
 					}
 				}
-				field+=',cboFieldId_'+i+',cboIsMandatory_'+i;
+				field+=',cboFieldId_'+i+',cboIsDisable_'+i+',setDefaultVal_'+i;
 			}
             var formData = get_form_data(field);
+            formData.append('cboFieldId_'+i, $("#"+ex).val());
             var method ="POST";
            
             formData.append('_token', '{{csrf_token()}}');
             formData.append('total_row', row_num);
             formData.append('operation', operation);
-            var url = `{{URL::to('/tools/mandatory_field')}}`;
+            var url = `{{URL::to('/tools/field_level_access')}}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -169,7 +170,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 		var user_id=$('#text_user_id').val();
         load_drop_down( 'tools/load_drop_down_field_level_access', val, 'tools/load_drop_down_field_level_access', 'fieldtd' );
 
-		get_php_form_data(company_id+'**'+user_id+'**'+val, "action_user_data", "requires/field_level_access_controller" );
+		//get_php_form_data(company_id+'**'+user_id+'**'+val, "action_user_data", "requires/field_level_access_controller" );
 
        
         var url = `{{URL::to('tools/field_level_action_user_data')}}`;
@@ -267,14 +268,14 @@ $permission = getPagePermission(request('mid') ?? 0);
 		$("#tbl_dtls tbody tr td:last ").removeAttr('id').attr('id','increment_'+i);
 		$("#tbl_dtls tbody tr:last").find(':input:not(:button)','select').val("");
 		$('#tbl_dtls tbody tr:last td:eq(3)').removeAttr('id').attr('id','tdId_'+i);
-			var k=i-1;
-			$('#incrementfactor_'+k).hide();
-			$('#decrementfactor_'+k).hide();
+        var k=i-1;
+        $('#incrementfactor_'+k).hide();
+        $('#decrementfactor_'+k).hide();
 	
 		  
-		  $('#incrementfactor_'+i).removeAttr("onClick").attr("onClick","add_factor_row("+i+");");
-		  $('#decrementfactor_'+i).removeAttr("onClick").attr("onClick","fn_deletebreak_down_tr("+i+");");
-		  $('#cboFieldId_'+i).removeAttr("onChange").attr("onChange","set_hide_data(this.value"+"+'**'+"+i+");");
+        $('#incrementfactor_'+i).removeAttr("onClick").attr("onClick","add_factor_row("+i+");");
+        $('#decrementfactor_'+i).removeAttr("onClick").attr("onClick","fn_deletebreak_down_tr("+i+");");
+        $('#cboFieldId_'+i).removeAttr("onChange").attr("onChange","set_hide_data(this.value"+"+'**'+"+i+");");
 		  
 	}
 	
@@ -310,8 +311,11 @@ $permission = getPagePermission(request('mid') ?? 0);
 	{
 		var ref_arr=ref.split('**');
 		var page_id=$('#cbo_page_id').val();
-        get_php_form_data(company_id+'**'+user_id+'**'+val, "action_user_data", "requires/field_level_access_controller" );
-		load_drop_down( 'requires/field_level_access_controller', page_id+'**'+ref_arr[0]+'**'+ref_arr[1]+'**'+$('#cbo_company_name').val(), 'set_field_name', 'tdId_'+ref_arr[1]);
+        var company_id=$('#cbo_company_name').val();
+        var user_id=$('#text_user_id').val();
+       // get_php_form_data(company_id+'**'+user_id+'**'+page_id, "action_user_data", "requires/field_level_access_controller" );
+       // fn_set_item(page_id);
+		load_drop_down( 'tools/set_field_name', page_id+'**'+ref_arr[0]+'**'+ref_arr[1]+'**'+$('#cbo_company_name').val(), 'tools/set_field_name', 'tdId_'+ref_arr[1]);
 	}
     
 </script>

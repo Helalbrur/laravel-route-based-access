@@ -50,4 +50,14 @@ function yes_no()
 {
     return array(1 => "Yes", 2 => "No");
 }
+
+function currency()
+{
+    return array(1 => "BDT", 2 => "USD", 3 => "EURO", 4 => "CHF", 5 => "SGD", 6 => "Pound", 7 => "YEN");
+}
+
+function pay_mode()
+{
+    return array(1 => "Credit", 2 => "Import", 3 => "In House", 4 => "Cash", 5 => "Within Group");
+}
 ?>

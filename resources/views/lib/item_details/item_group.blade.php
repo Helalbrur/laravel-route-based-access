@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Session;
 $permission = getPagePermission(request('mid') ?? 0);
 ?>
@@ -8,7 +9,7 @@ $permission = getPagePermission(request('mid') ?? 0);
         <div class="col-sm-12">
             <center><h1 class="m-0 align-center"><strong>Lib Group</strong></h1></center>
         </div>
-    </div><!-- /.row -->
+    </div>
 @endsection()
 @section('content')
 <div class="row">
@@ -102,9 +103,9 @@ $permission = getPagePermission(request('mid') ?? 0);
 <script>
      var permission ='{{$permission}}';
      var field_level_data = "";
-     @if(session()->has('logic_erp.data_arr.3'))
+     @if(session()->has('laravel_stater.data_arr.3'))
         @php
-            $dataArr = json_encode(session('logic_erp.data_arr.3'));
+            $dataArr = json_encode(session('laravel_stater.data_arr.3'));
             echo "field_level_data = ".$dataArr.";\n";
         @endphp
     @endif
@@ -174,5 +175,7 @@ $permission = getPagePermission(request('mid') ?? 0);
         readImage(this,'displayImage');
     });
     setFilterGrid("list_view",-1);
+    make_mandatory(3);
+   
 </script>
 @endsection

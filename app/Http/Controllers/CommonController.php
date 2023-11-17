@@ -146,4 +146,15 @@ class CommonController extends Controller
         $file_type = $request->query('file_type') ?? '';
         return view('ajax.common_file_popup',compact('sys_no','page_name','file_type'));
     }
+
+    public function get_mandatory_and_field_level_data(Request $request)
+    {
+        $entry_form = $request->entry_form;
+        $mandatory_field ="";
+        if(session()->has("laravel_stater.mandatory_field.$entry_form"))
+        {
+            $mandatory_field = implode("*", session("laravel_stater.mandatory_field.$entry_form"));;
+        }
+        echo $mandatory_field;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\FieldLevelAccess;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,88 @@ class FieldLevelAccessController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        try
+        {
+            DB::enableQueryLog();
+       
+            $user_id = str_replace("'","",$request->text_user_id);// '132,133,134' 
+            $duplicate_result = FieldLevelAccess::where('company_id',$request->cbo_company_name)
+                                            ->where('user_id',$user_id)
+                                            ->where('page_id',$request->cbo_page_id)
+                                            ->get(); 
+                                    
+            if(count($duplicate_result)>0)
+            {			
+            foreach($duplicate_result as $dup)
+            {
+                $dup->delete();
+            }
+            }
+        
+            if(str_replace("'","",$request->update_id)=="")
+            {
+               
+                $user_ids = explode(',',$user_id);
+                $data_array="";$add_comm=0;
+                foreach ($user_ids as $userId)
+                {                           
+                    for($i=1;$i<=$request->total_row;$i++)
+                    {             
+                        $cboFieldId=$request->cboFieldId_.$i;
+                        $txtFieldName=$request->txtFieldName_.$i;
+                        $cboIsDisable=$request->cboIsDisable_.$i;
+                        $setDefaultVal=$request->setDefaultVal_.$i;
+                        
+
+                        $duplicate_result = FieldLevelAccess::where('company_id',$request->cbo_company_name)
+                                            ->where('user_id',$userId)
+                                            ->where('page_id',$request->cbo_page_id)
+                                            ->where('field_name',$cboFieldId)
+                                            ->get(); 
+                                    
+                        if(count($duplicate_result)>0)
+                        {			
+                            foreach($duplicate_result as $dup)
+                            {
+                                $dup->delete();
+                            }
+                        }
+                                                                        
+                        FieldLevelAccess::create([
+                            'mst_id'=>$request->mst_id,
+                            'company_id'=>$request->cbo_company_name,
+                            'user_id'=>$userId,
+                            'field_id'=>$cboFieldId,
+                            'page_id'=>$request->cbo_page_id,
+                            'field_name'=>$txtFieldName,
+                            'is_disable'=>$cboIsDisable,
+                            'defalt_value'=>$setDefaultVal,
+                            'created_by'=>Auth::user()->id
+                        ]);
+                                        
+                    }                            
+                }          
+            }
+            
+            $common_data =$request->mst_id."**".str_replace("'","",$request->cbo_company_name)."**".str_replace("'","",$request->text_user_id)."**".str_replace("'","",$request->cbo_page_id);
+            return response()->json([
+                'code'=>0,
+                'message'=>'success',
+                'data'=>$common_data,
+                'others_data' => ''
+            ]);
+        }
+        catch(Exception $e)
+        {
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            return response()->json([
+                'code'=>37,
+                'message'=>$error_message,
+                'data'=> [
+                ]
+            ]);
+        }
     }
 
     /**
@@ -128,7 +210,7 @@ class FieldLevelAccessController extends Controller
         {
             if($data_ref[1]==6)
             {
-                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, $currency,"",1,"----Select----",0,"","","","","","","","","" );
+                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, currency(),"",1,"----Select----",0,"","","","","","","","","" );
             }
             if($data_ref[1]==7)
             {
@@ -138,7 +220,7 @@ class FieldLevelAccessController extends Controller
         else if($data_ref[0]==147)
         {
             if($data_ref[1]==1)
-                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, $pay_mode,"",1,"----Select----",0,"","","","","","","","","" );	
+                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, pay_mode(),"",1,"----Select----",0,"","","","","","","","","" );	
             else
                 echo '<input type="text" name="setDefaultVal_'.$data_ref[2].'" id="setDefaultVal_'.$data_ref[2].'" class="text_boxes" style="width:140px;" />';
         }

@@ -1056,6 +1056,7 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		return response.json();
 	})
 	.then(data => {
+		console.log(`data=${data}`);
 		showNotification(operation_success_msg[data.code]);
 		if(data.code < 2)
 		{
@@ -1240,4 +1241,37 @@ function set_field_level_access( company )
 			}
 		});
 	}
+}
+
+function make_mandatory(entry_form)
+{
+	const url = `/get_mandatory_and_field_level_data?entry_form=${entry_form}`;
+    fetch(url,{
+		method: 'GET' ,
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
+		}
+	})
+	.then(response => response.text())
+	.then(data => {
+		try {
+			if(data.length > 0)
+			{
+				var mandatory_field_leve_data = data.split("#");
+				var mandatory_field_arr = mandatory_field_leve_data[0].split("*");
+				for (var property in mandatory_field_arr) {
+					$("#" + mandatory_field_arr[property]).parent().prev('label').css("color", "blue");
+					$("#" + mandatory_field_arr[property]).parent().prev('td').css("color", "blue");
+				}
+			}
+		} catch (error) {
+			throw new Error(error);
+		}
+	})
+    .catch(error => {
+		showNotification(error,'error');
+    });
+
 }

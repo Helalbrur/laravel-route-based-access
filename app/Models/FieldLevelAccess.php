@@ -11,5 +11,5 @@ class FieldLevelAccess extends Model
     protected $fillable = [
         'mst_id','company_id','user_id','field_id','page_id','field_name','is_disable','defalt_value','created_by','updated_by'
     ];
-    protected $table = 'mandatory_field';
+    protected $table = 'field_level_access';
 }

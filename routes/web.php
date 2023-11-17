@@ -87,6 +87,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/populate_common_data',[CommonController::class,'populateCommonData']);
     Route::get('show_common_list_view',[CommonController::class,'show_common_list_view']);
     Route::get('common_file_popup',[CommonController::class,'common_file_popup']);
+    Route::get('get_mandatory_and_field_level_data',[CommonController::class,'get_mandatory_and_field_level_data']);
 
     Route::delete('/file_delete/{id}', [ImageUploadController::class,'destroy']);
 
