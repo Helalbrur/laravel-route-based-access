@@ -79,6 +79,9 @@ With this project, you can easily set up user management, define page-level perm
 <pre><code>composer dump-autoload
 </code></pre>
 
+<p>Give mysql path for manual database backup in .env file (Need to change according to your mysql location)</p>
+<pre><code>MYSQLDUMP_PATH=F:/wamp64/bin/mysql/mysql8.0.27/bin/mysqldump</code></pre>
+
 
 <h2>Usage</h2>
 

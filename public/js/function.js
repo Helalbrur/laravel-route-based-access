@@ -1057,6 +1057,21 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	})
 	.then(data => {
 		console.log(`data=${data}`);
+		
+		if(data.code == 10)
+		{
+			
+			if(data.hasOwnProperty("message") && data.message.length > 0)
+			{
+				showNotification(operation_success_msg[data.message],'error');
+			}
+			else
+			{
+				showNotification(operation_success_msg[data.code],'error');
+			}
+			
+			return;
+		}
 		showNotification(operation_success_msg[data.code]);
 		if(data.code < 2)
 		{

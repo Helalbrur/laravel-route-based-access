@@ -1,28 +1,29 @@
 <?php
 
-use App\Http\Controllers\CommonController;
-use App\Models\UserPrivMst;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MainMenuController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FieldLevelAccessController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\ImageUploadController;
-use App\Http\Controllers\LibCategoryController;
-use App\Http\Controllers\LibColorController;
-use App\Http\Controllers\LibCountryController;
-use App\Http\Controllers\LibItemGroupController;
-use App\Http\Controllers\LibItemSubGroupController;
-use App\Http\Controllers\LibSizeController;
-use App\Http\Controllers\MainModuleController;
-use App\Http\Controllers\MandatoryFieldController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\UserPrivMstController;
 use App\Models\ImageUpload;
+use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubGroup;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\CommonController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\LibSizeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DbBackUpController;
+use App\Http\Controllers\LibColorController;
+use App\Http\Controllers\MainMenuController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LibCountryController;
+use App\Http\Controllers\MainModuleController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\LibCategoryController;
+use App\Http\Controllers\UserPrivMstController;
+use App\Http\Controllers\LibItemGroupController;
+use App\Http\Controllers\MandatoryFieldController;
+use App\Http\Controllers\LibItemSubGroupController;
+use App\Http\Controllers\FieldLevelAccessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,8 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
     Route::get('field_level_access_user',[FieldLevelAccessController::class,'field_level_access_user']);
     Route::get('field_level_action_user_data',[FieldLevelAccessController::class,'field_level_action_user_data']);
     Route::get('load_drop_down_field_level_access',[FieldLevelAccessController::class,'load_drop_down_field_level_access']);
+    Route::get('set_field_name',[FieldLevelAccessController::class,'set_field_name']);
+
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -114,6 +117,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['CheckPermission:Save Permission'])->group(function () {
        Route::post('/permission',[PermissionController::class,'store'])->name('permission.store');
     });
+
+     //Button Click Database Backup route
+     Route::resource('/db_backup',DbBackUpController::class);
 });
 
 

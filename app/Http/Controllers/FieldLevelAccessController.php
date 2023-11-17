@@ -31,71 +31,56 @@ class FieldLevelAccessController extends Controller
      */
     public function store(Request $request)
     {
-
+        DB::beginTransaction();
         try
         {
-            DB::enableQueryLog();
        
             $user_id = str_replace("'","",$request->text_user_id);// '132,133,134' 
-            $duplicate_result = FieldLevelAccess::where('company_id',$request->cbo_company_name)
-                                            ->where('user_id',$user_id)
-                                            ->where('page_id',$request->cbo_page_id)
-                                            ->get(); 
-                                    
-            if(count($duplicate_result)>0)
-            {			
-            foreach($duplicate_result as $dup)
-            {
-                $dup->delete();
-            }
-            }
-        
-            if(str_replace("'","",$request->update_id)=="")
-            {
-               
-                $user_ids = explode(',',$user_id);
-                $data_array="";$add_comm=0;
-                foreach ($user_ids as $userId)
-                {                           
-                    for($i=1;$i<=$request->total_row;$i++)
-                    {             
-                        $cboFieldId=$request->cboFieldId_.$i;
-                        $txtFieldName=$request->txtFieldName_.$i;
-                        $cboIsDisable=$request->cboIsDisable_.$i;
-                        $setDefaultVal=$request->setDefaultVal_.$i;
-                        
+           
+            $user_ids = explode(',',$user_id);
+            $data_array="";$add_comm=0;
+            foreach ($user_ids as $userId)
+            {                           
+                for($i=1;$i<=$request->total_row;$i++)
+                {             
+                    $cboFieldId=$request->{'cboFieldId_'.$i};
+                    $txtFieldName=$request->{'txtFieldName_'.$i};
+                    $cboIsDisable=$request->{'cboIsDisable_'.$i};
+                    $setDefaultVal=$request->{'setDefaultVal_'.$i};
+                    
 
-                        $duplicate_result = FieldLevelAccess::where('company_id',$request->cbo_company_name)
-                                            ->where('user_id',$userId)
-                                            ->where('page_id',$request->cbo_page_id)
-                                            ->where('field_name',$cboFieldId)
-                                            ->get(); 
-                                    
-                        if(count($duplicate_result)>0)
-                        {			
-                            foreach($duplicate_result as $dup)
-                            {
-                                $dup->delete();
-                            }
+                    $duplicate_result = FieldLevelAccess::where('company_id',$request->cbo_company_name)
+                                        ->where('user_id',$userId)
+                                        ->where('page_id',$request->cbo_page_id)
+                                        ->where('field_name',$cboFieldId)
+                                        ->get(); 
+                                
+                    if(count($duplicate_result)>0)
+                    {			
+                        foreach($duplicate_result as $dup)
+                        {
+                            $dup->delete();
                         }
-                                                                        
-                        FieldLevelAccess::create([
-                            'mst_id'=>$request->mst_id,
-                            'company_id'=>$request->cbo_company_name,
-                            'user_id'=>$userId,
-                            'field_id'=>$cboFieldId,
-                            'page_id'=>$request->cbo_page_id,
-                            'field_name'=>$txtFieldName,
-                            'is_disable'=>$cboIsDisable,
-                            'defalt_value'=>$setDefaultVal,
-                            'created_by'=>Auth::user()->id
-                        ]);
-                                        
-                    }                            
-                }          
-            }
-            
+                    }
+                                                                    
+                   $field_level = FieldLevelAccess::create([
+                        'mst_id' => rand(1,100),
+                        'company_id'=>$request->cbo_company_name,
+                        'user_id'=>$userId,
+                        'field_id'=>$cboFieldId,
+                        'page_id'=>$request->cbo_page_id,
+                        'field_name'=>$txtFieldName,
+                        'is_disable'=>$cboIsDisable,
+                        'defalt_value'=>$setDefaultVal,
+                        'created_by'=>Auth::user()->id
+                    ]);
+                    $field_level->update(['mst_id'=>$field_level->id]);
+                                    
+                }                            
+            }          
+           
             $common_data =$request->mst_id."**".str_replace("'","",$request->cbo_company_name)."**".str_replace("'","",$request->text_user_id)."**".str_replace("'","",$request->cbo_page_id);
+            DB::commit();
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
@@ -105,9 +90,10 @@ class FieldLevelAccessController extends Controller
         }
         catch(Exception $e)
         {
+            DB::rollBack();
             $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
             return response()->json([
-                'code'=>37,
+                'code'=>10,
                 'message'=>$error_message,
                 'data'=> [
                 ]
@@ -134,9 +120,8 @@ class FieldLevelAccessController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FieldLevelAccess $fieldLevelAccess)
+    public function update(Request $request, FieldLevelAccess $flaccess)
     {
-        //
     }
 
     /**
@@ -181,12 +166,7 @@ class FieldLevelAccessController extends Controller
         {
             foreach($array as $row)
             {
-                if($i==0)
-                    $str=$row[csf("id")]."*".$row[csf("mst_id")]."*".$row[csf("field_id")]."*".$row[csf("field_name")]."*".$row[csf("is_disable")]."*".$row[csf("defalt_value")]."*".$row[csf("user_id")];
-                else
-                    $str .="@@".$row[csf("id")]."*".$row[csf("mst_id")]."*".$row[csf("field_id")]."*".$row[csf("field_name")]."*".$row[csf("is_disable")]."*".$row[csf("defalt_value")]."*".$row[csf("user_id")];
-                $i++;
-                array_push($data_array,[
+                array_push($data_array,(object)[
                     'id'            =>$row->id,
                     'mst_id'        =>$row->mst_id,
                     'page_id'       =>$page_id,
@@ -228,12 +208,14 @@ class FieldLevelAccessController extends Controller
         {
             echo '<input type="text" name="setDefaultVal_'.trim($data_ref[2]).'" id="setDefaultVal_'.trim($data_ref[2]).'" class="text_boxes" style="width:140px;" />';
         }
-        ?>	
-        <input type="hidden" name="txtFieldName[]"  id="txtFieldName_<? echo $data_ref[2];?>" value="<? echo $field_val; ?>" class="text_boxes" style="width:100px;" />
+	
+        echo '<input type="hidden" name="txtFieldName[]"  id="txtFieldName_'.$data_ref[2].'" value="'.$field_val.'" class="text_boxes" style="width:100px;" />';
 
-        <input type="hidden" name="hiddenPaymode" id="hiddenPaymode" />
-        <?php
+        echo '<input type="hidden" name="hiddenPaymode" id="hiddenPaymode" />';
+
         exit();
 
     }
+
+
 }

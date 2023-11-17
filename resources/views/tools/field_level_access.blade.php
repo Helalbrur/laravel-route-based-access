@@ -13,7 +13,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 <div class="row">
     <div class="col-lg-12">
         <center>
-            <div class="card" style="justify-content:center;width: 80%;">
+            <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center;width:80%">
                 <div class="card-body" style="justify-content:center;">
                     <div class="card-text" style="justify-content:center;">
                         <!-- #EBF4FA; -->
@@ -21,7 +21,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                             <form name="fieldlevelaccess_1" id="fieldlevelaccess_1" autocomplete="off" style="padding: 10px;">
                                 
                                 <div class="row">
-                                    <table width="800" class="table table-bordered table-stripped"  id="tbl_mst" style="background-color:#ddd;">
+                                    <table width="800" class="table table-bordered table-stripped"  id="tbl_mst" >
                                         <thead>
                                             <th width="250">Company &nbsp;&nbsp;<?php echo create_drop_down( "cbo_company_name", 150, "select id,company_name from lib_company order by company_name", "id,company_name",1, "-- Select Company --", "", "",0,"" ); ?></th>
                                             <th width="250">
@@ -36,7 +36,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                     </table>
                                 </div>
                                 <div class="row mt-10">
-                                    <table width="70%" class="table table-bordered table-stripped" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center" style="margin-top: 20px;background-color:#ddd;">
+                                    <table width="70%" class="table table-bordered table-stripped" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center" style="margin-top: 20px;">
                                         <thead>
                                             <th width="150" id="user_name_th" style="display:none;" >User Name</th>
                                             <th width="180">Field Name</th>
@@ -46,13 +46,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </thead>
                                         <tbody id="dtls_body">
                                             <tr>
-                                                <td align="center" id="user_name_td" style="display:none;" >
-                                                <?php
-
-                                                    $nameArray = return_library_array( "select id,name from users", "id", "name" );
-                                                    echo create_drop_down("cboUserId_1",150,$nameArray,"id,name",1,"----Select----",0,"",0,"","","","","","","cbo_user_id[]");
-                                                ?>
-                                                </td>
+                                                
                                                 <td align="center" id="fieldtd">
                                                 <?php echo create_drop_down("cboFieldId_1",180,blank_array(),"",1,"----Select----",0,"","","","","","","","","cbo_field_id[]"); ?>
                                                 </td>
@@ -123,10 +117,10 @@ $permission = getPagePermission(request('mid') ?? 0);
 						alert("Duplicate Field Name Not Allow");return;
 					}
 				}
-				field+=',cboFieldId_'+i+',cboIsDisable_'+i+',setDefaultVal_'+i;
+				field+=',cboFieldId_'+i+',cboIsDisable_'+i+',setDefaultVal_'+i+',txtFieldName_'+i;
 			}
             var formData = get_form_data(field);
-            formData.append('cboFieldId_'+i, $("#"+ex).val());
+            //formData.append('cboFieldId_'+i, $("#"+ex).val());
             var method ="POST";
            
             formData.append('_token', '{{csrf_token()}}');
@@ -164,16 +158,13 @@ $permission = getPagePermission(request('mid') ?? 0);
            //fn_set_item(entry_form_id);
 		}
     }
+    
     function fn_set_item(val)
 	{	
+        load_drop_down( 'tools/load_drop_down_field_level_access', val, 'tools/load_drop_down_field_level_access', 'fieldtd' );
+        var url = `{{URL::to('tools/field_level_action_user_data')}}`;
         var company_id=$('#cbo_company_name').val();
 		var user_id=$('#text_user_id').val();
-        load_drop_down( 'tools/load_drop_down_field_level_access', val, 'tools/load_drop_down_field_level_access', 'fieldtd' );
-
-		//get_php_form_data(company_id+'**'+user_id+'**'+val, "action_user_data", "requires/field_level_access_controller" );
-
-       
-        var url = `{{URL::to('tools/field_level_action_user_data')}}`;
         var param = company_id+'**'+user_id+'**'+val;
         url = `${url}?data=${param}`;
         fetch(url,{
@@ -189,16 +180,16 @@ $permission = getPagePermission(request('mid') ?? 0);
             {
                 try
                 {
+                    
                     if(data.length > 0 )
                     {
-                        $('#user_name_th').attr('style','display:true;');
-                        $('#user_name_td').attr('style','display:true;');
                         $('#button_status_check').val(1);
                         set_button_status(1, permission, 'fnc_field_level_access',1);
 
                         var i = 1;
                         for(row of data)
                         {
+                            
                             $('#cboFieldId_'+i).val(row.field_id);
                             set_hide_data( row.field_id+"**"+i );
                             $('#cboIsDisable_'+i).val(row.is_disable);
@@ -206,7 +197,6 @@ $permission = getPagePermission(request('mid') ?? 0);
                             $('#setDefaultVal_'+i).val(row.defalt_value);
                             $('#hideDtlsId_1'+i).val(row.id);
                             $('#update_id').val(row.mst_id);
-                            $('#cboUserId_'+i).val(row.user_id);
                             if(i < data.length)
                             {
                                 add_factor_row( i );
@@ -216,8 +206,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                     }
                     else
                     {
-                        $('#user_name_th').attr('style','display:none;');
-                        $('#user_name_td').attr('style','display:none;');
+                        
                         $('#button_status_check').val(0);
                         set_button_status(0, permission, 'fnc_field_level_access',1);
                     }
@@ -229,8 +218,6 @@ $permission = getPagePermission(request('mid') ?? 0);
             })
             .catch(error =>
             {
-                $('#user_name_th').attr('style','display:none;');
-                $('#user_name_td').attr('style','display:none;');
                 $('#button_status_check').val(0);
                 set_button_status(0, permission, 'fnc_field_level_access',1);
                 showNotification(error,'error');
@@ -313,9 +300,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 		var page_id=$('#cbo_page_id').val();
         var company_id=$('#cbo_company_name').val();
         var user_id=$('#text_user_id').val();
-       // get_php_form_data(company_id+'**'+user_id+'**'+page_id, "action_user_data", "requires/field_level_access_controller" );
-       // fn_set_item(page_id);
-		load_drop_down( 'tools/set_field_name', page_id+'**'+ref_arr[0]+'**'+ref_arr[1]+'**'+$('#cbo_company_name').val(), 'tools/set_field_name', 'tdId_'+ref_arr[1]);
+		//load_drop_down( 'tools/set_field_name', page_id+'**'+ref_arr[0]+'**'+ref_arr[1]+'**'+$('#cbo_company_name').val(), 'tools/set_field_name', 'tdId_'+ref_arr[1]);
 	}
     
 </script>
