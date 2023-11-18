@@ -138,21 +138,18 @@ function load_submit_buttons($permission, $sub_func, $is_update, $is_show_print 
     return $perm_str;die;
 }
 
-function getPagePermission($menu_id = '')
+function getPagePermission($menu_id)
 {
     $permission = "";
     DB::enableQueryLog();
-    if(!empty($menu_id))
-    {
-        $userPermission = DB::table('main_menu as a')
+   
+        /*
+         $userPermission = DB::table('main_menu as a')
                       ->join('user_priv_mst as b','a.m_menu_id','=','b.main_menu_id')
                       ->select('b.save_priv','b.edit_priv','b.delete_priv','b.approve_priv')
                       ->where('b.user_id',Auth::user()->id)
                       ->where('a.m_menu_id',$menu_id)->first();
-    }
-    else
-    {
-        /*
+
         $array = explode(".", Route::currentRouteName());
         // Get the subset of the array without the last element
         $subset = array_slice($array, 0,count($array)-1);
@@ -167,13 +164,13 @@ function getPagePermission($menu_id = '')
                       ->first();
                      // ->ddRawSql();
         */
-        $userPermission = DB::table('main_menu as a')
+    $userPermission = DB::table('main_menu as a')
         ->join('user_priv_mst as b','a.m_menu_id','=','b.main_menu_id')
         ->select('b.save_priv','b.edit_priv','b.delete_priv','b.approve_priv')
         ->where('b.user_id',Auth::user()->id)
         ->where('a.f_location', Route::getCurrentRoute()->uri)
+        ->where('a.m_menu_id',$menu_id)
         ->first();
-    }
     //dd(DB::getQueryLog());
     //dd($userPermission);
 

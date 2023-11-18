@@ -196,7 +196,7 @@
                     $level2 = $child_menu1_arr[$m_id][$uid][$r_sql[csf('M_MENU_ID')]] ?? array();
                     if( count( $level2 ) < 1)
                     {
-                        $url = URL::to("/{$r_sql[csf('f_location')]}");
+                        $url = URL::to("/{$r_sql[csf('f_location')]}?mid={$r_sql[csf('M_MENU_ID')]}");
                         ?>
                         <li>
                             <a
@@ -227,7 +227,7 @@
                             $level3 = $child_menu2_arr[$m_id][$uid][$r_sql[csf('M_MENU_ID')]][$menu_id] ?? array();
                             if( count( $level3 ) < 1)
                             {
-                                $url = URL::to("/{$f_location}");
+                                $url = URL::to("/{$f_location}?mid={$menu_id}");
                                 ?>
                                 <li>
                                     <a
@@ -253,7 +253,7 @@
                                     $delete_priv 	= $r_sql3[5];
                                     $approve_priv 	= $r_sql3[6];
                                     $fabric_nature 	= $r_sql3[7];
-                                    $url = URL::to("/{$f_location}");
+                                    $url = URL::to("/{$f_location}?mid={$menu_id}");
                                     ?>
                                      <li>
                                         <a

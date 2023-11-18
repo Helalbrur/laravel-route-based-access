@@ -1,6 +1,6 @@
 <?php
 //dd(session('laravel_stater.data_arr.8'));
-$permission = getPagePermission();
+$permission = getPagePermission(request('mid') ?? 0);
 ?>
 @extends('layouts.app')
 @section('content_header')
