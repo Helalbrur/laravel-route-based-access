@@ -100,7 +100,7 @@ $permission = getPagePermission();
                                 <th width="3%">Sl</th>
                                 <th width="12%">Location Name</th>
                                 <th width="15%">Company Name</th>
-                                <th width="10%">Short Name</th>
+                                <th width="10%">Country Name</th>
                                 <th width="12%">Email</th>
                                 <th width="13%">Website</th>
                                 <th width="13%">Contact No</th>
@@ -114,16 +114,16 @@ $permission = getPagePermission();
                             
                             ?>
                             @foreach($locations as $location)
-                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$location->id}}')" style="cursor:pointer">
-                                    <td>{{$sl++}}</td>
-                                    <td>{{$location->location_name}}</td>
-                                    <td>{{$company->company->company_name ?? ''}}</td>
-                                    <td>{{$company->company_short_name}}</td>
-                                    <td>{{$company->email}}</td>
-                                    <td>{{$company->website}}</td>
-                                    <td>{{$company->contact_no}}</td>
-                                    <td>{{$company->address}}</td>
-                                </tr>
+                            <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$location->id}}')" style="cursor:pointer">
+                                <td>{{$sl++}}</td>
+                                <td>{{$location->location_name}}</td>
+                                <td>{{$location->company->company_name ?? ''}}</td>
+                                <td>{{$location->country->country_name ?? ''}}</td>
+                                <td>{{$location->email}}</td>
+                                <td>{{$location->website}}</td>
+                                <td>{{$location->contact_no}}</td>
+                                <td>{{$location->address}}</td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -147,7 +147,7 @@ $permission = getPagePermission();
     @endif
     function fnc_company_name( operation )
     {
-        if (form_validation('cbo_group_name*txt_company_name*txt_company_short_name','Group Name*Company Name*Company Short Name')==false)
+        if (form_validation('cbo_company_name*txt_location_name',' Company Name*Location Name')==false)
         {
             return;
         }
@@ -169,7 +169,7 @@ $permission = getPagePermission();
                     return;
                 }
             }
-            var formData = get_form_data('cbo_group_name,txt_company_name,txt_company_short_name,txt_email,txt_website_name,txt_contact_no,txt_company_address,update_id','txt_file');
+            var formData = get_form_data('cbo_company_name,txt_location_name,cbo_country_name,txt_email,txt_website_name,txt_contact_no,txt_contact_person,txt_company_address,update_id');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -179,7 +179,7 @@ $permission = getPagePermission();
                 else formData.append('_method', 'DELETE');
             }
             formData.append('_token', '{{csrf_token()}}');
-            var url = `/lib/company${param}`;
+            var url = `/lib/location${param}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -189,16 +189,16 @@ $permission = getPagePermission();
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_company_list_view','list_view_div','mainform_1');
+            save_update_delete(operation,url,requestData,'id','show_location_list_view','list_view_div','mainform_1');
         }
     }
 
     const load_php_data_to_form =async (menuId) =>
     {
-        var columns = 'group_id*company_name*company_short_name*email*website*contact_no*address*id';
-        var fields = 'cbo_group_name*txt_company_name*txt_company_short_name*txt_email*txt_website_name*txt_contact_no*txt_company_address*update_id';
-        var others = 'image_uploads,sys_no,id,file_name,displayImage,company_profile';
-       var get_return_value = await populate_form_data('id',menuId,'lib_company',columns,fields,'{{csrf_token()}}');
+        var columns = 'location_name*company_id*country_id*contact_person*contact_no*website*email*address*id';
+        var fields = 'txt_location_name*cbo_company_name*cbo_country_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_company_address*update_id';
+        var others = '';
+       var get_return_value = await populate_form_data('id',menuId,'lib_location',columns,fields,'{{csrf_token()}}');
        if(get_return_value == 1)
        {
          set_button_status(1, permission, 'fnc_company_name',1);
