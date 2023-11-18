@@ -56,7 +56,8 @@ function csf($data) // checked 3
 
 function load_submit_buttons($permission, $sub_func, $is_update, $is_show_print = '', $refresh_function = '', $btn_id = "", $is_show_approve = "")
 {
-    $permission = explode('_', $permission);
+    $permission = explode('_', $permission ?? '0_0_0_0');
+    
     $perm_str = "";
     if ($btn_id == "") {
         $btn_id = 1;
@@ -174,8 +175,8 @@ function getPagePermission($menu_id)
     //dd(DB::getQueryLog());
     //dd($userPermission);
 
-    if(isset($userPermission)) $permission = $userPermission->save_priv. "_" .$userPermission->edit_priv. "_" .$userPermission->delete_priv . "_" . $userPermission->approve_priv;
-    return $permission;
+    if(isset($userPermission)) return $permission = $userPermission->save_priv. "_" .$userPermission->edit_priv. "_" .$userPermission->delete_priv . "_" . $userPermission->approve_priv;
+    return null;
 }
 
 function fn_number_format($val, $after_point = 0, $dot = '', $null = '')
@@ -763,6 +764,85 @@ function get_button_level_permission($permission)
 function execute_query( $strQuery, $commit="" )
 {
 	DB::unprepared($strQuery);
+}
+
+function getMenuName($menu_id)
+{  
+    $menu = DB::table('main_menu')
+        ->where('f_location', Route::getCurrentRoute()->uri)
+        ->where('m_menu_id',$menu_id)
+        ->first();
+    if(!empty($menu->menu_name)) return $menu->menu_name;
+    return null;
+}
+
+function bn2en($number)
+{
+    $bn = array("১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯", "০");
+    $en = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
+    return str_replace($bn, $en, $number);
+}
+
+function en2bn($number)
+{
+    $bn = array("১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯", "০");
+    $en = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
+    return str_replace($en, $bn, $number);
+}
+
+function getTotalDay($month,$year)
+{
+
+    return cal_days_in_month(CAL_GREGORIAN, $month, $year);
+}
+
+function getDayNUmber($date1,$date2)
+{
+    $datetime1 = date_create($date1);
+    $datetime2 = date_create($date2);
+    $interval = date_diff($datetime1, $datetime2);
+    return $interval->days;
+}
+
+function executeTime()
+{
+    return (microtime(true) - $_SERVER['REQUEST_TIME']);
+}
+function get_ip_mac($trace)
+{
+    ob_start();
+    system($trace . ' -h 2' . " yahoo.com");
+    $trace = ob_get_contents();
+    ob_clean();
+    $lines = explode("\n", $trace);
+    $lines = explode(" ", $lines[5]);
+
+    foreach ($lines as $line) {
+        if (strlen(trim($line)) > 5) {
+            $proxy_address = $line;
+        }
+    }
+
+    $ipAddress = $_SERVER['REMOTE_ADDR'];
+    $macAddr = "";
+
+    #run the external command, break output into lines
+    ob_start();
+    system('arp -a ' . $ipAddress);
+    $arp = ob_get_contents();
+    ob_clean();
+    $lines = explode("\n", $arp);
+
+    #look for the output line describing our IP address
+    foreach ($lines as $line) {
+        $cols = preg_split('/\s+/', trim($line));
+        if ($cols[0] == $ipAddress) {
+            $macAddr = $cols[1];
+        }
+    }
+    //return trim($ipAddress)."__".strtoupper(trim($macAddr))."__".trim($proxy_address);
+    return trim($proxy_address);
+    //echo strtoupper($macAddr)."--".$ipAddress."--".$proxy_address;
 }
 
 ?>

@@ -5,7 +5,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 align-center"><strong>Main Module</strong></h1>
+            <h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Main Module'}}</strong></h1>
         </div>
         <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

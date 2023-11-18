@@ -5,7 +5,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 align-center">Permission Page</h1>
+            <h1 class="m-0 align-center">{{getMenuName(request('mid') ?? 0) ?? 'Permission Page'}}</h1>
         </div>
         <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

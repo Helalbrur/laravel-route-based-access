@@ -13,7 +13,7 @@ class LibBuyerController extends Controller
      */
     public function index()
     {
-        //
+        return view('lib.buyer');
     }
 
     /**

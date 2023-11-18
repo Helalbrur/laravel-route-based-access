@@ -1,11 +1,13 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
+//dd(get_ip_mac("traceroute"));
+//dd(get_ip_mac("tracert"));
 ?>
 @extends('layouts.app')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-12">
-            <center><h1 class="m-0 align-center"><strong>Mandatory Field List</strong></h1></center>
+            <center><h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Mandatory Field List'}}</strong></h1></center>
         </div>
     </div><!-- /.row -->
 @endsection()

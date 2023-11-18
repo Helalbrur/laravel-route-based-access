@@ -5,7 +5,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-12">
-            <center><h1 class="m-0 align-center"><strong>Lib Category</strong></h1></center>
+            <center><h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Lib Category'}}</strong></h1></center>
         </div>
     </div><!-- /.row -->
 @endsection()
