@@ -24,6 +24,7 @@ use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
+use App\Http\Controllers\LibLocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     //permision route = > only admin user can access
     Route::resource('/company', CompanyController::class);
     Route::resource('/group', GroupController::class);
+    Route::resource('/location', LibLocationController::class);
 
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/size', LibSizeController::class);

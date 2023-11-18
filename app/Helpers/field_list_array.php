@@ -24,7 +24,8 @@ function get_fieldlevel_access_arr( $index )
 function fieldlevel_access_arr()
 {
     $fieldlevel_arr = array();
-    $fieldlevel_arr[3][1]="txt_item_group_code"; //Knit Finish Fabric Issue
+    $fieldlevel_arr[3][1]="txt_item_group_code"; //Item Group
+	$fieldlevel_arr[8][1]="cbo_country_name"; //Location
     return $fieldlevel_arr;
 }
 

@@ -43,7 +43,7 @@ function get_uom()
 
 function get_entry_form()
 {
-    return array(1 => "Group Profile", 2 => "Company Profile", 3 => "Item Group", 4 => "Item Sub Group");
+    return array(1 => "Group Profile", 2 => "Company Profile", 3 => "Item Group", 4 => "Item Sub Group", 5 => "Country" , 6 => "Color", 7 => "Size", 8 => "Location");
 }
 
 function yes_no()

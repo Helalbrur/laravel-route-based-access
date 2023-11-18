@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('field_level_access', function (Blueprint $table) {
             $table->id();
             $table->string('field_name');
-            $table->string('defalt_value')->nullable();
+            $table->string('default_value')->nullable();
             $table->unsignedBigInteger('mst_id');
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('user_id');

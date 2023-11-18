@@ -35,6 +35,7 @@ function fieldlevel_arr()
 {
     $fieldlevel_arr = array();
     $fieldlevel_arr[3][1] = "txt_item_group_code";
+    $fieldlevel_arr[8][1] = "cbo_country_name";
     return $fieldlevel_arr;
 }
 

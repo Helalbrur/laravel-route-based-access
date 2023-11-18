@@ -166,6 +166,7 @@ $permission = getPagePermission();
         var url = `{{URL::to('tools/field_level_action_user_data')}}`;
         var company_id=$('#cbo_company_name').val();
 		var user_id=$('#text_user_id').val();
+        var page_id=$('#cbo_page_id').val();
         var param = company_id+'**'+user_id+'**'+val;
         url = `${url}?data=${param}`;
         fetch(url,{
@@ -192,22 +193,28 @@ $permission = getPagePermission();
                         {
                             
                             $('#cboFieldId_'+i).val(row.field_id);
-                            set_hide_data( row.field_id+"**"+i );
+                            load_drop_down( 'tools/set_field_name', page_id+'**'+row.field_id+"**"+i+'**'+$('#cbo_company_name').val()+"**"+row.defalt_value, 'tools/set_field_name', 'tdId_'+i);
+                            console.log(row.defalt_value);
                             $('#cboIsDisable_'+i).val(row.is_disable);
                             $('#txtFieldName_'+i).val(row.field_name);
                             $('#setDefaultVal_'+i).val(row.defalt_value);
-                            $('#hideDtlsId_1'+i).val(row.id);
+                            $('#hideDtlsId_'+i).val(row.id);
                             $('#update_id').val(row.mst_id);
                             if(i < data.length)
                             {
                                 add_factor_row( i );
                             } 
                             i++;
+                           
                         }
                     }
                     else
                     {
-                        
+                        $('#cboIsDisable_1').val('');
+                        $('#txtFieldName_1').val('');
+                        $('#setDefaultVal_1').val('');
+                        $('#hideDtlsId_1').val('');
+                        $('#update_id').val('');
                         $('#button_status_check').val(0);
                         set_button_status(0, permission, 'fnc_field_level_access',1);
                     }
@@ -296,13 +303,14 @@ $permission = getPagePermission();
         }
 	}
     function set_hide_data(ref)
-	{
-		var ref_arr=ref.split('**');
+    {
+        var ref_arr=ref.split('**');
 		var page_id=$('#cbo_page_id').val();
         var company_id=$('#cbo_company_name').val();
         var user_id=$('#text_user_id').val();
-		//load_drop_down( 'tools/set_field_name', page_id+'**'+ref_arr[0]+'**'+ref_arr[1]+'**'+$('#cbo_company_name').val(), 'tools/set_field_name', 'tdId_'+ref_arr[1]);
-	}
+        load_drop_down( 'tools/set_field_name', page_id+'**'+ref_arr[0]+'**'+ref_arr[1]+'**'+$('#cbo_company_name').val(), 'tools/set_field_name', 'tdId_'+ref_arr[1]);
+		
+    }
     
 </script>
 @endsection

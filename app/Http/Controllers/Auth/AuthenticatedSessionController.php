@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         $user = Auth::user();
-        /*
+        
         $sql = "SELECT page_id, company_id, user_id, field_id, field_name, is_disable, default_value FROM field_level_access WHERE user_id = ?";
         $sql_exe = DB::select($sql, [$user->id]);
 
@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
             Session::put('laravel_stater.data_arr.'.$row->page_id.'.'.$row->company_id.'.'.$row->field_name.'.is_disable', $row->is_disable);
             Session::put('laravel_stater.data_arr.'.$row->page_id.'.'.$row->company_id.'.'.$row->field_name.'.default_value', $row->default_value);
         }
-        */
+        
 
         $sql = "SELECT id, page_id, field_id, field_name, field_message, is_mandatory FROM mandatory_field WHERE is_mandatory = 1 AND field_name IS NOT NULL";
         $sql_exe = DB::select($sql);

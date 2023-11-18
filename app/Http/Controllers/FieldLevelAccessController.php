@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\LibCountry;
 use Illuminate\Http\Request;
 use App\Models\FieldLevelAccess;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +72,7 @@ class FieldLevelAccessController extends Controller
                         'page_id'=>$request->cbo_page_id,
                         'field_name'=>$txtFieldName,
                         'is_disable'=>$cboIsDisable,
-                        'defalt_value'=>$setDefaultVal,
+                        'default_value'=>$setDefaultVal,
                         'created_by'=>Auth::user()->id
                     ]);
                     $field_level->update(['mst_id'=>$field_level->id]);
@@ -155,7 +156,7 @@ class FieldLevelAccessController extends Controller
         
         
         
-        $array=DB::select("SELECT a.id, a.mst_id, a.field_id, a.field_name, a.is_disable, a.defalt_value, a.user_id from field_level_access a where a.company_id=$com_id and a.user_id in ($user_id_arr) and a.page_id=$page_id ");
+        $array=DB::select("SELECT a.id, a.mst_id, a.field_id, a.field_name, a.is_disable, a.default_value, a.user_id from field_level_access a where a.company_id=$com_id and a.user_id in ($user_id_arr) and a.page_id=$page_id ");
 
 
         //$field_arr=get_fieldlevel_access_arr($page_id);
@@ -173,7 +174,7 @@ class FieldLevelAccessController extends Controller
                     'field_id'      =>$row->field_id,
                     'field_name'    =>$row->field_name,
                     'is_disable'    =>$row->is_disable,
-                    'defalt_value'  =>$row->defalt_value,
+                    'default_value'  =>$row->default_value,
                     'user_id'       =>$row->user_id
                 ]);
             }
@@ -185,30 +186,30 @@ class FieldLevelAccessController extends Controller
         $data_ref=explode("**",$request->data);
         $fieldlevel_arr = fieldlevel_access_arr();
         $field_val=$fieldlevel_arr[$data_ref[0]][$data_ref[1]];
-
-        if($data_ref[0]==1)
+        $default_value=$data_ref[4] ?? '';
+        if($data_ref[0]==8)
         {
-            if($data_ref[1]==6)
+            if($data_ref[1]==1)
             {
-                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, currency(),"",1,"----Select----",0,"","","","","","","","","" );
+                $lib_country = LibCountry::pluck('country_name', 'id');
+                $country_arr = array();
+                foreach($lib_country as $country_id => $country_name)
+                {
+                    $country_arr[$country_id] = $country_name;
+                }
+                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, $country_arr,"",1,"----Select----",$default_value ?? 0,"","","","","","","","","" );
             }
             if($data_ref[1]==7)
             {
                 echo '<input type="text" name="setDefaultVal_"'.$data_ref[2].' id="setDefaultVal_"'.$data_ref[2].' class="text_boxes" style="width:140px;" />';
             }	
         }
-        else if($data_ref[0]==147)
-        {
-            if($data_ref[1]==1)
-                echo create_drop_down( "setDefaultVal_".$data_ref[2], 150, pay_mode(),"",1,"----Select----",0,"","","","","","","","","" );	
-            else
-                echo '<input type="text" name="setDefaultVal_'.$data_ref[2].'" id="setDefaultVal_'.$data_ref[2].'" class="text_boxes" style="width:140px;" />';
-        }
+        
         else
         {
-            echo '<input type="text" name="setDefaultVal_'.trim($data_ref[2]).'" id="setDefaultVal_'.trim($data_ref[2]).'" class="text_boxes" style="width:140px;" />';
+            echo '<input type="text" name="setDefaultVal_'.trim($data_ref[2]).'" id="setDefaultVal_'.trim($data_ref[2]).'" class="text_boxes" style="width:140px;" value="'.$default_value.'" />';
         }
-	
+       
         echo '<input type="hidden" name="txtFieldName[]"  id="txtFieldName_'.$data_ref[2].'" value="'.$field_val.'" class="text_boxes" style="width:100px;" />';
 
         echo '<input type="hidden" name="hiddenPaymode" id="hiddenPaymode" />';

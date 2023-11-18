@@ -1238,19 +1238,19 @@ function set_field_level_access( company )
 				$('#'+key).attr('disabled',false);
 			}
 			
-			if(value['defalt_value']==null || value['defalt_value']=="undefined"){value['defalt_value']='';}
+			if(value['default_value']==null || value['default_value']=="undefined"){value['default_value']='';}
 			
-			if(value['defalt_value']!='')
+			if(value['default_value']!='')
 			{ 
-				if(value['defalt_value']=="") return;
+				if(value['default_value']=="") return;
 				first_values.push({
 					f_title: key,
 					f_val:  $('#'+key).val()
 				});
 				
-				 if(value['defalt_value']!='')
+				 if(value['default_value']!='')
 				 { 
-					$('#'+key).val(value['defalt_value']);
+					$('#'+key).val(value['default_value']);
 					$('#'+key).change();
 				 }
 			}

@@ -13,7 +13,7 @@ class LibLocationController extends Controller
      */
     public function index()
     {
-        //
+        return view('lib.location');
     }
 
     /**
