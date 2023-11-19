@@ -191,13 +191,13 @@ $permission = getPagePermission(request('mid') ?? 0);
                         var i = 1;
                         for(row of data)
                         {
-                            
+                           
                             $('#cboFieldId_'+i).val(row.field_id);
-                            load_drop_down( 'tools/set_field_name', page_id+'**'+row.field_id+"**"+i+'**'+$('#cbo_company_name').val()+"**"+row.defalt_value, 'tools/set_field_name', 'tdId_'+i);
-                            console.log(row.defalt_value);
+                            load_drop_down( 'tools/set_field_name', page_id+"**"+row.field_id+"**"+i+"**"+$('#cbo_company_name').val()+"**'"+row.default_value+"'", 'tools/set_field_name', 'tdId_'+i);
+                            
                             $('#cboIsDisable_'+i).val(row.is_disable);
                             $('#txtFieldName_'+i).val(row.field_name);
-                            $('#setDefaultVal_'+i).val(row.defalt_value);
+                            $('#setDefaultVal_'+i).val(row.default_value);
                             $('#hideDtlsId_'+i).val(row.id);
                             $('#update_id').val(row.mst_id);
                             if(i < data.length)

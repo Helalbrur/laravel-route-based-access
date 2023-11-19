@@ -186,7 +186,7 @@ class FieldLevelAccessController extends Controller
         $data_ref=explode("**",$request->data);
         $fieldlevel_arr = fieldlevel_access_arr();
         $field_val=$fieldlevel_arr[$data_ref[0]][$data_ref[1]];
-        $default_value=$data_ref[4] ?? '';
+        $default_value=str_replace("'","",$data_ref[4]) ?? '';
         if($data_ref[0]==8)
         {
             if($data_ref[1]==1)
@@ -201,7 +201,7 @@ class FieldLevelAccessController extends Controller
             }
             if($data_ref[1]==7)
             {
-                echo '<input type="text" name="setDefaultVal_"'.$data_ref[2].' id="setDefaultVal_"'.$data_ref[2].' class="text_boxes" style="width:140px;" />';
+                echo '<input type="text" name="setDefaultVal_"'.$data_ref[2].' id="setDefaultVal_"'.$data_ref[2].' class="text_boxes" style="width:140px;" value="'.$default_value.'" />';
             }	
         }
         
