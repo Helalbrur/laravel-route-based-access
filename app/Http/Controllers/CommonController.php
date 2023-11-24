@@ -81,9 +81,9 @@ class CommonController extends Controller
             {
                 foreach($others as $other)
                 {
-                $od = explode(",",$other);
-                if(count($od) > 4)
-                {
+                    $od = explode(",",$other);
+                    if(count($od) > 4)
+                    {
                         $table = $od[0];
                         $joinColumn = $od[1];
                         $columnToRetrieve = $od[3];
@@ -94,10 +94,10 @@ class CommonController extends Controller
                         $ord = DB::table($table)
                             ->where($joinColumn, $condition_value);
 
-                            if($table == 'image_uploads')
-                            {
-                                $ord =  $ord->where('page_name', $od[5]);
-                            }
+                        if($table == 'image_uploads')
+                        {
+                            $ord =  $ord->where('page_name', $od[5]);
+                        }
                         $ord  = $ord->select(DB::raw($columnToRetrieve))
                                     ->first();
                         
@@ -112,7 +112,7 @@ class CommonController extends Controller
                                 $other_data[$alias] =$ord->{$columnToRetrieve};
                             }
                         }
-                }
+                    }
                 }
             }
 

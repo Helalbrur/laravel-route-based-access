@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('supplier_name');
             $table->string('short_name');
-            $table->string('party_type');
-            $table->string('tag_company');
+            $table->string('party_type')->nullable();
+            $table->string('tag_company')->nullable();
             $table->string('contact_person')->nullable();
             $table->string('contact_no')->nullable();
             $table->string('web_site')->nullable();

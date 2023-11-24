@@ -12,6 +12,20 @@ class LibSupplier extends Model
     use SoftDeletes;
     protected $table = 'lib_supplier';
     protected $fillable = [
-        'supplier_name','short_name','party_type','tag_company','contact_person','contact_no','web_site','email','address'
+        'supplier_name','short_name','country_id','party_type','tag_company','contact_person','contact_no','web_site','email','address'
     ];
+
+    public function company()
+    {
+        return $this->belongsToMany(Company::class, 'lib_supplier_tag_company','supplier_id','company_id');
+        //->ddRawSql()
+    }
+    public function country()
+    {
+        return $this->belongsTo(LibCountry::class);
+    }
+    public function tagCompany()
+    {
+        return $this->hasMany(LibSupplierTagCompany::class,'buyer_id','id');//->ddRawSql();
+    }
 }
