@@ -43,7 +43,7 @@ function get_uom()
 
 function get_entry_form()
 {
-    return array(1 => "Group Profile", 2 => "Company Profile", 3 => "Item Group", 4 => "Item Sub Group", 5 => "Country" , 6 => "Color", 7 => "Size", 8 => "Location");
+    return array(1 => "Group Profile", 2 => "Company Profile", 3 => "Item Group", 4 => "Item Sub Group", 5 => "Country" , 6 => "Color", 7 => "Size", 8 => "Location", 9 => "Buyer Profile");
 }
 
 function yes_no()
@@ -60,4 +60,40 @@ function pay_mode()
 {
     return array(1 => "Credit", 2 => "Import", 3 => "In House", 4 => "Cash", 5 => "Within Group");
 }
+
+function party_type()
+{
+    return array(1=>"Buyer", 2=>"Subcontract", 3=>"Buyer/Subcontract", 4=>"Notifying Party", 5=>"Consignee", 6=>"Notifying/Consignee", 7=>"Client",8=>"Customer", 20=>"Buying Agent", 21=>"Buyer/Buying Agent", 22=>"Export LC Applicant", 23=>"LC Applicant/Buying Agent", 30=>"Developing Buyer", 80=>"Other Buyer", 90=>"Buyer/Supplier", 100=>"Also Notify Party");
+}
+
+function party_type_supplier()
+{
+   return array(1 => "Supplier", 2 => "Yarn Supplier", 3 => "Dyes & Chemical Supplier", 4 => "Trims Supplier", 5 => "Accessories Supplier", 6 => "Machineries Supplier", 7 => "General Item", 8 => "Stationery Supplier", 9 => "Leather & Synthetic Supplier", 20 => "Knit Subcontract", 21 => "Dyeing/Finishing Subcontract", 22 => "Finish Footwear Subcontract", 23 => "Embellishment Subcontract", 24 => "Fabric Washing Subcontract", 25 => "AOP Subcontract", 26 => "Lab Test Company", 30 => "C & F Agent", 31 => "Clearing Agent", 32 => "Forwarding Agent", 35 => "Transport Supplier", 36 => "Labor Contractor", 37 => "Civil Contractor", 38 => "Interior", 39 => "Other Contractor", 40 => "Indentor", 41 => "Inspection", 90 => "Buyer/Supplier", 91 => "Loan Party", 92 => "Vehicle Components", 93 => "Twisting", 94 => "Re-Waxing", 95 => "Grey Fabric Service Subcontract",96 => "Trims Sub-Contract", 130 => "General Accessories Service");
+}
+
+function get_all_month()
+{
+    return  array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
+}
+function get_all_month_short_name()
+{
+    return  array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
+}
+
+function get_all_year()
+{
+    $year = array();
+
+    for($y = 2010;$y <=date('Y')+10;$y++)
+    {
+        $year[$y] = $y;
+    }
+    return $year;
+}
+
+function get_all_day()
+{
+    return array(1 => "Saturday", 2 => "Sunday", 3 => "Monday", 4 => "Tuesday", 5 => "Wednesday", 6 => "Thursday", 7 => "Friday");
+}
+
 ?>

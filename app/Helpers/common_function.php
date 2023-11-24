@@ -700,7 +700,7 @@ function load_freeze_divs($img_path = '', $permission = "", $page_title_off = ""
 		</div>
 		<div id="mask"></div>
 		</div>
-		<div style="margin-top:10px; margin-bottom:10px;"> <input type="hidden" id="active_menu_id" value="' . $_SESSION['menu_id'] . '"><input type="hidden" id="active_module_id" value="' . $_SESSION['module_id'] . '"><input type="hidden" id="garments_nature" value="' . $_SESSION['fabric_nature'] . '"><input type="hidden" id="session_user_id" value="' . $_SESSION['logic_erp']['user_id'] . '">';
+		<div style="margin-top:10px; margin-bottom:10px;"> <input type="hidden" id="active_menu_id" value="' . $_SESSION['menu_id'] . '"><input type="hidden" id="active_module_id" value="' . $_SESSION['module_id'] . '"><input type="hidden" id="garments_nature" value="' . $_SESSION['fabric_nature'] . '"><input type="hidden" id="session_user_id" value="' . Auth::user()->id ?? '' . '">';
     if ($on_qcf == true) {
         $title = "Page On Qc";
         $style = 'style="color:red"';
@@ -845,4 +845,210 @@ function get_ip_mac($trace)
     //echo strtoupper($macAddr)."--".$ipAddress."--".$proxy_address;
 }
 
+function add_time($event_time, $event_length)
+{
+    //This function will return new time after adding a given value with a given time
+    // Here $event_time= Time ,$event_length= integer Minutes
+    // uses  --> add_time($event_time,50)
+
+    $timestamp = strtotime("$event_time");
+    $etime = strtotime("+$event_length minutes", $timestamp);
+    $etime = date('H:i:s', $etime);
+    return $etime;
+}
+
+function add_date($orgDate, $days)
+{
+    $cd = strtotime($orgDate);
+    $retDAY = date('Y-m-d', mktime(0, 0, 0, date('m', $cd), date('d', $cd) + $days, date('Y', $cd)));
+    return $retDAY;
+}
+
+function GetDays($sStartDate, $sEndDate)
+{
+    // Retrun array of days
+
+    $sStartDate = gmdate("Y-m-d", strtotime($sStartDate));
+    $sEndDate = gmdate("Y-m-d", strtotime($sEndDate));
+
+    $aDays[] = $sStartDate;
+
+    $sCurrentDate = $sStartDate;
+    while ($sCurrentDate < $sEndDate) {
+        $sCurrentDate = date("Y-m-d", strtotime("+1 day", strtotime($sCurrentDate)));
+        $aDays[] = $sCurrentDate;
+    }
+    return $aDays;
+}
+
+// interval: day or month or year or ........
+function datediff($interval, $datefrom, $dateto, $using_timestamps = false)
+{
+    if ($datefrom != "" and $dateto != "") {
+        if (!$using_timestamps) {
+            $datefrom = strtotime($datefrom, 0);
+            $dateto = strtotime($dateto, 0);
+        }
+        $difference = $dateto - $datefrom; // Difference in seconds
+        switch ($interval) {
+            case 'yyyy': // Number of full years
+                $years_difference = floor($difference / 31536000);
+                if (mktime(date("H", $datefrom), date("i", $datefrom), date("s", $datefrom), date("n", $datefrom), date("j", $datefrom), date("Y", $datefrom) + $years_difference) > $dateto) {
+                    $years_difference--;
+                }
+                if (mktime(date("H", $dateto), date("i", $dateto), date("s", $dateto), date("n", $dateto), date("j", $dateto), date("Y", $dateto) - ($years_difference + 1)) > $datefrom) {
+                    $years_difference++;
+                }
+                $datediff = $years_difference;
+                break;
+            case "q": // Number of full quarters
+                $quarters_difference = floor($difference / 8035200);
+                while (mktime(date("H", $datefrom), date("i", $datefrom), date("s", $datefrom), date("n", $datefrom) + ($quarters_difference * 3), date("j", $dateto), date("Y", $datefrom)) < $dateto) {
+                    $quarters_difference++;
+                }
+                $quarters_difference--;
+                $datediff = $quarters_difference;
+                break;
+            case "m": // Number of full months
+                $months_difference = floor($difference / 2678400);
+                while (mktime(date("H", $datefrom), date("i", $datefrom), date("s", $datefrom), date("n", $datefrom) + ($months_difference), date("j", $dateto), date("Y", $datefrom)) < $dateto) {
+                    $months_difference++;
+                }
+                //$months_difference--;
+                $datediff = $months_difference;
+                break;
+            case 'y': // Difference between day numbers
+                $datediff = date("z", $dateto) - date("z", $datefrom);
+                break;
+            case "d": // Number of full days
+                $datediff = (floor($difference / 86400) + 1);
+                break;
+            case "w": // Number of full weekdays
+                $days_difference = floor($difference / 86400);
+                $weeks_difference = floor($days_difference / 7); // Complete weeks
+                $first_day = date("w", $datefrom);
+                $days_remainder = floor($days_difference % 7);
+                $odd_days = $first_day + $days_remainder; // Do we have a Saturday or Sunday in the remainder?
+                if ($odd_days > 7) {
+                    $days_remainder--;
+                }
+                // Sunday
+                if ($odd_days > 6) {
+                    $days_remainder--;
+                }
+                // Saturday
+                $datediff = ($weeks_difference * 5) + $days_remainder;
+                break;
+            case "ww": // Number of full weeks
+                $datediff = floor($difference / 604800);
+                break;
+            case "h": // Number of full hours
+                $datediff = floor($difference / 3600);
+                break;
+            case "n": // Number of full minutes
+                $datediff = floor($difference / 60);
+                break;
+            default: // Number of full seconds (default)
+                $datediff = $difference;
+                break;
+        }
+        return $datediff;
+    }
+}
+
+function number_to_words($number = '', $full_unit = '', $half_unit = "")
+{
+    // This function returns amount in word
+    // uses :: echo number_to_words("55555555250", "USD", "CENTS");
+    $number = str_replace(",", "", $number);
+    if (($number < 0) || ($number > 99999999999)) {
+        throw new Exception("Number is out of range");
+    }
+    $number = explode('.', $number);
+    if ($number[1] == "" || $number == 0) {
+        $result1 = " " . $full_unit;
+        $number = $number[0];
+    } else {
+        $number[1] = str_pad($number[1], 2, "0", STR_PAD_RIGHT);
+        $result1 = " " . $full_unit . " and " . number_to_words($number[1]) . " " . $half_unit;
+        $number = $number[0];
+    }
+
+    $Cn = floor($number / 10000000); /* Crore (giga) */
+    $number -= $Cn * 10000000;
+
+    // $Gn = floor($number / 1000000);  /* Millions (giga) */
+    //$number -= $Gn * 1000000;
+
+    $Ln = floor($number / 100000); /* Lacs (giga) */
+    $number -= $Ln * 100000;
+
+    $kn = floor($number / 1000); /* Thousands (kilo) */
+    $number -= $kn * 1000;
+    $Hn = floor($number / 100); /* Hundreds (hecto) */
+    $number -= $Hn * 100;
+    $Dn = floor($number / 10); /* Tens (deca) */
+    $n = $number % 10; /* Ones */
+
+    $result = "";
+    if ($Cn) {$result .= number_to_words($Cn) . " Crore ";}
+
+    /* if ($Gn)
+    {  $result .= number_to_words($Gn) . " Million ";  }
+     */
+    if ($Ln) {$result .= number_to_words($Ln) . " Lac ";}
+
+    if ($kn) {$result .= (empty($result) ? "" : " ") . number_to_words($kn) . " Thousand ";}
+
+    if ($Hn) {$result .= (empty($result) ? "" : " ") . number_to_words($Hn) . " Hundred ";}
+
+    $ones = array("", "One", "Two", "Three", "Four", "Five", "Six",
+        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+        "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen",
+        "Nineteen");
+    $tens = array("", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty",
+        "Seventy", "Eighty", "Ninety");
+
+    if ($Dn || $n) {
+        /*if (!empty($result)) {
+        $result .= " and ";
+        }*/
+
+        if ($Dn < 2) {
+            $result .= $ones[$Dn * 10 + $n];
+        } else {
+            $result .= $tens[$Dn];
+            if ($n) {
+                $result .= "-" . $ones[$n];
+            }
+        }
+    }
+
+    if (empty($result)) {$result = "Zero";}
+
+    return "$result " . " $result1";
+}
+
+function load_month_buttons($show_year = 0)
+{
+    $month_year="";
+    if ($show_year == 1) {
+        $month_year = create_drop_down("cbo_year_selection", 65, get_all_year(), "", 0, "-- --", date("Y", time()), "", 0, "");
+    }
+    $month_btn ="";
+    for ($i = 1; $i < 13; $i++) {
+        if ($i < 10) {
+            $j = "0" . $i;
+        } else {
+            $j = $i;
+        }
+
+        $month_btn .= '<input type="button" name="btn_' . $i . '" style="width:50px;" onclick="set_date_range(\'' . $j . '\')" id="btn_' . $i . '" value="' . getMonth($i). '" class="month_button" />&nbsp;&nbsp;';
+    }
+    return $month_year . "&nbsp;&nbsp;" . $month_btn;die;
+}
+function getMonth($month) {
+    $months = array(1 => 'January',2 => 'February',3 => 'March',4 => 'April',5 => 'May',6 => 'June',7 => 'July',8 => 'August',9 => 'September',10 => 'October',11 => 'November',12 => 'December');
+    return $months[$month];
+}
 ?>

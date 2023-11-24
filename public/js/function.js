@@ -958,7 +958,7 @@ function readImage(input,displayImage)
 	}
 }
 
-async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='')
+async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='',multi_select_column ='')
 {
 	var return_value = -1 ;
 	var url = `/populate_common_data`;
@@ -992,6 +992,16 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 				var db_columns = database_column_name.split("*");
 				var form_columns = form_field_name.split("*");
 
+				if(multi_select_column.length > 0)
+				{
+					var multi_select_count = multi_select_column.split("*");
+					var multi_select_value = [];
+					for(var cn = 0; cn < multi_select_count.length; cn++)
+					{
+						multi_select_value.push(multi_select_count[cn]);
+					}
+				}
+
 				for( var row_no = 0 ; row_no < Math.min(db_columns.length,form_columns.length); row_no++)
 				{
 					var db_col = db_columns[row_no];
@@ -1000,6 +1010,14 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 					if (element)
 					{
 						element.value = data.data[db_col];
+						if(multi_select_column.length > 0)
+						{
+							if(multi_select_value.includes(form_columns[row_no]))
+							{
+								var nulti_index = multi_select_value.indexOf(form_columns[row_no]);
+								multi_select_value[nulti_index] = data.data[db_col];
+							}
+						}
 					}
 					else
 					{
@@ -1007,6 +1025,17 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 					}
 				}
 				return_value = 1 ;
+				if(multi_select_column.length > 0)
+				{
+					var multi_select_arr = [];
+					for(var cn = 0; cn < multi_select_count.length; cn++)
+					{
+						multi_select_arr.push(0);
+					}
+					var multi_select_str = multi_select_arr.join("*");
+					var multi_select_value_str = multi_select_value.join("*");
+					set_multiselect(multi_select_column,multi_select_str,1,multi_select_value_str,multi_select_str,'');
+				}
 				//showNotification(operation_success_msg[data.code],'info',2);
 			}
 			if (Object.keys(data.others_data).length > 0) {
@@ -1031,7 +1060,7 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 					}
 				  }
 				}
-			}  
+			} 
 		}
 		else
 		{

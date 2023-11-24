@@ -19,4 +19,8 @@ class Company extends Model
     {
         return $this->belongsTo(Group::class);
     }
+    public function buyers()
+    {
+        return $this->belongsToMany(LibBuyer::class, 'lib_buyer_tag_company');
+    }
 }

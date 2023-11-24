@@ -28,7 +28,6 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 		 	if (max_selection[i]==0) max_selection[i]=opts.length;
 			var max_select=max_selection[i];
 
-			// added from HRM 3rd version by - Jahid Hasan
 			var id_str="'";
 			var m=0;
 			$.map(opts, function( elem ){
@@ -46,12 +45,10 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 			html_list=html_list+'<thead><tr ><th colspan="2" height="20" id="multiselect_dropdown_table_header'+fld_id[i]+'" align="center" ><span href="##" onclick="disappear_list('+fld_id[i]+','+onc+') '+on_close_fnc+'"><b>Select Max '+max_select+' Item</b>'+closed+'</span></th></tr><tr><th><input type="checkbox" id="check_all_'+fld_id[i]+'" onclick="fnc_multi_check_all('+fld_id[i]+','+id_str+')"></th></a><th>Check All</th></tr></thead></table><div class="mylistview" style="overflow-y:scroll;max-height:'+140+'px; min-height:'+20+'px;"><table border="1" width="100%" id="table_body'+fld_id[i]+'" class="multiselect_dropdown_table_bottom" >';
 
 			var array = $.map(opts, function( elem ) {
-				//id_array[i]=elem.value;
-				//option_array[i]= elem.text;
+				
 				j++;
 				html_list=html_list+'<tr id="tr'+fld_id[i]+elem.value+'" class="multiselect_mouse_out" onMouseOver="make_selection('+fld_id[i]+','+elem.value+')" onMouseOut="make_selection_remove('+fld_id[i]+','+elem.value+')" ><td width="15"><input type="checkbox" onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')" id="'+fld_id[i]+elem.value+'"></td><td onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')">'+elem.text+'</td></tr>';
-				/*html_list=html_list+'<tr id="tr'+fld_id[i]+elem.value+'" class="multiselect_mouse_out" onMouseOver="make_selection('+fld_id[i]+','+elem.value+')" ><td width="15"><input type="checkbox" onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')" id="'+fld_id[i]+elem.value+'"></td><td onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')">'+elem.text+'</td></tr>';*/
-
+				
 			});
 			html_list=html_list+'</table></div></div>';
 			$('#'+fld_id[i]).replaceWith('<input id="show_text'+fld_id[i]+'" placeholder="Select Multiple Item" readonly type="text" class="text_boxes" style="text-align:center; width:'+elm_width+'px; height:'+elm_height+'px" onclick="append_list('+fld_id[i]+')"/>'+html_list +'<input type="hidden" id="'+fld_id[i]+'" class="text_boxes" />');
@@ -66,7 +63,7 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 		for ( var i=0; i<fld_id.length; i++ )
 		{
 			var rowCount = $('#table_body'+fld_id[i]+' tr').length;
-		//alert(rowCount);
+		    //alert(rowCount);
 			$('#table_body'+fld_id[i]+' input:checkbox').removeAttr('checked');  // Uncheck all Previuosly Selected box
 
 			$('#show_text'+fld_id[i]).val('');
@@ -88,91 +85,6 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 
 }
 
-// function set_multiselect_backup( fld_id, max_selection, is_update, update_values, on_close_fnc_param, on_close_fnc )
-// {
-
-// 	if (!on_close_fnc_param) var on_close_fnc_param="";
-// 	else
-// 	{
-// 		on_close_fnc_param=on_close_fnc_param.split("*");
-// 	}
-
-// 	if(!on_close_fnc){var on_close_fnc='';}
-// 	else{ var on_close_fnc=' ;'+on_close_fnc;}
-	
-	
-// 	fld_id=fld_id.split("*");
-// 	max_selection=max_selection.split("*");
-// 	update_values=update_values.split("*");
-// 	if (is_update!=1)  // New List Creation
-// 	{
-// 		for ( var i=0; i<fld_id.length; i++ )
-// 		{
-// 			var html_list="";
-// 			var elm_width=document.getElementById(fld_id[i]).offsetWidth-12;
-// 			var elm_height=document.getElementById(fld_id[i]).offsetHeight;
-// 			var onc="'"+on_close_fnc_param[i]+"'";
-// 			var j=0;
-// 			var opts = $('#'+fld_id[i])[0].options;
-// 		 	if (max_selection[i]==0) max_selection[i]=opts.length;
-// 			var max_select=max_selection[i];
-
-// 			// added from HRM 3rd version by - Jahid Hasan
-// 			var id_str="'";
-// 			var m=0;
-// 			$.map(opts, function( elem ){
-// 				if(m!=0) id_str+=",";
-// 				id_str+=elem.value;
-// 				m++;
-// 			});
-// 			id_str+="'";
-// 			//
-
-// 			var closed='<span style="position:absolute; right:5px; width:15px;"><a href="##" style="text-decoration:none" onclick="disappear_list('+fld_id[i]+','+onc+') '+on_close_fnc+'"> X </a></span>';
-// 			html_list ='<div class="multiselect_dropdown_table" id="multi_select_'+fld_id[i]+'" style="display:none; width:'+((elm_width*1)+12)+'px; max-height:'+170+'px; min-height:'+50+'px; position:absolute;"><table border="1" width="100%" class="multiselect_dropdown_table_top" >';
-// 			html_list=html_list+'<thead><tr><th colspan="2" height="20" id="multiselect_dropdown_table_header'+fld_id[i]+'" align="center"><b>Select Max '+max_select+' Item</b>'+closed+'</th></tr><tr><th><input type="checkbox" id="check_all_'+fld_id[i]+'" onclick="fnc_multi_check_all('+fld_id[i]+','+id_str+')"></th><th>Check All</th></tr></thead></table><div class="mylistview" style="overflow-y:scroll;max-height:'+140+'px; min-height:'+20+'px;"><table border="1" width="100%" id="table_body'+fld_id[i]+'" class="multiselect_dropdown_table_bottom" >';
-// 			var array = $.map(opts, function( elem ) {
-// 				//id_array[i]=elem.value;
-// 				//option_array[i]= elem.text;
-// 				j++;
-// 				html_list=html_list+'<tr id="tr'+fld_id[i]+elem.value+'" class="multiselect_mouse_out" onMouseOver="make_selection('+fld_id[i]+','+elem.value+')" onMouseOut="make_selection_remove('+fld_id[i]+','+elem.value+')" ><td width="15"><input type="checkbox" onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')" id="'+fld_id[i]+elem.value+'"></td><td onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')">'+elem.text+'</td></tr>';
-// 				/*html_list=html_list+'<tr id="tr'+fld_id[i]+elem.value+'" class="multiselect_mouse_out" onMouseOver="make_selection('+fld_id[i]+','+elem.value+')" ><td width="15"><input type="checkbox" onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')" id="'+fld_id[i]+elem.value+'"></td><td onclick="add_multiselect_listitems('+fld_id[i]+', '+elem.value+','+opts.length+','+max_selection[i]+')">'+elem.text+'</td></tr>';*/
-
-// 			});
-// 			html_list=html_list+'</table></div></div>';
-// 			$('#'+fld_id[i]).replaceWith('<input id="show_text'+fld_id[i]+'" placeholder="Select Multiple Item" readonly type="text" class="text_boxes" style="text-align:center; width:'+elm_width+'px; height:'+elm_height+'px" onclick="append_list('+fld_id[i]+')"/>'+html_list +'<input type="hidden" id="'+fld_id[i]+'" class="text_boxes" />');
-
-// 		}
-
-// 	}  // New List Creation Ends
-
-// 	else   // List Populate Here for Upadte Options or Previously Selected values
-// 	{
-// 		//alert(is_update)
-// 		for ( var i=0; i<fld_id.length; i++ )
-// 		{
-// 			var rowCount = $('#table_body'+fld_id[i]+' tr').length;
-
-// 			$('#table_body'+fld_id[i]+' input:checkbox').removeAttr('checked');  // Uncheck all Previuosly Selected box
-
-// 			$('#show_text'+fld_id[i]).val('');
-// 			document.getElementById(fld_id[i]).value='';
-
-// 			var values_sub=update_values[i].split(",");
-// 		 	if (max_selection[i]==0) max_selection[i]=rowCount;
-// 			var max_select=max_selection[i];
-// 			for (var k=0; k < values_sub.length; k++)
-// 			{
-// 				if (values_sub[k]!="")
-// 					add_multiselect_listitems_update(fld_id[i], values_sub[k], rowCount, max_selection[i]);
-// 			}
-// 			disappear_list_update(fld_id[i],on_close_fnc_param[i]);
-// 		}
-
-// 		//alert('asdas');
-// 	}
-
-// }
 
 function append_list(fld)
 {
