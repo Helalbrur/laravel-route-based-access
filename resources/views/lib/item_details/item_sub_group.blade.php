@@ -25,7 +25,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <?php
                                             $categories = App\Models\LibCategory::get();
                                         ?>
-                                        <select name="cbo_category_id" id="cbo_category_id" class="form-control">
+                                        <select name="cbo_category_id" id="cbo_category_id" onchange="load_drop_down( 'load_drop_down', this.value, 'item_group_under_category', 'item_group_div' )"  class="form-control">
                                             <option value="0">SELECT</option>
                                             @foreach($categories as $category)
                                                 <option value="{{$category->id}}" {{$category->id==1 ? 'selected' : ''}}>{{$category->category_name}}</option>
@@ -33,7 +33,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </select>
                                     </div>
                                     <label for="cbo_item_group_id" class="col-sm-3 col-form-label must_entry_caption">Item Group</label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-3" id="item_group_div">
                                         <?php
                                             $item_groups = App\Models\LibItemGroup::get();
                                         ?>

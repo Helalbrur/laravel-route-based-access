@@ -137,7 +137,7 @@ class CommonController extends Controller
     public function show_common_list_view(Request $request)
     {
         $show_list_view = $request->query('data') ?? 'show_common_list_view';
-        return view('ajax.'.$show_list_view);
+        return view('ajax.list_view.'.$show_list_view);
     }
     public function common_file_popup(Request $request)
     {
@@ -156,5 +156,12 @@ class CommonController extends Controller
             $mandatory_field = implode("*", session("laravel_stater.mandatory_field.$entry_form"));;
         }
         echo $mandatory_field;
+    }
+
+    public function load_drop_down(Request $request)
+    {
+        $action = $request->query('action') ?? '';
+        $data = $request->query('data') ?? '';
+        return view('ajax.drop_down.'.$action,compact('data'));
     }
 }

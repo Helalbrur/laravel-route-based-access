@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('lib_group', function (Blueprint $table) {
             $table->id();
             $table->string('group_name');
-            $table->string('group_short_name');
+            $table->string('group_short_name')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->string('website')->nullable();
             $table->string('address')->nullable();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('lib_group');
     }
 };

@@ -958,7 +958,7 @@ function readImage(input,displayImage)
 	}
 }
 
-async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='',multi_select_column ='')
+async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='',multi_select_column ='',extra_function_on_chage_column='')
 {
 	var return_value = -1 ;
 	var url = `/populate_common_data`;
@@ -1018,6 +1018,19 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 								multi_select_value[nulti_index] = data.data[db_col];
 							}
 						}
+						if(extra_function_on_chage_column.length > 0)
+						{
+							var extra_function_on_chage_column_explod = extra_function_on_chage_column.split("**");
+							
+							extra_function_on_chage_column_explod.forEach( (extra_function_on_chage_column_value)=>{
+								var extra_function_on_chage_column_value_explod = extra_function_on_chage_column_value.split("*");
+								if(extra_function_on_chage_column_value_explod[0] == form_columns[row_no])
+								{
+									var code = extra_function_on_chage_column_value_explod[1];
+									eval(code);
+								}
+							})
+						}
 					}
 					else
 					{
@@ -1065,6 +1078,35 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 		else
 		{
 			showNotification(operation_success_msg[data.code],'error');
+		}
+		return data;
+	})
+	.then(data=>{
+		if(extra_function_on_chage_column.length > 0)
+		{
+			var extra_function_on_chage_column_explod = extra_function_on_chage_column.split("**");
+			if(database_column_name.length > 0 && form_field_name.length > 0)
+			{
+				var db_columns = database_column_name.split("*");
+				var form_columns = form_field_name.split("*");
+				for( var row_no = 0 ; row_no < Math.min(db_columns.length,form_columns.length); row_no++)
+				{
+					var db_col = db_columns[row_no];
+					var element = document.getElementById(form_columns[row_no]);
+					if (element)
+					{
+						extra_function_on_chage_column_explod.forEach( (extra_function_on_chage_column_value)=>{
+							var extra_function_on_chage_column_value_explod = extra_function_on_chage_column_value.split("*");
+							if(extra_function_on_chage_column_value_explod[0] == form_columns[row_no])
+							{
+								$(`#${form_columns[row_no]}`).val(data.data[db_col]);
+								console.log(`${form_columns[row_no]}=${data.data[db_col]}`);
+							}
+						})
+					}
+					
+				}
+			}
 		}
 	})
 	.catch(error => {

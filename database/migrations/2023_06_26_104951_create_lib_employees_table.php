@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('lib_employee', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->unsignedBigInteger('company_id');
-            $table->string('id_card_no');
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->string('id_card_no')->nullable();
             $table->string('employee_code')->nullable();
             $table->string('national_id')->nullable();
-            $table->integer('gender');
-            $table->unsignedBigInteger('designation_id');
+            $table->integer('gender')->nullable();
+            $table->unsignedBigInteger('designation_id')->nullable();
             $table->string('contact_no')->nullable();
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_employees');
+        Schema::dropIfExists('lib_employee');
     }
 };

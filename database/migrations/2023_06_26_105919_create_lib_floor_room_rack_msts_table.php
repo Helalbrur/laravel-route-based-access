@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('lib_floor_room_rack_mst', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->string('floor_room_rack_name');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_floor_room_rack_msts');
+        Schema::dropIfExists('lib_floor_room_rack_mst');
     }
 };

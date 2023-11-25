@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('lib_supplier', function (Blueprint $table) {
             $table->id();
             $table->string('supplier_name');
-            $table->string('short_name');
+            $table->string('short_name')->nullable();
             $table->string('party_type')->nullable();
             $table->string('tag_company')->nullable();
             $table->string('contact_person')->nullable();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_suppliers');
+        Schema::dropIfExists('lib_supplier');
     }
 };

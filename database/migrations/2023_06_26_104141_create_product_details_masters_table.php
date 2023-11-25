@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('item_description');
             $table->string('product_name_details');
             $table->string('uom');
-            $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('item_category_id');
-            $table->unsignedBigInteger('item_group_id');
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('item_category_id')->nullable();
+            $table->unsignedBigInteger('item_group_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->unsignedBigInteger('store_id')->nullable();
             $table->unsignedBigInteger('detarmination_id')->nullable();
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_details_masters');
+        Schema::dropIfExists('product_details_master');
     }
 };

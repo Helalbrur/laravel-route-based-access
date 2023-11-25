@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('lib_item_sub_group', function (Blueprint $table) {
             $table->id();
             $table->string('sub_group_name');
-            $table->unsignedBigInteger('item_category_id');
-            $table->unsignedBigInteger('item_group_id');
+            $table->unsignedBigInteger('item_category_id')->nullable();
+            $table->unsignedBigInteger('item_group_id')->nullable();
             $table->string('sub_group_code')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

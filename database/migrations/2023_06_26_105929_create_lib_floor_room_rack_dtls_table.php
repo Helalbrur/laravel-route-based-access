@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('lib_floor_room_rack_dtls', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('location_id');
-            $table->unsignedBigInteger('store_id');
-            $table->unsignedBigInteger('floor_id');
+            $table->unsignedBigInteger('location_id')->nullable();
+            $table->unsignedBigInteger('store_id')->nullable();
+            $table->unsignedBigInteger('floor_id')->nullable();
             $table->unsignedBigInteger('room_id')->nullable();
             $table->unsignedBigInteger('rack_id')->nullable();
             $table->unsignedBigInteger('shelf_id')->nullable();
             $table->unsignedBigInteger('bin_id')->nullable();
-            $table->integer('serial_no');
+            $table->integer('serial_no')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->softDeletes();

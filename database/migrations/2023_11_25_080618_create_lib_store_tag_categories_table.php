@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lib_supplier_tag_company', function (Blueprint $table) {
+        Schema::create('lib_store_tag_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('lib_company');
-            $table->foreign('supplier_id')->references('id')->on('lib_supplier');
+            $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('lib_category');
+            $table->foreign('store_id')->references('id')->on('lib_store_location');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_supplier_tag_company');
+        Schema::dropIfExists('lib_store_tag_categories');
     }
 };

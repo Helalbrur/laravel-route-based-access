@@ -26,6 +26,6 @@ class LibSupplier extends Model
     }
     public function tagCompany()
     {
-        return $this->hasMany(LibSupplierTagCompany::class,'buyer_id','id');//->ddRawSql();
+        return $this->hasMany(LibSupplierTagCompany::class,'supplier_id','id');//->ddRawSql();
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('store_location')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('location_id');
-            $table->string('item_category_id');
+            $table->string('item_category_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->softDeletes();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_store_locations');
+        Schema::dropIfExists('lib_store_location');
     }
 };

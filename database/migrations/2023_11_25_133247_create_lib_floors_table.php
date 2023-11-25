@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('field_level_access', function (Blueprint $table) {
+        Schema::create('lib_floor', function (Blueprint $table) {
             $table->id();
-            $table->string('field_name');
-            $table->string('default_value')->nullable();
-            $table->unsignedBigInteger('mst_id');
+            $table->string('floor_name');
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('page_id');
-            $table->unsignedBigInteger('field_id');
-            $table->unsignedBigInteger('is_disable');
+            $table->unsignedBigInteger('location_id');
+            $table->string('store_id')->nullable();
+            $table->integer('seq')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('field_level_access');
+        Schema::dropIfExists('lib_floor');
     }
 };

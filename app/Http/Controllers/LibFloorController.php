@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\LibFloor;
 use Illuminate\Http\Request;
-use App\Models\LibStoreLocation;
 use Illuminate\Support\Facades\DB;
-use App\Models\LibStoreTagCategory;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreLibStoreLocationRequest;
-use App\Http\Requests\UpdateLibStoreLocationRequest;
 
-class LibStoreLocationController extends Controller
+class LibFloorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('lib.general.store');
+        return view('lib.inventory.floor');
     }
 
     /**
@@ -37,34 +34,20 @@ class LibStoreLocationController extends Controller
         DB::beginTransaction();
         try
         {
-            $lib_store_location=LibStoreLocation::create([
-                'store_name'=>$request->input('txt_store_name'),
+            $lib_floor=LibFloor::create([
+                'floor_name'=>$request->input('txt_floor_name'),
                 'company_id'=>$request->input('cbo_company_name'),
-                'store_location'=>$request->input('txt_store_name'),
-                'item_category_id'=>$request->input('cbo_category_id'),
+                'store_id'=>$request->input('cbo_store_name'),
+                'seq'=>$request->input('txt_floor_seq'),
                 'location_id'=>$request->input('cbo_location_name'),
                 'created_by'=>Auth::user()->id
             ]);
             
-            if(!empty($request->input('cbo_category_id')))
-            {
-                $tag_category = explode(",",$request->input('cbo_category_id'));
-                foreach($tag_category as $category)
-                {
-                    LibStoreTagCategory::create([
-                        'category_id' => $category,
-                        'store_id'   => $lib_store_location->id
-                    ]);
-                }
-            }
-
-           
-
             DB::commit();
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
-                'data'=>$lib_store_location
+                'data'=>$lib_floor
             ]);
         }
         catch(Exception $e)
@@ -83,7 +66,7 @@ class LibStoreLocationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LibStoreLocation $libStoreLocation)
+    public function show(LibFloor $libFloor)
     {
         //
     }
@@ -91,7 +74,7 @@ class LibStoreLocationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LibStoreLocation $libStoreLocation)
+    public function edit(LibFloor $libFloor)
     {
         //
     }
@@ -99,43 +82,25 @@ class LibStoreLocationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibStoreLocation $store)
+    public function update(Request $request, LibFloor $floor)
     {
         DB::beginTransaction();
         try
         {
-            
-            $store->update([
-                'store_name'=>$request->input('txt_store_name'),
+            $floor->update([
+                'floor_name'=>$request->input('txt_floor_name'),
                 'company_id'=>$request->input('cbo_company_name'),
-                'store_location'=>$request->input('txt_store_name'),
-                'item_category_id'=>$request->input('cbo_category_id'),
+                'store_id'=>$request->input('cbo_store_name'),
+                'seq'=>$request->input('txt_floor_seq'),
                 'location_id'=>$request->input('cbo_location_name'),
                 'updated_by'=>Auth::user()->id
             ]);
 
-            if(!empty($request->input('cbo_category_id')))
-            {
-                $tag_category = explode(",",$request->input('cbo_category_id'));
-                //$supplier->tagCompany;
-                foreach($store->tagCategory as $tag)
-                {
-                    $tag->delete();
-                }
-                foreach($tag_category as $category_id)
-                {
-                    LibStoreTagCategory::create([
-                        'category_id' => $category_id,
-                        'store_id'   => $store->id
-                    ]);
-                }
-            }
-    
             DB::commit();
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
-                'data'=>$store
+                'data'=>$floor
             ]);
         }
         catch(Exception $e)
@@ -153,16 +118,13 @@ class LibStoreLocationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibStoreLocation $store)
+    public function destroy(LibFloor $floor)
     {
         DB::beginTransaction();
         try
         {
-            foreach($store->tagCategory as $tag)
-            {
-                $tag->delete();
-            }
-            $store->delete();
+           
+            $floor->delete();
             DB::commit();
             return response()->json([
                 'code'=>2,

@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_item_groups');
+        Schema::dropIfExists('lib_item_group');
     }
 };

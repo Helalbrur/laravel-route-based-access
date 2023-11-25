@@ -25,3 +25,6 @@
         @endforeach
     </tbody>
 </table>
+<script>
+    setFilterGrid("list_view",-1);
+</script>

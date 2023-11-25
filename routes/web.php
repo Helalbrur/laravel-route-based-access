@@ -11,7 +11,9 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LibSizeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
+use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
+use App\Http\Controllers\LibFloorController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LibCountryController;
@@ -19,15 +21,15 @@ use App\Http\Controllers\MainModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\LibCategoryController;
+use App\Http\Controllers\LibEmployeeController;
+use App\Http\Controllers\LibLocationController;
+use App\Http\Controllers\LibSupplierController;
 use App\Http\Controllers\UserPrivMstController;
 use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
-use App\Http\Controllers\LibBuyerController;
-use App\Http\Controllers\LibEmployeeController;
-use App\Http\Controllers\LibLocationController;
-use App\Http\Controllers\LibSupplierController;
+use App\Http\Controllers\LibStoreLocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,9 +76,12 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/supplier', LibSupplierController::class);
     Route::resource('/buyer', LibBuyerController::class);
 
+    Route::resource('inventory/floor', LibFloorController::class);
+
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/size', LibSizeController::class);
     Route::resource('/general/country', LibCountryController::class);
+    Route::resource('/general/store', LibStoreLocationController::class);
 
     Route::resource('/item_details/item_category', LibCategoryController::class);
     Route::resource('/item_details/item_group', LibItemGroupController::class);
@@ -99,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_common_list_view',[CommonController::class,'show_common_list_view']);
     Route::get('common_file_popup',[CommonController::class,'common_file_popup']);
     Route::get('get_mandatory_and_field_level_data',[CommonController::class,'get_mandatory_and_field_level_data']);
+    Route::get('load_drop_down',[CommonController::class,'load_drop_down']);
 
     Route::delete('/file_delete/{id}', [ImageUploadController::class,'destroy']);
 

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('file_name');
             $table->string('file_type')->default(1);
-            $table->unsignedBigInteger('sys_no');
-            $table->string('page_name');
+            $table->unsignedBigInteger('sys_no')->nullable();
+            $table->string('page_name')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
