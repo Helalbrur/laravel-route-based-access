@@ -1,5 +1,5 @@
 <?php
-$permission = getPagePermission(request('mid') ?? 0); 
+$permission = getPagePermission(request('mid') ?? 0);
 ?>
 @extends('layouts.app')
 @section('content_header')
