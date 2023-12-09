@@ -1,5 +1,6 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
+$title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 //dd(get_ip_mac("traceroute"));
 //dd(get_ip_mac("tracert"));
 ?>

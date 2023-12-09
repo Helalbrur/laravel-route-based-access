@@ -67,54 +67,54 @@ function load_submit_buttons($permission, $sub_func, $is_update, $is_show_print 
     {
         if ($is_update == 0) //Entry Mode
         {
-            $perm_str = '<input type="button" value="Save" name="save" onclick="' . $sub_func . '(0)" style="width:80px" id="save' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
+            $perm_str = '<button type="button" onclick="' . $sub_func . '(0)"  id="save' . $btn_id . '"   class="formbutton btn btn-success waves-effect btn-label waves-light"><i class="bx bx-save label-icon"></i> Save</button>&nbsp;&nbsp;';
         } else {
-            $perm_str = '<input type="button" value="Save" name="save" onclick="show_button_disable_msg(0)" style="width:80px" id="save' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+            $perm_str = '<button type="button" onclick="show_button_disable_msg(0)" id="save' . $btn_id . '"  class="formbutton_disabled btn btn-success waves-effect btn-label waves-light"><i class="bx bx-save label-icon"></i> Save</button>&nbsp;&nbsp;';
         }
 
     } else {
-        $perm_str = '<input type="button" value="Save" name="save" onclick="show_no_permission_msg(0)" style="width:80px" id="save' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+        $perm_str = '<button type="button" onclick="show_no_permission_msg(0)" id="save' . $btn_id . '"  class="formbutton_disabled btn btn-success waves-effect btn-label waves-light"><i class="bx bx-save label-icon"></i> Save</button>&nbsp;&nbsp;';
     }
 
     if ($permission[1] == 1) // Update
     {
         if ($is_update == 1) //Entry Mode
         {
-            $perm_str .= '<input type="button" value="Update" name="update" onclick="' . $sub_func . '(1)" style="width:80px" id="update' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
+            $perm_str .= '<button type="button" onclick="' . $sub_func . '(1)" id="update' . $btn_id . '"   class="formbutton btn btn-primary waves-effect btn-label waves-light"><i class="bx bx-edit  label-icon"></i> Update</button>&nbsp;&nbsp;';
         } else {
-            $perm_str .= '<input type="button" value="Update" name="update" onclick="show_button_disable_msg(1)" style="width:80px" id="update' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+            $perm_str .= '<button type="button" onclick="show_button_disable_msg(1)" id="update' . $btn_id . '"  class="formbutton_disabled btn btn-primary waves-effect btn-label waves-light"><i class="bx bx-edit  label-icon"></i> Update</button>&nbsp;&nbsp;';
         }
 
     } else {
-        $perm_str .= '<input type="button" value="Update" name="update" onclick="show_no_permission_msg(1)" style="width:80px" id="update' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+        $perm_str .= '<button type="button" onclick="show_no_permission_msg(1)" id="update' . $btn_id . '"  class="formbutton_disabled btn btn-primary waves-effect btn-label waves-light"><i class="bx bx-edit  label-icon"></i> Update</button>&nbsp;&nbsp;';
     }
 
     if ($permission[2] == 1) // Delete
     {
         if ($is_update == 1) //Entry Mode
         {
-            $perm_str .= '<input type="button" value="Delete" name="delete" onclick="' . $sub_func . '(2)" style="width:80px" id="Delete' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
+            $perm_str .= '<button type="button" onclick="' . $sub_func . '(2)" id="Delete' . $btn_id . '"   class="formbutton btn btn-danger waves-effect btn-label waves-light"><i class="bx bxs-trash  label-icon"></i> Delete</button>&nbsp;&nbsp;';
         } else {
-            $perm_str .= '<input type="button" value="Delete" name="delete" onclick="show_button_disable_msg(2)" style="width:80px" id="Delete' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+            $perm_str .= '<button type="button" onclick="show_button_disable_msg(2)" id="Delete' . $btn_id . '"  class="formbutton_disabled btn btn-danger waves-effect btn-label waves-light"><i class="bx bxs-trash  label-icon"></i> Delete</button>&nbsp;&nbsp;';
         }
 
     } else {
-        $perm_str .= '<input type="button" value="Delete" name="delete" onclick="show_no_permission_msg(2)" style="width:80px" id="Delete' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+        $perm_str .= '<button type="button" onclick="show_no_permission_msg(2)" id="Delete' . $btn_id . '"  class="formbutton_disabled btn btn-danger waves-effect btn-label waves-light"><i class="bx bxs-trash  label-icon"></i> Delete</button>&nbsp;&nbsp;';
     }
 
-    $perm_str .= '<input type="button" value="Refresh" name="refresh" onclick="' . $refresh_function . '" style="width:80px" id="Refresh' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;</br><hr style="height:8px;">';
+    $perm_str .= '<button type="button" onclick="' . $refresh_function . '" id="Refresh' . $btn_id . '"   class="formbutton btn btn-warning waves-effect btn-label waves-light"><i class="bx bx-sync   label-icon"></i> Refresh</button>&nbsp;&nbsp;</br><hr style="height:8px;">';
 
     if ($is_show_approve == 1) {
         if ($permission[3] == 1) {
             if ($is_update == 1) //Entry Mode
             {
-                $perm_str .= '<input type="button" value="Approve" name="approve" onclick="' . $sub_func . '(3)" style="width:80px" id="approve' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
+                $perm_str .= '<button type="button" value="Approve" name="approve" onclick="' . $sub_func . '(3)" id="approve' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
             } else {
-                $perm_str .= '<input type="button" value="Approve" name="approve" onclick="show_button_disable_msg(3)" style="width:80px" id="approve' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+                $perm_str .= '<button type="button" value="Approve" name="approve" onclick="show_button_disable_msg(3)" id="approve' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
             }
 
         } else {
-            $perm_str .= '<input type="button" value="Approve" name="approve" onclick="show_no_permission_msg(3)" style="width:80px; visibility:hidden" id="approve' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+            $perm_str .= '<button type="button" value="Approve" name="approve" onclick="show_no_permission_msg(3)" style="width:80px; visibility:hidden" id="approve' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
         }
 
     }
@@ -123,17 +123,17 @@ function load_submit_buttons($permission, $sub_func, $is_update, $is_show_print 
         if ($permission[4] == 1) {
             if ($is_update == 0) //Entry Mode
             {
-                $perm_str .= '<input type="button" value="Print" name="print" onclick="' . $sub_func . '(4)" style="width:80px" id="Print' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
+                $perm_str .= '<button type="button" value="Print" name="print" onclick="' . $sub_func . '(4)" id="Print' . $btn_id . '"   class="formbutton"/>&nbsp;&nbsp;';
             } else {
-                $perm_str .= '<input type="button" value="Print" name="print" onclick="show_button_disable_msg(4)" style="width:80px" id="Print' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+                $perm_str .= '<button type="button" value="Print" name="print" onclick="show_button_disable_msg(4)" id="Print' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
             }
 
         } else {
-            $perm_str .= '<input type="button" value="Print" name="print" onclick="show_no_permission_msg(4)" style="width:80px" id="Print' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+            $perm_str .= '<button type="button" value="Print" name="print" onclick="show_no_permission_msg(4)" id="Print' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
         }
 
     } else {
-        $perm_str .= '<input type="button" value="Print" name="print" onclick="show_button_disable_msg(4)" style="width:80px; visibility:hidden" id="Print' . $btn_id . '"   class="formbutton_disabled"/>&nbsp;&nbsp;';
+        $perm_str .= '<button type="button" onclick="show_button_disable_msg(4)" style="width:80px; visibility:hidden" id="Print' . $btn_id . '"   class="formbutton_disabled"> Print</button>&nbsp;&nbsp;';
     }
 
     return $perm_str;die;

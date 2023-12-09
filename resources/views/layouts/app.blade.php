@@ -1,107 +1,175 @@
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Laravel Starter</title>
 
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>{{ @$title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="{{asset('fontawesome-free/css/all.min.css')}}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('adminlte/css/adminlte.min.css')}}">
-  <link rel="stylesheet" href="{{asset('modal_window/modal_window.css')}}">
+        <!-- Bootstrap Css -->
+        <link href="{{ asset('skote/assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{{ asset('skote/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{{ asset('skote/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
-  {{-- common style --}}
-  <link rel="stylesheet" href="{{asset('css/style_common.css')}}">
+        {{-- common style --}}
+        <link rel="stylesheet" href="{{asset('css/style_common.css')}}">
 
-   {{-- filtergrid style --}}
-   <link rel="stylesheet" href="{{asset('css/filtergrid.css')}}">
+        {{-- filtergrid style --}}
+        <link rel="stylesheet" href="{{asset('css/filtergrid.css')}}">
 
-  <link href="{{asset('sweetalert2/sweetalert2.css')}}" rel="stylesheet" type="text/css" />
-  <script src="{{asset('sweetalert2/sweetalert2.all.js')}}" type="text/javascript"></script>
-	
+        <link href="{{asset('sweetalert2/sweetalert2.css')}}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{{asset('modal_window/modal_window.css')}}">
+        <script src="{{asset('sweetalert2/sweetalert2.all.js')}}" type="text/javascript"></script>
+        <!-- App js -->
+        <script src="{{ asset('skote/assets/js/plugin.js') }}"></script>
+        {{-- custom style --}}
+        <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
+        @yield('script_before')
+    </head>
 
+    <body data-sidebar="dark">
 
-   @yield('script_before')
-  <!-- jQuery -->
-<script src="{{asset('jquery/jquery.min.js')}}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset('bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<!-- AdminLTE App -->
-<script src="{{asset('adminlte/js/adminlte.min.js')}}"></script>
-<script src="{{asset('modal_window/modal_window.js')}}"></script>
-<script src="{{asset('js/tablefilter.js')}}"></script>
-<script src="{{asset('js/function.js')}}"></script>
-<script src="{{asset('js/multi_select.js')}}"></script>
-</head>
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
 
-  <!-- Navbar -->
-  @include('layouts.navbar')
-  <!-- /.navbar -->
+        <!-- Begin page -->
+        <div id="layout-wrapper">
 
-  <!-- Main Sidebar Container -->
-  @include('layouts.sidebar')
+          @include('layouts.navbar')
+           
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        @yield('content_header')
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+            <!-- ========== Left Sidebar Start ========== -->
+            @include('layouts.left')
+            <!-- Left Sidebar End -->
 
-    <!-- Main content -->
-    <div class="content">
-      <div class="container-fluid">
-        @yield('content')
+            
 
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-    <div class="p-3">
-      <h5>Title</h5>
-      <p>Sidebar content</p>
-    </div>
-  </aside>
-  <!-- /.control-sidebar -->
+                <div class="page-content">
+                    <div class="container-fluid">
 
-  <!-- Main Footer -->
+                         <!-- start page title -->
+                        {{-- @yield('content_header') --}}
+                        <!-- end page title -->
+                        @yield('content')
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
 
-  <!-- <footer class="main-footer">
-    <div class="float-right d-none d-sm-inline">
-      Anything you want
-    </div>
-    <strong>Copyright &copy; {{date('Y')}} <a href="https://sait.com">Sait</a>.</strong> All rights reserved.
-  </footer> -->
+                
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © 
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    Design & Develop by ..........
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- end main content-->
 
-</div>
-<!-- ./wrapper -->
-<script>
-  $(".must_entry_caption").each(function( index ) {
-    var ht=" <font color='blue'>"+$(this).html()+"</font>";
-    $(this).html(ht);
-    $(this).attr('title','Must Entry Field.');
-  });
-</script>
-<!-- REQUIRED SCRIPTS -->
-@yield('script')
+        </div>
+        <!-- END layout-wrapper -->
 
-</body>
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar class="h-100">
+                <div class="rightbar-title d-flex align-items-center px-3 py-4">
+            
+                    <h5 class="m-0 me-2">Settings</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <hr class="mt-0" />
+                <h6 class="text-center mb-0">Choose Layouts</h6>
+
+                <div class="p-4">
+                    <div class="mb-2">
+                        <img src="{{URL::asset('skote/assets/images/layouts/layout-1.jpg') }}" class="img-thumbnail" alt="layout images">
+                    </div>
+
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input theme-choice" type="checkbox" id="light-mode-switch" checked>
+                        <label class="form-check-label" for="light-mode-switch">Light Mode</label>
+                    </div>
+    
+                    <div class="mb-2">
+                        <img src="{{URL::asset('skote/assets/images/layouts/layout-2.jpg') }}" class="img-thumbnail" alt="layout images">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input theme-choice" type="checkbox" id="dark-mode-switch">
+                        <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                    </div>
+    
+                    <div class="mb-2">
+                        <img src="{{URL::asset('skote/assets/images/layouts/layout-3.jpg') }}" class="img-thumbnail" alt="layout images">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input theme-choice" type="checkbox" id="rtl-mode-switch">
+                        <label class="form-check-label" for="rtl-mode-switch">RTL Mode</label>
+                    </div>
+
+                    <div class="mb-2">
+                        <img src="{{URL::asset('skote/assets/images/layouts/layout-4.jpg') }}" class="img-thumbnail" alt="layout images">
+                    </div>
+                    <div class="form-check form-switch mb-5">
+                        <input class="form-check-input theme-choice" type="checkbox" id="dark-rtl-mode-switch">
+                        <label class="form-check-label" for="dark-rtl-mode-switch">Dark RTL Mode</label>
+                    </div>
+
+            
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="{{ asset('skote/assets/libs/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('skote/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('skote/assets/libs/metismenu/metisMenu.min.js') }}"></script>
+        <script src="{{ asset('skote/assets/libs/simplebar/simplebar.min.js') }}"></script>
+        <script src="{{ asset('skote/assets/libs/node-waves/waves.min.js') }}"></script>
+
+        <script src="{{ asset('skote/assets/js/app.js') }}"></script>
+        <script src="{{asset('modal_window/modal_window.js')}}"></script>
+        <script src="{{asset('js/tablefilter.js')}}"></script>
+        <script src="{{asset('js/function.js')}}"></script>
+        <script src="{{asset('js/multi_select.js')}}"></script>
+
+        <script>
+          $(".must_entry_caption").each(function( index ) {
+            var ht=" <font color='red'>"+$(this).html()+"</font>";
+            $(this).html(ht);
+            $(this).attr('title','Must Entry Field.');
+          });
+        
+        </script>
+        <!-- REQUIRED SCRIPTS -->
+        @yield('script')
+    </body>
 </html>
