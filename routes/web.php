@@ -29,6 +29,7 @@ use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
+use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\LibStoreLocationController;
 
 /*
@@ -76,7 +77,11 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/supplier', LibSupplierController::class);
     Route::resource('/buyer', LibBuyerController::class);
 
-    Route::resource('inventory/floor', LibFloorController::class);
+    Route::resource('/inventory/floor', LibFloorController::class);
+    Route::resource('/inventory/room', LibFloorRoomRackMstController::class);
+    Route::resource('/inventory/rack', LibFloorRoomRackMstController::class);
+    Route::resource('/inventory/shefl', LibFloorRoomRackMstController::class);
+    Route::resource('/inventory/bin', LibFloorRoomRackMstController::class);
 
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/size', LibSizeController::class);
