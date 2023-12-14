@@ -1,5 +1,6 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
+$title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 ?>
 @extends('layouts.app')
 @section('content_header')

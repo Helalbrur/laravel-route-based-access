@@ -1,5 +1,6 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
+$title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 ?>
 @extends('layouts.app')
 @section('content_header')
@@ -14,8 +15,8 @@ $permission = getPagePermission(request('mid') ?? 0);
     <div class="col-lg-12">
         <center>
             <div class="card" style="width: 60%">
-                <div class="card-body">
-                    <h5 class="card-title"></h5>
+            <div class="card-body">
+                <h4 class="card-title">{{getMenuName(request('mid') ?? 0) ?? 'Color Entry'}}</h4>
                     <div class="card-text">
                         <!-- #EBF4FA; -->
                         <div class="card" style="background-color: #F5FFFA">

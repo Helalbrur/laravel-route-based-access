@@ -1,0 +1,14 @@
+.btn{
+    line-height:1;
+}
+
+.form-control{
+    padding: .7rem .5rem;
+    line-height: 0.8;
+}
+.metismenu li{
+    border-bottom:1px solid #555;
+}
+.navbar-brand-box{
+    border-bottom:1px solid #555;
+}
