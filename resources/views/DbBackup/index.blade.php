@@ -33,7 +33,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 							
                             <div class="col-sm-8">
                                 <?php
-                                    echo load_submit_buttons( $permission, "fnc_db_backup", 0,0 ,"");
+                                  echo load_submit_buttons( $permission, "fnc_db_backup", 0,0 ,"","","",1);
                                 ?>
                             </div>
                         </div>

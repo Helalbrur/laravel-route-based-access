@@ -63,7 +63,7 @@ function  showNotification(message,type='success',second = 5)
 		}
 	});
 }
-function set_button_status(is_update, permission, submit_func, btn_id, show_print)
+function set_button_status(is_update, permission, submit_func, btn_id, show_print,is_single_button=0)
 {
     if(!show_print) var show_print="";
 	permission=permission.split('_');
@@ -81,46 +81,49 @@ function set_button_status(is_update, permission, submit_func, btn_id, show_prin
 			 $('#save'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
 			 $('#save'+btn_id).attr('onclick', 'show_button_disable_msg(0)');
 		 }
-		if( permission[1] == 2 )
+		if(is_single_button == 0)
 		{
-			 $('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#update'+btn_id).attr('onclick', 'show_no_permission_msg(1)');
-		}
-		else
-		{
-			 $('#update'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#update'+btn_id).attr('onclick', submit_func+'(1)');
-		}
-		if( permission[2] == 2 )
-		{
-			 $('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#Delete'+btn_id).attr('onclick', 'show_no_permission_msg(2)');
-		}
-		else
-		{
-			 $('#Delete'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#Delete'+btn_id).attr('onclick', submit_func+'(2)');
-		}
-		if(permission[3] == 2)
-		 {
-			  $('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			  $('#approve'+btn_id).attr('onclick', 'show_no_permission_msg(3)');
-		 }
-		 else
-		 {
-			  $('#approve'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			  $('#approve'+btn_id).attr('onclick', submit_func+'(3)');
-		 }
+			if( permission[1] == 2 )
+			{
+				$('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#update'+btn_id).attr('onclick', 'show_no_permission_msg(1)');
+			}
+			else
+			{
+				$('#update'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
+				$('#update'+btn_id).attr('onclick', submit_func+'(1)');
+			}
+			if( permission[2] == 2 )
+			{
+				$('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#Delete'+btn_id).attr('onclick', 'show_no_permission_msg(2)');
+			}
+			else
+			{
+				$('#Delete'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
+				$('#Delete'+btn_id).attr('onclick', submit_func+'(2)');
+			}
+			if(permission[3] == 2)
+			{
+				$('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#approve'+btn_id).attr('onclick', 'show_no_permission_msg(3)');
+			}
+			else
+			{
+				$('#approve'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
+				$('#approve'+btn_id).attr('onclick', submit_func+'(3)');
+			}
 
-		if( permission[4] == 2 )
-		{
-			 $('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#Print').attr('onclick', 'show_no_permission_msg(4)');
-		}
-		else
-		{
-			 $('#Print'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-			 $('#Print'+btn_id).attr('onclick', submit_func+'(4)');
+			if( permission[4] == 2 )
+			{
+				$('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#Print').attr('onclick', 'show_no_permission_msg(4)');
+			}
+			else
+			{
+				$('#Print'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
+				$('#Print'+btn_id).attr('onclick', submit_func+'(4)');
+			}
 		}
 	}
 	else   //New Insert Mode
@@ -135,63 +138,67 @@ function set_button_status(is_update, permission, submit_func, btn_id, show_prin
 			 $('#save'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
 			 $('#save'+btn_id).attr('onclick', submit_func+'(0)');
 		 }
-		 if (permission[1] == 2 )
-		 {
-		 	$('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#update'+btn_id).attr('onclick', 'show_no_permission_msg(1)');
-		 }
-		 else
-		 {
-			 $('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#update'+btn_id).attr('onclick', 'show_button_disable_msg(1)');
-		 }
-		 if (permission[2] == 2 )
-		 {
-		 	$('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#Delete'+btn_id).attr('onclick', 'show_no_permission_msg(2)');
-		 }
-		 else
-		 {
-			 $('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#Delete'+btn_id).attr('onclick', 'show_button_disable_msg(2)');
-		 }
-		 if (permission[3] == 2 )
-		 {
-		 	$('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-			$('#approve'+btn_id).attr('onclick', 'show_no_permission_msg(3)');
-		 }
-		 else
-		 {
-			 $('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-			 $('#approve'+btn_id).attr('onclick', 'show_button_disable_msg(3)');
-		 }
 
-		 if(show_print==1)
-		 {
-			if( permission[4] == 2 )
+		if(is_single_button == 0)
+		{
+			if (permission[1] == 2 )
 			{
-				 $('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-				 $('#Print').attr('onclick', 'show_no_permission_msg(4)');
+				$('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
+				$('#update'+btn_id).attr('onclick', 'show_no_permission_msg(1)');
 			}
 			else
 			{
-				 $('#Print'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
-				 $('#Print'+btn_id).attr('onclick', submit_func+'(4)');
+				$('#update'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#update'+btn_id).attr('onclick', 'show_button_disable_msg(1)');
 			}
-		 }
-		 else
-		 {
-			 if ( permission[4] == 2 )
-			 {
-				$('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
-				$('#Print'+btn_id).attr('onclick', 'show_no_permission_msg(4)');
-			 }
-			 else
-			 {
-				 $('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
-				 $('#Print'+btn_id).attr('onclick', 'show_button_disable_msg(4)');
-			 }
-		 }
+			if (permission[2] == 2 )
+			{
+				$('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
+				$('#Delete'+btn_id).attr('onclick', 'show_no_permission_msg(2)');
+			}
+			else
+			{
+				$('#Delete'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#Delete'+btn_id).attr('onclick', 'show_button_disable_msg(2)');
+			}
+			if (permission[3] == 2 )
+			{
+				$('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
+				$('#approve'+btn_id).attr('onclick', 'show_no_permission_msg(3)');
+			}
+			else
+			{
+				$('#approve'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+				$('#approve'+btn_id).attr('onclick', 'show_button_disable_msg(3)');
+			}
+
+			if(show_print==1)
+			{
+				if( permission[4] == 2 )
+				{
+					$('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+					$('#Print').attr('onclick', 'show_no_permission_msg(4)');
+				}
+				else
+				{
+					$('#Print'+btn_id).removeClass('formbutton_disabled').addClass('formbutton');
+					$('#Print'+btn_id).attr('onclick', submit_func+'(4)');
+				}
+			}
+			else
+			{
+				if ( permission[4] == 2 )
+				{
+					$('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled')
+					$('#Print'+btn_id).attr('onclick', 'show_no_permission_msg(4)');
+				}
+				else
+				{
+					$('#Print'+btn_id).removeClass('formbutton').addClass('formbutton_disabled');
+					$('#Print'+btn_id).attr('onclick', 'show_button_disable_msg(4)');
+				}
+			}
+		}
 	}
 	return;
 }

@@ -433,7 +433,7 @@ CREATE TABLE `lib_buyer_tag_company` (
   PRIMARY KEY (`id`),
   KEY `lib_buyer_tag_company_company_id_foreign` (`company_id`),
   KEY `lib_buyer_tag_company_buyer_id_foreign` (`buyer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -442,7 +442,7 @@ CREATE TABLE `lib_buyer_tag_company` (
 
 LOCK TABLES `lib_buyer_tag_company` WRITE;
 /*!40000 ALTER TABLE `lib_buyer_tag_company` DISABLE KEYS */;
-INSERT INTO `lib_buyer_tag_company` VALUES (6,1,1,'2023-12-14 22:47:51','2023-12-14 22:47:51');
+INSERT INTO `lib_buyer_tag_company` VALUES (5,1,1,'2023-11-24 11:58:50','2023-11-24 11:58:50');
 /*!40000 ALTER TABLE `lib_buyer_tag_company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -626,7 +626,6 @@ CREATE TABLE `lib_floor` (
   `updated_by` bigint unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -637,7 +636,7 @@ CREATE TABLE `lib_floor` (
 
 LOCK TABLES `lib_floor` WRITE;
 /*!40000 ALTER TABLE `lib_floor` DISABLE KEYS */;
-INSERT INTO `lib_floor` VALUES (1,'1st Floor',1,2,'1',1,1,NULL,'2023-11-25 08:29:11','2023-11-25 08:29:11',NULL);
+INSERT INTO `lib_floor` VALUES (1,'1st Floor',1,2,'1',1,1,NULL,'2023-11-25 08:29:11','2023-11-25 08:29:11');
 /*!40000 ALTER TABLE `lib_floor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1457,4 +1456,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-15 10:48:37
+-- Dump completed on 2023-11-25 20:47:33
