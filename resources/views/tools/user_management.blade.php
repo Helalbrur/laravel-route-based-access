@@ -114,22 +114,18 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
 <script>
     function fnc_user_management( operation )
     {
-        if (form_validation('txt_name*txt_email*txt_password','Name*Email*Password')==false)
+        var val_col = 'txt_name*txt_email*txt_password';
+        var val_msg = 'Name*Email*Password';
+        if(operation != 0 ) {
+            val_col = 'txt_name*txt_email';
+            val_msg = 'Name*Email';
+        }
+        if (form_validation(val_col,val_msg)==false)
         {
             return;
         }
         else
         {
-            var method ="";
-            if(operation==0)  method ="POST";
-            else if(operation==1)  method ="PUT";
-            else if(operation==2)  method ="DELETE";
-            var param = "";
-            if(operation == 1 || operation == 2)
-            {
-                param = `/${document.getElementById('update_id').value}`;
-            }
-            
             var formData = get_form_data('txt_name,txt_email,txt_password,txt_phone_no,cbo_user_type,update_id');
             var method ="POST";
             var param = "";

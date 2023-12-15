@@ -12,7 +12,7 @@
     <tbody id="list_view">
         <?php
             $sl = 1;
-            
+            $user_type = user_type();
             $users = App\Models\User::get();
         ?>
         @foreach($users as $user)

@@ -81,8 +81,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user_id)
     {
+        $user = User::find($user_id);
         $request['name'] = $request->txt_name;
         $request['email'] = $request->txt_email;
         $request->validate([
@@ -93,8 +94,8 @@ class UserController extends Controller
         try
         {
             $user->update([
-                'name'=>$request->txt_name,
-                'email'=>$request->txt_email,
+                'name'=>$request->name,
+                'email'=>$request->email,
                 'phone'=>$request->txt_phone_no,
                 'type'=>$request->cbo_user_type
             ]);
@@ -119,8 +120,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($user_id)
     {
+        $user = User::find($user_id);
         $user->delete();
     }
 }
