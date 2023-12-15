@@ -78,12 +78,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             <div class="col-sm-2">
                                 <input type="hidden" name="update_id" id="update_id">
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 <?php
                                     echo load_submit_buttons( $permission, "fnc_company_name", 0,0 ,"reset_form('mainform_1','','',1)");
                                 ?>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-1">
                                 <input type="button" class="btn btn-sm btn-info" value="Show Files" onclick="show_files('update_id','company_profile','','show_company_list_view','list_view_div');">
                             </div>
                             <div class="col-sm-3">

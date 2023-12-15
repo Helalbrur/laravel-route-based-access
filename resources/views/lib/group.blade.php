@@ -85,7 +85,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             <div class="col-sm-1">
                                 <input type="hidden" value="" name="update_id" id="update_id"/>
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-7">
                                 <?php
                                     echo load_submit_buttons( $permission, "fnc_lib_group", 0,0 ,"reset_form('groupprofile_1','','',1)");
                                 ?>

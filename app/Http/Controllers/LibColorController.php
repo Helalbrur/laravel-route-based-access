@@ -85,11 +85,11 @@ class LibColorController extends Controller
         DB::beginTransaction();
         try
         {
+            $user_id = Auth::user()->id;
             $color->update([
                 'color_name'=>$request->input('txt_color_name'),
-                'updated_by'=>Auth::user()->id
+                'updated_by'=> $user_id 
             ]);
-    
             DB::commit();
             return response()->json([
                 'code'=>1,

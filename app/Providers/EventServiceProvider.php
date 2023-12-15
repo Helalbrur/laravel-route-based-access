@@ -29,12 +29,12 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
         
-        if (config('app.log_queries')) {
+        if (env('LOG_QUERIES', '')) {
             DB::listen(function ($query) {
                 $sql = $query->sql;
                 $bindings = $query->bindings;
                 $table_name = $this->extractTableNameFromQuery($sql);
-                if($this->isInsertOrUpdateQuery($sql) && !$this->isLogsQuery($sql))
+                if($this->isNotLogsQuery($sql) && $this->isInsertOrUpdateQuery($sql))
                 {
                     $this->deleteLog();
                     $createdBy = Auth::check() ? Auth::user()->id : null;
@@ -57,8 +57,8 @@ class EventServiceProvider extends ServiceProvider
 
     private function deleteLog()
     {
-        if (Log::count() > 25) {
-            $oldestLogs = Log::orderBy('id','DESC')->take(Log::count() - 25)->get();
+        if (Log::count() > 500) {
+            $oldestLogs = Log::orderBy('id','DESC')->take(Log::count() - 500)->get();
             foreach ($oldestLogs as $log) {
                 $log->delete();
             }
@@ -76,15 +76,16 @@ class EventServiceProvider extends ServiceProvider
     
     private function extractTableNameFromQuery($sql)
     {
+        $sql = strtolower($sql);
         $matches = [];
-        preg_match('/(?:FROM|from|INSERT INTO|insert into|UPDATE|update|delete from|DELETE FROM) `(.+?)`/i', $sql, $matches);
+        preg_match('/(?:from|insert into|update|delete from) `(.+?)`/i', $sql, $matches);
         return $matches[1] ?? null;
     }
 
-    private function isLogsQuery($sql)
+    private function isNotLogsQuery($sql)
     {
         $lowerSql = strtolower($sql);
-        return str_contains($lowerSql, 'log_table');
+        return str_contains($lowerSql, 'log_table') == false;
     }
 
     /**

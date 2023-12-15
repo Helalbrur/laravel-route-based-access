@@ -103,7 +103,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             <div class="col-sm-2">
                                 <input type="hidden" name="update_id" id="update_id">
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-7">
                                 <?php
                                     echo load_submit_buttons( $permission, "fnc_supplier_name", 0,0 ,"reset_form('mainform_1','','',1)");
                                 ?>
