@@ -95,5 +95,9 @@ function get_all_day()
 {
     return array(1 => "Saturday", 2 => "Sunday", 3 => "Monday", 4 => "Tuesday", 5 => "Wednesday", 6 => "Thursday", 7 => "Friday");
 }
+function user_type()
+{
+    return array(1 => "Admin", 2 => "Editor", 3 => "Visitor");
+}
 
 ?>

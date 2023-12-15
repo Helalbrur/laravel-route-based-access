@@ -5,6 +5,7 @@ use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubGroup;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyController;
@@ -29,8 +30,8 @@ use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
-use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\LibStoreLocationController;
+use App\Http\Controllers\LibFloorRoomRackMstController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,7 @@ Route::prefix('/tools')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/create_main_module', MainModuleController::class);
     Route::resource('/mandatory_field', MandatoryFieldController::class);
     Route::resource('/field_level_access', FieldLevelAccessController::class);
+    Route::resource('/user_management', UserController::class);
 });
 
 Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () {
