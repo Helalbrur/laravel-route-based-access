@@ -127,6 +127,20 @@ hr
 	border-radius:.7em;
 }
 
+.formbutton {
+	cursor:pointer;
+	pointer-events: painted;
+	opacity: 1;
+	color: #fff;
+}
+
+.formbutton_disabled {
+	cursor: not-allowed;
+	pointer-events: none;
+	opacity: 0.5;
+	color: gray;
+}
+
 /* .formbutton {
 	cursor:pointer;
 	border:outset 1px #66CC00;
