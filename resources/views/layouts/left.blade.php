@@ -53,8 +53,9 @@
                     if( count( $level2 ) < 1)
                     {
                         $url = URL::to("/{$r_sql[csf('f_location')]}?mid={$r_sql[csf('M_MENU_ID')]}");
+                        echo '<ul class="sub-menu" aria-expanded="false">';
                         ?>
-                        <li>
+                        <li >
                             <a
                                 id="lid<?php echo $r_sql[csf('M_MENU_ID')]; ?>"
                                 href="<?php if( trim( $r_sql[csf('F_LOCATION')] ) == "" ) echo "#"; else { echo $url; } ?>"
@@ -63,6 +64,7 @@
                             </a>
                         </li>
                         <?php
+                        echo '</ul>';
                     }
                     else
                     {
