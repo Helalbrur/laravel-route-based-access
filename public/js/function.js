@@ -40,6 +40,91 @@ operation_success_msg[35]="Data is Not Un-Acknowledged Successfully";
 operation_success_msg[36]="Copy Successfully";
 operation_success_msg[37]="Data is not Populated";
 
+
+
+var quotes_msg=new Array (50);
+quotes_msg[0]="";
+quotes_msg[1]="Never tell your problems to anyone...20% don't care and the other 80% are glad you have them --Lou Holtz ";
+quotes_msg[2]="Be who you are and say what you feel because those who mind don't matter and those who matter don't mind --Dr. Seuss ";
+quotes_msg[3]="Advice is what we ask for when we already know the answer but wish we did not --Erica Jong ";
+quotes_msg[4]="Work like you don't need the money, love like you've never been hurt and dance like no one is watching --Randall G Leighton ";
+quotes_msg[5]="Glory is fleeting, but obscurity is forever.- Napoleon Bonaparte";
+quotes_msg[6]="Victory goes to the player who makes the next-to-last mistake.- Chessmaster Savielly Grigorievitch Tartakower";
+quotes_msg[7]="Don't be so humble - you are not that great.- Golda Meir";
+quotes_msg[8]="You can avoid reality, but you cannot avoid the consequences of avoiding reality.- Ayn Rand";
+quotes_msg[9]="Nothing in the world is more dangerous than sincere ignorance and conscientious stupidity - Martin Luther King Jr.";
+quotes_msg[10]="Happiness equals reality minus expectations.- Tom Magliozzi";
+quotes_msg[11]="The only difference between I and a madman is that I'm not mad.- Salvador Dali";
+quotes_msg[12]="Be the change that you wish to see in the world.― Mahatma Gandhi";
+quotes_msg[13]="When one door closes, another opens; but we often look so long and so regretfully upon the closed door that we do not see the one that has opened for us. - Alexander Graham Bell";
+quotes_msg[14]="Challenges are what make life interesting and overcoming them is what makes life meaningful. – Joshua J. Marine";
+quotes_msg[15]="Happiness cannot be traveled to, owned, earned, or worn. It is the spiritual experience of living every minute with love, grace & gratitude. – Denis Waitley";
+quotes_msg[16]="In order to succeed, your desire for success should be greater than your fear of failure. – Bill Cosby";
+quotes_msg[17]="I am thankful for all of those who said NO to me. Its because of them I’m doing it myself.– Albert Einstein";
+quotes_msg[18]="The only way to do great work is to love what you do. If you haven’t found it yet, keep looking. Don’t settle. – Steve Jobs";
+quotes_msg[19]="The best revenge is massive success. – Frank Sinatra";
+quotes_msg[20]="In the end, it's not going to matter how many breaths you took, but how many moments took your breath away. --shing xiong ";
+
+
+function show_msg( msg )
+{
+	 $('#messagebox_main', window.parent.document).fadeTo(100,1,function() //start fading the messagebox
+	 {
+		$('#messagebox_main', window.parent.document).html( operation_success_msg[trim(msg)] ).removeClass('messagebox').addClass('messagebox_error').fadeOut(5500);
+	 });
+
+}
+
+
+function isNumber (o) {
+  return ! isNaN (o-0) && o !== null && o.replace(/^\s\s*/, '') !== "" && o !== false;
+}
+
+var mytime=0;
+function freeze_window(msg)
+{
+	var sdf=Math.floor(Math.random()*(19-1+1)+1);
+	document.getElementById('msg_text').innerHTML=quotes_msg[sdf];
+
+	var id = '#dialog';
+	//Get the screen height and width
+	var maskHeight = $(document).height();
+	var maskWidth = $(window).width();
+	//Set height and width to mask to fill up the whole screen
+	$('#mask').css({'width':maskWidth,'height':maskHeight});
+	$('#dialog').css({'height':150});
+
+	//transition effect
+	$('#mask').fadeIn(0);
+	$('#mask').fadeTo("slow",0.8);
+	//Get the window height and width
+	var winH = $(window).height();
+	var winW = $(window).width();
+	//Set the popup window to center
+	$(id).css('top',  winH/2-$(id).height()/2);
+	$(id).css('left', winW/2-$(id).width()/2);
+	document.getElementById("msg").innerHTML=0;
+	var time=0;
+	document.getElementById("msg").innerHTML=0;
+ 	mytime=setInterval('count_process_time()',5000); //document.getElementById("msg").innerHTML
+	//transition effect
+	$(id).fadeIn(0);
+}
+
+function count_process_time()
+{
+	document.getElementById('msg').innerHTML=(document.getElementById('msg').innerHTML*1)+5;
+	var vmax=20; var vmin=1;
+	var smsg=Math.floor(Math.random()*(vmax-vmin+1)+vmin); //Math.floor(Math.random() * 6) + 1
+	document.getElementById('msg_text').innerHTML=quotes_msg[smsg];
+}
+
+function release_freezing()
+{
+	$('#mask, .window').hide();
+	clearInterval(mytime);
+}
+
 function  showNotification(message,type='success',second = 5)
 {
 	Swal.fire({
@@ -270,7 +355,7 @@ function form_validation(control,msg_text)
 			}
 		}
 
-		if ( type == 'text' || type == 'password' || type == 'textarea' )
+		if ( type == 'text' || type == 'password' || type == 'textarea' || type == 'email' )
 		{
 			if (trim(document.getElementById(control[i]).value)=="")
 			{
@@ -413,6 +498,7 @@ function rtrim( stringToTrim ) {
 
 function show_list_view( data, action, div, path, extra_func, is_append , tabe_id ='')
 {
+	freeze_window(0);
 	if (!extra_func) var extra_func="";
 	if (!data) var data="0";
 	if (!is_append) var is_append="";
@@ -447,10 +533,11 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
 		{
 			setFilterGrid(tabe_id,-1);
 		}
+		release_freezing();
     })
     .catch(error => {
 		showNotification(error,'error');
-    	//console.log(error);
+    	release_freezing();
     });
 
 
@@ -772,18 +859,29 @@ function searchTableWithRowspan(tableId, inputFieldId, footer_table_id = '', col
     }
 }
 
-function load_drop_down( plink, data, action, container )
+function load_drop_down( plink, data, action, container , callback = "" )
 {
-	//alert(data);
+	freeze_window(0);
     var url = `/${plink}?data=${data}&action=${action}`;
     fetch(url)
     .then(response => response.text())
     .then(html => {
         document.getElementById(container).innerHTML = html;
+		release_freezing();
+		if(typeof callback === "function")
+		{
+			// Call the callback function
+			callback();
+		}
     })
     .catch(error => {
         showNotification(error,'error');
-        //console.log(error);
+		release_freezing();
+        if(typeof callback === "function")
+		{
+			// Call the callback function
+			callback();
+		}
     });
 }
 
@@ -967,6 +1065,7 @@ function readImage(input,displayImage)
 
 async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='',multi_select_column ='',extra_function_on_chage_column='')
 {
+	freeze_window(0);
 	var return_value = -1 ;
 	var url = `/populate_common_data`;
 	await fetch(url,{
@@ -1115,17 +1214,19 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 				}
 			}
 		}
+		release_freezing();
 	})
 	.catch(error => {
 
 		showNotification(error,'warning');
-		//console.log(error);
+		release_freezing();
 	});
 	return return_value;
 }
 
 function save_update_delete(operation,url,request_data,column_name='',show_list_view_name='',show_list_view_div_id ='',reset_form_id='')
 {
+	freeze_window(operation);
 	fetch(url,request_data)
 	.then(response => {
 		if (!response.ok) {
@@ -1179,17 +1280,21 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 			}
 			show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
 		}
+		release_freezing();
 	})
 	.catch(error => {
 		showNotification(error,'error');
+		release_freezing();
 	});
 }
 
 function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_list_view_div_id='')
 {
+	freeze_window(0);
 	if(form_validation(sys_no,'Sys No/Id')==false)
 	{
 		showNotification("Sys No/Id Can't be empty",'error');
+		release_freezing();
 		return;
 	}
 	else
@@ -1202,7 +1307,12 @@ function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_li
 		{
 			if(show_list_view_name.length > 0 && show_list_view_div_id.length > 0)
 			{
+				//release_freezing();
 				show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
+			}
+			else
+			{
+				release_freezing();
 			}
 		}
 	}

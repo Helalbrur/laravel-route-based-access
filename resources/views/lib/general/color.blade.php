@@ -16,8 +16,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <center>
             <div class="card" style="width: 60%">
                 <div class="card-body" style="justify-content:center;">
-                <h4 class="card-title">{{getMenuName(request('mid') ?? 0) ?? 'Color Entry'}}</h4>
-                    <!-- <p class="card-title-desc">A mobile and touch friendly input spinner component for Bootstrap</p> -->
+                    <h4 class="card-title">{{getMenuName(request('mid') ?? 0) ?? 'Color Entry'}}</h4>
                     <div class="card-text" style="justify-content:center;">
                         <!-- #EBF4FA; -->
                         <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">

@@ -303,8 +303,9 @@ function create_drop_down($field_id, $field_width, $query, $field_list, $show_se
     }
 
     $field_list = explode(",", $field_list);
+    if($field_width != "100%") $field_width = $field_width."px";
 
-    $drop_down = '<select ' . $tab_index . ' name="' . ($field_name == "" ? $field_id : $field_name) . '" id="' . $field_id . '" class="form-control ' . $additionalClass . '" ' . $is_disabled . '  style="width:' . $field_width . 'px" onchange="' . $onchange_func . '">\n';
+    $drop_down = '<select ' . $tab_index . ' name="' . ($field_name == "" ? $field_id : $field_name) . '" id="' . $field_id . '" class="form-control ' . $additionalClass . '" ' . $is_disabled . '  style="width:' . $field_width . '" onchange="' . $onchange_func . '">\n';
 
     if ($show_select == 1) {
         $drop_down .= '<option data-attr="" value="0">' . $select_text_msg . '</option>\n';

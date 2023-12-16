@@ -32,6 +32,7 @@ use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
+use App\Http\Controllers\ReportSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,9 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/general/size', LibSizeController::class);
     Route::resource('/general/country', LibCountryController::class);
     Route::resource('/general/store', LibStoreLocationController::class);
+
+
+    Route::resource('/variable_setting/report_setting', ReportSettingController::class);
 
     Route::resource('/item_details/item_category', LibCategoryController::class);
     Route::resource('/item_details/item_group', LibItemGroupController::class);

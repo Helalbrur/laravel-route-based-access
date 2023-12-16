@@ -100,4 +100,18 @@ function user_type()
     return array(1 => "Admin", 2 => "Editor", 3 => "Visitor");
 }
 
+function report_name()
+{
+    return array(1 => "Location", 2 => "Buyer Profile", 3 => "Supplier Profile");
+}
+
+function report_format()
+{
+    return array(1 => "Print", 2 => "Print B1", 3 => "Print B2", 4 => "Print B3");
+}
+
+function module_name()
+{
+    return  App\Models\MainModule::pluck('main_module', 'm_mod_id');;
+}
 ?>

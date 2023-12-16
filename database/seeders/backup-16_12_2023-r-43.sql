@@ -493,7 +493,7 @@ CREATE TABLE `lib_color` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,7 +502,7 @@ CREATE TABLE `lib_color` (
 
 LOCK TABLES `lib_color` WRITE;
 /*!40000 ALTER TABLE `lib_color` DISABLE KEYS */;
-INSERT INTO `lib_color` VALUES (1,'Black',NULL,NULL,NULL,NULL,'2023-06-28 10:08:37','2023-12-15 06:26:17'),(2,'White',NULL,NULL,NULL,NULL,'2023-06-28 10:11:38','2023-12-15 06:25:03'),(5,'new color',NULL,NULL,NULL,'2023-12-15 07:09:34','2023-12-15 07:09:22','2023-12-15 07:09:34'),(6,'Green',NULL,NULL,NULL,NULL,'2023-12-15 07:09:26','2023-12-16 02:30:46');
+INSERT INTO `lib_color` VALUES (1,'Black',NULL,NULL,NULL,NULL,'2023-06-28 10:08:37','2023-06-28 10:08:37'),(2,'White',NULL,NULL,NULL,NULL,'2023-06-28 10:11:38','2023-06-28 10:11:38');
 /*!40000 ALTER TABLE `lib_color` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -847,38 +847,6 @@ INSERT INTO `lib_location` VALUES (1,'Aricha',1,1,'Md. Helal Uddin','01758502951
 UNLOCK TABLES;
 
 --
--- Table structure for table `lib_report_template`
---
-
-DROP TABLE IF EXISTS `lib_report_template`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `lib_report_template` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `module_id` bigint unsigned NOT NULL,
-  `report_id` bigint unsigned NOT NULL,
-  `format_id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL,
-  `created_by` bigint unsigned DEFAULT NULL,
-  `updated_by` bigint unsigned DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `lib_report_template`
---
-
-LOCK TABLES `lib_report_template` WRITE;
-/*!40000 ALTER TABLE `lib_report_template` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lib_report_template` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `lib_size`
 --
 
@@ -904,7 +872,7 @@ CREATE TABLE `lib_size` (
 
 LOCK TABLES `lib_size` WRITE;
 /*!40000 ALTER TABLE `lib_size` DISABLE KEYS */;
-INSERT INTO `lib_size` VALUES (1,'32',NULL,NULL,NULL,NULL,'2023-06-28 10:55:19','2023-06-28 13:52:52'),(2,'36',NULL,NULL,NULL,NULL,'2023-06-28 10:56:22','2023-06-28 13:45:30'),(3,'44',NULL,NULL,NULL,NULL,'2023-06-28 13:01:06','2023-06-28 13:01:06'),(4,'57',NULL,NULL,NULL,NULL,'2023-06-28 15:32:57','2023-12-15 07:10:10');
+INSERT INTO `lib_size` VALUES (1,'32',NULL,NULL,NULL,NULL,'2023-06-28 10:55:19','2023-06-28 13:52:52'),(2,'36',NULL,NULL,NULL,NULL,'2023-06-28 10:56:22','2023-06-28 13:45:30'),(3,'44',NULL,NULL,NULL,NULL,'2023-06-28 13:01:06','2023-06-28 13:01:06'),(4,'56',NULL,NULL,NULL,NULL,'2023-06-28 15:32:57','2023-06-28 15:32:57');
 /*!40000 ALTER TABLE `lib_size` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1053,7 +1021,7 @@ CREATE TABLE `log_table` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `log_table_created_by_foreign` (`created_by`)
-) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1062,7 +1030,6 @@ CREATE TABLE `log_table` (
 
 LOCK TABLES `log_table` WRITE;
 /*!40000 ALTER TABLE `log_table` DISABLE KEYS */;
-INSERT INTO `log_table` VALUES (86,'update `lib_color` set `color_name` = \'White color\', `lib_color`.`updated_at` = \'2023-12-15 11:04:08\' where `id` = 2','lib_color',1,'2023-12-15 05:04:08','2023-12-15 05:04:08'),(87,'update `lib_color` set `color_name` = \'White\', `lib_color`.`updated_at` = \'2023-12-15 11:04:24\' where `id` = 2','lib_color',1,'2023-12-15 05:04:24','2023-12-15 05:04:24'),(88,'update `lib_color` set `color_name` = \'White test\', `lib_color`.`updated_at` = \'2023-12-15 11:09:34\' where `id` = 2','lib_color',1,'2023-12-15 05:09:34','2023-12-15 05:09:34'),(89,'insert into `main_menu` (`m_module_id`, `root_menu`, `sub_root_menu`, `menu_name`, `m_menu_id`, `f_location`, `position`, `status`, `slno`, `report_menu`, `fabric_nature`, `is_mobile_menu`, `m_page_name`, `m_page_short_name`, `inserted_by`, `status_active`, `is_deleted`) values (1, 0, 0, \'Variable Setting\', 33, \'\', 1, 1, 5, 0, 0, 0, \'\', \'\', 1, 1, 0)','main_menu',1,'2023-12-15 21:50:48','2023-12-15 21:50:48'),(90,'delete from user_priv_mst where main_menu_id in( select m_menu_id from main_menu where m_module_id=1 and root_menu=33) and user_id in (1)','',1,'2023-12-15 21:51:13','2023-12-15 21:51:13'),(91,'delete from user_priv_mst where main_menu_id in ( select m_menu_id from main_menu where m_module_id=1) and user_id in (1) and main_menu_id=33','',1,'2023-12-15 21:51:13','2023-12-15 21:51:13'),(92,'insert into `user_priv_mst` (`user_id`, `main_menu_id`, `show_priv`, `delete_priv`, `save_priv`, `edit_priv`, `approve_priv`, `valid`, `inserted_by`, `entry_date`, `updated_at`, `created_at`) values (1, 33, 1, 1, 1, 1, 1, 1, 1, 1702684800, \'2023-12-16 03:51:13\', \'2023-12-16 03:51:13\')','user_priv_mst',1,'2023-12-15 21:51:13','2023-12-15 21:51:13'),(93,'insert into `main_menu` (`m_module_id`, `root_menu`, `sub_root_menu`, `menu_name`, `m_menu_id`, `f_location`, `position`, `status`, `slno`, `report_menu`, `fabric_nature`, `is_mobile_menu`, `m_page_name`, `m_page_short_name`, `inserted_by`, `status_active`, `is_deleted`) values (1, 33, 0, \'Report Setting\', 34, \'lib/variable_setting/report_setting\', 2, 1, 1, 0, 0, 0, \'\', \'\', 1, 1, 0)','main_menu',1,'2023-12-15 21:53:24','2023-12-15 21:53:24'),(94,'delete from user_priv_mst where main_menu_id in ( select m_menu_id from main_menu where m_module_id=1 and sub_root_menu in (34)) and user_id  in (1)','',1,'2023-12-15 21:53:45','2023-12-15 21:53:45'),(95,'delete from user_priv_mst where main_menu_id in ( select m_menu_id from main_menu where  m_module_id=1 ) and user_id in (1) and main_menu_id=33','',1,'2023-12-15 21:53:45','2023-12-15 21:53:45'),(96,'delete from user_priv_mst where main_menu_id in( select m_menu_id from main_menu where m_module_id=1) and user_id in (1) and main_menu_id=34','',1,'2023-12-15 21:53:45','2023-12-15 21:53:45'),(97,'insert into `user_priv_mst` (`user_id`, `main_menu_id`, `show_priv`, `delete_priv`, `save_priv`, `edit_priv`, `approve_priv`, `valid`, `inserted_by`, `entry_date`, `updated_at`, `created_at`) values (1, 33, 1, 1, 1, 1, 1, 1, 1, 1702684800, \'2023-12-16 03:53:45\', \'2023-12-16 03:53:45\')','user_priv_mst',1,'2023-12-15 21:53:45','2023-12-15 21:53:45'),(98,'insert into `user_priv_mst` (`user_id`, `main_menu_id`, `show_priv`, `delete_priv`, `save_priv`, `edit_priv`, `approve_priv`, `valid`, `inserted_by`, `entry_date`, `updated_at`, `created_at`) values (1, 34, 1, 1, 1, 1, 1, 1, 1, 1702684800, \'2023-12-16 03:53:45\', \'2023-12-16 03:53:45\')','user_priv_mst',1,'2023-12-15 21:53:45','2023-12-15 21:53:45'),(99,'create table `lib_report_template` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(191) not null, `module_id` bigint unsigned not null, `report_id` bigint unsigned not null, `format_id` bigint unsigned not null, `user_id` bigint unsigned not null, `created_by` bigint unsigned null, `updated_by` bigint unsigned null, `created_at` timestamp null, `updated_at` timestamp null, `deleted_at` timestamp null) default character set utf8mb4 collate \'utf8mb4_unicode_ci\'','',NULL,'2023-12-15 22:12:56','2023-12-15 22:12:56'),(100,'insert into `migrations` (`migration`, `batch`) values (\'2023_12_16_035835_create_report_settings_table\', 15)','migrations',NULL,'2023-12-15 22:12:56','2023-12-15 22:12:56'),(101,'update `main_module` set `mod_slno` = 9, `main_module`.`updated_at` = \'2023-12-16 06:40:40\' where `id` = 1','main_module',1,'2023-12-16 00:40:41','2023-12-16 00:40:41'),(102,'update `lib_color` set `color_name` = \'Blue\', `lib_color`.`updated_at` = \'2023-12-16 08:30:25\' where `id` = 6','lib_color',1,'2023-12-16 02:30:26','2023-12-16 02:30:26'),(103,'update `lib_color` set `color_name` = \'Green\', `lib_color`.`updated_at` = \'2023-12-16 08:30:46\' where `id` = 6','lib_color',1,'2023-12-16 02:30:46','2023-12-16 02:30:46');
 /*!40000 ALTER TABLE `log_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1098,7 +1065,7 @@ CREATE TABLE `main_menu` (
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1107,7 +1074,7 @@ CREATE TABLE `main_menu` (
 
 LOCK TABLES `main_menu` WRITE;
 /*!40000 ALTER TABLE `main_menu` DISABLE KEYS */;
-INSERT INTO `main_menu` VALUES (1,5,10,0,0,'Menu Management','tools/create_menu','create_menu',0,1,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(2,4,10,0,0,'Module Management','tools/create_main_module','tools.create_main_module',0,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(3,3,10,0,0,'Privilege Management','tools/user_previledge','tools.user_previledge',113,1,1,3,0,0,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL),(4,6,1,8,0,'Company','lib/company',NULL,113,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(5,7,1,0,0,'General','',NULL,113,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(8,8,1,0,0,'Cost Center','',NULL,113,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(9,9,1,8,0,'Group Profile','lib/group',NULL,113,2,1,0,0,0,NULL,NULL,2,NULL,NULL,NULL,1,0,NULL),(11,11,1,7,0,'Color Entry','lib/general/color',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(13,12,1,7,0,'Size Entry','lib/general/size',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(14,13,1,7,0,'Country Entry','lib/general/country',NULL,0,2,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(15,14,1,0,0,'Item Details','',NULL,0,1,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(16,15,1,14,0,'Item Category List','lib/item_details/item_category',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(17,16,1,14,0,'Item Group','lib/item_details/item_group',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(18,17,1,14,0,'Item Sub Group','lib/item_details/item_sub_group',NULL,0,2,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(19,18,10,0,0,'Mandatory Field','tools/mandatory_field',NULL,0,1,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(20,19,10,0,0,'Field Level Access','tools/field_level_access',NULL,0,1,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(21,20,10,0,0,'Manual Database Backup','db_backup',NULL,0,1,1,6,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(22,21,1,8,0,'Location','lib/location',NULL,0,2,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(23,22,1,0,0,'Contact Details','',NULL,0,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(24,23,1,22,0,'Buyer Profile','lib/buyer',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(25,24,1,22,0,'Supplier Prpfile','lib/supplier',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(26,25,1,0,0,'Inventory','',NULL,0,1,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(27,26,1,25,0,'Floor Setup','lib/inventory/floor',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(28,27,1,25,0,'Room','lib/inventory/room',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(29,28,1,25,0,'Rack','lib/inventory/rack',NULL,0,2,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(30,29,1,25,0,'Shelf','lib/inventory/shelf',NULL,0,2,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(31,30,1,25,0,'Bin','lib/inventory/bin',NULL,0,2,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(32,31,1,7,0,'Store Location','lib/general/store',NULL,0,2,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(33,32,10,0,0,'User Management','tools/user_management',NULL,0,1,1,7,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(34,33,1,0,0,'Variable Setting','',NULL,0,1,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(35,34,1,33,0,'Report Setting','lib/variable_setting/report_setting',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL);
+INSERT INTO `main_menu` VALUES (1,5,10,0,0,'Menu Management','tools/create_menu','create_menu',0,1,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(2,4,10,0,0,'Module Management','tools/create_main_module','tools.create_main_module',0,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(3,3,10,0,0,'Privilege Management','tools/user_previledge','tools.user_previledge',113,1,1,3,0,0,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL),(4,6,1,8,0,'Company','lib/company',NULL,113,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(5,7,1,0,0,'General','',NULL,113,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(8,8,1,0,0,'Cost Center','',NULL,113,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(9,9,1,8,0,'Group Profile','lib/group',NULL,113,2,1,0,0,0,NULL,NULL,2,NULL,NULL,NULL,1,0,NULL),(11,11,1,7,0,'Color Entry','lib/general/color',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(13,12,1,7,0,'Size Entry','lib/general/size',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(14,13,1,7,0,'Country Entry','lib/general/country',NULL,0,2,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(15,14,1,0,0,'Item Details','',NULL,0,1,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(16,15,1,14,0,'Item Category List','lib/item_details/item_category',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(17,16,1,14,0,'Item Group','lib/item_details/item_group',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(18,17,1,14,0,'Item Sub Group','lib/item_details/item_sub_group',NULL,0,2,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(19,18,10,0,0,'Mandatory Field','tools/mandatory_field',NULL,0,1,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(20,19,10,0,0,'Field Level Access','tools/field_level_access',NULL,0,1,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(21,20,10,0,0,'Manual Database Backup','db_backup',NULL,0,1,1,6,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(22,21,1,8,0,'Location','lib/location',NULL,0,2,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(23,22,1,0,0,'Contact Details','',NULL,0,1,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(24,23,1,22,0,'Buyer Profile','lib/buyer',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(25,24,1,22,0,'Supplier Prpfile','lib/supplier',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(26,25,1,0,0,'Inventory','',NULL,0,1,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(27,26,1,25,0,'Floor Setup','lib/inventory/floor',NULL,0,2,1,1,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(28,27,1,25,0,'Room','lib/inventory/room',NULL,0,2,1,2,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(29,28,1,25,0,'Rack','lib/inventory/rack',NULL,0,2,1,3,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(30,29,1,25,0,'Shelf','lib/inventory/shelf',NULL,0,2,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(31,30,1,25,0,'Bin','lib/inventory/bin',NULL,0,2,1,5,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(32,31,1,7,0,'Store Location','lib/general/store',NULL,0,2,1,4,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL),(33,32,10,0,0,'User Management','tools/user_management',NULL,0,1,1,7,0,0,NULL,NULL,1,NULL,NULL,NULL,1,0,NULL);
 /*!40000 ALTER TABLE `main_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1138,7 +1105,7 @@ CREATE TABLE `main_module` (
 
 LOCK TABLES `main_module` WRITE;
 /*!40000 ALTER TABLE `main_module` DISABLE KEYS */;
-INSERT INTO `main_module` VALUES (1,10,'Admin',NULL,1,9,'2023-06-24 03:23:52','2023-12-16 00:40:40'),(2,1,'Lib',NULL,1,1,'2023-06-24 03:23:52','2023-11-18 10:35:27');
+INSERT INTO `main_module` VALUES (1,10,'Admin',NULL,1,10,'2023-06-24 03:23:52','2023-11-18 10:35:39'),(2,1,'Lib',NULL,1,1,'2023-06-24 03:23:52','2023-11-18 10:35:27');
 /*!40000 ALTER TABLE `main_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1186,7 +1153,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1195,7 +1162,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_reset_tokens_table',1),(3,'2019_08_19_000000_create_failed_jobs_table',1),(4,'2019_12_14_000001_create_personal_access_tokens_table',1),(5,'2023_02_25_162743_create_permissions_table',1),(30,'2023_02_26_010050_create_logs_table',9),(7,'2023_03_30_135628_create_main_modules_table',1),(8,'2023_03_30_232043_create_main_menus_table',1),(9,'2023_03_31_002654_create_user_priv_modules_table',1),(10,'2023_03_31_004123_create_user_priv_msts_table',1),(31,'2023_04_05_150231_create_lib_item_category_lists_table',10),(27,'2023_06_24_120120_create_companies_table',7),(13,'2023_06_26_102110_create_groups_table',3),(14,'2023_06_26_102151_create_lib_suppliers_table',3),(15,'2023_06_26_102207_create_lib_buyers_table',3),(16,'2023_06_26_103917_create_lib_item_groups_table',3),(17,'2023_06_26_104001_create_lib_item_sub_groups_table',3),(18,'2023_06_26_104141_create_product_details_masters_table',3),(19,'2023_06_26_104304_create_lib_colors_table',4),(20,'2023_06_26_104316_create_lib_sizes_table',4),(21,'2023_06_26_104349_create_lib_locations_table',5),(22,'2023_06_26_104929_create_lib_store_locations_table',5),(23,'2023_06_26_104951_create_lib_employees_table',5),(24,'2023_06_26_105919_create_lib_floor_room_rack_msts_table',5),(25,'2023_06_26_105929_create_lib_floor_room_rack_dtls_table',5),(26,'2023_06_26_190145_create_image_uploads_table',6),(28,'2023_06_28_172131_create_lib_countries_table',8),(34,'2023_11_24_154706_create_lib_buyer_tag_companies_table',11),(35,'2023_11_24_183141_create_lib_supplier_tag_companies_table',12),(36,'2023_11_25_080618_create_lib_store_tag_categories_table',13),(37,'2023_11_25_133247_create_lib_floors_table',14),(38,'2023_12_16_035835_create_report_settings_table',15);
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_reset_tokens_table',1),(3,'2019_08_19_000000_create_failed_jobs_table',1),(4,'2019_12_14_000001_create_personal_access_tokens_table',1),(5,'2023_02_25_162743_create_permissions_table',1),(30,'2023_02_26_010050_create_logs_table',9),(7,'2023_03_30_135628_create_main_modules_table',1),(8,'2023_03_30_232043_create_main_menus_table',1),(9,'2023_03_31_002654_create_user_priv_modules_table',1),(10,'2023_03_31_004123_create_user_priv_msts_table',1),(31,'2023_04_05_150231_create_lib_item_category_lists_table',10),(27,'2023_06_24_120120_create_companies_table',7),(13,'2023_06_26_102110_create_groups_table',3),(14,'2023_06_26_102151_create_lib_suppliers_table',3),(15,'2023_06_26_102207_create_lib_buyers_table',3),(16,'2023_06_26_103917_create_lib_item_groups_table',3),(17,'2023_06_26_104001_create_lib_item_sub_groups_table',3),(18,'2023_06_26_104141_create_product_details_masters_table',3),(19,'2023_06_26_104304_create_lib_colors_table',4),(20,'2023_06_26_104316_create_lib_sizes_table',4),(21,'2023_06_26_104349_create_lib_locations_table',5),(22,'2023_06_26_104929_create_lib_store_locations_table',5),(23,'2023_06_26_104951_create_lib_employees_table',5),(24,'2023_06_26_105919_create_lib_floor_room_rack_msts_table',5),(25,'2023_06_26_105929_create_lib_floor_room_rack_dtls_table',5),(26,'2023_06_26_190145_create_image_uploads_table',6),(28,'2023_06_28_172131_create_lib_countries_table',8),(34,'2023_11_24_154706_create_lib_buyer_tag_companies_table',11),(35,'2023_11_24_183141_create_lib_supplier_tag_companies_table',12),(36,'2023_11_25_080618_create_lib_store_tag_categories_table',13),(37,'2023_11_25_133247_create_lib_floors_table',14);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1437,7 +1404,7 @@ CREATE TABLE `user_priv_mst` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1446,7 +1413,7 @@ CREATE TABLE `user_priv_mst` (
 
 LOCK TABLES `user_priv_mst` WRITE;
 /*!40000 ALTER TABLE `user_priv_mst` DISABLE KEYS */;
-INSERT INTO `user_priv_mst` VALUES (1,1,3,1,1,1,1,1,0,NULL,NULL,NULL,1,0,'2023-06-24 03:23:52','2023-06-24 03:23:52'),(2,1,4,1,1,1,1,1,0,NULL,NULL,NULL,1,0,'2023-06-24 03:23:52','2023-06-24 03:23:52'),(3,1,5,1,1,1,1,1,0,NULL,NULL,NULL,1,0,'2023-06-24 03:23:52','2023-06-24 03:23:52'),(19,1,9,1,1,1,1,1,1687737600,NULL,NULL,'2',1,0,'2023-06-26 10:25:55','2023-06-26 10:25:55'),(33,1,12,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 10:41:12','2023-06-28 10:41:12'),(11,1,6,1,1,1,1,1,1687737600,NULL,NULL,'1',1,0,'2023-06-26 01:14:22','2023-06-26 01:14:22'),(37,1,13,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 11:30:41','2023-06-28 11:30:41'),(35,2,12,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 10:41:12','2023-06-28 10:41:12'),(66,1,21,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(91,1,31,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(17,2,6,1,1,1,1,1,1687737600,NULL,NULL,'1',1,0,'2023-06-26 02:20:46','2023-06-26 02:20:46'),(65,1,8,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(25,2,9,1,2,1,2,2,1687824000,NULL,NULL,'2',1,0,'2023-06-27 01:01:15','2023-06-27 01:01:15'),(27,2,10,1,2,2,2,2,1687824000,NULL,NULL,'2',1,0,'2023-06-27 01:03:19','2023-06-27 01:03:19'),(29,1,11,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 08:36:32','2023-06-28 08:36:32'),(90,1,7,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(61,2,11,1,2,1,2,2,1690329600,NULL,NULL,'1',1,0,'2023-07-26 10:55:04','2023-07-26 10:55:04'),(39,2,13,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 11:30:41','2023-06-28 11:30:41'),(43,2,15,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 03:35:44','2023-06-29 03:35:44'),(47,1,16,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 06:05:06','2023-06-29 06:05:06'),(57,2,17,1,2,2,2,2,1688083200,NULL,NULL,'1',1,0,'2023-06-30 00:38:34','2023-06-30 00:38:34'),(45,1,15,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 03:35:44','2023-06-29 03:35:44'),(56,2,14,1,2,2,2,2,1688083200,NULL,NULL,'1',1,0,'2023-06-30 00:38:34','2023-06-30 00:38:34'),(49,2,16,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 06:05:06','2023-06-29 06:05:06'),(52,1,14,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-29 21:44:53','2023-06-29 21:44:53'),(53,1,17,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-29 21:44:53','2023-06-29 21:44:53'),(58,2,18,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-30 02:01:40','2023-06-30 02:01:40'),(59,1,18,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-30 02:01:40','2023-06-30 02:01:40'),(62,1,19,1,1,1,1,1,1697241600,NULL,NULL,'1',1,0,'2023-10-14 02:18:31','2023-10-14 02:18:31'),(63,1,20,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-16 23:50:38','2023-11-16 23:50:38'),(64,2,20,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-16 23:50:38','2023-11-16 23:50:38'),(67,2,8,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(68,2,21,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(72,1,22,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 12:19:20','2023-11-24 12:19:20'),(71,1,23,1,1,1,1,1,1700265600,NULL,NULL,'1',1,0,'2023-11-18 10:29:47','2023-11-18 10:29:47'),(73,1,24,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 12:19:20','2023-11-24 12:19:20'),(81,1,26,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:33','2023-11-24 13:17:33'),(83,1,27,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:40','2023-11-24 13:17:40'),(85,1,28,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:46','2023-11-24 13:17:46'),(87,1,29,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:51','2023-11-24 13:17:51'),(89,1,30,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:56','2023-11-24 13:17:56'),(88,1,25,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:56','2023-11-24 13:17:56'),(92,2,7,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(93,2,31,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(94,1,32,1,1,1,1,1,1702598400,NULL,NULL,'1',1,0,'2023-12-14 23:16:17','2023-12-14 23:16:17'),(96,1,33,1,1,1,1,1,1702684800,NULL,NULL,'1',1,0,'2023-12-15 21:53:45','2023-12-15 21:53:45'),(97,1,34,1,1,1,1,1,1702684800,NULL,NULL,'1',1,0,'2023-12-15 21:53:45','2023-12-15 21:53:45');
+INSERT INTO `user_priv_mst` VALUES (1,1,3,1,1,1,1,1,0,NULL,NULL,NULL,1,0,'2023-06-24 03:23:52','2023-06-24 03:23:52'),(2,1,4,1,1,1,1,1,0,NULL,NULL,NULL,1,0,'2023-06-24 03:23:52','2023-06-24 03:23:52'),(3,1,5,1,1,1,1,1,0,NULL,NULL,NULL,1,0,'2023-06-24 03:23:52','2023-06-24 03:23:52'),(19,1,9,1,1,1,1,1,1687737600,NULL,NULL,'2',1,0,'2023-06-26 10:25:55','2023-06-26 10:25:55'),(33,1,12,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 10:41:12','2023-06-28 10:41:12'),(11,1,6,1,1,1,1,1,1687737600,NULL,NULL,'1',1,0,'2023-06-26 01:14:22','2023-06-26 01:14:22'),(37,1,13,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 11:30:41','2023-06-28 11:30:41'),(35,2,12,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 10:41:12','2023-06-28 10:41:12'),(66,1,21,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(91,1,31,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(17,2,6,1,1,1,1,1,1687737600,NULL,NULL,'1',1,0,'2023-06-26 02:20:46','2023-06-26 02:20:46'),(65,1,8,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(25,2,9,1,2,1,2,2,1687824000,NULL,NULL,'2',1,0,'2023-06-27 01:01:15','2023-06-27 01:01:15'),(27,2,10,1,2,2,2,2,1687824000,NULL,NULL,'2',1,0,'2023-06-27 01:03:19','2023-06-27 01:03:19'),(29,1,11,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 08:36:32','2023-06-28 08:36:32'),(90,1,7,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(61,2,11,1,2,1,2,2,1690329600,NULL,NULL,'1',1,0,'2023-07-26 10:55:04','2023-07-26 10:55:04'),(39,2,13,1,1,1,1,1,1687910400,NULL,NULL,'1',1,0,'2023-06-28 11:30:41','2023-06-28 11:30:41'),(43,2,15,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 03:35:44','2023-06-29 03:35:44'),(47,1,16,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 06:05:06','2023-06-29 06:05:06'),(57,2,17,1,2,2,2,2,1688083200,NULL,NULL,'1',1,0,'2023-06-30 00:38:34','2023-06-30 00:38:34'),(45,1,15,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 03:35:44','2023-06-29 03:35:44'),(56,2,14,1,2,2,2,2,1688083200,NULL,NULL,'1',1,0,'2023-06-30 00:38:34','2023-06-30 00:38:34'),(49,2,16,1,1,1,1,1,1687996800,NULL,NULL,'1',1,0,'2023-06-29 06:05:06','2023-06-29 06:05:06'),(52,1,14,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-29 21:44:53','2023-06-29 21:44:53'),(53,1,17,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-29 21:44:53','2023-06-29 21:44:53'),(58,2,18,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-30 02:01:40','2023-06-30 02:01:40'),(59,1,18,1,1,1,1,1,1688083200,NULL,NULL,'1',1,0,'2023-06-30 02:01:40','2023-06-30 02:01:40'),(62,1,19,1,1,1,1,1,1697241600,NULL,NULL,'1',1,0,'2023-10-14 02:18:31','2023-10-14 02:18:31'),(63,1,20,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-16 23:50:38','2023-11-16 23:50:38'),(64,2,20,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-16 23:50:38','2023-11-16 23:50:38'),(67,2,8,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(68,2,21,1,1,1,1,1,1700179200,NULL,NULL,'1',1,0,'2023-11-17 10:50:03','2023-11-17 10:50:03'),(72,1,22,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 12:19:20','2023-11-24 12:19:20'),(71,1,23,1,1,1,1,1,1700265600,NULL,NULL,'1',1,0,'2023-11-18 10:29:47','2023-11-18 10:29:47'),(73,1,24,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 12:19:20','2023-11-24 12:19:20'),(81,1,26,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:33','2023-11-24 13:17:33'),(83,1,27,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:40','2023-11-24 13:17:40'),(85,1,28,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:46','2023-11-24 13:17:46'),(87,1,29,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:51','2023-11-24 13:17:51'),(89,1,30,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:56','2023-11-24 13:17:56'),(88,1,25,1,1,1,1,1,1700784000,NULL,NULL,'1',1,0,'2023-11-24 13:17:56','2023-11-24 13:17:56'),(92,2,7,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(93,2,31,1,1,1,1,1,1700870400,NULL,NULL,'1',1,0,'2023-11-25 00:52:28','2023-11-25 00:52:28'),(94,1,32,1,1,1,1,1,1702598400,NULL,NULL,'1',1,0,'2023-12-14 23:16:17','2023-12-14 23:16:17');
 /*!40000 ALTER TABLE `user_priv_mst` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1480,7 +1447,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','admin@gmail.com','2023-06-24 03:23:52','$2y$10$fm6ccsFPqIPTq8LG6qeub.Qsofm3gZx46BQCy5FyMkw3DjiGAY1H2',NULL,1,'G6HpwjA5teG4XSAWQQ7rlt2jBb8GojhJLZoZksxBYipVuJDCiwlO5PuPzvUm','2023-06-24 03:23:52','2023-06-24 03:23:52',NULL),(2,'Helal Uddin','helal@gmail.com',NULL,'$2y$10$vrUWyBfwKL0AeKzKf0C/5OkivLRmS.qLVA.Kcb.nXwQHz.UIx8Rpq',NULL,3,NULL,'2023-06-26 02:19:33','2023-06-26 02:19:33',NULL),(3,'Himel','himel@gmail.com',NULL,'$2y$10$4Fp5tI5eNs2pUl.1/iNUKez1flgXFhwaThs3b4BuTy5DoSAUIdlLi','123456',3,NULL,'2023-12-15 00:11:30','2023-12-15 02:37:50',NULL);
+INSERT INTO `users` VALUES (1,'Admin','admin@gmail.com','2023-06-24 03:23:52','$2y$10$fm6ccsFPqIPTq8LG6qeub.Qsofm3gZx46BQCy5FyMkw3DjiGAY1H2',NULL,NULL,'j00mQEv2NiGr4Q69m2RjAvvq1S2tioU9E3qEIbNjPejTpduuIkrtmvkX4gx4','2023-06-24 03:23:52','2023-06-24 03:23:52',NULL),(2,'Helal Uddin','helal@gmail.com',NULL,'$2y$10$vrUWyBfwKL0AeKzKf0C/5OkivLRmS.qLVA.Kcb.nXwQHz.UIx8Rpq',NULL,NULL,NULL,'2023-06-26 02:19:33','2023-06-26 02:19:33',NULL),(3,'Himel','himel@gmail.com',NULL,'$2y$10$4Fp5tI5eNs2pUl.1/iNUKez1flgXFhwaThs3b4BuTy5DoSAUIdlLi',NULL,3,NULL,'2023-12-15 00:11:30','2023-12-15 00:11:30',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1493,4 +1460,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-16 14:59:56
+-- Dump completed on 2023-12-15 12:35:52

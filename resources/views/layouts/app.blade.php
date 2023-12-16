@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="utf-8" />
-        <title>{{ @$title }}</title>
+        <title>Laravel Stater {{ !empty($title) ?  '-' : '' }} {{ @$title }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -37,7 +37,16 @@
     <body data-sidebar="dark">
 
     <!-- <body data-layout="horizontal" data-topbar="dark"> -->
-
+        <div id="boxes">
+            <div id="dialog" class="window" >
+                <div id="msg" class="msg_header">
+                </div>
+                <div style="width:400;padding:20px; height:150px; vertical-align:middle">
+                    <img src="{{asset('images/Loading2.gif')}}" width="30" height="30" clear="all" style="vertical-align:middle;" /> <span id="msg_text" style="font-size:14px; color:#F00"> </span>
+                </div>
+            </div>
+            <div id="mask"></div>
+        </div>
         <!-- Begin page -->
         <div id="layout-wrapper">
 
