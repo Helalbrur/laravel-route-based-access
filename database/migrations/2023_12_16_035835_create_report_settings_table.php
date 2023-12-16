@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('lib_report_template', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('module_id');
             $table->unsignedBigInteger('report_id');
-            $table->unsignedBigInteger('format_id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('format_id');
+            $table->string('user_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

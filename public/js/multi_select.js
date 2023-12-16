@@ -11,7 +11,6 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 	if(!on_close_fnc){var on_close_fnc='';}
 	else{ var on_close_fnc=' ;'+on_close_fnc;}
 	
-	
 	fld_id=fld_id.split("*");
 	max_selection=max_selection.split("*");
 	update_values=update_values.split("*");
@@ -63,19 +62,23 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 		for ( var i=0; i<fld_id.length; i++ )
 		{
 			var rowCount = $('#table_body'+fld_id[i]+' tr').length;
-		    //alert(rowCount);
+
 			$('#table_body'+fld_id[i]+' input:checkbox').removeAttr('checked');  // Uncheck all Previuosly Selected box
 
 			$('#show_text'+fld_id[i]).val('');
 			document.getElementById(fld_id[i]).value='';
 
 			var values_sub=update_values[i].split(",");
-		 	if (max_selection[i]==0) max_selection[i]=rowCount;
+		 	if (max_selection[i]==0){
+				max_selection[i]=rowCount;
+			}
 			var max_select=max_selection[i];
 			for (var k=0; k < values_sub.length; k++)
 			{
 				if (values_sub[k]!="")
+				{
 					add_multiselect_listitems_update(fld_id[i], values_sub[k], rowCount, max_selection[i]);
+				}
 			}
 			disappear_list_update(fld_id[i],on_close_fnc_param[i]);
 		}
@@ -174,34 +177,34 @@ function add_multiselect_listitems( id, val, total, max_sel)
 
 function add_multiselect_listitems_update( id, val, total, max_sel)
 {
-
 	var old_data=document.getElementById(id).value.split(',');
 
-		var ind=inArray(val, old_data);
-		if (ind==-1)
-		{
-			if (old_data.length>=max_sel && document.getElementById(id).value!="")
-			{
-				$('#'+id+val).removeAttr('checked');
-				alert('You Can Select Only '+max_sel+' Records');
-				return false;
-			}
-			$('#'+id+val).attr('checked','checked');
-			if ( document.getElementById(id).value!="" ) document.getElementById(id).value=document.getElementById(id).value+","+val; else document.getElementById(id).value=val;
-		}
-		else
+	var ind=inArray(val, old_data);
+	console.log(id, val, total, max_sel,old_data,ind);
+	if (ind==-1)
+	{
+		if (old_data.length>=max_sel && document.getElementById(id).value!="")
 		{
 			$('#'+id+val).removeAttr('checked');
-			old_data.splice(ind,1); //old_data.splice(pos, 1);
-			document.getElementById(id).value=old_data;
+			alert('You Can Select Only '+max_sel+' Records');
+			return false;
 		}
-		if (document.getElementById(id).value!="")
-		{
-			var old_data=document.getElementById(id).value.split(',');
-			$('#show_text'+id).val(old_data.length+' Out of '+ total +' Selected');
-		}
-		else
-		 	$('#show_text'+id).val('');
+		$('#'+id+val).removeAttr('checked').attr('checked','checked');
+		if ( document.getElementById(id).value!="" ) document.getElementById(id).value=document.getElementById(id).value+","+val; else document.getElementById(id).value=val;
+	}
+	else
+	{
+		$('#'+id+val).removeAttr('checked');
+		old_data.splice(ind,1); //old_data.splice(pos, 1);
+		document.getElementById(id).value=old_data;
+	}
+	if (document.getElementById(id).value!="")
+	{
+		var old_data=document.getElementById(id).value.split(',');
+		$('#show_text'+id).val(old_data.length+' Out of '+ total +' Selected');
+	}
+	else
+		$('#show_text'+id).val('');
 
 }
 

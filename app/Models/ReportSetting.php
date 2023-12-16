@@ -10,11 +10,13 @@ class ReportSetting extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = [
-        'name',
+        'company_id',
         'module_id',
         'report_id',
         'format_id',
-        'user_id'
+        'user_id',
+        'created_by',
+        'updated_by'
     ];
     protected $table = "lib_report_template";
 }

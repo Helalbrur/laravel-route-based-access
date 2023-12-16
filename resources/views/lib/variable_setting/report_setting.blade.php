@@ -68,7 +68,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                                     <label for="cbo_format_name" class="col-sm-3 col-form-label must_entry_caption">Format Name</label>
                                     <div class="col-sm-6" id="format_div">
                                         <?php
-                                            echo create_drop_down( "cbo_format_name", "100%", blank_array(),'', 1, '--- Select Format ---', 0, "","",""  );
+                                            echo create_drop_down( "cbo_format_name", "100%", report_format(),'', 1, '--- Select Format ---', 0, "","",""  );
                                         ?>
                                     </div>
                                 </div>
@@ -90,39 +90,65 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                             </form>
                         </div>
                         <div style="margin:auto;padding:10px;background-color:#F5FFFA;justify-content:center;text-align:center" class="card table-responsive table-info" align="center" id="list_view_div">
-                        <table class="table table-bordered table-striped" >
-                            <thead>
-                                <tr>
-                                    <th width="10%">Sl</th>
-                                    <th width="20%">Floor Name</th>
-                                    <th width="25%">Company Name</th>
-                                    <th width="25%">Location Name</th>
-                                    <th >Store</th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody id="list_view">
-                                <?php
-                                    $sl = 1;
-                                    $floors = DB::table('lib_floor as a')
-                                                ->leftJoin('lib_company as b','a.company_id','b.id')
-                                                ->leftJoin('lib_location as c','a.location_id','c.id')
-                                                ->leftJoin('lib_store_location as d','a.store_id','d.id')
-                                                ->select('a.id','d.store_name','b.company_name','c.location_name','a.floor_name')
-                                                ->get();
-                                ?>
-
-                                @foreach($floors as $floor)
-                                    <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$floor->id}}')" style="cursor:pointer">
-                                        <td>{{$sl++}}</td>
-                                        <td>{{$floor->floor_name}}</td>
-                                        <td>{{$floor->company_name}}</td>
-                                        <td>{{$floor->location_name}}</td>
-                                        <td>{{$floor->store_name}}</td>
+                            <table class="table table-bordered table-striped" >
+                                <thead>
+                                    <tr>
+                                        <th width="7%">Sl</th>
+                                        <th width="15%">Company Name</th>
+                                        <th width="10%">Module Name</th>
+                                        <th width="20%">Report Name</th>
+                                        <th width="25%">Format Name</th>
+                                        <th >User Name</th>
+                                        
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody id="list_view">
+                                    <?php
+                                        $sl = 1;
+                                        $settings = DB::table('lib_report_template as a')
+                                                    ->leftJoin('lib_company as b','a.company_id','b.id')
+                                                    ->leftJoin('main_module as c','a.module_id','c.m_mod_id')
+                                                    ->select('a.id','a.user_id','a.report_id','a.format_id','b.company_name','c.main_module')
+                                                    ->get();
+                                        $report_format = report_format();
+                                        $user_names = user_names();
+                                        $report_name = report_name();
+                                    ?>
+
+                                    @foreach($settings as $setting)
+                                        <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$setting->id}}')" style="cursor:pointer">
+                                            <td>{{$sl++}}</td>
+                                            <td>{{$setting->company_name}}</td>
+                                            <td>{{$setting->main_module}}</td>
+                                            <td>{{$report_name[$setting->report_id]}}</td>
+                                            <td>
+                                                <?php
+                                                $format_ids = explode(",",$setting->format_id);
+                                                $sl_f = 0;
+                                                foreach($format_ids as $format_id)
+                                                {
+                                                    if($sl_f > 0) echo ",";
+                                                    echo  $report_format[$format_id];
+                                                    $sl_f++;
+                                                }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                $user_ids = explode(",",$setting->user_id);
+                                                $sl_f = 0;
+                                                foreach($user_ids as $user_id)
+                                                {
+                                                    if($sl_f > 0) echo ",";
+                                                    echo  $user_names[$user_id];
+                                                    $sl_f++;
+                                                }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -138,13 +164,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
      var permission ='{{$permission}}';
     function fnc_report_setting( operation )
     {
-        if (form_validation('txt_floor_name*cbo_company_name*cbo_location_name*cbo_store_name','Floor Name* Company Name*Location*Store Name')==false)
+        if (form_validation('cbo_company_name*cbo_module_name*cbo_report_name*cbo_format_name*cbo_user_id','Company Name*Module*Report Name*Format Name*User Name')==false)
         {
             return;
         }
         else
         {
-            var formData = get_form_data('txt_floor_name,cbo_company_name,cbo_location_name,cbo_store_name,txt_floor_seq,update_id');
+            var formData = get_form_data('cbo_company_name,cbo_module_name,cbo_report_name,cbo_format_name,cbo_user_id,update_id');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -154,7 +180,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                 else formData.append('_method', 'DELETE');
             }
             formData.append('_token', '{{csrf_token()}}');
-            var url = `/lib/inventory/floor${param}`;
+            var url = `/lib/variable_setting/report_setting${param}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -164,24 +190,24 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_floor_list_view','list_view_div','reportsetting_1');
+            save_update_delete(operation,url,requestData,'id','show_report_setting_list_view','list_view_div','reportsetting_1');
         }
     }
 
     const load_php_data_to_form =async (menuId) =>
     {
         reset_form('reportsetting_1','','',1);
-        var columns = 'floor_name*company_id*location_id*store_id*seq*id';
-        var fields = 'txt_floor_name*cbo_company_name*cbo_location_name*cbo_store_name*txt_floor_seq*update_id';
-        var func_name = `load_drop_down( 'load_drop_down', ${$("#cbo_company_name").val()}+'*store_under_location*store_div', 'location_under_company', 'location_div' )`;
-       var get_return_value = await populate_form_data('id',menuId,'lib_floor',columns,fields,'{{csrf_token()}}','','','');
+        var columns = 'company_id*module_id*report_id*format_id*user_id*id';
+        var fields = 'cbo_company_name*cbo_module_name*cbo_report_name*cbo_format_name*cbo_user_id*update_id';
+        var func_name = `load_drop_down( 'load_drop_down', document.getElementById('report_id').value, 'report_formate_under_report_name', 'format_div' )`;
+        var get_return_value = await populate_form_data('id',menuId,'lib_report_template',columns,fields,'{{csrf_token()}}','','','');
        if(get_return_value == 1)
        {
+          adjust_drop_down();
           set_button_status(1, permission, 'fnc_report_setting',1);
        }
     }
     setFilterGrid("list_view",-1);
-    set_multiselect('cbo_format_name*cbo_user_id','0*0','0*0','','0*0');
     
     var documentElement = document.documentElement;
     // Add a keypress event listener
@@ -199,9 +225,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                 load_drop_down( 'load_drop_down', target.value, 'report_formate_under_report_name', 'format_div',
                     function() {
                         console.log('hello');
-                        set_multiselect('cbo_format_name*cbo_user_id','0*0','0*0','','0*0');
+                        set_multiselect('cbo_format_name','0','','','0');
                     }
                 );
+            }
+            if(target.id =="cbo_module_name" || target.id =="cbo_report_name" || target.id =="cbo_company_name")
+            {
+                var data = document.getElementById("cbo_company_name").value + '_'+ document.getElementById("cbo_module_name").value+ '_'+ document.getElementById("cbo_report_name").value;
+                show_list_view('show_report_setting_list_view','show_common_list_view','list_view_div','/show_common_list_view','','','',data);
             }
         } catch (error) {
             console.log(error)
@@ -222,5 +253,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
         console.log(3);
     });
     */
+    set_multiselect('cbo_format_name*cbo_user_id','0*0','0','','');
+    function adjust_drop_down()
+    {
+        var cbo_module_name =document.getElementById("cbo_module_name").value;
+        var cbo_report_name =document.getElementById("cbo_report_name").value;
+        var cbo_format_name =document.getElementById("cbo_format_name").value;
+        var cbo_user_id =document.getElementById("cbo_user_id").value;
+        load_drop_down( "load_drop_down",cbo_module_name, "report_name_under_module", "report_div",function(){
+            load_drop_down( "load_drop_down",cbo_report_name, "report_formate_under_report_name",'format_div',function(){
+                document.getElementById("cbo_report_name").value = cbo_report_name;
+                set_multiselect('cbo_format_name','',0,'0','0','');
+                set_multiselect('cbo_format_name*cbo_user_id','0*0',1,`${cbo_format_name}*${cbo_user_id}`,'0*0','');
+            });
+        });
+        
+    }
 </script>
 @endsection

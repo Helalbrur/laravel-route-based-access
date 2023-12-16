@@ -83,6 +83,7 @@ function isNumber (o) {
 var mytime=0;
 function freeze_window(msg)
 {
+	release_freezing();
 	var sdf=Math.floor(Math.random()*(19-1+1)+1);
 	document.getElementById('msg_text').innerHTML=quotes_msg[sdf];
 
@@ -496,14 +497,12 @@ function rtrim( stringToTrim ) {
 	return stringToTrim.replace( /\s+$/, "" );
 }
 
-function show_list_view( data, action, div, path, extra_func, is_append , tabe_id ='')
+function show_list_view( data, action, div, path, extra_func, is_append , tabe_id ='',param ='')
 {
-	freeze_window(0);
+	freeze_window(6);
 	if (!extra_func) var extra_func="";
 	if (!data) var data="0";
 	if (!is_append) var is_append="";
-	//freeze_window(1);
-	//alert(data.length);
 	document.getElementById(div).innerHTML='<span style="font-size:24px; font-weight:bold; color:#FF0000; margin-top:10px">Please wait, Data is Loading...</span>';
 	if( trim(data).length == 0 ) {
 		document.getElementById(div).innerHTML = "";
@@ -512,7 +511,7 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
 
     var base_url = getBaseUrl();
 
-    var url = `${base_url}${path}?data=${data}&action=${action}`;
+    var url = `${base_url}${path}?data=${data}&action=${action}&param=${param}`;
 	//console.log(`list view url : ${url}`);
     fetch(url, {
 		method: 'GET',
@@ -861,13 +860,11 @@ function searchTableWithRowspan(tableId, inputFieldId, footer_table_id = '', col
 
 function load_drop_down( plink, data, action, container , callback = "" )
 {
-	freeze_window(0);
     var url = `/${plink}?data=${data}&action=${action}`;
     fetch(url)
     .then(response => response.text())
     .then(html => {
         document.getElementById(container).innerHTML = html;
-		release_freezing();
 		if(typeof callback === "function")
 		{
 			// Call the callback function
@@ -876,7 +873,6 @@ function load_drop_down( plink, data, action, container , callback = "" )
     })
     .catch(error => {
         showNotification(error,'error');
-		release_freezing();
         if(typeof callback === "function")
 		{
 			// Call the callback function
@@ -1065,7 +1061,7 @@ function readImage(input,displayImage)
 
 async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='',multi_select_column ='',extra_function_on_chage_column='')
 {
-	freeze_window(0);
+	freeze_window(7);
 	var return_value = -1 ;
 	var url = `/populate_common_data`;
 	await fetch(url,{
@@ -1290,11 +1286,9 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 
 function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_list_view_div_id='')
 {
-	freeze_window(0);
 	if(form_validation(sys_no,'Sys No/Id')==false)
 	{
 		showNotification("Sys No/Id Can't be empty",'error');
-		release_freezing();
 		return;
 	}
 	else
@@ -1307,12 +1301,7 @@ function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_li
 		{
 			if(show_list_view_name.length > 0 && show_list_view_div_id.length > 0)
 			{
-				//release_freezing();
 				show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
-			}
-			else
-			{
-				release_freezing();
 			}
 		}
 	}

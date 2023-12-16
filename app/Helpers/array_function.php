@@ -112,6 +112,10 @@ function report_format()
 
 function module_name()
 {
-    return  App\Models\MainModule::pluck('main_module', 'm_mod_id');;
+    return  App\Models\MainModule::pluck('main_module', 'm_mod_id');
+}
+function user_names()
+{
+    return App\Models\User::pluck('name', 'id');
 }
 ?>

@@ -137,7 +137,8 @@ class CommonController extends Controller
     public function show_common_list_view(Request $request)
     {
         $show_list_view = $request->query('data') ?? 'show_common_list_view';
-        return view('ajax.list_view.'.$show_list_view);
+        $param = $request->query('param') ?? '';
+        return view('ajax.list_view.'.$show_list_view,compact('param'));
     }
     public function common_file_popup(Request $request)
     {
