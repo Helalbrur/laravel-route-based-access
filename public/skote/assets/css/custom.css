@@ -3,8 +3,8 @@
 }
 
 .form-control{
-    padding: .7rem .5rem;
-    line-height: 0.8;
+    padding: .1rem .3rem;
+    /* line-height: 0.8; */
 }
 .metismenu li{
     border-bottom:1px solid #555;
