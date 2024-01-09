@@ -12,3 +12,5 @@
 .navbar-brand-box{
     border-bottom:1px solid #555;
 }
+.table > :not(caption) > * > *{padding: 3px; text-align: center;}
+.table-bordered{border: 1px solid #999;}
