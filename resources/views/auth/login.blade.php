@@ -19,6 +19,15 @@
         <link href="{{ asset('skote/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
         <!-- App js -->
         <script src="{{ asset('skote/assets/js/plugin.js') }}"></script>
+        <style>
+            /* body{background-image: linear-gradient(to bottom, #ff0000, #ff8100);} */
+            body{
+                background-image: url('skote/assets/images/login-bg.jpg');
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        </style>
 
     </head>
 
@@ -37,12 +46,12 @@
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
-                                        <img src="skote/assets/images/profile-img.png" alt="" class="img-fluid">
+                                        <img src="{{asset('skote/assets/images/profile-img.png') }}" alt="" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body pt-0"> 
-                                <div class="auth-logo">
+                                <!-- <div class="auth-logo">
                                     <a href="index.html" class="auth-logo-light">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
@@ -58,7 +67,7 @@
                                             </span>
                                         </div>
                                     </a>
-                                </div>
+                                </div> -->
                                 <div class="p-2">
                                 <x-auth-session-status class="mb-4" :status="session('status')" />
                                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
@@ -89,7 +98,7 @@
                                             <button class="btn btn-primary waves-effect waves-light" type="submit">Log In  <i class="mdi mdi-login"></i></button>
                                         </div>
             
-                                        <div class="mt-4 text-center">
+                                        <!-- <div class="mt-4 text-center">
                                             <h5 class="font-size-14 mb-3">Sign in with</h5>
             
                                             <ul class="list-inline">
@@ -109,23 +118,23 @@
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> -->
 
-                                        <div class="mt-4 text-center">
+                                        <!-- <div class="mt-4 text-center">
                                             <a href="##" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
-                                        </div>
+                                        </div> -->
                                     </form>
                                 </div>
             
                             </div>
                         </div>
-                        <div class="mt-5 text-center">
+                        <!-- <div class="mt-5 text-center">
                             
                             <div>
                                 <p>Don't have an account ? <a href="auth-register.html" class="fw-medium text-primary"> Signup now </a> </p>
                                 <p>© <script>document.write(new Date().getFullYear())</script> Skote. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
