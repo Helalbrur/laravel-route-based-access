@@ -44,7 +44,7 @@ With this project, you can easily set up user management, define page-level perm
   <li>Install PHP dependencies:</li>
 </ol>
 
-<pre><code>composer update
+<pre><code>composer install
 </code></pre>
 
 <ol start="4">
