@@ -81,8 +81,15 @@ function isNumber (o) {
 }
 
 var mytime=0;
+var isFrozen = false; // Flag to check if freeze_window is already running
 function freeze_window(msg)
 {
+	if (isFrozen) return; // If already running, do nothing
+	if ($('#mask').is(':visible') || $('.window').is(':visible')) {
+        return;
+    }
+
+    isFrozen = true; // Set flag to true
 	release_freezing();
 	var sdf=Math.floor(Math.random()*(19-1+1)+1);
 	document.getElementById('msg_text').innerHTML=quotes_msg[sdf];
@@ -122,8 +129,15 @@ function count_process_time()
 
 function release_freezing()
 {
+
 	$('#mask, .window').hide();
+	 // Check if mask and window are currently visible before hiding
+	if ($('#mask').is(':visible') || $('.window').is(':visible')) {
+        $('#mask, .window').hide();
+    }
+
 	clearInterval(mytime);
+	isFrozen = false; // Reset flag when freezing is released
 }
 
 function  showNotification(message,type='success',second = 5)
@@ -652,8 +666,7 @@ function set_all_onclick()
 	});
 
  	// Special Character Validation Ends
-
-	 															 // Global Date Picker Initialisaton
+    // Global Date Picker Initialisaton
 	$( ".datepicker" ).datepicker({
 					dateFormat: 'dd-mm-yy',
 					changeMonth: true,
@@ -666,7 +679,7 @@ function set_all_onclick()
 	 // Datapickker ENds
 
 
-	if(isMobile.any()) {  // 09-03-2015
+	if(isMobile.any()) {  
 	   //alert("This is a Mobile Device");
 	   $(".text_boxes").each(function( index ) {
 			 var ttl=$(this).attr('onDblClick');
@@ -1461,6 +1474,44 @@ function make_mandatory(entry_form)
 		} catch (error) {
 			throw new Error(error);
 		}
+	})
+    .catch(error => {
+		showNotification(error,'error');
+    });
+
+}
+
+
+function field_manager(entry_form)
+{
+	const url = `/get_field_manager_data?entry_form=${entry_form}`;
+    fetch(url,{
+		method: 'GET' ,
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
+		}
+	})
+	.then(response => response.text())
+	.then(data => {
+		try {
+            if (data.length > 0) {
+                var field_manager_data = data.split("*");
+                for (var property in field_manager_data) {
+                    let fieldId = field_manager_data[property];
+                    
+                   // Hide the input field
+					$("#" + fieldId).css("visibility", "hidden");
+
+					// Hide parent elements (label, div, td, etc.)
+					$("#" + fieldId).closest('.form-group').css("visibility", "hidden");
+
+                }
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
 	})
     .catch(error => {
 		showNotification(error,'error');

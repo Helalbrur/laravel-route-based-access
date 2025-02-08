@@ -125,6 +125,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_common_list_view',[CommonController::class,'show_common_list_view']);
     Route::get('common_file_popup',[CommonController::class,'common_file_popup']);
     Route::get('get_mandatory_and_field_level_data',[CommonController::class,'get_mandatory_and_field_level_data']);
+
+    Route::get('get_field_manager_data',[CommonController::class,'get_field_manager_data']);
+
+
     Route::get('load_drop_down',[CommonController::class,'load_drop_down']);
 
     Route::delete('/file_delete/{id}', [ImageUploadController::class,'destroy']);

@@ -177,6 +177,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     });
     setFilterGrid("list_view",-1);
     make_mandatory(3);
+    field_manager(3);
    
 </script>
 @endsection

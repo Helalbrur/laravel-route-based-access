@@ -23,18 +23,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                             <form name="mandatoryfield_1" id="mandatoryfield_1" autocomplete="off" style="padding: 10px;">
                                 
                                 <div class="form-group row">
-                                    <label for="cbo_entry_form_name" class="col-sm-2 col-form-label must_entry_caption">Entry Form</label>
-                                    <div class="col-sm-4">
-                                       <input type="text" class="form-control" id="cbo_entry_form_name" name="cbo_entry_form_name" placeholder="Browse" ondblclick="loadEntryForm()" readonly>
-                                       <input type="hidden" name="cbo_page_id" id="cbo_page_id">
-                                    </div>
-
                                     <label for="cbo_entry_form_name" class="col-sm-2 col-form-label must_entry_caption">User</label>
                                     <div class="col-sm-4">
                                        
                                        <?php echo create_drop_down("cbo_user_id",200,get_all_user(),"",1,"----Select----",0,"","","","","","","",""); ?>
                                        
                                     </div>
+                                    <label for="cbo_entry_form_name" class="col-sm-2 col-form-label must_entry_caption">Entry Form</label>
+                                    <div class="col-sm-4">
+                                       <input type="text" class="form-control" id="cbo_entry_form_name" name="cbo_entry_form_name" placeholder="Browse" ondblclick="loadEntryForm()" readonly>
+                                       <input type="hidden" name="cbo_entry_form" id="cbo_entry_form">
+                                    </div>
+
+                                    
                                 </div>
                                 <div class="row mt-10">
                                     <table width="70%" class="table table-bordered table-stripped rpt_table" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center">
@@ -49,7 +50,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                                                     <?php echo create_drop_down("cboFieldId_1",200,blank_array(),"",1,"----Select----",0,"","","","","","","","","cbo_field_id[]"); ?>
                                                 </td>
                                                 <td align="center">
-                                                    <?php echo create_drop_down("cboIsMandatory_1",150,yes_no(),"",1,"-- Select --",0,"","","","","","","","","cbo_permission_id[]"); ?> 
+                                                    <?php echo create_drop_down("cboIsHide_1",150,yes_no(),"",1,"-- Select --",0,"","","","","","","","","cbo_permission_id[]"); ?> 
                                                 </td>
                                                 <td align="center" id="increment_1">
                                                     <input style="width:30px;" type="button" id="incrementfactor_1" name="incrementfactor_1"  class="formbutton" value="+" onClick="add_break_down_tr(1)"/>
@@ -61,7 +62,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                                             <tr>
                                                 <td colspan="3" align="center" style="padding-top:10px;" class="button_container">
                                                     <?php 
-                                                        echo load_submit_buttons( $permission, "fnc_mandatory_field()", 0,0 ,"reset_form('mandatoryfield_1','','','','','')",1); 
+                                                        echo load_submit_buttons( $permission, "fnc_field_manager()", 0,0 ,"reset_form('mandatoryfield_1','','','','','')",1); 
 
                                                     ?>
                                                     <input type="hidden" id="txt_update_data_dtls" readonly disabled>
@@ -84,9 +85,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 @section('script')
 <script>
     var permission ='{{$permission}}';
-    function fnc_mandatory_field( operation )
+    function fnc_field_manager( operation )
     {
-        if (form_validation('cbo_page_id','Page Name')==false)
+        if (form_validation('cbo_entry_form','Page Name')==false)
         {
             return;
         }
@@ -95,7 +96,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 		
 			var field_id_arr=new Array();
 			var row_num=$('#tbl_dtls tbody tr').length;
-			var field='cbo_page_id';
+			var field='cbo_entry_form,cbo_user_id';
 			for (var i=1; i<=row_num; i++)
 			{
 				var cboFieldId=$('#cboFieldId_'+i).val();
@@ -110,7 +111,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 						alert("Duplicate Field Name Not Allow");return;
 					}
 				}
-				field+=',cboFieldId_'+i+',cboIsMandatory_'+i;
+				field+=',cboFieldId_'+i+',cboIsHide_'+i;
 			}
             var formData = get_form_data(field);
             var method ="POST";
@@ -118,7 +119,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
             formData.append('_token', '{{csrf_token()}}');
             formData.append('total_row', row_num);
             formData.append('operation', operation);
-            var url = `{{URL::to('/tools/mandatory_field')}}`;
+            var url = `{{URL::to('/tools/field_manager')}}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -129,7 +130,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
             };
 
             save_update_delete(operation,url,requestData);
-            fn_set_item($('#cbo_page_id').val());
+            fn_set_item($('#cbo_entry_form').val());
         
 		}
         
@@ -137,7 +138,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 
     function loadEntryForm()
     {
-        
+        if(form_validation('cbo_user_id','User') == false)
+        {
+            return;
+        }
 		var title = 'Page List View';
 		var page_link='/tools/mandatory_field_entry_form';
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=500px,height=370px,center=1,resize=1,scrolling=1','../');
@@ -146,7 +150,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
             var cbo_entry_form_name = this.contentDoc.getElementById('entry_form_name').value;
             var entry_form_id = this.contentDoc.getElementById('entry_form_id').value;
 			$("#cbo_entry_form_name").val(cbo_entry_form_name);
-			$("#cbo_page_id").val(entry_form_id);
+			$("#cbo_entry_form").val(entry_form_id);
            fn_set_item(entry_form_id);
 		}
     }
@@ -167,19 +171,28 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                     'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                // Check if the response status is 2xx (success)
+                if (!response.ok) {
+                    // Handle HTTP errors (4xx or 5xx)
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                // Try to parse the response JSON
+                return response.json();
+            })
             .then(data => {
                 try
                 {
                     if(data.length > 0 )
                     {
                         //$('#txt_update_data_dtls').val(data);
-                        set_button_status(1, permission, 'fnc_mandatory_field',1);
+                        set_button_status(1, permission, 'fnc_field_manager',1);
                         var row_num=$('#tbl_dtls tbody tr').length;
                         for (var i=1; i<=row_num; i++)
                         {
                             $('#cboFieldId_'+i).val(0);
-                            $('#cboIsMandatory_'+i).val(0);
+                            $('#cboIsHide_'+i).val(0);
                             fn_deletebreak_down_tr(i);
                         }		
                         var i = 1;
@@ -187,7 +200,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                         {
                             if(i<data.length)add_break_down_tr( i );
                             $('#cboFieldId_'+i).val(row.field_id);
-                            $('#cboIsMandatory_'+i).val(row.is_mandatory);
+                            $('#cboIsHide_'+i).val(row.is_hide);
                            i++;
                         }
                     }
@@ -197,10 +210,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                         for (var i=1; i<=row_num; i++)
                         {
                             $('#cboFieldId_'+i).val(0);
-                            $('#cboIsMandatory_'+i).val(0);
+                            $('#cboIsHide_'+i).val(0);
                             fn_deletebreak_down_tr(i);
                         }
-                        set_button_status(0, permission, 'fnc_mandatory_field',1);
+                        set_button_status(0, permission, 'fnc_field_manager',1);
                     }
                 }
                 catch (error)
@@ -213,7 +226,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                 for (var i=1; i<=row_num; i++)
                 {
                     $('#cboFieldId_'+i).val(0);
-                    $('#cboIsMandatory_'+i).val(0);
+                    $('#cboIsHide_'+i).val(0);
                     fn_deletebreak_down_tr(i);
                 }
                 showNotification(error,'error');
@@ -232,7 +245,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 		}
 		i++;
 		
-		if(form_validation('cbo_page_id','Page Name')==false)
+		if(form_validation('cbo_entry_form','Page Name')==false)
 		{
 			alert("Please Select Page Name Field"); return;
 		}
