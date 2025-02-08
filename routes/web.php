@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
+use App\Http\Controllers\LibUomController; 
 use App\Http\Controllers\LibFloorController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\ReportSettingController;
+use App\Models\LibUom;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/inventory/bin', LibFloorRoomRackMstController::class);
 
     Route::resource('/general/color', LibColorController::class);
+    Route::resource('/general/uom', LibUomController::class);
     Route::resource('/general/size', LibSizeController::class);
     Route::resource('/general/country', LibCountryController::class);
     Route::resource('/general/store', LibStoreLocationController::class);
