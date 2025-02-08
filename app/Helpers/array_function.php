@@ -118,4 +118,9 @@ function user_names()
 {
     return App\Models\User::pluck('name', 'id');
 }
+
+function get_all_user()
+{
+    return App\Models\User::pluck('name', 'id')->toArray();
+}
 ?>

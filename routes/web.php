@@ -30,6 +30,7 @@ use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
+use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\ReportSettingController;
@@ -68,6 +69,7 @@ Route::prefix('/tools')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/mandatory_field', MandatoryFieldController::class);
     Route::resource('/field_level_access', FieldLevelAccessController::class);
     Route::resource('/user_management', UserController::class);
+    Route::resource('/field_manager',FieldManagerController::class);
 });
 
 Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () {
@@ -103,6 +105,14 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
     Route::get('mandatory_field_entry_form',[MandatoryFieldController::class,'entry_form_popup']);
     Route::get('load_drop_down_mandatory_field_item',[MandatoryFieldController::class,'load_drop_down_mandatory_field_item']);
     Route::get('mandatory_action_user_data',[MandatoryFieldController::class,'mandatory_action_user_data']);
+
+
+    Route::get('field_manager_entry_form',[FieldManagerController::class,'entry_form_popup']);
+    Route::get('load_drop_down_field_manager_item',[FieldManagerController::class,'load_drop_down_field_manager_item']);
+    Route::get('field_manager_action_user_data',[FieldManagerController::class,'field_manager_action_user_data']);
+
+
+    
     Route::get('field_level_access_user',[FieldLevelAccessController::class,'field_level_access_user']);
     Route::get('field_level_action_user_data',[FieldLevelAccessController::class,'field_level_action_user_data']);
     Route::get('load_drop_down_field_level_access',[FieldLevelAccessController::class,'load_drop_down_field_level_access']);

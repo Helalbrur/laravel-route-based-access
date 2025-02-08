@@ -59,4 +59,9 @@ class User extends Authenticatable
         $permission = Permission::where('name',$permission_name)->first();
         return $this->permissions->contains($permission);
     }
+
+    public function fieldManagers()
+    {
+        return $this->hasMany(FieldManager::class, 'user_id');
+    }
 }
