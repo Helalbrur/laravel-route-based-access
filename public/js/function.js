@@ -1484,6 +1484,7 @@ function make_mandatory(entry_form)
 
 function field_manager(entry_form)
 {
+	console.log(`field_manager(${entry_form})`);
 	const url = `/get_field_manager_data?entry_form=${entry_form}`;
     fetch(url,{
 		method: 'GET' ,
@@ -1500,7 +1501,7 @@ function field_manager(entry_form)
                 var field_manager_data = data.split("*");
                 for (var property in field_manager_data) {
                     let fieldId = field_manager_data[property];
-                    
+                    console.log('fieldId',fieldId);
                    // Hide the input field
 					$("#" + fieldId).css("visibility", "hidden");
 
@@ -1517,4 +1518,20 @@ function field_manager(entry_form)
 		showNotification(error,'error');
     });
 
+}
+
+
+function load_all_setup(entry_form) {
+	var field_level_data = sessionData.data_arr[entry_form] || {};
+	var mandatoryField = sessionData.mandatory_field[entry_form] ? sessionData.mandatory_field[entry_form].join('*') : "";
+	var mandatoryMessage = sessionData.mandatory_message[entry_form] ? sessionData.mandatory_message[entry_form].join('*') : "";
+
+	make_mandatory(entry_form);
+	field_manager(entry_form);
+
+	return {
+		field_level_data: field_level_data,
+		mandatoryField: mandatoryField,
+		mandatoryMessage: mandatoryMessage
+	};
 }
