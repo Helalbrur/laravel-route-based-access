@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\FieldManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CommonController extends Controller
 {
@@ -164,5 +166,16 @@ class CommonController extends Controller
         $action = $request->query('action') ?? '';
         $data = $request->query('data') ?? '';
         return view('ajax.drop_down.'.$action,compact('data'));
+    }
+
+    public function get_field_manager_data(Request $request)
+    {
+        $field_manager = array();
+        $field_managers = FieldManager::where('entry_form',$request->entry_form)->where('user_id',Auth::user()->id)->where('is_hide',1)->get();
+        
+        foreach ($field_managers as $fm) {
+            $field_manager[$fm->field_id] = $fm->field_name;
+        }
+        echo implode("*",$field_manager);
     }
 }

@@ -31,6 +31,15 @@
         <script src="{{ asset('skote/assets/js/plugin.js') }}"></script>
         {{-- custom style --}}
         <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
+        <<script>
+            var sessionData = {!! json_encode([
+                'data_arr' => session('laravel_stater.data_arr', []),
+                'mandatory_field' => session('laravel_stater.mandatory_field', []),
+                'mandatory_message' => session('laravel_stater.mandatory_message', []),
+            ]) !!};
+            console.log(sessionData);
+        </script>
+
         @yield('script_before')
     </head>
 
@@ -158,7 +167,6 @@
             $(this).html(ht);
             $(this).attr('title','Must Entry Field.');
           });
-        
         </script>
         <!-- REQUIRED SCRIPTS -->
         @yield('script')

@@ -49,6 +49,14 @@ class AuthenticatedSessionController extends Controller
             Session::put('laravel_stater.mandatory_message.'.$row->page_id.'.'.$row->field_id, $row->field_message);
         }
 
+        $sql = "SELECT id, entry_form, field_id, field_name, field_message, is_hide FROM field_managers WHERE is_hide = 1 AND field_name IS NOT NULL and user_id = ?";
+        $sql_exe = DB::select($sql,[$user->id]);
+
+        foreach ($sql_exe as $row) {
+            Session::put('laravel_stater.field_manager.'.$row->entry_form.'.'.$row->field_id, $row->field_name);
+            Session::put('laravel_stater.field_manager_message.'.$row->entry_form.'.'.$row->field_id, $row->field_message);
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

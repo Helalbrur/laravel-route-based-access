@@ -103,6 +103,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 @section('script')
 <script>
      var permission ='{{$permission}}';
+     /*
      var field_level_data = "";
      @if(session()->has('laravel_stater.data_arr.3'))
         @php
@@ -110,6 +111,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
             echo "field_level_data = ".$dataArr.";\n";
         @endphp
     @endif
+    */
+
+    var setup_data = load_all_setup(3); // Pass the entry_form dynamically
+    console.log(setup_data);
+
+    var field_level_data = setup_data.field_level_data;
+    var mandatoryField = setup_data.mandatoryField;
+    var mandatoryMessage = setup_data.mandatoryMessage;
 
     function fnc_lib_item_group( operation )
     {
@@ -119,12 +128,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         }
         else
         {
+            /*
             var mandatoryField = "";
             var mandatoryMessage = "";
             @if(session()->has('laravel_stater.mandatory_field.3'))
-                mandatoryField = '<?php echo implode('*', session('laravel_stater.mandatory_field.3')); ?>';
-                mandatoryMessage = '<?php echo implode('*', session('laravel_stater.mandatory_message.3')); ?>';
+                mandatoryField = '<?php //echo implode('*', session('laravel_stater.mandatory_field.3')); ?>';
+                mandatoryMessage = '<?php //echo implode('*', session('laravel_stater.mandatory_message.3')); ?>';
             @endif
+            */
 
             // Check if mandatoryField is not empty
             if (mandatoryField)
@@ -176,7 +187,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         readImage(this,'displayImage');
     });
     setFilterGrid("list_view",-1);
-    make_mandatory(3);
+    // make_mandatory(3);
+    // field_manager(3);
    
 </script>
 @endsection
