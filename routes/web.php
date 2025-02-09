@@ -5,6 +5,7 @@ use App\Models\ImageUpload;
 use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubGroup;
+use App\Models\LibBrand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
+use App\Http\Controllers\LibGenericController; 
 use App\Http\Controllers\LibFloorController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
@@ -39,6 +41,7 @@ use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
+use App\Http\Controllers\LibBrandController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -94,9 +97,11 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/uom', LibUomController::class);
+    Route::resource('/general/generic', LibGenericController::class);
     Route::resource('/general/size', LibSizeController::class);
     Route::resource('/general/country', LibCountryController::class);
     Route::resource('/general/store', LibStoreLocationController::class);
+    Route::resource('/general/brand', LibBrandController::class);
 
 
     Route::resource('/variable_setting/report_setting', ReportSettingController::class);

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lib_brand', function (Blueprint $table) {
+        Schema::create('lib_generic', function (Blueprint $table) {
             $table->id();
-            $table->string('brand_name');
-            $table->unsignedBigInteger('buyer_id')->nullable();
+            $table->string('generic_name')->unique();
+            $table->integer('entry_form')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lib_brand');
+        Schema::dropIfExists('lib_generic');
     }
 };

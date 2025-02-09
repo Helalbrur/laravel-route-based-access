@@ -2,23 +2,23 @@
     <thead>
         <tr>
             <th width="10%">Sl</th>
-            <th >Uom Name</th>
+            <th >Generic Name</th>
             
         </tr>
     </thead>
     <tbody id="list_view">
         <?php
             $sl = 1;
-            $uoms = DB::table('lib_uom as a')
+            $generics = DB::table('lib_generic as a')
                         ->whereNull('a.deleted_at')
                         ->select('a.*')
                         ->get();
         ?>
 
-        @foreach($uoms as $uom)
-            <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$uom->id}}')" style="cursor:pointer">
+        @foreach($generics as $generic)
+            <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$generic->id}}')" style="cursor:pointer">
                 <td>{{$sl++}}</td>
-                <td>{{$uom->uom_name}}</td>
+                <td>{{$generic->generic_name}}</td>
             </tr>
         @endforeach
     </tbody>
