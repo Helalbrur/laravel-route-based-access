@@ -4,6 +4,7 @@ use App\Models\ImageUpload;
 use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubGroup;
+use App\Models\LibBrand;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
@@ -36,7 +37,8 @@ use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\ReportSettingController;
-use App\Models\LibUom;
+use App\Http\Controllers\LibBrandController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +99,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/general/size', LibSizeController::class);
     Route::resource('/general/country', LibCountryController::class);
     Route::resource('/general/store', LibStoreLocationController::class);
+    Route::resource('/general/brand', LibBrandController::class);
 
 
     Route::resource('/variable_setting/report_setting', ReportSettingController::class);
@@ -130,6 +133,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_common_list_view',[CommonController::class,'show_common_list_view']);
     Route::get('common_file_popup',[CommonController::class,'common_file_popup']);
     Route::get('get_mandatory_and_field_level_data',[CommonController::class,'get_mandatory_and_field_level_data']);
+
+    Route::get('get_field_manager_data',[CommonController::class,'get_field_manager_data']);
+
+
     Route::get('load_drop_down',[CommonController::class,'load_drop_down']);
 
     Route::delete('/file_delete/{id}', [ImageUploadController::class,'destroy']);

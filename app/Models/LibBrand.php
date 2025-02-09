@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Brand extends Model
+class LibBrand extends Model
 {
     use HasFactory;
     use SoftDeletes;
     protected $table = 'lib_brand';
     protected $fillable = [
-       'name', 'buyer_id','created_by','updated_by'
+       'brand_name', 'buyer_id','created_by','updated_by'
     ];
 }
