@@ -26,7 +26,7 @@ class UserImportController extends Controller
         }
         catch(Exception $e)
         {
-            return back()->with('success', $e->getMessage());
+            return back()->with('error', $e->getMessage());
         } 
     }
 }
