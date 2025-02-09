@@ -1,42 +1,44 @@
 <?php
 
+use App\Models\LibUom;
 use App\Models\ImageUpload;
 use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubGroup;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LibSizeController;
+use App\Http\Controllers\LibUomController; 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
-use App\Http\Controllers\LibUomController; 
 use App\Http\Controllers\LibFloorController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LibCountryController;
 use App\Http\Controllers\MainModuleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserImportController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\LibCategoryController;
 use App\Http\Controllers\LibEmployeeController;
 use App\Http\Controllers\LibLocationController;
 use App\Http\Controllers\LibSupplierController;
 use App\Http\Controllers\UserPrivMstController;
+use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibItemGroupController;
+use App\Http\Controllers\ReportSettingController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
-use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
-use App\Http\Controllers\ReportSettingController;
-use App\Models\LibUom;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -162,6 +164,22 @@ Route::middleware(['auth'])->group(function () {
 
      //Button Click Database Backup route
      Route::resource('/db_backup',DbBackUpController::class);
+
+    Route::get('/user_import', function () {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="user_import_template.csv"',
+        ];
+
+        $columns = ['Name', 'Email', 'Phone', 'Password']; // Adjust columns as needed
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, $columns);
+
+        return Response::make(stream_get_contents($handle), 200, $headers);
+    });
+
+    Route::post('/user_import', [UserImportController::class, 'import'])->name('import');
+
 });
 
 

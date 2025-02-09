@@ -69,10 +69,10 @@
                                       }
                                 }
                                 ?>
-                                @if (Auth::check() && Auth::user()->hasAccess('View Permission'))
-                                  <li class="nav-item d-none d-sm-inline-block">
-                                      <a href="{{route('permission.index')}}" class="nav-link">{{__('Permission')}}</a>
-                                  </li>
+                                @if (Auth::check())
+                                 
+                                 
+                                 
                                 @endif
                              
 

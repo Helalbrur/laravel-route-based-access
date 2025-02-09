@@ -16,7 +16,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
         <div class="card">
             <div class="card-body">
 
-            <h5 class="card-title"></h5>
+            <h5 class="card-title"> 
+                <a href="{{ url('/user_import') }}" class="nav-link btn btn-info">
+                    Download Format
+                </a>
+
+                <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="file" required>
+                    <button type="submit" class="btn btn-info">Import</button>
+                </form>
+            </h5>
             <div class="card-text">
                 <!-- #EBF4FA; -->
                 <div class="card" style="background-color: #F5FFFA">
