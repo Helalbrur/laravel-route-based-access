@@ -37,11 +37,26 @@ function set_multiselect( fld_id, max_selection, is_update, update_values, on_cl
 			id_str+="'";
 			//
 
-			var closed='<span style="position:absolute; right:5px; width:15px;"><a href="##" style="text-decoration:none"> X </a></span>';
+			var closed = '<span style="position: absolute; top: 5px; right: 5px; width: 15px;">' +
+			'<a href="##" style="text-decoration: none; background-color: #F43737; color: white; margin: 3px; padding: 1px 2px; border-radius: 3px; font-family: Arial, sans-serif; font-weight: bold;">X</a>' +
+			'</span>';
 		
-			html_list ='<div class="multiselect_dropdown_table" id="multi_select_'+fld_id[i]+'" style="display:none; width:'+((elm_width*1)+12)+'px; max-height:'+170+'px; min-height:'+50+'px; position:absolute; z-index:30"><table border="1" width="100%" class="multiselect_dropdown_table_top" >';	
-			
-			html_list=html_list+'<thead><tr ><th colspan="2" height="20" id="multiselect_dropdown_table_header'+fld_id[i]+'" align="center" ><span href="##" onclick="disappear_list('+fld_id[i]+','+onc+') '+on_close_fnc+'"><b>Select Max '+max_select+' Item</b>'+closed+'</span></th></tr><tr><th><input type="checkbox" id="check_all_'+fld_id[i]+'" onclick="fnc_multi_check_all('+fld_id[i]+','+id_str+')"></th></a><th>Check All</th></tr></thead></table><div class="mylistview" style="overflow-y:scroll;max-height:'+140+'px; min-height:'+20+'px;"><table border="1" width="100%" id="table_body'+fld_id[i]+'" class="multiselect_dropdown_table_bottom" >';
+			html_list = '<div class="multiselect_dropdown_table" id="multi_select_' + fld_id[i] + '" style="display: none; width: ' + ((elm_width * 1) + 12) + 'px; max-height: ' + 170 + 'px; min-height: ' + 50 + 'px; position: absolute; z-index: 30;">' +
+			'<table border="0" width="100%" class="multiselect_dropdown_table_top" style="border-spacing:0">' +
+			'<thead>' +
+			'<tr>' +
+			'<th style="border-right:none;"><b>Select Max ' + max_select + ' Item</b></th>' +
+			'<th width="20" height="20" valign="middle" style="text-align: center; position: relative; border-left:none;" id="multiselect_dropdown_table_header' + fld_id[i] + '" align="center">' +
+			'<span href="##" onclick="disappear_list(' + fld_id[i] + ',' + onc + '); ' + on_close_fnc + '">' + closed + '</span>' +
+			'</th>' +
+			'</tr>' +
+			'<tr>' +
+			'<th colspan="2" style="text-align: left;">&nbsp;<input type="checkbox" id="check_all_' + fld_id[i] + '" onclick="fnc_multi_check_all(' + fld_id[i] + ',' + id_str + ')">&nbsp;&nbsp;Check All</th>' +
+			'</tr>' +
+			'</thead>' +
+			'</table>' +
+			'<div class="mylistview" style="overflow-y: scroll; max-height: ' + 140 + 'px; min-height: ' + 20 + 'px;">' +
+			'<table border="1" width="100%" id="table_body' + fld_id[i] + '" class="multiselect_dropdown_table_bottom">';
 
 			var array = $.map(opts, function( elem ) {
 				

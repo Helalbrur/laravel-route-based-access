@@ -8,47 +8,38 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <div class="col-sm-6">
             <h1 class="m-0 align-center">{{getMenuName(request('mid') ?? 0) ?? 'Permission Page'}}</h1>
         </div>
-        <!-- <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Starter Page</li>
-            </ol>
-        </div> -->
-    </div><!-- /.row -->
+    </div>
 @endsection()
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card p-4 shadow-sm" style="background-color: #F5FFFA;">
             <div class="card-body">
-
-            <h5 class="card-title"></h5>
-            <div class="card-text">
+                <h3 class="text-center mb-4" style="color: black !important;">Select User and Module</h3>
                 <form name="userpriv_1" id="userpriv_1" autocomplete="off">
-                    <legend>Select user and module</legend>
-                    <table width="100%">
-                        <tr>
-                            <td width="70">User ID</td>
-                            <td width="200"><?=create_drop_down("cbo_user_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--- Select User ---', 0, "" ); ?></td>
-                            <td width="120">Main Module Name</td>
-                            <td width="200"><?=create_drop_down("cbo_main_module", 180, "select main_module,m_mod_id from main_module where status=1 order by main_module",'m_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();" ); ?></td>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">User ID</label>
+                            <?= create_drop_down("cbo_user_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--- Select User ---', 0, ""); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Main Module Name</label>
+                            <?= create_drop_down("cbo_main_module", "form-select", "select main_module,m_mod_id from main_module where status=1 order by main_module", 'm_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();"); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Copy To User ID</label>
+                            <?= create_drop_down("cbo_copyuser_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--Select To User--', 0, ""); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">&nbsp;</label>
+                            <button type="button" class="btn btn-info w-100" onclick="fnc_copy_previledge(0);">
+                                Copy Privilege for New User
+                            </button>
+                        </div>
+                    </div>
 
-
-                            <td width="100">Copy To User ID</td>
-                            <td  width="200"><?=create_drop_down("cbo_copyuser_name", 180, "select name,id from users  order by name ASC",'id,name', 1, '--Select To User--', 0, ""); ?></td>
-                            <td>
-                                <input type="button" name="btnPreviledgeCopy" id="btnPreviledgeCopy" class="btn btn-sm btn-info" value="Copy Previledge for New User" onClick="fnc_copy_previledge(0);" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="7" height="20"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="7" id="load_priviledge"></td>
-                        </tr>
-                    </table>
+                    <div class="mt-4" id="load_priviledge"></div>
                 </form>
-            </div>
             </div>
         </div>
     </div>
