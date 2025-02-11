@@ -31,6 +31,7 @@
     <script src="{{ asset('skote/assets/js/plugin.js') }}"></script>
     {{-- custom style --}}
     <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
+    <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
     <<script>
         var sessionData = {!! json_encode([
         'data_arr' => session('laravel_stater.data_arr', []),
@@ -167,12 +168,17 @@
     <script src="{{asset('js/tablefilter.js')}}"></script>
     <script src="{{asset('js/function.js')}}"></script>
     <script src="{{asset('js/multi_select.js')}}"></script>
+    <script src="{{asset('js/select2.min.js')}}"></script>
 
     <script>
         $(".must_entry_caption").each(function(index) {
             var ht = " <font color='red'>" + $(this).html() + "</font>";
             $(this).html(ht);
             $(this).attr('title', 'Must Entry Field.');
+        });
+
+        $(document).ready(function() {
+            $('.select2').select2();
         });
     </script>
     <!-- REQUIRED SCRIPTS -->

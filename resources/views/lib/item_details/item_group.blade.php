@@ -29,7 +29,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                         <?php
                                             $categories = App\Models\LibCategory::get();
                                         ?>
-                                        <select name="cbo_category_id" id="cbo_category_id" class="form-control">
+                                        <select name="cbo_category_id" id="cbo_category_id" class="select2 form-control" style="width: 100%;">
                                             <option value="0">SELECT</option>
                                             @foreach($categories as $category)
                                                 <option value="{{$category->id}}" {{$category->id==1 ? 'selected' : ''}}>{{$category->category_name}}</option>
