@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\LibUom;
+use App\Models\LibBrand;
 use App\Models\ImageUpload;
 use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubGroup;
-use App\Models\LibBrand;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
@@ -17,9 +18,9 @@ use App\Http\Controllers\LibSizeController;
 use App\Http\Controllers\LibUomController; 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
+use App\Http\Controllers\LibBrandController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
-use App\Http\Controllers\LibGenericController; 
 use App\Http\Controllers\LibFloorController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\UserImportController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\LibCategoryController;
 use App\Http\Controllers\LibEmployeeController;
+use App\Http\Controllers\LibGenericController; 
 use App\Http\Controllers\LibLocationController;
 use App\Http\Controllers\LibSupplierController;
 use App\Http\Controllers\UserPrivMstController;
@@ -41,7 +43,6 @@ use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
-use App\Http\Controllers\LibBrandController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -184,6 +185,10 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::post('/user_import', [UserImportController::class, 'import'])->name('import');
+
+
+    Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
+
 
 });
 

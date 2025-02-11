@@ -10,6 +10,7 @@
         "laravel/framework": "^10.0",
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1.62",
+        "mpdf/mpdf": "^8.2",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
