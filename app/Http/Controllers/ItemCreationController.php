@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductDetailsMaster;
-use App\Http\Requests\StoreProductDetailsMasterRequest;
-use App\Http\Requests\UpdateProductDetailsMasterRequest;
+use Illuminate\Http\Request;
 
-class ProductDetailsMasterController extends Controller
+class ItemCreationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('lib.general.product_details_master');
+        //
     }
 
     /**
@@ -27,7 +25,7 @@ class ProductDetailsMasterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductDetailsMasterRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +33,7 @@ class ProductDetailsMasterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductDetailsMaster $productDetailsMaster)
+    public function show(string $id)
     {
         //
     }
@@ -43,7 +41,7 @@ class ProductDetailsMasterController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductDetailsMaster $productDetailsMaster)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +49,7 @@ class ProductDetailsMasterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductDetailsMasterRequest $request, ProductDetailsMaster $productDetailsMaster)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,7 +57,7 @@ class ProductDetailsMasterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductDetailsMaster $productDetailsMaster)
+    public function destroy(string $id)
     {
         //
     }

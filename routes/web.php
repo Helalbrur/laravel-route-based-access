@@ -43,6 +43,7 @@ use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
+use App\Http\Controllers\ProductDetailsMasterController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -103,6 +104,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/general/country', LibCountryController::class);
     Route::resource('/general/store', LibStoreLocationController::class);
     Route::resource('/general/brand', LibBrandController::class);
+    Route::resource('/general/product_details_master', ProductDetailsMasterController::class);
 
 
     Route::resource('/variable_setting/report_setting', ReportSettingController::class);
