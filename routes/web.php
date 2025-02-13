@@ -44,6 +44,7 @@ use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\ProductDetailsMasterController;
+use App\Http\Controllers\LibItemSubCategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -112,6 +113,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/item_details/item_category', LibCategoryController::class);
     Route::resource('/item_details/item_group', LibItemGroupController::class);
     Route::resource('/item_details/item_sub_group', LibItemSubGroupController::class);
+    Route::resource('/item_details/item_sub_category', LibItemSubCategoryController::class);
 });
 
 Route::prefix('/tools')->middleware(['auth'])->group(function(){
