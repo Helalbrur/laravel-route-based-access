@@ -15,50 +15,63 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 </div><!-- /.row -->
 @endsection()
 @section('content')
-<div class="row" style="justify-content: center; max-width: 60%; margin: auto;">
-    <div class="form-group col-6 d-flex align-items-center">
-        <div class="row w-100 align-items-center">
-            <label for="cbo_entry_form_name" class="col-sm-6 col-form-label text-center text-black d-flex align-items-center justify-content-center">Entry Form</label>
-            <div class="col-sm-6 text-center d-flex align-items-center">
-                <input type="text" class="form-control" id="cbo_entry_form_name" name="cbo_entry_form_name" placeholder="Browse" ondblclick="loadEntryForm()" readonly>
-                <input type="hidden" name="cbo_page_id" id="cbo_page_id">
-            </div>
-        </div>
-    </div>
+<div class="container mt-1">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center">Mandatory Field</h3>
+                    <div class="card-text">
+                        <div class="card p-4" style="background-color:rgb(241, 241, 241)">
+                            <form name="mandatoryfield_1" id="mandatoryfield_1" autocomplete="off">
+                                <!-- Entry Form Name Field -->
+                                <div class="mb-3 row d-flex justify-content-center">
+                                    <label for="cbo_entry_form_name" class="col-sm-2 col-form-label fw-bold text-end">Entry Form</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="cbo_entry_form_name" name="cbo_entry_form_name" placeholder="Browse" ondblclick="loadEntryForm()" readonly />
+                                        <input type="hidden" name="cbo_page_id" id="cbo_page_id" />
+                                    </div>
+                                </div>
 
-    <div class="form-group col-12">
-        <div class="row">
-            <table class="table table-bordered table-striped" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th width="40%" class="text-center">Field Name</th>
-                        <th width="40%" class="text-center">Mandatory</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="dtls_body">
-                    <tr>
-                        <td align="center" id="field_td">
-                            <?php echo create_drop_down("cboFieldId_1", 200, blank_array(), "", 1, "----Select----", 0, "", "", "", "", "", "", "", "", "cbo_field_id[]"); ?>
-                        </td>
-                        <td align="center">
-                            <?php echo create_drop_down("cboIsMandatory_1", 150, yes_no(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_permission_id[]"); ?>
-                        </td>
-                        <td align="center" id="increment_1">
-                            <input style="width:30px;" type="button" id="incrementfactor_1" name="incrementfactor_1" class="btn btn-success formbutton" value="+" onclick="add_break_down_tr(1)" />
-                            <input style="width:30px;" type="button" id="decrementfactor_1" name="decrementfactor_1" class="btn btn-danger formbutton" value="-" onclick="fn_deletebreak_down_tr(1)" />
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" align="center" style="padding-top:10px;" class="button_container">
-                            <?php echo load_submit_buttons($permission, "fnc_mandatory_field()", 0, 0, "reset_form('mandatoryfield_1','','','','','')", 1); ?>
-                            <input type="hidden" id="txt_update_data_dtls" readonly disabled>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+                                <!-- Details Table -->
+                                <div class="mb-3 row d-flex justify-content-center">
+                                    <table class="table table-bordered table-striped text-center" id="tbl_dtls">
+                                        <thead class="table-secondary">
+                                            <tr>
+                                                <th width="40%" class="text-center">Field Name</th>
+                                                <th width="40%" class="text-center">Mandatory</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dtls_body">
+                                            <tr>
+                                                <td id="field_td">
+                                                    <?php echo create_drop_down("cboFieldId_1", 200, blank_array(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_field_id[]"); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo create_drop_down("cboIsMandatory_1", 150, yes_no(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_permission_id[]"); ?>
+                                                </td>
+                                                <td id="increment_1">
+                                                    <input type="button" id="incrementfactor_1" name="incrementfactor_1" class="btn btn-success" value="+" onclick="add_break_down_tr(1)" />
+                                                    <input type="button" id="decrementfactor_1" name="decrementfactor_1" class="btn btn-danger" value="-" onclick="fn_deletebreak_down_tr(1)" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" align="center">
+                                                    <?php echo load_submit_buttons($permission, "fnc_mandatory_field()", 0, 0, "reset_form('mandatoryfield_1','','','','','')", 1); ?>
+                                                    <input type="hidden" id="txt_update_data_dtls" readonly disabled />
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

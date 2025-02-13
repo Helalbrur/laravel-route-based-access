@@ -11,40 +11,41 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     </div>
 @endsection()
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="card p-4 shadow-sm" style="background-color: #F5FFFA;">
-            <div class="card-body">
-                <h3 class="text-center mb-4" style="color: black !important;">Select User and Module</h3>
-                <form name="userpriv_1" id="userpriv_1" autocomplete="off">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">User ID</label>
-                            <?= create_drop_down("cbo_user_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--- Select User ---', 0, ""); ?>
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card p-4 shadow-sm" style="background-color:rgb(241, 241, 241);">
+                <div class="card-body">
+                    <h3 class="text-center mb-4" style="color: black !important;">Select User and Module</h3>
+                    <form name="userpriv_1" id="userpriv_1" autocomplete="off">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">User ID</label>
+                                <?= create_drop_down("cbo_user_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--- Select User ---', 0, ""); ?>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Main Module Name</label>
+                                <?= create_drop_down("cbo_main_module", "form-select", "select main_module,m_mod_id from main_module where status=1 order by main_module", 'm_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();"); ?>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Copy To User ID</label>
+                                <?= create_drop_down("cbo_copyuser_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--Select To User--', 0, ""); ?>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">&nbsp;</label>
+                                <button type="button" class="btn btn-info w-100" onclick="fnc_copy_previledge(0);">
+                                    Copy Privilege for New User
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Main Module Name</label>
-                            <?= create_drop_down("cbo_main_module", "form-select", "select main_module,m_mod_id from main_module where status=1 order by main_module", 'm_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();"); ?>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Copy To User ID</label>
-                            <?= create_drop_down("cbo_copyuser_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--Select To User--', 0, ""); ?>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">&nbsp;</label>
-                            <button type="button" class="btn btn-info w-100" onclick="fnc_copy_previledge(0);">
-                                Copy Privilege for New User
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="mt-4" id="load_priviledge"></div>
-                </form>
+                        <div class="mt-4" id="load_priviledge"></div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('script')

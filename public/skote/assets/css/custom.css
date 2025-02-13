@@ -3,15 +3,20 @@
     line-height:1;
 }
 
-.form-control{
+/* .form-control, .form-select{
     padding: .1rem .3rem;
-    /* line-height: 0.8; */
+} */
+.form-control, .form-select{
+    padding: .25rem .6rem;
 }
+
 .metismenu li{
     border-bottom:1px solid #555;
 }
+
 .navbar-brand-box{
     border-bottom:1px solid #555;
 }
+
 .table > :not(caption) > * > *{padding: 3px; text-align: center;}
 .table-bordered{border: 1px solid #999;}
