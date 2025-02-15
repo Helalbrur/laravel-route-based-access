@@ -38,7 +38,7 @@
         'mandatory_field' => session('laravel_stater.mandatory_field', []),
         'mandatory_message' => session('laravel_stater.mandatory_message', []),
         ]) !!};
-        console.log(sessionData);
+        //console.log(sessionData);
         </script>
 
         @yield('script_before')
