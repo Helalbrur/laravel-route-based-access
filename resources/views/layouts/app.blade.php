@@ -89,17 +89,15 @@
 
             <footer class="footer">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
+                    <div class="row g-0"> <!-- Added g-0 to remove gap -->
+                        
+                        <div class="col-sm-12 text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> ©
+                            </script> © 
+                            <span class="d-inline-block text-start">Design & Develop by Sait</span>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">
-                                Design & Develop by ..........
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </footer>
@@ -171,15 +169,24 @@
     <script src="{{asset('js/select2.min.js')}}"></script>
 
     <script>
-        $(".must_entry_caption").each(function(index) {
-            var ht = " <font color='red'>" + $(this).html() + "</font>";
-            $(this).html(ht);
-            $(this).attr('title', 'Must Entry Field.');
+        
+
+        // $(document).ready(function() {
+        //     $('.select2').select2();
+        // });
+        $(document).ready(function() {
+            $(".must_entry_caption").each(function(index) {
+                var ht = " <font color='red'>" + $(this).html() + "</font>";
+                $(this).html(ht);
+                $(this).attr('title', 'Must Entry Field.');
+            });
+            $('.select2, select[id^="cbo_"]').select2();
         });
 
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
+        // $(document).on('DOMNodeInserted', function() {
+        //     $('.select2, select[id^="cbo_"]').select2();
+        // });
+
     </script>
     <!-- REQUIRED SCRIPTS -->
     @yield('script')

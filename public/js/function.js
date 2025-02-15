@@ -883,6 +883,7 @@ function load_drop_down( plink, data, action, container , callback = "" )
 			// Call the callback function
 			callback();
 		}
+		$('.select2, select[id^="cbo_"]').select2();
     })
     .catch(error => {
         showNotification(error,'error');
