@@ -1125,7 +1125,25 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 					var element = document.getElementById(form_columns[row_no]);
 					if (element)
 					{
-						element.value = data.data[db_col];
+						// Check if element has class 'select2' or ID starts with 'cbo'
+						if (($(element).hasClass('select2')  || element.id.startsWith('cbo')) && $(element).data('select2') ) {
+							// Handle multi-select or single-select based on value format
+							var selectedValues = data.data[db_col];
+        
+							// Check if selectedValues is a string and contains a comma (for multi-select)
+							if (typeof selectedValues === 'string' && selectedValues.includes(',')) {
+								selectedValues = selectedValues.split(",");  // Split the comma-separated values
+								console.log('Setting selected values:', selectedValues);
+								
+							} 
+
+							$(element).select2('destroy').val(selectedValues).select2();
+							
+						} else {
+							// For single select or other fields, just set the value directly
+							element.value = data.data[db_col];
+						}
+
 						if(multi_select_column.length > 0)
 						{
 							if(multi_select_value.includes(form_columns[row_no]))

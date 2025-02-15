@@ -2,6 +2,7 @@
     $data = explode("*",$data);
     $company_id = $data[0];
     $is_floor_loaded = "";
+    $on_change = "";
     if(count($data) > 1)
     {
         $is_floor_loaded = $data[1];

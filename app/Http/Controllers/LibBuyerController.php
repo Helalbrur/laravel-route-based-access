@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\LibBuyer;
+use Illuminate\Http\Request;
+use App\Exports\LibBuyerExport;
+use App\Imports\LibBuyerImport;
+use App\Models\LibBuyerTagParty;
+use App\Models\LibBuyerTagCompany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreLibBuyerRequest;
 use App\Http\Requests\UpdateLibBuyerRequest;
-use App\Models\LibBuyerTagCompany;
-use Illuminate\Http\Request;
 
 class LibBuyerController extends Controller
 {
@@ -62,6 +66,20 @@ class LibBuyerController extends Controller
                     ]);
                 }
             }
+
+            if(!empty($request->input('cbo_tag_party_name')))
+            {
+                $parties = explode(",",$request->input('cbo_tag_party_name'));
+                foreach($parties as $party_type)
+                {
+                    LibBuyerTagParty::create([
+                        'party_type' => $party_type,
+                        'buyer_id'   => $lib_buyer->id
+                    ]);
+                }
+            }
+
+            
 
            
 
@@ -191,4 +209,36 @@ class LibBuyerController extends Controller
             ]);
         }
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimetypes:text/plain,text/csv,application/csv,application/vnd.ms-excel',
+        ]);
+        
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if (!in_array($extension, ['csv', 'xlsx'])) {
+            return back()->withErrors(['file' => 'Invalid file format. Please upload a CSV or Excel file.']);
+        }
+
+        try {
+            Excel::import(new LibBuyerImport, $request->file('file'));
+
+            return response()->json([
+                'code' => 0,
+                'message' => 'Import successful',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 10,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new LibBuyerExport, 'lib_buyers.csv');
+    }
+
 }

@@ -189,7 +189,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::post('/user_import', [UserImportController::class, 'import'])->name('import');
-
+    Route::post('/lib_buyer_import', [LibBuyerController::class, 'import'])->name('lib_buyer_import');
+    Route::get('/lib_buyer_export', [LibBuyerController::class, 'export'])->name('lib_buyer_export');
 
     Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
 

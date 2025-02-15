@@ -75,7 +75,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             
                             <label for="cbo_tag_company_name"  class="col-sm-2 col-form-label">Tag Company Name</label>
                             <div class="col-sm-4">
-                                <select name="cbo_tag_company_name" id="cbo_tag_company_name"  class="form-control">
+                                <select name="cbo_tag_company_name[]" id="cbo_tag_company_name"  class="form-control" multiple>
                                     <option value="0">SELECT</option>
                                     <?php
                                         $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -87,7 +87,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             </div>
                             <label for="cbo_tag_party_name"  class="col-sm-2 col-form-label">Tag Party Name</label>
                             <div class="col-sm-4">
-                                <select name="cbo_tag_party_name" id="cbo_tag_party_name" class="form-control">
+                                <select name="cbo_tag_party_name[]" id="cbo_tag_party_name" class="form-control" multiple>
                                     
                                     <?php
                                         $party_types =party_type_supplier();
@@ -226,7 +226,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         var columns = 'supplier_name*short_name*country_id*tag_company*party_type*contact_person*contact_no*web_site*email*address*id';
         var fields = 'txt_supplier_name*txt_short_name*cbo_country_name*cbo_tag_company_name*cbo_tag_party_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_supplier_address*update_id';
         var others = '';
-       var get_return_value = await populate_form_data('id',menuId,'lib_supplier',columns,fields,'{{csrf_token()}}','','cbo_tag_company_name*cbo_tag_party_name');
+       var get_return_value = await populate_form_data('id',menuId,'lib_supplier',columns,fields,'{{csrf_token()}}','','');
        if(get_return_value == 1)
        {
          set_button_status(1, permission, 'fnc_supplier_name',1);
@@ -236,7 +236,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     make_mandatory(10);
     setFilterGrid("list_view",-1);
     
-   set_multiselect('cbo_tag_company_name*cbo_tag_party_name','0*0','0*0','','0');
+   //set_multiselect('cbo_tag_company_name*cbo_tag_party_name','0*0','0*0','','0');
 
 </script>
 @endsection

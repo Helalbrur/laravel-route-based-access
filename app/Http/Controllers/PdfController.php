@@ -25,17 +25,17 @@ class PdfController extends Controller
                 'solaimanlipi' => [
                     'R' => 'SolaimanLipi.ttf',
                     'useOTL' => true,
-                    'useKashida' => false, // Not needed for Bangla
+                    'useKashida' => true, // Not needed for Bangla
                 ],
                 'siyamrupali' => [
                     'R' => 'Siyamrupali.ttf',
                     'useOTL' => true,
-                    'useKashida' => false,
+                    'useKashida' => true,
                 ],
                 'kalpurush' => [
                     'R' => 'kalpurush.ttf',
                     'useOTL' => true,
-                    'useKashida' => false,
+                    'useKashida' => true,
                 ]
             ],
             'default_font' => 'kalpurush' // Set default Bangla font

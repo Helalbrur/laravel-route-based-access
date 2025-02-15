@@ -59,10 +59,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                         <?php
                                             $categories = App\Models\LibCategory::get();
                                         ?>
-                                        <select name="cbo_category_id" id="cbo_category_id" class="form-control">
-                                            <option value="0">SELECT</option>
+                                        <select name="cbo_category_id[]" id="cbo_category_id" class="form-control" multiple="multiple">
+                                            <option value="0" selected>SELECT</option>
                                             @foreach($categories as $category)
-                                                <option value="{{$category->id}}" {{$category->id==1 ? 'selected' : ''}}>{{$category->category_name}}</option>
+                                                <option value="{{$category->id}}">{{$category->category_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -163,14 +163,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         var columns = 'store_name*company_id*location_id*item_category_id*id';
         var fields = 'txt_store_name*cbo_company_name*cbo_location_name*cbo_category_id*update_id';
         var func_name = `load_drop_down( 'load_drop_down', document.getElementById('cbo_company_name').value, 'location_under_company', 'location_div' )`;
-       var get_return_value = await populate_form_data('id',menuId,'lib_store_location',columns,fields,'{{csrf_token()}}','','cbo_category_id','');
+       var get_return_value = await populate_form_data('id',menuId,'lib_store_location',columns,fields,'{{csrf_token()}}','','','');
        if(get_return_value == 1)
        {
          set_button_status(1, permission, 'fnc_lib_store_location',1);
        }
     }
 
-    set_multiselect('cbo_category_id','0','0','','0');
+    //set_multiselect('cbo_category_id','0','0','','0');
     setFilterGrid("list_view",-1);
    
 </script>

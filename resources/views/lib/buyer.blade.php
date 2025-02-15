@@ -16,8 +16,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-
-                
+                <h3 class="text-center">Buyer Management</h3>
+                <h5 class="card-title d-flex justify-content-between align-items-center">
+                    <a href="{{ url('/lib_buyer_export') }}" class="btn btn-info">Download Format</a>
+                    <form action="{{ route('lib_buyer_import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
+                        @csrf
+                        <input type="file" name="file" required class="form-control me-2">
+                        <button type="submit" class="btn btn-info">Import</button>
+                    </form>
+                </h5>
                 <div class="card-text">
                     <form name="mainform_1" id="mainform_1" autocomplete="off">
                         
@@ -75,7 +82,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             
                             <label for="cbo_tag_company_name"  class="col-sm-2 col-form-label">Tag Company Name</label>
                             <div class="col-sm-4">
-                                <select name="cbo_tag_company_name" id="cbo_tag_company_name"  class="form-control">
+                                <select name="cbo_tag_company_name[]" id="cbo_tag_company_name"  class="form-control" multiple="multiple">
                                     <option value="0">SELECT</option>
                                     <?php
                                         $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -87,7 +94,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             </div>
                             <label for="cbo_tag_party_name"  class="col-sm-2 col-form-label">Tag Party Name</label>
                             <div class="col-sm-4">
-                                <select name="cbo_tag_party_name" id="cbo_tag_party_name" class="form-control">
+                                <select name="cbo_tag_party_name[]" id="cbo_tag_party_name" class="form-control" multiple="multiple">
                                     
                                     <?php
                                         $party_types =party_type();
@@ -226,7 +233,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         var columns = 'buyer_name*short_name*country_id*tag_company*party_type*contact_person*contact_no*web_site*email*address*id';
         var fields = 'txt_buyer_name*txt_short_name*cbo_country_name*cbo_tag_company_name*cbo_tag_party_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_buyer_address*update_id';
         var others = '';
-       var get_return_value = await populate_form_data('id',menuId,'lib_buyer',columns,fields,'{{csrf_token()}}','','cbo_tag_company_name*cbo_tag_party_name');
+       //var get_return_value = await populate_form_data('id',menuId,'lib_buyer',columns,fields,'{{csrf_token()}}','','cbo_tag_company_name*cbo_tag_party_name');
+
+       var get_return_value = await populate_form_data('id',menuId,'lib_buyer',columns,fields,'{{csrf_token()}}','','');
        if(get_return_value == 1)
        {
          set_button_status(1, permission, 'fnc_buyer_name',1);
@@ -236,7 +245,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     make_mandatory(9);
     setFilterGrid("list_view",-1);
     
-   set_multiselect('cbo_tag_company_name*cbo_tag_party_name','0*0','0*0','','0');
+   //set_multiselect('cbo_tag_company_name*cbo_tag_party_name','0*0','0*0','','0');
 
 </script>
 @endsection

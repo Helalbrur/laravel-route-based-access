@@ -16,8 +16,7 @@ class LibBuyer extends Model
     ];
     public function company()
     {
-        return $this->belongsToMany(Company::class, 'lib_buyer_tag_company','buyer_id','company_id');
-        //->ddRawSql()
+        return $this->belongsToMany(Company::class, 'lib_buyer_tag_company','buyer_id','company_id');//->ddRawSql();
     }
     public function country()
     {
