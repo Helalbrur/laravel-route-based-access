@@ -33,7 +33,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                                             Company &nbsp;&nbsp;
                                                         </div>
                                                         <div class="col-sm-8">
-                                                            <?php echo create_drop_down("cbo_company_name", 150, "select id,company_name from lib_company order by company_name", "id,company_name", 1, "-- Select Company --", "", "", 0, ""); ?>
+                                                            <?php echo create_drop_down("cbo_company_name", 150, "SELECT id,company_name from lib_company order by company_name", "id,company_name", 1, "-- Select Company --", "", "", 0, ""); ?>
                                                         </div>
                                                     </div>
                                                 </th>
@@ -79,13 +79,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                         <tbody id="dtls_body">
                                             <tr>
                                                 <td align="center" id="fieldtd">
-                                                    <?php echo create_drop_down("cboFieldId_1", 150, blank_array(), "", 1, "----Select----", 0, "", "", "", "", "", "", "", "", "cbo_field_id[]"); ?>
+                                                    <?php echo create_drop_down("cboFieldId_1", 150, blank_array(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_field_id[]"); ?>
                                                 </td>
                                                 <td align="center">
                                                     <?php echo create_drop_down("cboIsDisable_1", 150, yes_no(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_permission_id[]"); ?>
                                                 </td>
-                                                <td align="center" id="tdId_1">
-                                                    <input type="text" id="setDefaultVal_1" name="" style="width:100px" class="form-control" />
+                                                <td id="tdId_1">
+                                                    <input type="text" id="setDefaultVal_1" name="" style="width:100px; margin:0 auto;" class="form-control" />
                                                     <input type="hidden" id="hideDtlsId_1" name="hideDtlsId[]" style="width:100px;" value="" />
                                                 </td>
                                                 <td align="center" id="increment_1">
