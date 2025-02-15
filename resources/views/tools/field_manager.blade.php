@@ -152,6 +152,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 			$("#cbo_entry_form_name").val(cbo_entry_form_name);
 			$("#cbo_entry_form").val(entry_form_id);
            fn_set_item(entry_form_id);
+           $('.select2, select[id^="cbo"]').select2();
 		}
     }
     function fn_set_item(val)

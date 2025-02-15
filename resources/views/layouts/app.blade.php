@@ -180,7 +180,7 @@
                 $(this).html(ht);
                 $(this).attr('title', 'Must Entry Field.');
             });
-            $('.select2, select[id^="cbo_"]').select2();
+            $('.select2, select[id^="cbo"]').select2();
         });
 
         // $(document).on('DOMNodeInserted', function() {
