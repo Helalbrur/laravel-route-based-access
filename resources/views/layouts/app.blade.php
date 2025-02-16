@@ -95,7 +95,7 @@
                             <script>
                                 document.write(new Date().getFullYear())
                             </script> © 
-                            <span class="d-inline-block text-start">Design & Develop by Sait</span>
+                            <span class="d-inline-block text-start">Designed & Developed by Sait</span>
                         </div>
                         
                     </div>
