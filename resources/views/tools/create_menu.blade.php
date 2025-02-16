@@ -60,14 +60,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                         </div>
                                     </div>
 
-                                    <!-- <div class="form-group">
-                                        <div class="row d-flex justify-content-center">
-                                            <label for="txt_menu_link" class="col-sm-2 col-form-label fw-bold text-start">Menu Link</label>
-                                            <div class="col-sm-6 d-flex align-items-center">
-                                                <input type="text" name="txt_menu_link" id="txt_menu_link" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <div class="form-group">
                                         <div class="row d-flex justify-content-center">
                                             <label for="txt_menu_link" class="col-sm-2 col-form-label fw-bold text-start">Menu Link</label>
