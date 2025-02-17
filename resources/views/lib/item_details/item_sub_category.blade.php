@@ -27,7 +27,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Sub Category';
                                         <?php
                                             $categories = App\Models\LibCategory::get();
                                         ?>
-                                        <select name="cbo_category_id" id="cbo_category_id" onchange="load_drop_down( 'load_drop_down', this.value, 'item_group_under_category', 'item_group_div' )"  class="form-control">
+                                        <select name="cbo_category_id" id="cbo_category_id" onchange="load_drop_down( 'load_drop_down', this.value, 'item_group_under_category', 'item_category_div' )"  class="form-control">
                                             <option value="0">SELECT</option>
                                             @foreach($categories as $category)
                                                 <option value="{{$category->id}}" {{$category->id==1 ? 'selected' : ''}}>{{$category->category_name}}</option>
@@ -127,7 +127,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Sub Category';
     const load_php_data_to_form =async (menuId) =>
     {
         
-        reset_form('itemsubcategoryentry_1','','',1);
+       // reset_form('itemsubcategoryentry_1','','',1);
         var columns = 'item_category_id*sub_category_name*id';
         var fields = 'cbo_category_id*txt_item_sub_category_name*update_id';
         var get_return_value = await populate_form_data('id',menuId,'lib_item_sub_category',columns,fields,'{{csrf_token()}}');

@@ -114,6 +114,7 @@ class LibItemSubCategoryController extends Controller
      */
     public function destroy(LibItemSubCategory $sub_category)
     {
+        dd($sub_category);
         DB::beginTransaction();
         try
         {
