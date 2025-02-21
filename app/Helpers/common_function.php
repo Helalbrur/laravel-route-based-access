@@ -282,7 +282,7 @@ function get_split_length($str, $width)
     }
 }
 
-function create_drop_down($field_id, $field_width, $query, $field_list, $show_select, $select_text_msg = "", $selected_index = "", $onchange_func = "", $is_disabled = "", $array_index = "", $fixed_options = "", $fixed_values = "", $not_show_array_index = "", $tab_index = "", $new_conn = "", $field_name = "", $additionalClass = "", $additionalAttributes = "")
+function create_drop_down($field_id, $field_width, $query, $field_list, $show_select, $select_text_msg = "", $selected_index = "", $onchange_func = "", $is_disabled = "", $array_index = "", $fixed_options = "", $fixed_values = "", $not_show_array_index = "", $tab_index = "", $new_conn = "", $field_name = "", $additionalClass = "", $additionalAttributes = "",$is_multiple=0)
 {
 
     //$drop_down_loader_data=$field_id."*".$field_width."*".$query."*".$field_list."*".$show_select."*".$select_text_msg."*".$selected_index."*".$onchange_func."*". $onchange_func_param_db."*".$onchange_func_param_sttc."*".$add_new_page_lnk."*".$div_id;
@@ -305,7 +305,12 @@ function create_drop_down($field_id, $field_width, $query, $field_list, $show_se
     $field_list = explode(",", $field_list);
     if($field_width != "100%") $field_width = $field_width."px";
 
-    $drop_down = '<select ' . $tab_index . ' name="' . ($field_name == "" ? $field_id : $field_name) . '" id="' . $field_id . '" class="form-control ' . $additionalClass . '" ' . $is_disabled . '  style="width:' . $field_width . '" onchange="' . $onchange_func . '">\n';
+    $multiple = "";
+    if($is_multiple == 1) {
+        $multiple = 'multiple="multiple[]" ';
+    }
+
+    $drop_down = '<select ' . $tab_index . ' ' . $multiple . ' name="' . ($field_name == "" ? $field_id : $field_name) . '" id="' . $field_id . '" class="form-control ' . $additionalClass . '" ' . $is_disabled . '  style="width:' . $field_width . '" onchange="' . $onchange_func . '">\n';
 
     if ($show_select == 1) {
         $drop_down .= '<option data-attr="" value="0">' . $select_text_msg . '</option>\n';

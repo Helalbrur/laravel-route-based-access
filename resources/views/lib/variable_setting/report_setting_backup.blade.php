@@ -203,6 +203,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
         var get_return_value = await populate_form_data('id',menuId,'lib_report_template',columns,fields,'{{csrf_token()}}','','','');
        if(get_return_value == 1)
        {
+          //adjust_drop_down();
           set_button_status(1, permission, 'fnc_report_setting',1);
        }
     }
@@ -224,6 +225,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                 load_drop_down( 'load_drop_down', target.value, 'report_formate_under_report_name', 'format_div',
                     function() {
                         console.log('hello');
+                        //set_multiselect('cbo_format_name','0','','','0');
                     }
                 );
             }
@@ -237,7 +239,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
         }
     });
    
+    /*
    
+    // Add a click event listener to the button
+    document.getElementById("cbo_module_name").addEventListener("change", function() {
+        load_drop_down( "load_drop_down", this.value, "report_name_under_module", "report_div" ) ;
+    });
+    document.getElementById("cbo_report_name").addEventListener("change", function() {
+        console.log(1);
+        load_drop_down( 'load_drop_down', this.value, 'report_formate_under_report_name', 'format_div' );
+        console.log(2);
+        set_multiselect('cbo_format_name','0','0','','0');
+        console.log(3);
+    });
+    */
+    //set_multiselect('cbo_format_name*cbo_user_id','0*0','0','','');
     function adjust_drop_down()
     {
         var cbo_module_name =document.getElementById("cbo_module_name").value;
@@ -250,6 +266,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
 
             load_drop_down( "load_drop_down",cbo_report_name, "report_formate_under_report_name",'format_div',function(){
                 document.getElementById("cbo_report_name").value    = cbo_report_name;
+               // document.getElementById("cbo_format_name").value    = cbo_format_name;
+                //document.getElementById("cbo_user_id").value        = cbo_user_id;
+                //set_multiselect('cbo_format_name','',0,'0','0','');
+                //set_multiselect('cbo_format_name*cbo_user_id','0*0',1,`${cbo_format_name}*${cbo_user_id}`,'0*0','');
             });
         });
         
