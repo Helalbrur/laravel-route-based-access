@@ -4,60 +4,59 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 ?>
 @extends('layouts.app')
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Size Entry'}}</strong></h1>
-        </div>
-    </div><!-- /.row -->
+<div class="row mb-2">
+    <div class="col-sm-12 d-flex justify-content-center">
+        <h1 class="m-0 text-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Size Entry'}}</strong></h1>
+    </div>
+</div>
 @endsection()
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <center>
-            <div class="card" style="width: 60%">
+
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"></h5>
+                    <h3 class="text-center">{{ getMenuName(request('mid') ?? 0) ?? 'Size Entry' }}</h3>
                     <div class="card-text">
-                        <!-- #EBF4FA; -->
-                        <div class="card" style="background-color: #F5FFFA">
-                            <form name="sizeentry_1" id="sizeentry_1" autocomplete="off" style="padding: 10px;">
-                                
-                                <div class="form-group row">
-                                    <label for="txt_size_name" class="col-sm-5 col-form-label must_entry_caption">Size Name</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="txt_size_name" id="txt_size_name" class="form-control"  />
+                        <div class="card p-4" style="background-color: rgb(241, 241, 241);">
+                            <form name="sizeentry_1" id="sizeentry_1" autocomplete="off">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group row d-flex justify-content-center">
+                                            <label for="txt_size_name" class="col-sm-2 col-form-label fw-bold text-end must_entry_caption">Size Name</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="txt_size_name" id="txt_size_name" class="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="from-group row" style="margin-top: 20px;">
-                                    <div class="col-sm-12">
-                                    <input type="hidden" value="" name="update_id" id="update_id"/>
-                                        <?php
-                                            echo load_submit_buttons( $permission, "fnc_lib_size", 0,0 ,"reset_form('sizeentry_1','','',1)");
-                                        ?>
+                                <div class="mb-3 row d-flex justify-content-center mt-4">
+                                    <div class="col-sm-2">
+                                        <input type="hidden" value="" name="update_id" id="update_id"/>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <?php echo load_submit_buttons($permission, "fnc_lib_size", 0, 0, "reset_form('sizeentry_1','','',1)"); ?>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div style="float:left; margin:auto;padding:10px;background-color:#F5FFFA" class="card table-responsive table-info" align="center" id="list_view_div">
-                            <table class="table table-bordered table-striped" >
-                                <thead>
+                        <div class="card table-responsive table-info mx-auto p-3 mt-4" style="background-color: rgb(241, 241, 241);" id="list_view_div">
+                            <table class="table table-bordered table-striped text-center">
+                                <thead class="table-secondary">
                                     <tr>
                                         <th width="10%">Sl</th>
-                                        <th >Size Name</th>
-                                        
+                                        <th>Size Name</th>
                                     </tr>
                                 </thead>
                                 <tbody id="list_view">
                                     <?php
                                         $sl = 1;
-                                        
-                                        
                                         $sizes = DB::table('lib_size as a')
                                                     ->whereNull('a.deleted_at')
                                                     ->select('a.*')
                                                     ->get();
                                     ?>
-
                                     @foreach($sizes as $size)
                                         <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$size->id}}')" style="cursor:pointer">
                                             <td>{{$sl++}}</td>
@@ -70,7 +69,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                     </div>
                 </div>
             </div>
-        </center>
+        </div>
     </div>
 </div>
 
