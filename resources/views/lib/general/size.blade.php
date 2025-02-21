@@ -17,7 +17,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <div class="col-lg-7">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-center">{{ getMenuName(request('mid') ?? 0) ?? 'Size Entry' }}</h3>
                     <div class="card-text">
                         <div class="card p-4" style="background-color: rgb(241, 241, 241);">
                             <form name="sizeentry_1" id="sizeentry_1" autocomplete="off">

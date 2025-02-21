@@ -18,7 +18,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         <center>
             <div class="card">
                 <div class="card-body" style="justify-content:center;">
-                    <h4 class="card-title">{{getMenuName(request('mid') ?? 0) ?? 'Item Creation'}}</h4>
                     <div class="card-text">
                         <form name="mainform_1" id="mainform_1" autocomplete="off">
                         <div class="form-group row">

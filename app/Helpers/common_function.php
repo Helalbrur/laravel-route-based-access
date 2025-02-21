@@ -1060,67 +1060,24 @@ function getMonth($month) {
     return $months[$month];
 }
 
-// function get_available_route()
-// {
-//     $existingRoutes = DB::table('main_menu')
-//         ->where('is_deleted', 0)
-//         ->pluck('f_location') // Fetch only 'f_location' column
-//         ->toArray(); // Convert collection to an array
-
-//     // Get all Laravel routes, but keep only GET requests
-//     $routes = collect(Route::getRoutes())->filter(function ($route) {
-//         return in_array('GET', $route->methods()); // Keep only GET routes
-//     })->map(function ($route) {
-//         return $route->uri();
-//     })->unique()->values();
-
-//     // Extract base route names (remove leading slash if exists)
-//     $baseRoutes = collect($existingRoutes)->map(function ($route) {
-//         return trim($route, '/'); // Normalize route by trimming `/`
-//     })->toArray();
-
-//     // Define Laravel's resource route patterns
-//     $resourceActions = ['create', '{id}', '{id}/edit', '{id}/show', '{id}/update', '{id}/destroy'];
-
-//     // Define additional routes to ignore
-//     $ignoreRoutes = ['login','register','forgot-password','reset-password/{token}','verify-email','verify-email/{id}/{hash}','confirm-password','reset-password/{token}','verify-email/{id}/{hash}','_ignition/health-check','api/user','dashboard','profile','popup', 'show_common_list_view', 'get_field_manager_data', 'load_drop_down','mandatory_field_entry_form','load_drop_down_mandatory_field_item','mandatory_action_user_data','field_manager_entry_form','load_drop_down_field_manager_item','field_manager_action_user_data','field_level_access_user','field_level_action_user_data','load_drop_down_field_level_access','set_field_name','common_file_popup','get_mandatory_and_field_level_data','/tools/create_main_module/get_data_by_id/{id}','tools/create_menu/get_data_by_id/{id}'];
-
-//     // Filter routes: Exclude existing base routes, nested resource routes, and ignored routes
-//     $availableRoutes = $routes->reject(function ($route) use ($baseRoutes, $resourceActions, $ignoreRoutes) {
-//         // Normalize route (trim `/` and replace dynamic parameters)
-//         $normalizedRoute = preg_replace('/\{[^}]+\}/', '{id}', trim($route, '/'));
-
-//         // Exclude routes in the ignore list
-//         if (in_array($normalizedRoute, $ignoreRoutes)) {
-//             return true;
-//         }
-
-//         foreach ($baseRoutes as $base) {
-//             // Exclude exact match (base route)
-//             if ($normalizedRoute === $base) {
-//                 return true;
-//             }
-
-//             // Exclude variations of resource routes
-//             foreach ($resourceActions as $action) {
-//                 if (str_starts_with($normalizedRoute, "$base/$action")) {
-//                     return true;
-//                 }
-//             }
-//         }
-
-//         return false;
-//     })->values();
-
-//     return $availableRoutes;
-// }
-
-function get_available_route()
+function get_available_route($menu_id = null)
 {
-    $existingRoutes = DB::table('main_menu')
+
+    if(!empty($menu_id)){
+        $existingRoutes = DB::table('main_menu')
+        ->where('is_deleted', 0)
+        ->where('m_menu_id','!=' ,$menu_id)
+        ->pluck('f_location') // Fetch only 'f_location' column
+        ->toArray(); // Convert collection to an array
+    }
+    else
+    {
+        $existingRoutes = DB::table('main_menu')
         ->where('is_deleted', 0)
         ->pluck('f_location') // Fetch only 'f_location' column
         ->toArray(); // Convert collection to an array
+    }
+   
 
     // Get all Laravel routes, but keep only GET requests
     $routes = collect(Route::getRoutes())->filter(function ($route) {
@@ -1148,7 +1105,7 @@ function get_available_route()
         'load_drop_down_field_level_access', 'set_field_name', 'common_file_popup',
         'get_mandatory_and_field_level_data', 'tools/create_main_module/get_data_by_id/{id}',
         'tools/create_menu/get_data_by_id/{id}','tools/mandatory_field_entry_form','tools/load_drop_down_mandatory_field_item',
-        'tools/mandatory_action_user_data','tools/field_manager_entry_form','tools/load_drop_down_field_manager_item','tools/field_manager_action_user_data','tools/field_level_access_use','tools/show_module_list_view','permission','tools/load_priv_list_view','tools/load_priviledge_list','tools/load_main_menu','tools/root_menu_under','user_import','tools/load_sub_menu_under_menu','tools/sub_root_menu_under','tools/create_menu_search_list_view','tools/set_field_name','tools/load_drop_down_field_level_access','tools/field_level_action_user_data','tools/field_level_access_user'
+        'tools/mandatory_action_user_data','tools/field_manager_entry_form','tools/load_drop_down_field_manager_item','tools/field_manager_action_user_data','tools/field_level_access_use','tools/show_module_list_view','permission','tools/load_priv_list_view','tools/load_priviledge_list','tools/load_main_menu','tools/root_menu_under','user_import','tools/load_sub_menu_under_menu','tools/sub_root_menu_under','tools/create_menu_search_list_view','tools/set_field_name','tools/load_drop_down_field_level_access','tools/field_level_action_user_data','tools/field_level_access_user','lib_buyer_export','lib_supplier_export'
     ];
 
     // Normalize routes (replace dynamic params `{xyz}` with `{id}`)

@@ -16,7 +16,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Sub Category';
         <center>
             <div class="card" style="justify-content:center;width: 80%;">
                 <div class="card-body" style="justify-content:center;">
-                    <h4 class="card-title">{{getMenuName(request('mid') ?? 0) ?? 'Item Sub Category'}}</h4>
                     <div class="card-text" style="justify-content:center;">
                         <!-- #EBF4FA; -->
                         <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">

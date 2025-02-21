@@ -16,7 +16,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-center">Buyer Management</h3>
                     <h5 class="card-title d-flex justify-content-between align-items-center">
                         <a href="{{ url('/lib_buyer_export') }}" class="btn btn-info">Download Format</a>
                         <form action="{{ route('lib_buyer_import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">

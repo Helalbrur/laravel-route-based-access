@@ -63,7 +63,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                     <div class="form-group">
                                         <div class="row d-flex justify-content-center">
                                             <label for="txt_menu_link" class="col-sm-2 col-form-label fw-bold text-start">Menu Link</label>
-                                            <div class="col-sm-6 d-flex align-items-center">
+                                            <div class="col-sm-6 d-flex align-items-center" id="menu_link_div">
                                                 <select name="txt_menu_link" id="txt_menu_link" class="form-control select2">
                                                     <option value="">Select a Route</option>
                                                     @foreach(get_available_route() as $route)
@@ -316,6 +316,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                     document.getElementById('update_id').value = menuId;
                     document.getElementById('cbo_fabric_nature').value = data.fabric_nature;
                     console.log(`id = ${document.getElementById('update_id').value}`);
+
+                    load_drop_down( 'load_drop_down',menuId+'**'+data.f_location, 'load_available_route', 'menu_link_div' );
                     set_button_status(1, permission, 'fnc_menu_create', 1);
                 } catch (error) {
                     console.log(error);

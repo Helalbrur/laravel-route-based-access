@@ -19,7 +19,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                     <div class="card-text" style="justify-content:center;">
                         <!-- #EBF4FA; -->
                         <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">
-                            <form name="libfloor_1" id="libfloor_1" autocomplete="off" style="padding: 10px;">
+                            <form name="libroom_1" id="libroom_1" autocomplete="off" style="padding: 10px;">
                                 <div class="form-group row">
                                    
                                     <label for="cbo_company_name"  class="col-sm-2 col-form-label must_entry_caption">Company Name</label>
@@ -88,7 +88,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <input type="hidden" value="" name="update_id" id="update_id"/>
                                     
                                         <?php
-                                            echo load_submit_buttons( $permission, "fnc_lib_floor", 0,0 ,"reset_form('libfloor_1','','',1,'')");
+                                            echo load_submit_buttons( $permission, "fnc_lib_room", 0,0 ,"reset_form('libroom_1','','',1,'')");
                                         ?>
                                     </div>
                                 </div>
@@ -99,31 +99,45 @@ $permission = getPagePermission(request('mid') ?? 0);
                             <thead>
                                 <tr>
                                     <th width="10%">Sl</th>
-                                    <th width="20%">Floor Name</th>
-                                    <th width="25%">Company Name</th>
-                                    <th width="25%">Location Name</th>
-                                    <th >Store</th>
+                                    <th width="15%">Company Name</th>
+                                    <th width="20%">Location Name</th>
+                                    <th width="20%">Store</th>
+                                    <th width="15%">Floor Name</th>
+                                    <th >Room No</th>
                                     
                                 </tr>
                             </thead>
                             <tbody id="list_view">
                                 <?php
                                     $sl = 1;
-                                    $floors = DB::table('lib_floor as a')
-                                                ->leftJoin('lib_company as b','a.company_id','b.id')
-                                                ->leftJoin('lib_location as c','a.location_id','c.id')
-                                                ->leftJoin('lib_store_location as d','a.store_id','d.id')
-                                                ->select('a.id','d.store_name','b.company_name','c.location_name','a.floor_name')
+                                    $rooms = DB::table('lib_floor_room_rack_mst as a')
+                                                ->join('lib_floor_room_rack_dtls as b', 'a.id', 'b.room_id')
+                                                ->leftJoin('lib_location as c', 'b.location_id', 'c.id')
+                                                ->leftJoin('lib_store_location as d', 'b.store_id', 'd.id')
+                                                ->leftJoin('lib_company as e', 'a.company_id', 'e.id')
+                                                ->leftJoin('lib_floor as f', 'b.floor_id', 'f.id')
+                                                ->select(
+                                                    'a.id',
+                                                    'd.store_name',
+                                                    'e.company_name',
+                                                    'c.location_name',
+                                                    'f.floor_name',
+                                                    'a.floor_room_rack_name as room_no'
+                                                )
+                                                ->whereNull('a.deleted_at')  
+                                                ->whereNull('b.deleted_at') 
                                                 ->get();
+                                                //->ddRawSql();
                                 ?>
 
-                                @foreach($floors as $floor)
-                                    <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$floor->id}}')" style="cursor:pointer">
+                                @foreach($rooms as $room)
+                                    <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$room->id}}')" style="cursor:pointer">
                                         <td>{{$sl++}}</td>
-                                        <td>{{$floor->floor_name}}</td>
-                                        <td>{{$floor->company_name}}</td>
-                                        <td>{{$floor->location_name}}</td>
-                                        <td>{{$floor->store_name}}</td>
+                                        <td>{{$room->company_name}}</td>
+                                        <td>{{$room->location_name}}</td>
+                                        <td>{{$room->store_name}}</td>
+                                        <td>{{$room->floor_name}}</td>
+                                        <td>{{$room->room_no}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -141,15 +155,15 @@ $permission = getPagePermission(request('mid') ?? 0);
 @section('script')
 <script>
      var permission ='{{$permission}}';
-    function fnc_lib_floor( operation )
+    function fnc_lib_room( operation )
     {
-        if (form_validation('txt_floor_name*cbo_company_name*cbo_location_name*cbo_store_name','Floor Name* Company Name*Location*Store Name')==false)
+        if (form_validation('cbo_floor_name*cbo_company_name*cbo_location_name*cbo_store_name*txt_room_no','Floor Name* Company Name*Location*Store Name')==false)
         {
             return;
         }
         else
         {
-            var formData = get_form_data('txt_floor_name,cbo_company_name,cbo_location_name,cbo_store_name,txt_floor_seq,update_id');
+            var formData = get_form_data('cbo_floor_name,cbo_company_name,cbo_location_name,cbo_store_name,txt_room_no,update_id');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -159,7 +173,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                 else formData.append('_method', 'DELETE');
             }
             formData.append('_token', '{{csrf_token()}}');
-            var url = `/lib/inventory/floor${param}`;
+            var url = `/lib/inventory/room${param}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -169,22 +183,83 @@ $permission = getPagePermission(request('mid') ?? 0);
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_floor_list_view','list_view_div','libfloor_1');
+            save_update_delete(operation,url,requestData,'id','show_room_list_view','list_view_div','libroom_1');
         }
     }
 
-    const load_php_data_to_form =async (menuId) =>
-    {
-        reset_form('libfloor_1','','',1);
-        var columns = 'floor_name*company_id*location_id*store_id*seq*id';
-        var fields = 'txt_floor_name*cbo_company_name*cbo_location_name*cbo_store_name*txt_floor_seq*update_id';
-        var func_name = `load_drop_down( 'load_drop_down', ${$("#cbo_company_name").val()}+'*store_under_location*store_div', 'location_under_company', 'location_div' )`;
-       var get_return_value = await populate_form_data('id',menuId,'lib_floor',columns,fields,'{{csrf_token()}}','','','');
-       if(get_return_value == 1)
-       {
-          set_button_status(1, permission, 'fnc_lib_floor',1);
-       }
+    async function load_php_data_to_form(room_id) {
+        try {
+            reset_form('libroom_1', '', '', 1);
+            const response = await fetch(`/room_details/${room_id}`);
+            if (!response.ok) throw new Error('Failed to fetch data');
+            const data = await response.json();
+            console.log(data);
+
+            // 🏃 Company -> Location
+            $('#cbo_company_name').val(data.company_id);
+            triggerChangeEvent('#cbo_company_name');  // Trigger change based on condition
+            await waitForDropdownUpdate('#cbo_location_name', data.location_id); // Wait for correct location
+
+            // 🏃 Location -> Store
+            //$('#cbo_location_name').val(data.location_id);
+            triggerChangeEvent('#cbo_location_name');
+            await waitForDropdownUpdate('#cbo_store_name', data.store_id); // Wait for correct store
+
+            // 🏃 Store -> Floor
+            //$('#cbo_store_name').val(data.store_id);
+            triggerChangeEvent('#cbo_store_name');
+            await waitForDropdownUpdate('#cbo_floor_name', data.floor_id); // Wait for correct floor
+
+            // 🏃 Floor (final)
+            //$('#cbo_floor_name').val(data.floor_id);
+            triggerChangeEvent('#cbo_floor_name');
+            document.getElementById('txt_room_no').value = data.room_no;
+            document.getElementById('update_id').value = data.id;
+
+            set_button_status(1, permission, 'fnc_lib_room', 1);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
+
+    async function waitForDropdownUpdate(selector, expectedValue, timeout = 100) {
+        return new Promise((resolve, reject) => {
+            const targetNode = $(selector)[0];  // jQuery object to DOM element
+            if (!targetNode) return reject(`Element ${selector} not found`);
+
+            const observer = new MutationObserver(() => {
+                const optionExists = [...targetNode.options].some(opt => opt.value == expectedValue);
+                console.log(`Checking ${selector} for value ${expectedValue}:`, optionExists);
+
+                if (optionExists) {
+                    // Use Select2's val method to set value and trigger appropriate event
+                    $(selector).val(expectedValue);
+                    triggerChangeEvent(selector);  // Trigger Select2 or regular change event based on condition
+                    observer.disconnect();
+                    console.log(`${selector} resolved with value: ${expectedValue}`);
+                    resolve();
+                }
+            });
+
+            // Observe for options being added
+            observer.observe(targetNode, { childList: true, subtree: true });
+
+            // Safety timeout
+            setTimeout(() => {
+                observer.disconnect();
+                const finalCheck = [...targetNode.options].some(opt => opt.value == expectedValue);
+                if (finalCheck) {
+                    $(selector).val(expectedValue);
+                    triggerChangeEvent(selector);
+                    console.log(`${selector} resolved after timeout with value: ${expectedValue}`);
+                    resolve();
+                } else {
+                    reject(`Timeout: ${selector} did not resolve to ${expectedValue}`);
+                }
+            }, timeout);
+        });
+    }
+
     setFilterGrid("list_view",-1);
    
 </script>

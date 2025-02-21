@@ -1554,3 +1554,15 @@ function load_all_setup(entry_form) {
 		mandatoryMessage: mandatoryMessage
 	};
 }
+
+
+// Function to trigger appropriate change event
+function triggerChangeEvent(selector) {
+    const element = $(selector)[0];  // Get the raw DOM element
+    // Check if element exists and has an ID starting with 'cbo' or has the 'select2' class
+    if (element && ($(element).hasClass('select2') || element.id.startsWith('cbo'))) {
+        $(selector).trigger('change.select2');  // Trigger Select2 change event
+    } else {
+        $(selector).trigger('change');  // Trigger regular change event
+    }
+}

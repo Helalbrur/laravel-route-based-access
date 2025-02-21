@@ -13,7 +13,10 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\LibBinController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\LibRackController;
+use App\Http\Controllers\LibRoomController;
 use App\Http\Controllers\LibSizeController;
 use App\Http\Controllers\LibUomController; 
 use App\Http\Controllers\ProfileController;
@@ -22,6 +25,7 @@ use App\Http\Controllers\LibBrandController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
 use App\Http\Controllers\LibFloorController;
+use App\Http\Controllers\LibShelfController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LibCountryController;
@@ -42,9 +46,9 @@ use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
+use App\Http\Controllers\LibItemSubCategoryController;
 use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\ProductDetailsMasterController;
-use App\Http\Controllers\LibItemSubCategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,10 +97,10 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/buyer', LibBuyerController::class);
 
     Route::resource('/inventory/floor', LibFloorController::class);
-    Route::resource('/inventory/room', LibFloorRoomRackMstController::class);
-    Route::resource('/inventory/rack', LibFloorRoomRackMstController::class);
-    Route::resource('/inventory/shefl', LibFloorRoomRackMstController::class);
-    Route::resource('/inventory/bin', LibFloorRoomRackMstController::class);
+    Route::resource('/inventory/room', LibRoomController::class);
+    Route::resource('/inventory/rack', LibRackController::class);
+    Route::resource('/inventory/shefl', LibShelfController::class);
+    Route::resource('/inventory/bin', LibBinController::class);
 
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/uom', LibUomController::class);
@@ -157,6 +161,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('tools/root_menu_under',[MainMenuController::class,'root_menu_under']);
     Route::get('tools/sub_root_menu_under',[MainMenuController::class,'sub_root_menu_under']);
     Route::get('tools/load_main_menu',[MainMenuController::class,'load_main_menu']);
+    //Route::get('tools/load_available_route',[MainMenuController::class,'load_available_route']);
     Route::get('tools/load_sub_menu_under_menu',[MainMenuController::class,'load_sub_menu_under_menu']);
     Route::get('tools/load_priviledge_list',[UserPrivMstController::class,'load_priviledge_list']);
     Route::get('tools/load_priv_list_view',[UserPrivMstController::class,'load_priv_list_view']);
@@ -196,6 +201,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lib_supplier_export', [LibSupplierController::class, 'export'])->name('lib_supplier_export');
 
     Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
+
+
+    Route::get('/room_details/{room_id}', [LibRoomController::class, 'load_details']);
 
 
 });

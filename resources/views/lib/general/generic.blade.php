@@ -16,7 +16,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Generic Entry';
         <center>
             <div class="card" style="width: 60%">
                 <div class="card-body" style="justify-content:center;">
-                    <h4 class="card-title">{{getMenuName(request('mid') ?? 0) ?? 'Generic Entry'}}</h4>
                     <div class="card-text" style="justify-content:center;">
                         <!-- #EBF4FA; -->
                         <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">

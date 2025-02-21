@@ -78,7 +78,7 @@
                 <div class="container-fluid">
 
                     <!-- start page title -->
-                    {{-- @yield('content_header') --}}
+                    @yield('content_header')
                     <!-- end page title -->
                     @yield('content')
 
