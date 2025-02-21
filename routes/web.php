@@ -193,7 +193,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lib_buyer_export', [LibBuyerController::class, 'export'])->name('lib_buyer_export');
 
     Route::post('/lib_supplier_import', [LibSupplierController::class, 'import'])->name('lib_supplier_import');
-    Route::get('/lib_bsupplier_export', [LibSupplierController::class, 'export'])->name('lib_bsupplier_export');
+    Route::get('/lib_supplier_export', [LibSupplierController::class, 'export'])->name('lib_supplier_export');
 
     Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
 
