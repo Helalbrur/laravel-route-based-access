@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LibSupplierExport;
 use Exception;
 use App\Models\LibSupplier;
 use Illuminate\Http\Request;
+use App\Imports\LibSupplierImport;
 use Illuminate\Support\Facades\DB;
+use App\Models\LibSupplierTagParty;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LibSupplierTagCompany;
 use App\Http\Requests\StoreLibSupplierRequest;
 use App\Http\Requests\UpdateLibSupplierRequest;
@@ -58,6 +62,18 @@ class LibSupplierController extends Controller
                 {
                     LibSupplierTagCompany::create([
                         'company_id' => $company_id,
+                        'supplier_id'   => $lib_supplier->id
+                    ]);
+                }
+            }
+
+            if(!empty($request->input('cbo_tag_party_name')))
+            {
+                $parties = explode(",",$request->input('cbo_tag_party_name'));
+                foreach($parties as $party_type)
+                {
+                    LibSupplierTagParty::create([
+                        'party_type' => $party_type,
                         'supplier_id'   => $lib_supplier->id
                     ]);
                 }
@@ -139,6 +155,21 @@ class LibSupplierController extends Controller
                     ]);
                 }
             }
+            if(!empty($request->input('cbo_tag_party_name')))
+            {
+                foreach($supplier->tagParty as $tag)
+                {
+                    $tag->delete();
+                }
+                $parties = explode(",",$request->input('cbo_tag_party_name'));
+                foreach($parties as $party_type)
+                {
+                    LibSupplierTagParty::create([
+                        'party_type' => $party_type,
+                        'supplier_id'   => $supplier->id
+                    ]);
+                }
+            }
     
             DB::commit();
             return response()->json([
@@ -167,11 +198,16 @@ class LibSupplierController extends Controller
         DB::beginTransaction();
         try
         {
-            $supplier->delete();
+            
             foreach($supplier->tagCompany() as $tag)
             {
                 $tag->delete();
             }
+            foreach($supplier->tagParty as $tag)
+            {
+                $tag->delete();
+            }
+            $supplier->delete();
             DB::commit();
             return response()->json([
                 'code'=>2,
@@ -191,4 +227,35 @@ class LibSupplierController extends Controller
             ]);
         }
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimetypes:text/plain,text/csv,application/csv,application/vnd.ms-excel',
+        ]);
+        
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if (!in_array($extension, ['csv', 'xlsx'])) {
+            return back()->withErrors(['file' => 'Invalid file format. Please upload a CSV or Excel file.']);
+        }
+
+        try {
+            Excel::import(new LibSupplierImport, $request->file('file'));
+
+            return response()->json([
+                'code' => 0,
+                'message' => 'Import successful'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 10,
+                'message' => 'Error: ' . $e->getMessage(),
+            ]);
+        }
+    }
+    public function export()
+    {
+        return Excel::download(new LibSupplierExport, 'lib_suppliers.csv');
+    }
+
 }

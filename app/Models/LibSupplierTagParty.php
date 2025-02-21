@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class LibSupplierTagParty extends Model
 {
     use HasFactory;
+    protected $fillable = ['party_type','supplier_id'];
 }

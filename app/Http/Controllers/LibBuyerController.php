@@ -157,6 +157,22 @@ class LibBuyerController extends Controller
                     ]);
                 }
             }
+
+            if(!empty($request->input('cbo_tag_party_name')))
+            {
+                foreach($buyer->tagParty as $tag)
+                {
+                    $tag->delete();
+                }
+                $parties = explode(",",$request->input('cbo_tag_party_name'));
+                foreach($parties as $party_type)
+                {
+                    LibBuyerTagParty::create([
+                        'party_type' => $party_type,
+                        'buyer_id'   => $buyer->id
+                    ]);
+                }
+            }
     
             DB::commit();
             return response()->json([
@@ -185,11 +201,17 @@ class LibBuyerController extends Controller
         DB::beginTransaction();
         try
         {
-            $buyer->delete();
+            
             foreach($buyer->tagCompany() as $tag)
             {
                 $tag->delete();
             }
+            foreach($buyer->tagParty as $tag)
+            {
+                $tag->delete();
+            }
+            $buyer->delete();
+
             DB::commit();
             return response()->json([
                 'code'=>2,

@@ -26,4 +26,9 @@ class LibBuyer extends Model
     {
         return $this->hasMany(LibBuyerTagCompany::class,'buyer_id','id');//->ddRawSql();
     }
+
+    public function tagParty()
+    {
+        return $this->hasMany(LibBuyerTagParty::class,'buyer_id','id');//->ddRawSql();
+    }
 }
