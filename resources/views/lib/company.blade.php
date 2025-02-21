@@ -4,9 +4,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 ?>
 @extends('layouts.app')
 @section('content_header')
-<div class="row mb-2">
-    <div class="col-sm-6">
-        <h1 class="m-0 align-center"><strong>{{ getMenuName(request('mid') ?? 0) ?? 'Company Profile'}}</strong></h1>
+<div class="row">
+    <div class="col-sm-12">
+        <center><h1 class="m-0 align-center"><strong>{{ getMenuName(request('mid') ?? 0) ?? 'Company Profile'}}</strong></h1></center>
     </div>
 </div>
 @endsection()

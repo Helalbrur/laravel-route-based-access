@@ -6,7 +6,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
 @extends('layouts.app')
 @section('content_header')
     <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-12 d-flex justify-content-center">
             <h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Item Creation'}}</strong></h1>
         </div>
         
