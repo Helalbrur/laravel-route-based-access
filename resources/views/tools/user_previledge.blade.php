@@ -21,11 +21,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                         <div class="row g-3 align-items-center">
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">User ID</label>
-                                <?= create_drop_down("cbo_user_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--- Select User ---', 0, ""); ?>
+                                <?= create_drop_down("cbo_user_name", "form-select", "select name,id from users order by name ASC", 'id,name', 1, '--- Select User ---', 0, "","","","","","","","","","select2","",1); ?>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Main Module Name</label>
-                                <?= create_drop_down("cbo_main_module", "form-select", "select main_module,m_mod_id from main_module where status=1 order by main_module", 'm_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();"); ?>
+                                <?= create_drop_down("cbo_main_module", "form-select", "select main_module,m_mod_id from main_module where status=1 order by main_module", 'm_mod_id,main_module', 1, '--- Select Module ---', 0, "load_drop_down( 'tools/load_priviledge_list', document.getElementById('cbo_user_name').value+'_'+this.value, 'tools/load_priviledge_list', 'load_priviledge');load_prev_list();",""); ?>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Copy To User ID</label>
@@ -188,5 +188,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         }
     }
 </script>
-<script>set_multiselect('cbo_user_name*cbo_copyuser_name','0*0','0*0','','0');</script>
+<script>
+    //set_multiselect('cbo_user_name*cbo_copyuser_name','0*0','0*0','','0');
+</script>
 @endsection
