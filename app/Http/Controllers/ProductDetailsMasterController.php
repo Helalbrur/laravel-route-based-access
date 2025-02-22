@@ -98,13 +98,13 @@ class ProductDetailsMasterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductDetailsMaster $lib_item)
+    public function update(Request $request, $id)
     {
-        //dd($request->all());
+       $item=ProductDetailsMaster::find($id);
         DB::beginTransaction();
         try
         {
-            $lib_item->update([
+            $item->update([
                 'company_id'=>$request->input('cbo_company_name'),
                 'supplier_id'=>$request->input('cbo_supplier_name'),
                 'generic_id'=>$request->input('cbo_generic_name'),
@@ -131,8 +131,8 @@ class ProductDetailsMasterController extends Controller
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
-                'data'=>$lib_item
-            ]);
+                'data'=>$item
+            ],200);
         }
         catch(Exception $e)
         {
@@ -142,7 +142,7 @@ class ProductDetailsMasterController extends Controller
                 'message'=>$error_message,
                 'data'=> [
                 ]
-            ]);
+            ],500);
         }
     }
 
