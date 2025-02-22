@@ -180,22 +180,20 @@ $permission = getPagePermission(request('mid') ?? 0);
 
             // 🏃 Company -> Location
             $('#cbo_company_name').val(data.company_id);
-            triggerChangeEvent('#cbo_company_name'); // Trigger change based on condition
-            await waitForDropdownUpdate('#cbo_location_name', data.location_id); // Wait for correct location
+            triggerChangeEvent('cbo_company_name'); // Trigger change based on condition
+            await waitForDropdownUpdate('cbo_location_name', data.location_id); // Wait for correct location
+            triggerChangeEvent('cbo_location_name');
 
-            // 🏃 Location -> Store
-            //$('#cbo_location_name').val(data.location_id);
-            triggerChangeEvent('#cbo_location_name');
-            await waitForDropdownUpdate('#cbo_store_name', data.store_id); // Wait for correct store
-
+ 
+            await waitForDropdownUpdate('cbo_store_name', data.store_id); // Wait for correct store
             // 🏃 Store -> Floor
-            //$('#cbo_store_name').val(data.store_id);
-            triggerChangeEvent('#cbo_store_name');
-            await waitForDropdownUpdate('#cbo_floor_name', data.floor_id); // Wait for correct floor
+            triggerChangeEvent('cbo_store_name');
 
+
+            await waitForDropdownUpdate('cbo_floor_name', data.floor_id); // Wait for correct floor
             // 🏃 Floor (final)
-            //$('#cbo_floor_name').val(data.floor_id);
-            triggerChangeEvent('#cbo_floor_name');
+            triggerChangeEvent('cbo_floor_name');
+
             document.getElementById('txt_room_no').value = data.room_no;
             document.getElementById('update_id').value = data.id;
 
