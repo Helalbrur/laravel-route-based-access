@@ -1558,18 +1558,18 @@ function load_all_setup(entry_form) {
 
 // Function to trigger appropriate change event
 function triggerChangeEvent(selector) {
-    const element = $(selector)[0];  // Get the raw DOM element
+    const element = $('#'+selector)[0];  // Get the raw DOM element
     // Check if element exists and has an ID starting with 'cbo' or has the 'select2' class
     if (element && ($(element).hasClass('select2') || element.id.startsWith('cbo'))) {
-        $(selector).trigger('change.select2');  // Trigger Select2 change event
+        $('#'+selector).trigger('change.select2');  // Trigger Select2 change event
     } else {
-        $(selector).trigger('change');  // Trigger regular change event
+        $('#'+selector).trigger('change');  // Trigger regular change event
     }
 }
 
-async function waitForDropdownUpdate(selector, expectedValue, timeout = 100) {
+async function waitForDropdownUpdate(selector, expectedValue, timeout = 300) {
 	return new Promise((resolve, reject) => {
-		const targetNode = $(selector)[0];  // jQuery object to DOM element
+		const targetNode = $('#'+selector)[0];  // jQuery object to DOM element
 		if (!targetNode) return reject(`Element ${selector} not found`);
 
 		const observer = new MutationObserver(() => {
@@ -1578,7 +1578,7 @@ async function waitForDropdownUpdate(selector, expectedValue, timeout = 100) {
 
 			if (optionExists) {
 				// Use Select2's val method to set value and trigger appropriate event
-				$(selector).val(expectedValue);
+				$('#'+selector).val(expectedValue);
 				triggerChangeEvent(selector);  // Trigger Select2 or regular change event based on condition
 				observer.disconnect();
 				console.log(`${selector} resolved with value: ${expectedValue}`);
@@ -1594,7 +1594,7 @@ async function waitForDropdownUpdate(selector, expectedValue, timeout = 100) {
 			observer.disconnect();
 			const finalCheck = [...targetNode.options].some(opt => opt.value == expectedValue);
 			if (finalCheck) {
-				$(selector).val(expectedValue);
+				$('#'+selector).val(expectedValue);
 				triggerChangeEvent(selector);
 				console.log(`${selector} resolved after timeout with value: ${expectedValue}`);
 				resolve();
