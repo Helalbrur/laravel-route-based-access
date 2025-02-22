@@ -1566,3 +1566,41 @@ function triggerChangeEvent(selector) {
         $(selector).trigger('change');  // Trigger regular change event
     }
 }
+
+async function waitForDropdownUpdate(selector, expectedValue, timeout = 100) {
+	return new Promise((resolve, reject) => {
+		const targetNode = $(selector)[0];  // jQuery object to DOM element
+		if (!targetNode) return reject(`Element ${selector} not found`);
+
+		const observer = new MutationObserver(() => {
+			const optionExists = [...targetNode.options].some(opt => opt.value == expectedValue);
+			console.log(`Checking ${selector} for value ${expectedValue}:`, optionExists);
+
+			if (optionExists) {
+				// Use Select2's val method to set value and trigger appropriate event
+				$(selector).val(expectedValue);
+				triggerChangeEvent(selector);  // Trigger Select2 or regular change event based on condition
+				observer.disconnect();
+				console.log(`${selector} resolved with value: ${expectedValue}`);
+				resolve();
+			}
+		});
+
+		// Observe for options being added
+		observer.observe(targetNode, { childList: true, subtree: true });
+
+		// Safety timeout
+		setTimeout(() => {
+			observer.disconnect();
+			const finalCheck = [...targetNode.options].some(opt => opt.value == expectedValue);
+			if (finalCheck) {
+				$(selector).val(expectedValue);
+				triggerChangeEvent(selector);
+				console.log(`${selector} resolved after timeout with value: ${expectedValue}`);
+				resolve();
+			} else {
+				reject(`Timeout: ${selector} did not resolve to ${expectedValue}`);
+			}
+		}, timeout);
+	});
+}

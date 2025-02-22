@@ -98,10 +98,54 @@ class LibRoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    
+    public function update(Request $request, LibFloorRoomRackMst $room_mst)
     {
-        //
-    }
+        DB::beginTransaction();
+        try {
+            $room_mst->update([
+                'floor_room_rack_name' => $request->input('txt_room_no'),
+                'company_id' => $request->input('cbo_company_name'),
+                'updated_by' => Auth::user()->id
+            ]);
+    
+            $room_dtls = $room_mst->room_details;
+            if ($room_dtls) {
+                $room_dtls->update([
+                    'company_id' => $request->input('cbo_company_name'),
+                    'location_id' => $request->input('cbo_location_name'),
+                    'store_id' => $request->input('cbo_store_name'),
+                    'floor_id' => $request->input('cbo_floor_name'),
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+    
+            DB::commit();
+    
+            return response()->json([
+                'code' => 0,
+                'message' => 'success',
+                'data' => [
+                    'id' => $room_mst->id,
+                    'company_id' => $room_mst->company_id,
+                    'location_id' => $room_dtls->location_id ?? null,
+                    'store_id' => $room_dtls->store_id ?? null,
+                    'floor_id' => $room_dtls->floor_id ?? null,
+                    'room_no' => $room_mst->floor_room_rack_name,
+                    'room_id' => $room_mst->id,
+                    'updated_by' => Auth::user()->id
+                ]
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            $error_message = "Error: " . $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine();
+            return response()->json([
+                'code' => 10,
+                'message' => $error_message,
+                'data' => []
+            ]);
+        }
+    }    
 
     /**
      * Remove the specified resource from storage.

@@ -38,7 +38,7 @@ class UserPrivMstController extends Controller
         try
         {
             $cbo_set_module_privt=str_replace("'","",$request->cbo_set_module_privt);
-            $cbo_user_name=str_replace("'","",$request->cbo_user_name);
+            $cbo_user_name=implode(",",$request->cbo_user_name);
             $cbo_main_module=str_replace("'","",$request->cbo_main_module);
             $cbo_visibility=str_replace("'","",$request->cbo_visibility);
             $cbo_delete=str_replace("'","",$request->cbo_delete);
@@ -55,9 +55,6 @@ class UserPrivMstController extends Controller
                     execute_query( "delete from user_priv_mst where main_menu_id in ( select m_menu_id from main_menu where  m_module_id=".$inf[csf("module_id")]." ) and user_id=".$inf[csf("user_id")]."");
                 }
             }  
-            //01 Set Selected Module or menu not visible as a whole
-            
-            //02 Set Selected Module or menu  visible as a whole
             else if( $cbo_set_module_privt == 1  ) 
             {
                 $nameArray1=sql_select( "SELECT m_menu_id FROM main_menu WHERE m_module_id = $cbo_main_module and status=1" );
@@ -93,9 +90,6 @@ class UserPrivMstController extends Controller
                 execute_query( "delete from user_priv_module where user_id in (".$cbo_user_name.") AND module_id = $cbo_main_module");
                 execute_query( "delete from user_priv_mst where main_menu_id in ( select m_menu_id from main_menu where  m_module_id=$cbo_main_module ) and user_id in (".$cbo_user_name.")");
             }
-            //02 Set Selected Module or menu  visible as a whole
-            
-            //03 Set Selected Module or menu  visible as a partial
             else if( $cbo_set_module_privt == 0  ) 
             {
                 $cbo_user_arr=explode(",",$cbo_user_name);
