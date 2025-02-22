@@ -19,7 +19,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-center">Menu Management</h3>
+                    
                     <div class="card-text">
                         <div class="card p-4" style="background-color:rgb(241, 241, 241)">
 
