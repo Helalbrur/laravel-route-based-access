@@ -7,7 +7,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 @extends('layouts.app')
 @section('content_header')
 <div class="row mb-2">
-    <div class="col-sm-6">
+    <div class="col-sm-12 d-flex justify-content-center align-items-center text-center">
         <h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Menu Management'}}</strong></h1>
     </div>
 </div>

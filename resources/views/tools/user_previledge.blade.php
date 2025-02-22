@@ -5,7 +5,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 @extends('layouts.app')
 @section('content_header')
     <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-12 d-flex justify-content-center align-items-center text-center">
             <h1 class="m-0 align-center">{{getMenuName(request('mid') ?? 0) ?? 'Permission Page'}}</h1>
         </div>
     </div>
@@ -16,7 +16,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <div class="col-lg-12">
             <div class="card p-4 shadow-sm" style="background-color:rgb(241, 241, 241);">
                 <div class="card-body">
-                    <h3 class="text-center mb-4" style="color: black !important;">Select User and Module</h3>
                     <form name="userpriv_1" id="userpriv_1" autocomplete="off">
                         <div class="row g-3 align-items-center">
                             <div class="col-md-3">

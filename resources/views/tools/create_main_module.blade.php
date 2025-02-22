@@ -5,7 +5,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 @extends('layouts.app')
 @section('content_header')
 <div class="row mb-2">
-    <div class="col-sm-6">
+    <div class="col-sm-12 d-flex justify-content-center align-items-center text-center">
         <h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Main Module'}}</strong></h1>
     </div>
 </div>
@@ -16,7 +16,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-center">Module Management</h3>
                     <div class="card-text">
                         <div class="card p-4" style="background-color:rgb(241, 241, 241)">
                             <form name="mainmodule_1" id="mainmodule_1" autocomplete="off">
