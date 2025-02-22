@@ -63,7 +63,7 @@ class LibBrandController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LibBrand $LibBrand)
+    public function show(LibBrand $brand)
     {
         //
     }
@@ -71,7 +71,7 @@ class LibBrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LibBrand $LibBrand)
+    public function edit(LibBrand $brand)
     {
         //
     }
@@ -99,6 +99,7 @@ class LibBrandController extends Controller
         }
         catch(Exception $e)
         {
+            DB::rollBack();
             $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
             return response()->json([
                 'code'=>10,
@@ -112,12 +113,12 @@ class LibBrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibBrand $LibBrand)
+    public function destroy(LibBrand $brand)
     {
         DB::beginTransaction();
         try
         {
-            $LibBrand->delete();
+            $brand->delete();
 
             DB::commit();
             return response()->json([
