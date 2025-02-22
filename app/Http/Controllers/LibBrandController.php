@@ -38,7 +38,7 @@ class LibBrandController extends Controller
         DB::beginTransaction();
         try {
             $lib_brand = LibBrand::create([
-                'brand_name' => $request->input('txt_brand_name'),
+                'name' => $request->input('txt_brand_name'),
                 'buyer_id' => $request->input('cbo_buyer_id'),
                 'created_by' => Auth::user()->id
             ]);
@@ -79,13 +79,13 @@ class LibBrandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibBrand $LibBrand)
+    public function update(Request $request, LibBrand $brand)
     {
         DB::beginTransaction();
         try
         {
-            $LibBrand->update([
-                'brand_name'=>$request->input('txt_brand_name'),
+            $brand->update([
+                'name'=>$request->input('txt_brand_name'),
                 'buyer_id'=>$request->input('cbo_buyer_id'),
                 'updated_by'=>Auth::user()->id
             ]);
@@ -94,7 +94,7 @@ class LibBrandController extends Controller
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
-                'data'=>$LibBrand
+                'data'=>$brand
             ]);
         }
         catch(Exception $e)

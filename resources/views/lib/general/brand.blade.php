@@ -75,14 +75,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
                                     $brands = DB::table('lib_brand as a')
                                         ->leftJoin('lib_buyer as b', 'a.buyer_id', 'b.id')
                                         ->whereNull('a.deleted_at')
-                                        ->select('a.id', 'a.brand_name', 'b.buyer_name')
+                                        ->select('a.id', 'a.name', 'b.buyer_name')
+                                        //->ddRawSql();
                                         ->get();
                                     ?>
 
                                     @foreach($brands as $brand)
                                     <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$brand->id}}')" style="cursor:pointer">
                                         <td>{{$sl++}}</td>
-                                        <td>{{$brand->brand_name}}</td>
+                                        <td>{{$brand->name}}</td>
                                         <td>{{$brand->buyer_name}}</td>
                                     </tr>
                                     @endforeach
@@ -130,7 +131,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
 
     const load_php_data_to_form = async (menuId) => {
         reset_form('libBrand_1', '', '', 1);
-        var columns = 'id*brand_name*buyer_id';
+        var columns = 'id*name*buyer_id';
         var fields = 'update_id*txt_brand_name*cbo_buyer_id';
         var get_return_value = await populate_form_data('id', menuId, 'lib_brand', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {

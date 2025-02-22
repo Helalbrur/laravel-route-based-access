@@ -11,6 +11,6 @@ class LibBrand extends Model
     use SoftDeletes;
     protected $table = 'lib_brand';
     protected $fillable = [
-       'brand_name', 'buyer_id','created_by','updated_by'
+       'name', 'buyer_id','created_by','updated_by'
     ];
 }

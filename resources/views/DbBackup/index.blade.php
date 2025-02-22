@@ -4,7 +4,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 @extends('layouts.app')
 @section('content_header')
 <div class="row mb-2">
-    <div class="col-sm-6">
+    <div class="col-sm-12 justify-content-center d-flex align-items-center text-center">
         <h1 class="m-0 align-center"><strong>Manual Database Backup</strong></h1>
     </div>
 
@@ -16,7 +16,6 @@ $permission = getPagePermission(request('mid') ?? 0);
         <div class="col-lg-6"> <!-- Keeps card width controlled -->
             <div class="card mx-auto"> <!-- Center the card horizontally -->
                 <div class="card-body text-center"> <!-- Center content inside the card -->
-                    <h3>Manual Database Backup</h3>
                     <div class="card-text">
                         <div class="card p-4" style="background-color: rgb(241, 241, 241);">
                             <form name="db_backup" id="db_backup" autocomplete="off" class="text-center">

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('lib_brand', function (Blueprint $table) {
             $table->id();
-            $table->string('brand_name');
+            $table->string('name');
             $table->unsignedBigInteger('buyer_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
