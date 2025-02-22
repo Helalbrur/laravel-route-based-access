@@ -5,7 +5,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
 @extends('layouts.app')
 @section('content_header')
 <div class="row mb-2">
-    <div class="col-sm-6">
+    <div class="col-sm-12 d-flex justify-content-center align-items-center text-center">
         <h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'User Management'}}</strong></h1>
     </div>
 </div>
@@ -16,7 +16,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-center">User Management</h3>
+                    
                     <h5 class="card-title d-flex justify-content-between align-items-center">
                         <a href="{{ url('/user_import') }}" class="btn btn-info">Download Format</a>
                         <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
