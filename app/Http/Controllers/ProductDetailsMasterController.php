@@ -149,8 +149,30 @@ class ProductDetailsMasterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductDetailsMaster $productDetailsMaster)
+    public function destroy($id)
     {
-        //
+        $item=ProductDetailsMaster::find($id);
+        DB::beginTransaction();
+        try
+        {
+            $item->delete();
+            DB::commit();
+            return response()->json([
+                'code'=>2,
+                'message'=>'success',
+                'data'=>[]
+            ]);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            return response()->json([
+                'code'=>10,
+                'message'=>$error_message,
+                'data'=> [
+                ]
+            ]);
+        }
     }
 }
