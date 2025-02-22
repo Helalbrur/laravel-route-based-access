@@ -18,4 +18,9 @@ class LibFloorRoomRackDtls extends Model
         return $this->belongsTo(LibFloorRoomRackMst::class, 'room_id', 'id');
     }
 
+    public function rack()
+    {
+        return $this->belongsTo(LibFloorRoomRackMst::class, 'rack_id', 'id');
+    }
+
 }

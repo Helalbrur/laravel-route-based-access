@@ -17,5 +17,9 @@ class LibFloorRoomRackMst extends Model
     {
         return $this->hasOne(LibFloorRoomRackDtls::class, 'room_id', 'id');
     }
+    public function rack_details()
+    {
+        return $this->hasOne(LibFloorRoomRackDtls::class, 'rack_id', 'id');
+    }
 
 }

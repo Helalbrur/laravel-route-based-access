@@ -146,7 +146,7 @@ $permission = getPagePermission(request('mid') ?? 0);
     function fnc_lib_room(operation) 
     {
         if (form_validation('cbo_floor_name*cbo_company_name*cbo_location_name*cbo_store_name*txt_room_no', 'Floor Name*Company Name*Location*Store Name*Room Name') == false) {
-            // return;
+            return;
         } else {
             var formData = get_form_data('cbo_floor_name,cbo_company_name,cbo_location_name,cbo_store_name,txt_room_no,update_id');
             var method = "POST";

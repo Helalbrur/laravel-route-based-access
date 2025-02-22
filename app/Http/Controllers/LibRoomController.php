@@ -64,7 +64,7 @@ class LibRoomController extends Controller
                     'room_id'=>$lib_room->id,
                     'created_by'=>Auth::user()->id
                 ]
-            ]);
+            ],200);
         }
         catch(Exception $e)
         {
@@ -75,7 +75,7 @@ class LibRoomController extends Controller
                 'message'=>$error_message,
                 'data'=> [
                 ]
-            ]);
+            ],500);
         }
     }
 
@@ -99,17 +99,18 @@ class LibRoomController extends Controller
      * Update the specified resource in storage.
      */
     
-    public function update(Request $request, LibFloorRoomRackMst $room_mst)
+    public function update(Request $request, LibFloorRoomRackMst $room)
     {
+        
         DB::beginTransaction();
         try {
-            $room_mst->update([
+            $room->update([
                 'floor_room_rack_name' => $request->input('txt_room_no'),
                 'company_id' => $request->input('cbo_company_name'),
                 'updated_by' => Auth::user()->id
             ]);
     
-            $room_dtls = $room_mst->room_details;
+            $room_dtls = $room->room_details;
             if ($room_dtls) {
                 $room_dtls->update([
                     'company_id' => $request->input('cbo_company_name'),
@@ -123,19 +124,19 @@ class LibRoomController extends Controller
             DB::commit();
     
             return response()->json([
-                'code' => 0,
+                'code' => 1,
                 'message' => 'success',
                 'data' => [
-                    'id' => $room_mst->id,
-                    'company_id' => $room_mst->company_id,
+                    'id' => $room->id,
+                    'company_id' => $room->company_id,
                     'location_id' => $room_dtls->location_id ?? null,
                     'store_id' => $room_dtls->store_id ?? null,
                     'floor_id' => $room_dtls->floor_id ?? null,
-                    'room_no' => $room_mst->floor_room_rack_name,
-                    'room_id' => $room_mst->id,
+                    'room_no' => $room->floor_room_rack_name,
+                    'room_id' => $room->id,
                     'updated_by' => Auth::user()->id
                 ]
-            ]);
+            ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             $error_message = "Error: " . $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine();
@@ -143,7 +144,7 @@ class LibRoomController extends Controller
                 'code' => 10,
                 'message' => $error_message,
                 'data' => []
-            ]);
+            ], 500);
         }
     }    
 
@@ -159,7 +160,7 @@ class LibRoomController extends Controller
     {
         $room = LibFloorRoomRackMst::with(['room_details'])
         ->where('id', $id)
-        ->whereNull('deleted_at') // Handles soft delete
+        // ->whereNull('deleted_at') // Handles soft delete
         ->first();
 
         if (!$room) {
