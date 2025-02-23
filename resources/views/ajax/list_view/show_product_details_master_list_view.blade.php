@@ -14,20 +14,26 @@
     <tbody id="list_view">
         <?php
             $sl = 1;
-            $lib_items = App\Models\ProductDetailsMaster::get();
+            $lib_items = DB::table('product_details_master as a')
+                    ->leftJoin('lib_generic as b','a.generic_id','=','b.id')
+                    ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
+                    ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
+                    ->leftJoin('lib_color as e','a.color_id','=','e.id')
+                    ->select('a.id','a.item_description','a.item_code','a.conversion_fac','b.generic_name','c.category_name','d.name','e.color_name')
+                    ->get();
         
         ?>
         @foreach($lib_items as $lib_item)
-        <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$lib_item->id}}')" style="cursor:pointer">
-            <td>{{$sl++}}</td>
-            <td>{{$lib_item->generic_id}}</td>
-            <td>{{$lib_item->item_description}}</td>
-            <td>{{$lib_item->item_code}}</td>
-            <td>{{$lib_item->item_category_id}}</td>
-            <td>{{$lib_item->brand_id}}</td>
-            <td>{{$lib_item->color_id}}</td>
-            <td>{{$lib_item->conversion_fac}}</td>
-        </tr>
+            <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$lib_item->id}}')" style="cursor:pointer">
+                <td>{{$sl++}}</td>
+                <td>{{$lib_item->generic_name}}</td>
+                <td>{{$lib_item->item_description}}</td>
+                <td>{{$lib_item->item_code}}</td>
+                <td>{{$lib_item->category_name}}</td>
+                <td>{{$lib_item->name}}</td>
+                <td>{{$lib_item->color_name}}</td>
+                <td>{{$lib_item->conversion_fac}}</td>
+            </tr>
         @endforeach
     </tbody>
 </table>
