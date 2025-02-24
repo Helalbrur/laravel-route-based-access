@@ -47,7 +47,6 @@ use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
-use App\Http\Controllers\LibFloorRoomRackMstController;
 use App\Http\Controllers\ProductDetailsMasterController;
 /*
 |--------------------------------------------------------------------------
@@ -204,6 +203,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/room_details/{room_id}', [LibRoomController::class, 'load_details']);
+    Route::get('/rack_details/{rack_id}', [LibRackController::class, 'load_details']);
 
 
 });
