@@ -18,13 +18,13 @@ $permission = getPagePermission(request('mid') ?? 0);
                 <div class="card-body">
                     <div class="card-text">
                         <div class="card pt-4 px-4" style="background-color: rgb(241, 241, 241);">
-                            <form name="librack_1" id="librack_1" autocomplete="off">
+                            <form name="libRack_1" id="libRack_1" autocomplete="off">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group row d-flex justify-content-center">
-                                            <label for="txt_rack_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Rack Name</label>
+                                            <label for="txt_rack_no" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Rack No</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="txt_rack_name" name="txt_rack_name">
+                                                <input type="text" class="form-control" id="txt_rack_no" name="txt_rack_no">
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
@@ -76,13 +76,13 @@ $permission = getPagePermission(request('mid') ?? 0);
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
-                                            <label for="cbo_room_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Room Name</label>
+                                            <label for="cbo_room_no" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Room No</label>
                                             <div class="col-sm-8 d-flex align-items-center" id="room_div">
                                                 <?php 
                                                     use App\Models\LibFloorRoomRackMst; 
                                                     $rooms = LibFloorRoomRackMst::whereHas('room_details')->get(); 
                                                 ?>
-                                                <select name="cbo_room_name" id="cbo_room_name" class="form-control">
+                                                <select name="cbo_room_no" id="cbo_room_no" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     @foreach($rooms as $room)
                                                         <option value="{{$room->id}}">{{$room->floor_room_rack_name}}</option>
@@ -97,7 +97,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <input type="hidden" value="" name="update_id" id="update_id">
                                     </div>
                                     <div class="col-sm-8">
-                                        <?php echo load_submit_buttons($permission, "fnc_lib_floor", 0, 0, "reset_form('librack_1','','',1,'')"); ?>
+                                        <?php echo load_submit_buttons($permission, "fnc_lib_rack", 0, 0, "reset_form('libRack_1','','',1,'')"); ?>
                                     </div>
                                 </div>
                             </form>
@@ -120,26 +120,28 @@ $permission = getPagePermission(request('mid') ?? 0);
                                     use Illuminate\Support\Facades\DB;
 
                                     $sl = 1;
+                                    
                                     $racks = DB::table('lib_floor_room_rack_mst as a')
                                         ->join('lib_floor_room_rack_dtls as b', 'a.id', 'b.rack_id')
                                         ->leftJoin('lib_location as c', 'b.location_id', 'c.id')
                                         ->leftJoin('lib_store_location as d', 'b.store_id', 'd.id')
                                         ->leftJoin('lib_company as e', 'a.company_id', 'e.id')
                                         ->leftJoin('lib_floor as f', 'b.floor_id', 'f.id')
+                                        ->leftJoin('lib_floor_room_rack_mst as room', 'b.room_id', 'room.id')
+                                        ->leftJoin('lib_floor_room_rack_mst as rack', 'b.rack_id', 'rack.id')
                                         ->select(
                                             'a.id',
                                             'd.store_name',
                                             'e.company_name',
                                             'c.location_name',
                                             'f.floor_name',
-                                            DB::raw('(SELECT floor_room_rack_name FROM lib_floor_room_rack_mst WHERE id = b.room_id) as room_no'),
-                                            DB::raw('(SELECT floor_room_rack_name FROM lib_floor_room_rack_mst WHERE id = b.rack_id) as rack_no')
+                                            'room.floor_room_rack_name as room_no',
+                                            'rack.floor_room_rack_name as rack_no'
                                         )
                                         ->whereNull('a.deleted_at')
                                         ->whereNull('b.deleted_at')
                                         ->get();
-
-                                        dd($query->toSql());
+                                    
                                     ?>
                                     @foreach($racks as $rack)
                                     <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$rack->id}}')" style="cursor:pointer">
@@ -153,7 +155,6 @@ $permission = getPagePermission(request('mid') ?? 0);
                                     </tr>
                                     @endforeach
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -167,15 +168,15 @@ $permission = getPagePermission(request('mid') ?? 0);
 @section('script')
 <script>
      var permission ='{{$permission}}';
-    function fnc_lib_floor( operation )
+    function fnc_lib_rack( operation )
     {
-        if (form_validation('txt_rack_name*cbo_company_name*cbo_location_name*cbo_store_name*cbo_floor_name*cbo_room_name','Rack Name* Company Name*Location*Store Name*Floor Name*Room Name')==false)
+        if (form_validation('txt_rack_no*cbo_company_name*cbo_location_name*cbo_store_name*cbo_floor_name*cbo_room_no','Rack No*Company Name*Location*Store Name*Floor Name*Room No')==false)
         {
             return;
         }
         else
         {
-            var formData = get_form_data('txt_rack_name,cbo_company_name,cbo_location_name,cbo_store_name,cbo_floor_name,cbo_room_name,update_id');
+            var formData = get_form_data('txt_rack_no,cbo_company_name,cbo_location_name,cbo_store_name,cbo_floor_name,cbo_room_no,update_id');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -195,23 +196,43 @@ $permission = getPagePermission(request('mid') ?? 0);
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_rack_list_view','list_view_div','librack_1');
+            save_update_delete(operation,url,requestData,'id','show_rack_list_view','list_view_div','libRack_1');
         }
     }
 
-    const load_php_data_to_form =async (menuId) =>
-    {
-        reset_form('librack_1','','',1);
-        var columns = 'floor_name*company_id*location_id*store_id*seq*id';
-        var fields = 'txt_floor_name*cbo_company_name*cbo_location_name*cbo_store_name*txt_floor_seq*update_id';
-        var func_name = `load_drop_down( 'load_drop_down', ${$("#cbo_company_name").val()}+'*store_under_location*store_div', 'location_under_company', 'location_div' )`;
-       var get_return_value = await populate_form_data('id',menuId,'lib_floor',columns,fields,'{{csrf_token()}}','','','');
-       if(get_return_value == 1)
-       {
-          set_button_status(1, permission, 'fnc_lib_floor',1);
-       }
+    async function load_php_data_to_form(rack_id) {
+        try {
+            reset_form('libRack_1', '', '', 1);
+            const response = await fetch(`/rack_details/${rack_id}`);
+            if (!response.ok) throw new Error('Failed to fetch data');
+            const data = await response.json();
+            console.log(data);
+
+            // 🏃 Company -> Location
+            $('#cbo_company_name').val(data.company_id);
+            triggerChangeEvent('cbo_company_name'); // Trigger change based on condition
+
+            await waitForDropdownUpdate('cbo_location_name', data.location_id); // Wait for correct location
+            triggerChangeEvent('cbo_location_name');
+
+            await waitForDropdownUpdate('cbo_store_name', data.store_id); // Wait for correct store
+            triggerChangeEvent('cbo_store_name');
+
+            await waitForDropdownUpdate('cbo_floor_name', data.floor_id); // Wait for correct floor
+            triggerChangeEvent('cbo_floor_name');
+
+            await waitForDropdownUpdate('cbo_room_no', data.room_id); // Wait for correct room
+            triggerChangeEvent('cbo_room_no');
+
+            document.getElementById('txt_rack_no').value = data.rack_no;
+            document.getElementById('update_id').value = data.id;
+
+            set_button_status(1, permission, 'fnc_lib_rack', 1);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
-    setFilterGrid("list_view",-1);
-   
+
+    setFilterGrid("list_view", -1);
 </script>
 @endsection

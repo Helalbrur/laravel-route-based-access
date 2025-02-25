@@ -98,7 +98,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/inventory/floor', LibFloorController::class);
     Route::resource('/inventory/room', LibRoomController::class);
     Route::resource('/inventory/rack', LibRackController::class);
-    Route::resource('/inventory/shefl', LibShelfController::class);
+    Route::resource('/inventory/shelf', LibShelfController::class);
     Route::resource('/inventory/bin', LibBinController::class);
 
     Route::resource('/general/color', LibColorController::class);
@@ -204,7 +204,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/room_details/{room_id}', [LibRoomController::class, 'load_details']);
     Route::get('/rack_details/{rack_id}', [LibRackController::class, 'load_details']);
-
+    Route::get('/shelf_details/{shelf_id}', [LibShelfController::class, 'load_details']);
+    Route::get('/bin_details/{bin_id}', [LibBinController::class, 'load_details']);
 
 });
 

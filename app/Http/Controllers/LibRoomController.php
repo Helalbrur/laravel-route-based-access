@@ -40,7 +40,7 @@ class LibRoomController extends Controller
                 'created_by' => Auth::user()->id
             ]);
 
-            $lib_room_dtls = LibFloorRoomRackDtls::create([
+            $room_dtls = LibFloorRoomRackDtls::create([
                 'company_id' => $request->input('cbo_company_name'),
                 'location_id' => $request->input('cbo_location_name'),
                 'store_id' => $request->input('cbo_store_name'),
@@ -56,9 +56,9 @@ class LibRoomController extends Controller
                 'data' => [
                     'id' => $lib_room->id,
                     'company_id' => $lib_room->company_id,
-                    'location_id' => $lib_room_dtls->location_id,
-                    'store_id' => $lib_room_dtls->store_id,
-                    'floor_id' => $lib_room_dtls->floor_id,
+                    'location_id' => $room_dtls->location_id,
+                    'store_id' => $room_dtls->store_id,
+                    'floor_id' => $room_dtls->floor_id,
                     'room_no' => $lib_room->floor_room_rack_name,
                     'room_id' => $lib_room->id,
                     'created_by' => Auth::user()->id
@@ -161,8 +161,8 @@ class LibRoomController extends Controller
             DB::commit();
 
             return response()->json([
-                'code' => 0,
-                'message' => 'Room deleted successfully',
+                'code' => 2,
+                'message' => 'success',
                 'data' => []
             ], 200);
         } catch (Exception $e) {
