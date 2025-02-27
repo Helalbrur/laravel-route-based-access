@@ -37,8 +37,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Sub Category';
                                     <div class="col-sm-3">
                                         <input type="text" name="txt_item_sub_category_name" id="txt_item_sub_category_name" class="form-control"  />
                                     </div>
-                                    </div>
                                 </div>
+                                
                                 <div class="from-group row" style="margin-top: 20px;">
                                     <div class="col-sm-12">
                                         <input type="hidden" value="" name="update_id" id="update_id"/>
@@ -120,13 +120,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Sub Category';
             };
 
             save_update_delete(operation,url,requestData,'id','show_sub_category_list_view','list_view_div','itemsubcategoryentry_1'); 
+            
         }
     }
 
     const load_php_data_to_form =async (menuId) =>
     {
         
-       // reset_form('itemsubcategoryentry_1','','',1);
+        reset_form('itemsubcategoryentry_1','','',1);
         var columns = 'item_category_id*sub_category_name*id';
         var fields = 'cbo_category_id*txt_item_sub_category_name*update_id';
         var get_return_value = await populate_form_data('id',menuId,'lib_item_sub_category',columns,fields,'{{csrf_token()}}');
