@@ -26,7 +26,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Sub Category';
                                         <?php
                                             $categories = App\Models\LibCategory::get();
                                         ?>
-                                        <select name="cbo_category_id" id="cbo_category_id" onchange="load_drop_down( 'load_drop_down', this.value, 'item_group_under_category', 'item_category_div' )"  class="form-control">
+                                        <select name="cbo_category_id" id="cbo_category_id" class="form-control">
                                             <option value="0">SELECT</option>
                                             @foreach($categories as $category)
                                                 <option value="{{$category->id}}" {{$category->id==1 ? 'selected' : ''}}>{{$category->category_name}}</option>

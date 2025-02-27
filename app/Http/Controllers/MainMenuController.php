@@ -215,7 +215,7 @@ class MainMenuController extends Controller
             
             $arr=array (1=>$m_module_id,3=>$main_menu_arr,4=>$main_menu_arr,5=>get_item_category());
             //print_r( get_item_category());
-            echo  create_list_view ( "list_view", "ID,Module Name,Menu Name,Root Menu,Sub Root Menu,Fabric Nature,Position,Seq.", "60,100,150,100,100,75,50,50","720","300",1, $sql, "load_php_data_to_form", "m_menu_id","", 1, "0,m_module_id,0,root_menu,sub_root_menu,fabric_nature,0,0", $arr , "m_menu_id,m_module_id,menu_name,root_menu,sub_root_menu,fabric_nature,position,slno", "tools/create_menu/get_data_by_id", 'setFilterGrid("list_view",-1);',"0,0,0,0,1,0,1,1" ) ;
+            echo  create_list_view ( "list_view", "ID,Module Name,Menu Name,Root Menu,Sub Root Menu,Nature,Position,Seq.", "60,100,150,100,100,75,50,50","720","300",1, $sql, "load_php_data_to_form", "m_menu_id","", 1, "0,m_module_id,0,root_menu,sub_root_menu,fabric_nature,0,0", $arr , "m_menu_id,m_module_id,menu_name,root_menu,sub_root_menu,fabric_nature,position,slno", "tools/create_menu/get_data_by_id", 'setFilterGrid("list_view",-1);',"7,0,0,0,1,0,7,7" ) ;
         }
         exit();
     }
