@@ -944,7 +944,11 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 					// select elements need to have their 'selectedIndex' property set to -1
 					// (this works for both single and multiple select elements)
 					else if (type == 'select-one')
-					  this.selectedIndex = 0;
+					{
+						$(this).val('').trigger('change'); // Reset Select2
+						this.selectedIndex = 0;
+					}
+					 
 					else if (type == 'hidden')
 					  this.value = "";
 				}
