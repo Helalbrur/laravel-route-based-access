@@ -442,7 +442,7 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
     $table_id0 = "";
     if(count($table_id)>0) $table_id0 = $table_id[0];
 
-    $table = '<div><table width="' . $tbl_width . '" cellpadding="0" cellspacing="0" border="' . $tbl_border . '" class="rpt_table" id="rpt_table' .$table_id0. '" rules="all"><thead><tr>';
+    $table = '<div><table width="' . $tbl_width . '" cellpadding="0" cellspacing="0" border="' . $tbl_border . '" class="table table-striped table-bordered" id="rpt_table' . $table_id0 . '" rules="all" style="margin-bottom: 0; background-color:#f1f1f1;"><thead><tr>';
 
     if ($show_sl == 1) {
         $table .= '<th width="50">SL No</th>';
@@ -581,15 +581,20 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
                     $align = "align='right'";
                     $show_data = number_format($result[csf($qry_field_list[$i])], '5');
                 }
+                else if ($fld_type_arr[$i] == 7)
+                {
+                    $align = "align='center'";
+                    $show_data = ($result[csf($qry_field_list[$i])]);
+                }
                 else
                 {
-                    $align = "align='left'";
+                    $align = "align='center'";
                     $show_data = ($result[csf($qry_field_list[$i])]);
                 }
             }
             else
             {
-                $align = "align='left'";
+                $align = "align='center'";
                 $show_data = ($result[csf($qry_field_list[$i])]);
             }
 
