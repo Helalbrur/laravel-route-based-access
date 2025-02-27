@@ -1318,14 +1318,61 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	})
 	.catch(error => {
 		if (error.status === 422) {
-			// Extract validation errors
-			let validationErrors = Object.values(error.data.errors).flat().join('<br>'); 
-			showNotification(validationErrors, 'error'); // Show all validation errors
+			let validationErrors = error.data.errors;
+			let firstField = null;
+			let errorMessages = [];
+	
+			// Remove previous error messages and validation styles
+			document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+			document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+	
+			Object.keys(validationErrors).forEach((field, index) => {
+				// Find input field that contains the error field name (partial match)
+				let inputField = Array.from(document.querySelectorAll('input, select, textarea')).find(el => 
+					el.id.includes(field) || el.name.includes(field)
+				);
+			
+				if (inputField) {
+					inputField.classList.add('is-invalid');
+			
+					// Create an error message div
+					let errorDiv = document.createElement('div');
+					errorDiv.className = 'invalid-feedback row d-flex justify-content-center';
+					errorDiv.innerHTML = validationErrors[field].join('<br>');
+			
+					// Find the parent form-group
+					let formGroup = inputField.closest('.form-group');
+			
+					// If the error message doesn't already exist, append it
+					if (formGroup && !formGroup.querySelector('.invalid-feedback')) {
+						formGroup.appendChild(errorDiv);
+					}
+
+					errorDiv.style.display = 'block';
+			
+					if (index === 0) {
+						firstField = inputField; // Store first invalid field
+					}
+				}
+			
+				errorMessages.push(validationErrors[field].join('<br>'));
+			});
+			
+	
+			// Focus on the first invalid field
+			if (firstField) {
+				firstField.focus();
+			}
+	
+			showNotification(errorMessages.join('<br>'), 'error');
 		} else {
 			showNotification(error, 'error');
 		}
 		release_freezing();
 	});
+	
+	
+	
 }
 
 function show_files(sys_no,page_name,file_type='',show_list_view_name='',show_list_view_div_id='')
