@@ -1262,7 +1262,9 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	fetch(url,request_data)
 	.then(response => {
 		if (!response.ok) {
-			throw new Error('Network response was not ok');
+			return response.json().then(errorData => {
+				throw { status: response.status, data: errorData };
+			});
 		}
 		return response.json();
 	})
@@ -1315,7 +1317,13 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		release_freezing();
 	})
 	.catch(error => {
-		showNotification(error,'error');
+		if (error.status === 422) {
+			// Extract validation errors
+			let validationErrors = Object.values(error.data.errors).flat().join('<br>'); 
+			showNotification(validationErrors, 'error'); // Show all validation errors
+		} else {
+			showNotification(error, 'error');
+		}
 		release_freezing();
 	});
 }
