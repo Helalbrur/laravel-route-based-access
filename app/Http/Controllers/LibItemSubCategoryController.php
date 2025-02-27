@@ -78,12 +78,13 @@ class LibItemSubCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibItemSubCategory $sub_category)
+    public function update(Request $request, $id)
     {
+        $subCategory=LibItemSubCategory::find($id);
         DB::beginTransaction();
         try
         {
-            $sub_category->update([
+            $subCategory->update([
                 'item_category_id'=>$request->input('cbo_category_id'),
                 'sub_category_name'=>$request->input('txt_item_sub_category_name'),
                 'updated_by'=>Auth::user()->id
@@ -93,7 +94,7 @@ class LibItemSubCategoryController extends Controller
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
-                'data'=>$sub_category
+                'data'=>$subCategory
             ]);
         }
         catch(Exception $e)
@@ -112,13 +113,13 @@ class LibItemSubCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibItemSubCategory $sub_category)
+    public function destroy($id)
     {
-        dd($sub_category);
+        $subCategory=LibItemSubCategory::find($id);
         DB::beginTransaction();
         try
         {
-            $sub_category->delete();
+            $subCategory->delete();
             DB::commit();
             return response()->json([
                 'code'=>2,

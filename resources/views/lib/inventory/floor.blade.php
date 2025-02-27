@@ -28,7 +28,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_company_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-8 d-flex align-items-center">
                                                 <select name="cbo_company_name" id="cbo_company_name" onchange="load_drop_down('load_drop_down', this.value+'*store_under_location*store_div', 'location_under_company', 'location_div')" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
@@ -42,7 +42,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_location_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Location</label>
-                                            <div class="col-sm-8" id="location_div">
+                                            <div class="col-sm-8 d-flex align-items-center" id="location_div">
                                                 <select name="cbo_location_name" id="cbo_location_name" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
@@ -56,7 +56,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_store_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Store Name</label>
-                                            <div class="col-sm-8" id="store_div">
+                                            <div class="col-sm-8 d-flex align-items-center" id="store_div">
                                                 <?php $stores = App\Models\LibStoreLocation::get(); ?>
                                                 <select name="cbo_store_name" id="cbo_store_name" class="form-control">
                                                     <option value="0">SELECT</option>

@@ -23,4 +23,13 @@ class LibFloorRoomRackDtls extends Model
         return $this->belongsTo(LibFloorRoomRackMst::class, 'rack_id', 'id');
     }
 
+    public function shelf()
+    {
+        return $this->belongsTo(LibFloorRoomRackMst::class, 'shelf_id', 'id');
+    }
+
+    public function bin()
+    {
+        return $this->belongsTo(LibFloorRoomRackMst::class, 'bin_id', 'id');
+    }
 }

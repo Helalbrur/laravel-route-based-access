@@ -77,7 +77,12 @@
             <div class="page-content">
                 <div class="container-fluid">
                     
-                    <div id="messagebox_main" class="row col-md-8 msgbox d-flex justify-content-center text-center" style="color: red; font-weight: bold; font-size: 15px;"></div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div id="messagebox_main" class="row col-md-6 text-center">
+                            <!-- Content goes here -->
+                        </div>
+                    </div>
+                    
                     <!-- start page title -->
                     @yield('content_header')
                     <!-- end page title -->
