@@ -2,9 +2,8 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8" />
-    <title>Laravel Stater {{ !empty($title) ?  '-' : '' }} {{ @$title }}</title>
+    <title>{{ @$title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -23,7 +22,6 @@
 
     {{-- filtergrid style --}}
     <link rel="stylesheet" href="{{asset('css/filtergrid.css')}}">
-
     <link href="{{asset('sweetalert2/sweetalert2.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{asset('modal_window/modal_window.css')}}">
     <script src="{{asset('sweetalert2/sweetalert2.all.js')}}" type="text/javascript"></script>
@@ -39,9 +37,8 @@
         'mandatory_message' => session('laravel_stater.mandatory_message', []),
         ]) !!};
         //console.log(sessionData);
-        </script>
-
-        @yield('script_before')
+    </script>
+    @yield('script_before')
 </head>
 
 <body data-sidebar="dark">
@@ -62,12 +59,9 @@
 
         @include('layouts.navbar')
 
-
         <!-- ========== Left Sidebar Start ========== -->
         @include('layouts.left')
         <!-- Left Sidebar End -->
-
-
 
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -76,13 +70,13 @@
 
             <div class="page-content">
                 <div class="container-fluid">
-                    
+
                     <div class="d-flex justify-content-center align-items-center">
                         <div id="messagebox_main" class="row col-md-6 text-center">
                             <!-- Content goes here -->
                         </div>
                     </div>
-                    
+
                     <!-- start page title -->
                     @yield('content_header')
                     <!-- end page title -->
@@ -96,14 +90,14 @@
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row g-0"> <!-- Added g-0 to remove gap -->
-                        
+
                         <div class="col-sm-12 text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> © 
+                            </script> ©
                             <span class="d-inline-block text-start">Designed & Developed by Sait</span>
                         </div>
-                        
+
                     </div>
                 </div>
             </footer>
@@ -175,8 +169,6 @@
     <script src="{{asset('js/select2.min.js')}}"></script>
 
     <script>
-        
-
         // $(document).ready(function() {
         //     $('.select2').select2();
         // });
@@ -192,7 +184,6 @@
         // $(document).on('DOMNodeInserted', function() {
         //     $('.select2, select[id^="cbo_"]').select2();
         // });
-
     </script>
     <!-- REQUIRED SCRIPTS -->
     @yield('script')
