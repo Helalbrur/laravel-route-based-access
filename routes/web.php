@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\LibBinController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LibRackController;
 use App\Http\Controllers\LibRoomController;
@@ -201,6 +202,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lib_supplier_export', [LibSupplierController::class, 'export'])->name('lib_supplier_export');
 
     Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
+    Route::get('/html_content_export', [ReportController::class,'generateExcelFromHtmlContent']);
 
 
     Route::get('/room_details/{room_id}', [LibRoomController::class, 'load_details']);
