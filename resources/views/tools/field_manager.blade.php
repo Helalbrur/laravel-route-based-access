@@ -20,7 +20,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                     <div class="card-text">
                         <div class="card pt-4 px-4" style="background-color: rgb(241, 241, 241);">
                             <form name="mandatoryfield_1" id="mandatoryfield_1" autocomplete="off" style="padding: 10px;">
-                                
                                 <div class="form-group row">
                                     <label for="cbo_entry_form_name" class="col-sm-2 col-form-label must_entry_caption">User</label>
                                     <div class="col-sm-4">
@@ -35,7 +34,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                                     </div>
                                 </div>
                                 <div class="row mt-10">
-                                    <table width="70%" class="table table-bordered table-stripped" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center">
+                                    <table width="70%" class="table table-bordered table-striped" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center">
                                         <thead>
                                             <th width="40%">Field Name</th>
                                             <th width="40%">Is Hidden</th>
@@ -59,7 +58,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                                             <tr>
                                                 <td colspan="3" align="center" style="padding-top:10px;" class="button_container">
                                                     <?php 
-                                                        echo load_submit_buttons( $permission, "fnc_field_manager()", 0,0 ,"reset_form('mandatoryfield_1','','','','','')",1);
+                                                    echo load_submit_buttons( $permission, "fnc_field_manager()", 0, 0,"reset_form('mandatoryfield_1','','','','','')",1);
                                                     ?>
                                                     <input type="hidden" id="txt_update_data_dtls" readonly disabled>
                                                 </td>

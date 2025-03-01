@@ -3,16 +3,15 @@
 <div >
     <input type="hidden" id="entry_form_id" >
     <input type="hidden" id="entry_form_name" >
-    <table class="table table-striped table-bordered rpt_table bg-info" style="width:450px;margin-bottom:0px;padding-bottom:0px;">
+    <table class="table table-striped table-bordered bg-secondary" style="width:450px;margin-bottom:0px;padding-bottom:0px;">
         <tbody>
             <tr>
-                <th width="10%">Sl</th>
-                <th>Entry form</th>
-
+                <th width="10%"><strong>Sl</strong></th>
+                <th><strong>Entry Form</strong></th>
             </tr>
         </tbody>
     </table>
-        <div style="max-height: 350px;overflow-y: scroll;width:468px">
+        <div style="max-height: 290px;overflow-y: scroll;width:468px">
             <table class="table table-striped table-bordered" style="width:450px">
                 <tbody  id="list_view">
                     <?php
