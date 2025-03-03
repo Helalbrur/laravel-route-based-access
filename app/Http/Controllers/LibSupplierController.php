@@ -52,6 +52,7 @@ class LibSupplierController extends Controller
                 'web_site'=>$request->input('txt_website_name'),
                 'email'=>$request->input('txt_email'),
                 'address'=>$request->input('txt_supplier_address'),
+                'other_company_id'=>$request->input('cbo_supplier_company'),
                 'created_by'=>Auth::user()->id
             ]);
             
@@ -136,6 +137,7 @@ class LibSupplierController extends Controller
                 'web_site'=>$request->input('txt_website_name'),
                 'email'=>$request->input('txt_email'),
                 'address'=>$request->input('txt_supplier_address'),
+                'other_company_id'=>$request->input('cbo_supplier_company'),
                 'updated_by'=>Auth::user()->id
             ]);
 

@@ -3,11 +3,12 @@
         <tr>
             <th width="3%">Sl</th>
             <th width="12%">Supplier Name</th>
-            <th width="15%">Company Name</th>
+            <th width="12%">Company Name</th>
             <th width="10%">Country Name</th>
-            <th width="12%">Email</th>
-            <th width="13%">Website</th>
-            <th width="13%">Contact No</th>
+            <th width="10%">Email</th>
+            <th width="10%">Website</th>
+            <th width="10%">Contact No</th>
+            <th width="10%">Supplier Company</th>
             <th >Address</th>
         </tr>
     </thead>
@@ -33,6 +34,7 @@
                 <td>{{$supplier->email}}</td>
                 <td>{{$supplier->website}}</td>
                 <td>{{$supplier->contact_no}}</td>
+                <td>{{$supplier->other_company->name ?? ''}}</td>
                 <td>{{$supplier->address}}</td>
             </tr>
         @endforeach

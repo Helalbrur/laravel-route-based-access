@@ -12,7 +12,7 @@ class LibSupplier extends Model
     use SoftDeletes;
     protected $table = 'lib_supplier';
     protected $fillable = [
-        'supplier_name','short_name','country_id','party_type','tag_company','contact_person','contact_no','web_site','email','address'
+        'supplier_name','short_name','country_id','party_type','tag_company','contact_person','contact_no','web_site','email','address','other_company_id'
     ];
 
     public function company()
@@ -23,6 +23,10 @@ class LibSupplier extends Model
     public function country()
     {
         return $this->belongsTo(LibCountry::class);
+    }
+    public function other_company()
+    {
+        return $this->belongsTo(OtherCompany::class);
     }
     public function tagCompany()
     {

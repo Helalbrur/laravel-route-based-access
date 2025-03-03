@@ -104,6 +104,20 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="cbo_supplier_company" class="col-sm-2 col-form-label">Supplier Name</label>
+                            <div class="col-sm-4">
+                                <select name="cbo_supplier_company" id="cbo_supplier_company" class="form-control">
+                                    <option value="0">SELECT</option>
+                                    <?php
+                                        $other_company = App\Models\OtherCompany::pluck('name', 'id');
+                                    ?>
+                                    @foreach($other_company as $id => $company_name)
+                                        <option value="{{ $id }}">{{ $company_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                        
                         <div class="from-group row">
                             <div class="col-sm-2">
@@ -125,11 +139,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             <tr>
                                 <th width="3%">Sl</th>
                                 <th width="12%">Supplier Name</th>
-                                <th width="15%">Company Name</th>
+                                <th width="12%">Company Name</th>
                                 <th width="10%">Country Name</th>
-                                <th width="12%">Email</th>
-                                <th width="13%">Website</th>
-                                <th width="13%">Contact No</th>
+                                <th width="10%">Email</th>
+                                <th width="10%">Website</th>
+                                <th width="10%">Contact No</th>
+                                <th width="10%">Supplier Company</th>
                                 <th >Address</th>
                             </tr>
                         </thead>
@@ -155,6 +170,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                     <td>{{$supplier->email}}</td>
                                     <td>{{$supplier->website}}</td>
                                     <td>{{$supplier->contact_no}}</td>
+                                    <td>{{$supplier->other_company->name ?? ''}}</td>
                                     <td>{{$supplier->address}}</td>
                                 </tr>
                             @endforeach
@@ -202,7 +218,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                     return;
                 }
             }
-            var formData = get_form_data('txt_supplier_name,txt_short_name,cbo_country_name,txt_email,txt_website_name,txt_contact_no,txt_contact_person,txt_supplier_address,cbo_tag_company_name,cbo_tag_party_name,update_id');
+            var formData = get_form_data('txt_supplier_name,txt_short_name,cbo_country_name,txt_email,txt_website_name,txt_contact_no,txt_contact_person,txt_supplier_address,cbo_tag_company_name,cbo_tag_party_name,update_id,cbo_supplier_company');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -229,8 +245,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     const load_php_data_to_form =async (menuId) =>
     {
         
-        var columns = 'supplier_name*short_name*country_id*tag_company*party_type*contact_person*contact_no*web_site*email*address*id';
-        var fields = 'txt_supplier_name*txt_short_name*cbo_country_name*cbo_tag_company_name*cbo_tag_party_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_supplier_address*update_id';
+        var columns = 'supplier_name*short_name*country_id*tag_company*party_type*contact_person*contact_no*web_site*email*address*id*other_company_id';
+        var fields = 'txt_supplier_name*txt_short_name*cbo_country_name*cbo_tag_company_name*cbo_tag_party_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_supplier_address*update_id*cbo_supplier_company';
         var others = '';
        var get_return_value = await populate_form_data('id',menuId,'lib_supplier',columns,fields,'{{csrf_token()}}','','');
        if(get_return_value == 1)
