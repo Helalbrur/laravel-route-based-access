@@ -23,7 +23,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Other Company';
                                    
                                     <div class="form-group">
                                         <div class="row d-flex justify-content-center">
-                                            <label for="txt_company_name" class="col-sm-2 col-form-label fw-bold text-start must_entry_caption">Name</label>
+                                            <label for="txt_name" class="col-sm-2 col-form-label fw-bold text-start must_entry_caption">Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <input type="text" id="txt_name" class="form-control" name="txt_name">
                                             </div>
@@ -31,7 +31,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Other Company';
                                     </div>
                                     <div class="form-group">
                                         <div class="row d-flex justify-content-center">
-                                            <label for="txt_company_short_name" class="col-sm-2 col-form-label fw-bold text-start must_entry_caption">Company Short Name</label>
+                                            <label for="txt_short_name" class="col-sm-2 col-form-label fw-bold text-start">Company Short Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <input type="text" id="txt_short_name" class="form-control" name="txt_short_name">
                                             </div>
@@ -92,7 +92,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Other Company';
     var permission = '{{$permission}}';
 
     function fnc_company_name(operation) {
-        if (form_validation('txt_name*txt_short_name', 'Company Name*Company Short Name') == false) {
+        if (form_validation('txt_name', 'Name') == false) {
             return;
         } else {
             var formData = get_form_data('txt_name,txt_short_name,update_id');
