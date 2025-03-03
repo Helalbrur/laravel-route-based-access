@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -37,7 +38,8 @@ class UserController extends Controller
         $request['password'] = $request->txt_password;
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required','string','email','max:255',Rule::unique(User::class)->whereNull('deleted_at')],
             'password' => ['required', Password::defaults()],
         ]);
         DB::beginTransaction();
@@ -88,7 +90,8 @@ class UserController extends Controller
         $request['email'] = $request->txt_email;
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id]
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id]
+            'email' => ['required','string','email','max:255',Rule::unique(User::class)->ignore($user->id)->whereNull('deleted_at')],
         ]);
         DB::beginTransaction();
         try
