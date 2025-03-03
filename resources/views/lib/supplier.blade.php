@@ -105,7 +105,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="cbo_supplier_company" class="col-sm-2 col-form-label">Supplier Name</label>
+                            <label for="cbo_supplier_company" class="col-sm-2 col-form-label">Supplier Company</label>
                             <div class="col-sm-4">
                                 <select name="cbo_supplier_company" id="cbo_supplier_company" class="form-control">
                                     <option value="0">SELECT</option>
