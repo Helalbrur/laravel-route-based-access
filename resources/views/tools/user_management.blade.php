@@ -19,7 +19,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
                     
                     <h5 class="card-title d-flex justify-content-between align-items-center">
                         <a href="{{ url('/user_import') }}" class="btn btn-info">Download Format</a>
-                        <a href="{{ url('/html_content_export') }}" class="btn btn-info">Download Excel</a>
+                        <!-- <a href="{{ url('/html_content_export') }}" class="btn btn-info">Download Excel</a> -->
                         <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
                             @csrf
                             <input type="file" name="file" required class="form-control me-2">
