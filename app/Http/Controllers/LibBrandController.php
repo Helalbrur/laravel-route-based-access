@@ -38,8 +38,8 @@ class LibBrandController extends Controller
         DB::beginTransaction();
         try {
             $lib_brand = LibBrand::create([
-                'name' => $request->input('txt_brand_name'),
-                'buyer_id' => $request->input('cbo_buyer_id'),
+                'brand_name' => $request->input('txt_brand_name'),
+                'buyer_id' => $request->input('cbo_buyer_id') ?? null,
                 'created_by' => Auth::user()->id
             ]);
 
@@ -85,8 +85,8 @@ class LibBrandController extends Controller
         try
         {
             $brand->update([
-                'name'=>$request->input('txt_brand_name'),
-                'buyer_id'=>$request->input('cbo_buyer_id'),
+                'brand_name'=>$request->input('txt_brand_name'),
+                'buyer_id' => $request->input('cbo_buyer_id') ?? null,
                 'updated_by'=>Auth::user()->id
             ]);
     

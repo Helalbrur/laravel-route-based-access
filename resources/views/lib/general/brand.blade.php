@@ -21,7 +21,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
             <div class="card">
                 <div class="card-body">
                     <div class="card-text">
-                        <div class="card p-4" style="background-color: rgb(241, 241, 241);">
+                        <div class="card pt-4 px-4" style="background-color: rgb(241, 241, 241);">
                             <form name="libBrand_1" id="libBrand_1" autocomplete="off">
                                 <div class="row">
                                     <div class="form-group">
@@ -34,7 +34,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
                                     </div>
                                     
                                     <div class="form-group">
-                                        <div class="row d-flex justify-content-center mt-4">
+                                        <div class="row d-flex justify-content-center">
                                             <label for="cbo_buyer_id" class="col-sm-2 col-form-label fw-bold text-start must_entry_caption">Buyer Name</label>
                                             <div class="col-sm-8 d-flex align-items-center">
                                                 <select name="cbo_buyer_id" id="cbo_buyer_id" class="form-control">
@@ -66,16 +66,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
                                     <tr>
                                         <th width="10%">Sl</th>
                                         <th width="45%">Brand Name</th>
-                                        <th>Buyer Name</th>
                                     </tr>
                                 </thead>
                                 <tbody id="list_view">
                                     <?php
+                                    use Illuminate\Support\Facades\DB;
                                     $sl = 1;
                                     $brands = DB::table('lib_brand as a')
                                         ->leftJoin('lib_buyer as b', 'a.buyer_id', 'b.id')
                                         ->whereNull('a.deleted_at')
-                                        ->select('a.id', 'a.name', 'b.buyer_name')
+                                        ->select('a.id', 'a.brand_name', 'b.buyer_name')
                                         //->ddRawSql();
                                         ->get();
                                     ?>
@@ -83,8 +83,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
                                     @foreach($brands as $brand)
                                     <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$brand->id}}')" style="cursor:pointer">
                                         <td>{{$sl++}}</td>
-                                        <td>{{$brand->name}}</td>
-                                        <td>{{$brand->buyer_name}}</td>
+                                        <td>{{$brand->brand_name}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -131,7 +130,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
 
     const load_php_data_to_form = async (menuId) => {
         reset_form('libBrand_1', '', '', 1);
-        var columns = 'id*name*buyer_id';
+        var columns = 'id*brand_name*buyer_id';
         var fields = 'update_id*txt_brand_name*cbo_buyer_id';
         var get_return_value = await populate_form_data('id', menuId, 'lib_brand', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {
@@ -139,5 +138,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
         }
     }
     setFilterGrid("list_view", -1);
+
+    field_manager(12);
 </script>
 @endsection
