@@ -32,7 +32,7 @@ class OtherCompanyController extends Controller
     {
         // Validate name requirement and store name and short_name in database
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255'
+            'txt_name' => 'required|string|max:255'
         ]);
 
         
@@ -87,6 +87,9 @@ class OtherCompanyController extends Controller
      */
     public function update(Request $request, OtherCompany $company)
     {
+        $validatedData = $request->validate([
+            'txt_name' => 'required|string|max:255'
+        ]);
         DB::beginTransaction();
         try
         {
