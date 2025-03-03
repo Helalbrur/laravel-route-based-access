@@ -5,28 +5,26 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 ?>
 @extends('layouts.app')
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-12">
-            <center><h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Field Manager'}}</strong></h1></center>
-        </div>
-    </div><!-- /.row -->
+<div class="row mb-2">
+    <div class="col-sm-12 d-flex justify-content-center">
+        <h1 class="m-0 text-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Field Manager'}}</strong></h1>
+    </div>
+</div>
 @endsection()
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <center>
-            <div class="card" style="justify-content:center;width: 80%;">
-                <div class="card-body" style="justify-content:center;">
-                    <div class="card-text" style="justify-content:center;">
-                        <!-- #EBF4FA; -->
-                        <div class="card" style="background-color: #F5FFFA;justify-content:center;text-align:center">
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-text">
+                        <div class="card pt-4 px-4" style="background-color: rgb(241, 241, 241);">
                             <form name="mandatoryfield_1" id="mandatoryfield_1" autocomplete="off" style="padding: 10px;">
-                                
                                 <div class="form-group row">
                                     <label for="cbo_entry_form_name" class="col-sm-2 col-form-label must_entry_caption">User</label>
                                     <div class="col-sm-4">
                                        
-                                       <?php echo create_drop_down("cbo_user_id",200,get_all_user(),"",1,"----Select----",0,"","","","","","","",""); ?>
+                                       <?php echo create_drop_down("cbo_user_id",220,get_all_user(),"",1,"-- Select --",0,"","","","","","","",""); ?>
                                        
                                     </div>
                                     <label for="cbo_entry_form_name" class="col-sm-2 col-form-label must_entry_caption">Entry Form</label>
@@ -34,27 +32,25 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                                        <input type="text" class="form-control" id="cbo_entry_form_name" name="cbo_entry_form_name" placeholder="Browse" ondblclick="loadEntryForm()" readonly>
                                        <input type="hidden" name="cbo_entry_form" id="cbo_entry_form">
                                     </div>
-
-                                    
                                 </div>
                                 <div class="row mt-10">
-                                    <table width="70%" class="table table-bordered table-stripped rpt_table" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center">
+                                    <table width="70%" class="table table-bordered table-striped" cellpadding="0" cellspacing="0" border="1" rules="all" id="tbl_dtls" align="center">
                                         <thead>
                                             <th width="40%">Field Name</th>
-                                            <th width="40%">Is Hide</th>
+                                            <th width="40%">Is Hidden</th>
                                             <th></th>
                                         </thead>
                                         <tbody id="dtls_body">
                                             <tr>
                                                 <td align="center" id="field_td">
-                                                    <?php echo create_drop_down("cboFieldId_1",200,blank_array(),"",1,"----Select----",0,"","","","","","","","","cbo_field_id[]"); ?>
+                                                    <?php echo create_drop_down("cboFieldId_1",200,blank_array(),"",1,"-- Select --",0,"","","","","","","","","cbo_field_id[]"); ?>
                                                 </td>
                                                 <td align="center">
                                                     <?php echo create_drop_down("cboIsHide_1",150,yes_no(),"",1,"-- Select --",0,"","","","","","","","","cbo_permission_id[]"); ?> 
                                                 </td>
                                                 <td align="center" id="increment_1">
-                                                    <input style="width:30px;" type="button" id="incrementfactor_1" name="incrementfactor_1"  class="formbutton" value="+" onClick="add_break_down_tr(1)"/>
-                                                    <input style="width:30px;" type="button" id="decrementfactor_1" name="decrementfactor_1"  class="formbutton" value="-" onClick="javascript:fn_deletebreak_down_tr(1)"/>&nbsp;
+                                                    <input type="button" id="incrementfactor_1" name="incrementfactor_1"  class="btn btn-success" value="+" onclick="add_break_down_tr(1)"/>
+                                                    <input type="button" id="decrementfactor_1" name="decrementfactor_1"  class="btn btn-danger" value="-" onclick="fn_deletebreak_down_tr(1)"/>&nbsp;
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -62,8 +58,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                                             <tr>
                                                 <td colspan="3" align="center" style="padding-top:10px;" class="button_container">
                                                     <?php 
-                                                        echo load_submit_buttons( $permission, "fnc_field_manager()", 0,0 ,"reset_form('mandatoryfield_1','','','','','')",1); 
-
+                                                    echo load_submit_buttons( $permission, "fnc_field_manager()", 0, 0,"reset_form('mandatoryfield_1','','','','','')",1);
                                                     ?>
                                                     <input type="hidden" id="txt_update_data_dtls" readonly disabled>
                                                 </td>
@@ -76,10 +71,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                     </div>
                 </div>
             </div>
-        </center>
+        </div>
     </div>
 </div>
-
 @endsection
 
 @section('script')
@@ -261,8 +255,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 		}).end().appendTo("#tbl_dtls");
 
 		  
-		  $('#incrementfactor_'+i).removeAttr("onClick").attr("onClick","add_break_down_tr("+i+");");
-		  $('#decrementfactor_'+i).removeAttr("onClick").attr("onClick","fn_deletebreak_down_tr("+i+");");
+		  $('#incrementfactor_'+i).removeAttr("onclick").attr("onclick","add_break_down_tr("+i+");");
+		  $('#decrementfactor_'+i).removeAttr("onclick").attr("onclick","fn_deletebreak_down_tr("+i+");");
 		  
 	}
 
@@ -280,8 +274,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
 					  'value': function(_, value) { return value }              
 					}); 
 					
-				$('#incrementfactor_'+i).removeAttr("onClick").attr("onClick","add_break_down_tr("+i+");");
-				$('#decrementfactor_'+i).removeAttr("onClick").attr("onClick","fn_deletebreak_down_tr("+i+")");
+				$('#incrementfactor_'+i).removeAttr("onclick").attr("onclick","add_break_down_tr("+i+");");
+				$('#decrementfactor_'+i).removeAttr("onclick").attr("onclick","fn_deletebreak_down_tr("+i+")");
 				})
 
 			}

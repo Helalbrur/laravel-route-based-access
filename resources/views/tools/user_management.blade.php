@@ -16,7 +16,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    
                     <h5 class="card-title d-flex justify-content-between align-items-center">
                         <a href="{{ url('/user_import') }}" class="btn btn-info">Download Format</a>
                         <!-- <a href="{{ url('/html_content_export') }}" class="btn btn-info">Download Excel</a> -->
@@ -27,7 +26,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
                         </form>
                     </h5>
                     <div class="card-text">
-                        <div class="card p-4" style="background-color:rgb(241, 241, 241)">
+                        <div class="card pt-4 px-4" style="background-color:rgb(241, 241, 241)">
                             <form name="usermanagement_1" id="usermanagement_1" autocomplete="off">
                                 <div class="row">
                                     <div class="form-group">
