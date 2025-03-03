@@ -95,12 +95,12 @@
                 <div class="container-fluid">
                     <div class="row g-0"> <!-- Added g-0 to remove gap -->
 
-                        <div class="col-sm-12 text-center">
+                        <!-- <div class="col-sm-12 text-center">
                             <script>
                                 document.write(new Date().getFullYear())
                             </script> ©
                             <span class="d-inline-block text-start">Designed & Developed by Sait</span>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
