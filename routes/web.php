@@ -5,6 +5,7 @@ use App\Models\LibBrand;
 use App\Models\ImageUpload;
 use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
+use App\Models\OtherCompany;
 use App\Models\LibItemSubGroup;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfController;
@@ -42,6 +43,7 @@ use App\Http\Controllers\LibSupplierController;
 use App\Http\Controllers\UserPrivMstController;
 use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibItemGroupController;
+use App\Http\Controllers\OtherCompanyController;
 use App\Http\Controllers\ReportSettingController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
@@ -49,6 +51,7 @@ use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
 use App\Http\Controllers\ProductDetailsMasterController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -90,6 +93,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 
     //permision route = > only admin user can access
     Route::resource('/company', CompanyController::class);
+    Route::resource('/other_company', OtherCompanyController::class);
     Route::resource('/group', GroupController::class);
     Route::resource('/location', LibLocationController::class);
     Route::resource('/employee', LibEmployeeController::class);
