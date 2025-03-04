@@ -482,7 +482,7 @@ function create_list_view($table_id, $tbl_header_arr, $td_width_arr, $tbl_width,
     foreach ($nameArray as $result) {
         $j++;
         if ($j % 2 == 0) {
-            $bgcolor = "#E9F3FF";
+            $bgcolor = "#f0f0f0";
         } else {
             $bgcolor = "#FFFFFF";
         }
