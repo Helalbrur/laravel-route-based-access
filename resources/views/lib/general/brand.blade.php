@@ -139,6 +139,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Brand Entry';
     }
     setFilterGrid("list_view", -1);
 
-    field_manager(12);
+    field_manager(11);
 </script>
 @endsection
