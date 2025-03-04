@@ -1,135 +1,117 @@
+<?php
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+?>
 <header id="page-topbar">
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-            <?php 
+                <?php
 
-            $company_logo = "";
-            $company = \App\Models\Company::first();
-            if(!empty($company)) {
-                $images = App\Models\ImageUpload::where('sys_no',$company->id)
-                ->where('page_name','company_profile')
-                ->where('file_type',1)->first();
-                //dd($images);
-                if(!empty($images)) {
-                    $company_logo = $images->file_name;
-                    //dd($company_logo);
+                $company_logo = "";
+                $company = \App\Models\Company::first();
+                if (!empty($company)) {
+                    $images = App\Models\ImageUpload::where('sys_no', $company->id)
+                        ->where('page_name', 'company_profile')
+                        ->where('file_type', 1)->first();
+                    //dd($images);
+                    if (!empty($images)) {
+                        $company_logo = $images->file_name;
+                        //dd($company_logo);
+                    }
                 }
-            }
 
-             if(!empty($company_logo))
-             {  
+                if (!empty($company_logo)) 
+                {
+                    ?>
+                    <a href="{{URL::to('/')}}" class="logo logo-dark">
+                        <span class="logo-sm">
+                            <img src="{{asset($company_logo)}}" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{asset($company_logo)}}" alt="" height="22">
+                        </span>
+                    </a>
+                    <a href="{{URL::to('/')}}" class="logo logo-light">
+                        <span class="logo-sm">
+                            <img src="{{asset($company_logo)}}" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{asset($company_logo)}}" alt="" height="22">
+                        </span>
+                    </a>
+                    <?php
+                } 
+                else 
+                {
+                    ?>
+                    <a href="{{URL::to('/')}}" class="logo logo-dark">
+                        <span class="logo-sm">
+                            <img src="skote/assets/images/logo.svg" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="skote/assets/images/logo-dark.png" alt="" height="17">
+                        </span>
+                    </a>
+
+                    <a href="{{URL::to('/')}}" class="logo logo-light">
+                        <span class="logo-sm">
+                            <img src="skote/assets/images/logo-light.svg" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="skote/assets/images/logo-light.png" alt="" height="19">
+                        </span>
+                    </a>
+                    <?php
+                }
                 ?>
-                <a href="{{URL::to('/')}}" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="{{asset($company_logo)}}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{asset($company_logo)}}" alt="" height="22">
-                    </span>
-                </a>
-                <a href="{{URL::to('/')}}" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="{{asset($company_logo)}}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{asset($company_logo)}}" alt="" height="22">
-                    </span>
-                </a>
-                <?php
-
-             }
-             else
-             {
-                ?>
-                <a href="{{URL::to('/')}}" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="skote/assets/images/logo.svg" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="skote/assets/images/logo-dark.png" alt="" height="17">
-                    </span>
-                </a>
-
-                <a href="{{URL::to('/')}}" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="skote/assets/images/logo-light.svg" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="skote/assets/images/logo-light.png" alt="" height="19">
-                    </span>
-                </a>
-                <?php
-
-             }
-
-            ?>
-
-                
             </div>
 
             <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
                 <i class="fa fa-fw fa-bars"></i>
             </button>
 
-            <!-- App Search-->
-            <!--  <form class="app-search d-none d-lg-block">
-                <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="bx bx-search-alt"></span>
-                </div>
-            </form> -->
+            <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
 
-            
-        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+                <div class="collapse navbar-collapse active" id="topnav-menu-content">
+                    <ul class="navbar-nav active">
 
-            <div class="collapse navbar-collapse active" id="topnav-menu-content">
-                <ul class="navbar-nav active">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{URL::to('/')}}" id="topnav-dashboard" role="button">
+                                <span key="t-dashboards">Dashboard</span>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{URL::to('/')}}" id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Dashboards</span> 
-                        </a>
-                    </li>
-
-                    <?php
-                    if (Auth::check())
-                    {
+                        <?php
+                        if (Auth::check()) {
                             //DB::enableQueryLog();
                             $modules = DB::table('main_module as a')
-                            ->join('user_priv_module as b', 'a.m_mod_id', '=', 'b.module_id')
-                            ->select('a.m_mod_id', 'a.main_module')
-                            ->where('b.user_id', Auth::user()->id)
-                            ->where('b.valid', 1)
-                            ->where('a.status', 1)
-                            ->orderBy('a.mod_slno','ASC')
-                            ->get();
+                                ->join('user_priv_module as b', 'a.m_mod_id', '=', 'b.module_id')
+                                ->select('a.m_mod_id', 'a.main_module')
+                                ->where('b.user_id', Auth::user()->id)
+                                ->where('b.valid', 1)
+                                ->where('a.status', 1)
+                                ->orderBy('a.mod_slno', 'ASC')
+                                ->get();
                             //dd(DB::getQueryLog());
-                            foreach ($modules as $module)
-                            {
+                            foreach ($modules as $module) {
                                 ?>
                                 <li class="nav-item d-none d-sm-inline-block">
                                     <a href="{{route('dashboard', ['module_id' => $module->m_mod_id])}}" class="nav-link">{{$module->main_module}}</a>
                                 </li>
                                 <?php
                             }
-                    }
-                    ?>
-                    @if (Auth::check())
-                        
-                        
-                        
-                    @endif
-                    
-
-                </ul>
-            </div>
+                        }
+                        ?>
+                        @if (Auth::check())
+                        @endif
+                    </ul>
+                </div>
             </nav>
-
         </div>
 
-        <div class="d-flex">                       
+        <div class="d-flex">
 
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
@@ -139,9 +121,9 @@
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada"></i>
-                    <span class="badge bg-danger rounded-pill">3</span>
+                    <!-- <span class="badge bg-danger rounded-pill">3</span> -->
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                     aria-labelledby="page-header-notifications-dropdown">
@@ -218,7 +200,7 @@
                     </div>
                     <div class="p-2 border-top d-grid">
                         <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                            <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">View More..</span> 
+                            <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">View More..</span>
                         </a>
                     </div>
                 </div>
@@ -226,7 +208,7 @@
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img class="rounded-circle header-profile-user" src="{{URL::asset('skote/assets/images/users/avatar-1.jpg') }}"
                         alt="Header Avatar">
                     <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ Auth::user()->name }}</span>
@@ -243,11 +225,11 @@
                         @csrf
 
                         <a href="route('logout')" class="dropdown-item dropdown-footer"
-                                onclick="event.preventDefault();
+                            onclick="event.preventDefault();
                                             this.closest('form').submit();"><i class="bx bx-log-out font-size-16 align-middle me-1"></i>
                             {{ __('Log Out') }}
-                        </a>                                 
-                        
+                        </a>
+
                     </form>
                 </div>
             </div>
