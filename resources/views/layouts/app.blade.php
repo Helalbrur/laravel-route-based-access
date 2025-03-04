@@ -34,7 +34,7 @@
     {{-- custom style --}}
     <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-    <<script>
+    <script>
         var sessionData = {!! json_encode([
         'data_arr' => session('laravel_stater.data_arr', []),
         'mandatory_field' => session('laravel_stater.mandatory_field', []),
@@ -61,10 +61,13 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-        @include('layouts.navbar')
+        <!-- Auth check -->
+        @if (Auth::check()) 
+            @include('layouts.navbar')
 
-        <!-- ========== Left Sidebar Start ========== -->
-        @include('layouts.left')
+            <!-- ========== Left Sidebar Start ========== -->
+            @include('layouts.left')
+        @endif
         <!-- Left Sidebar End -->
 
         <!-- ============================================================== -->
@@ -82,7 +85,9 @@
                     </div>
 
                     <!-- start page title -->
-                    @yield('content_header')
+                    @if(Auth::check())
+                        @yield('content_header')
+                    @endif
                     <!-- end page title -->
                     @yield('content')
 

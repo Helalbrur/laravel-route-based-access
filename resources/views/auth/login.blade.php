@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    /* body{background-image: linear-gradient(to bottom, #ff0000, #ff8100);} */
+    body{
+        background-image: url('skote/assets/images/login_bg.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    </style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
