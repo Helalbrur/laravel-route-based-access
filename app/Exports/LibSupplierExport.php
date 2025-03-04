@@ -11,7 +11,7 @@ class LibSupplierExport implements FromCollection, WithHeadings, WithMapping
 {
     public function collection()
     {
-        return LibSupplier::with(['country', 'tagCompanies', 'tagParties'])->get();
+        return LibSupplier::with(['country', 'tagCompany', 'tagParty'])->get();
     }
 
     public function headings(): array
@@ -36,8 +36,8 @@ class LibSupplierExport implements FromCollection, WithHeadings, WithMapping
             $supplier->supplier_name,
             $supplier->short_name,
             $supplier->country->country_name ?? '',
-            $supplier->tagCompanies->pluck('company_name')->implode(', '),
-            $supplier->tagParties->pluck('party_type')->implode(', '),
+            $supplier->tagCompany->pluck('company_name')->implode(', '),
+            $supplier->tagParty->pluck('party_type')->implode(', '),
             $supplier->contact_person,
             $supplier->contact_no,
             $supplier->web_site,
