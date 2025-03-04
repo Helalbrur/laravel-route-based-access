@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Permission;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -63,5 +64,10 @@ class User extends Authenticatable
     public function fieldManagers()
     {
         return $this->hasMany(FieldManager::class, 'user_id');
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

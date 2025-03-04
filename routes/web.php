@@ -7,6 +7,7 @@ use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\OtherCompany;
 use App\Models\LibItemSubGroup;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Storage;
@@ -66,6 +67,10 @@ use App\Http\Controllers\ProductDetailsMasterController;
 Route::get('/', function () {
     return redirect('/login');
 });
+
+Auth::routes([
+    'register' => false
+]);
 
 Route::get('/dashboard',[DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -218,3 +223,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 require __DIR__.'/auth.php';
+
+// Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

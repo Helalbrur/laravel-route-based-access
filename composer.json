@@ -10,6 +10,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/tinker": "^2.8",
+        "laravel/ui": "^4.6",
         "maatwebsite/excel": "^3.1.62",
         "mpdf/mpdf": "^8.2",
         "yoeunes/toastr": "^2.3"

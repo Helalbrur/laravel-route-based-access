@@ -7,7 +7,7 @@
     <div id="sidebar-menu">
         <!-- Left Menu Start -->
         <ul class="metismenu list-unstyled" id="side-menu">
-
+        @if (Auth::check())
         <?php
                 //$routes = getPermissionBasedAllRoutes();
                 $m_id = Session::get('module_id');
@@ -135,7 +135,7 @@
                 }
 
              ?>
-
+            @endif
         </ul>
     </div>
     <!-- Sidebar -->
