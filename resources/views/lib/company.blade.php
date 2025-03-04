@@ -156,6 +156,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 <script>
     var permission = '{{$permission}}';
 
+    var setup_data = load_all_setup(2); // Pass the entry_form dynamically
+    console.log(setup_data);
+
     function fnc_company_name(operation) {
         if (form_validation('cbo_group_name*txt_company_name*txt_company_short_name', 'Group Name*Company Name*Company Short Name') == false) {
             return;
