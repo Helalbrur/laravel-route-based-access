@@ -19,7 +19,7 @@
                     ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
                     ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
                     ->leftJoin('lib_color as e','a.color_id','=','e.id')
-                    ->select('a.id','a.item_description','a.item_code','a.conversion_fac','b.generic_name','c.category_name','d.name','e.color_name')
+                    ->select('a.id','a.item_description','a.item_code','a.conversion_fac','b.generic_name','c.category_name','d.brand_name','e.color_name')
                     ->get();
         
         ?>
@@ -30,7 +30,7 @@
                 <td>{{$lib_item->item_description}}</td>
                 <td>{{$lib_item->item_code}}</td>
                 <td>{{$lib_item->category_name}}</td>
-                <td>{{$lib_item->name}}</td>
+                <td>{{$lib_item->brand_name}}</td>
                 <td>{{$lib_item->color_name}}</td>
                 <td>{{$lib_item->conversion_fac}}</td>
             </tr>
