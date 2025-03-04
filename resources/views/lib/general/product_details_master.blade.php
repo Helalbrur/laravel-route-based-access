@@ -110,10 +110,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     <select name="cbo_brand_name" id="cbo_brand_name" onchange="load_company_config(this.value)" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
-                                            $lib_brand = App\Models\LibBrand::pluck('name', 'id');
+                                            $lib_brand = App\Models\LibBrand::pluck('brand_name', 'id');
                                         ?>
-                                        @foreach($lib_brand as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
+                                        @foreach($lib_brand as $id => $brand_name)
+                                            <option value="{{ $id }}">{{ $brand_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -238,7 +238,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                                 ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
                                                 ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
                                                 ->leftJoin('lib_color as e','a.color_id','=','e.id')
-                                                ->select('a.id','a.item_description','a.item_code','a.conversion_fac','b.generic_name','c.category_name','d.name','e.color_name')
+                                                ->select('a.id','a.item_description','a.item_code','a.conversion_fac','b.generic_name','c.category_name','d.brand_name','e.color_name')
                                                 ->get();
                                 ?>
                                 @foreach($lib_items as $lib_item)
@@ -248,7 +248,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     <td>{{$lib_item->item_description}}</td>
                                     <td>{{$lib_item->item_code}}</td>
                                     <td>{{$lib_item->category_name}}</td>
-                                    <td>{{$lib_item->name}}</td>
+                                    <td>{{$lib_item->brand_name}}</td>
                                     <td>{{$lib_item->color_name}}</td>
                                     <td>{{$lib_item->conversion_fac}}</td>
                                 </tr>
