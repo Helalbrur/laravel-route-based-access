@@ -72,7 +72,7 @@
                         <li>
                             <a id="lid<?php echo $r_sql[csf('M_MENU_ID')]; ?>"
                                href="<?php echo trim($r_sql[csf('F_LOCATION')]) == "" ? "#" : $url; ?>">
-                                <img src="<?php echo $icon; ?>" alt="icon">
+                                <!-- <img src="<?php //echo $icon; ?>" alt="icon"> -->
                                 <?php echo $r_sql[csf('MENU_NAME')]; ?>
                             </a>
                         </li>
