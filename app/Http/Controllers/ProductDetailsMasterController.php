@@ -109,13 +109,7 @@ class ProductDetailsMasterController extends Controller
            ],500);
        }
        //ddRawSql() is a custom function to get the raw sql query
-       $item=ProductDetailsMaster::where('id',$id)->ddRawSql();
-       return response()->json([
-            'code'=>10,
-            'message'=>$item,
-            'data'=>[]
-        ],500);
-        
+       $item=ProductDetailsMaster::find('id',$id);
        if(empty($item))
        {
            return response()->json([
