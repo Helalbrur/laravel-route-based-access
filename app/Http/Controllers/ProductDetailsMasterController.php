@@ -101,6 +101,14 @@ class ProductDetailsMasterController extends Controller
     public function update(Request $request, $id)
     {
        $item=ProductDetailsMaster::find($id);
+       if(empty($item))
+       {
+           return response()->json([
+               'code'=>10,
+               'message'=>'Item not found',
+               'data'=>[]
+           ],500);
+       };
         DB::beginTransaction();
         try
         {
