@@ -108,7 +108,7 @@ class ProductDetailsMasterController extends Controller
                'data'=>[]
            ],500);
        }
-       $item=ProductDetailsMaster::find($id);
+       $item=ProductDetailsMaster::where('id',$id)->first();
        if(empty($item))
        {
            return response()->json([
