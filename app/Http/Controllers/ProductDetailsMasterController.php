@@ -100,6 +100,14 @@ class ProductDetailsMasterController extends Controller
      */
     public function update(Request $request, $id)
     {
+       if(empty($id))
+       {
+           return response()->json([
+               'code'=>10,
+               'message'=>'Update Id not found',
+               'data'=>[]
+           ],500);
+       }
        $item=ProductDetailsMaster::find($id);
        if(empty($item))
        {
@@ -108,7 +116,7 @@ class ProductDetailsMasterController extends Controller
                'message'=>'Item not found',
                'data'=>[]
            ],500);
-       };
+       }
         DB::beginTransaction();
         try
         {
