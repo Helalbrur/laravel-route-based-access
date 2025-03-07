@@ -32,7 +32,7 @@
                 </td>
                 <td>{{$supplier->country->country_name ?? ''}}</td>
                 <td>{{$supplier->email}}</td>
-                <td>{{$supplier->website}}</td>
+                <td>{{$supplier->web_site}}</td>
                 <td>{{$supplier->contact_no}}</td>
                 <td>{{$supplier->other_company->name ?? ''}}</td>
                 <td>{{$supplier->address}}</td>

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
                 }
 
                 if (!empty($company_logo)) {
-                ?>
+                    ?>
                     <a href="{{URL::to('/')}}" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{asset($company_logo)}}" alt="" height="22">
@@ -39,9 +39,9 @@ use Illuminate\Support\Facades\DB;
                             <img src="{{asset($company_logo)}}" alt="" height="22">
                         </span>
                     </a>
-                <?php
+                    <?php
                 } else {
-                ?>
+                    ?>
                     <a href="{{URL::to('/')}}" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="skote/assets/images/logo.svg" alt="" height="22">
@@ -65,15 +65,18 @@ use Illuminate\Support\Facades\DB;
             </div>
 
             <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
-                <svg viewBox="-3.36 -3.36 30.72 30.72" width="30" height="35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="1.584">
-                        <path d="M16.1359 18.2928C16.5264 18.6833 17.1596 18.6833 17.5501 18.2928L22.4375 13.4006C23.2179 12.6194 23.2176 11.3536 22.4369 10.5728L17.5465 5.68247C17.156 5.29195 16.5228 5.29195 16.1323 5.68247C15.7418 6.073 15.7418 6.70616 16.1323 7.09669L20.3179 11.2823C20.7085 11.6729 20.7085 12.306 20.3179 12.6965L16.1359 16.8786C15.7454 17.2691 15.7454 17.9023 16.1359 18.2928Z" fill="#000000"></path>
-                        <path d="M7.88675 5.68247C7.49623 5.29195 6.86307 5.29195 6.47254 5.68247L1.58509 10.5747C0.804698 11.3559 0.805008 12.6217 1.58579 13.4024L6.47615 18.2928C6.86667 18.6833 7.49984 18.6833 7.89036 18.2928C8.28089 17.9023 8.28089 17.2691 7.89036 16.8786L3.70471 12.6929C3.31419 12.3024 3.31419 11.6692 3.70472 11.2787L7.88675 7.09669C8.27728 6.70616 8.27728 6.073 7.88675 5.68247Z" fill="#000000"></path>
-                    </g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
-                        <path d="M16.1359 18.2928C16.5264 18.6833 17.1596 18.6833 17.5501 18.2928L22.4375 13.4006C23.2179 12.6194 23.2176 11.3536 22.4369 10.5728L17.5465 5.68247C17.156 5.29195 16.5228 5.29195 16.1323 5.68247C15.7418 6.073 15.7418 6.70616 16.1323 7.09669L20.3179 11.2823C20.7085 11.6729 20.7085 12.306 20.3179 12.6965L16.1359 16.8786C15.7454 17.2691 15.7454 17.9023 16.1359 18.2928Z" fill="#000000"></path>
-                        <path d="M7.88675 5.68247C7.49623 5.29195 6.86307 5.29195 6.47254 5.68247L1.58509 10.5747C0.804698 11.3559 0.805008 12.6217 1.58579 13.4024L6.47615 18.2928C6.86667 18.6833 7.49984 18.6833 7.89036 18.2928C8.28089 17.9023 8.28089 17.2691 7.89036 16.8786L3.70471 12.6929C3.31419 12.3024 3.31419 11.6692 3.70472 11.2787L7.88675 7.09669C8.27728 6.70616 8.27728 6.073 7.88675 5.68247Z" fill="#000000"></path>
+                        <g id="style=linear">
+                            <g id="arrow-short-left" transform="translate(-7, 0)">
+                                <path id="vector-left" d="M15.2308 5L9.37451 10.5481C8.95817 10.9425 8.75 11.4713 8.75 12C8.75 12.5287 8.95817 13.0575 9.37451 13.4519L15.2308 19" stroke="#000000" stroke-width="2.4" stroke-linecap="round"></path>
+                            </g>
+                            <g id="arrow-short-right" transform="translate(5, 0)">
+                                <path id="vector-right" d="M8.75 5L14.6063 10.5481C15.0227 10.9425 15.2308 11.4713 15.2308 12C15.2308 12.5287 15.0227 13.0575 14.6063 13.4519L8.75 19" stroke="#000000" stroke-width="2.4" stroke-linecap="round"></path>
+                            </g>
+                        </g>
                     </g>
                 </svg>
             </button>

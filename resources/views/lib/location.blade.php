@@ -204,7 +204,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_location_list_view','list_view_div','mainform_1');
+            save_update_delete(operation,url,requestData,'id','show_location_list_view','list_view_div','locationForm_1');
         }
     }
 

@@ -15,7 +15,6 @@
         <?php
             $sl = 1;
             $buyers = App\Models\LibBuyer::get();
-        
         ?>
         @foreach($buyers as $buyer)
             <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$buyer->id}}')" style="cursor:pointer">
@@ -31,7 +30,7 @@
                 </td>
                 <td>{{$buyer->country->country_name ?? ''}}</td>
                 <td>{{$buyer->email}}</td>
-                <td>{{$buyer->website}}</td>
+                <td>{{$buyer->web_site}}</td>
                 <td>{{$buyer->contact_no}}</td>
                 <td>{{$buyer->address}}</td>
             </tr>
