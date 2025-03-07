@@ -53,7 +53,7 @@
             <div id="msg" class="msg_header">
             </div>
             <div style="width:400;padding:20px; height:150px; vertical-align:middle">
-                <img src="{{asset('images/loading.gif')}}" width="30" height="30" clear="all" style="vertical-align:middle;" /> <span id="msg_text" style="font-size:14px; color:#ffffff"> </span>
+                <img src="{{asset('images/loading.gif')}}" width="20" height="20" clear="all" style="vertical-align:middle;" /> &nbsp; &nbsp;<span id="msg_text" style="font-size:14px; color:#ffffff"> </span>
             </div>
         </div>
         <div id="mask"></div>
