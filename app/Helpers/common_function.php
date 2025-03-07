@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Company;
+use App\Models\LibLocation;
 use App\Models\UserPrivMst;
-use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Contracts\Database\Query\Builder;
 
 
 function getPermissionBasedAllRoutes()
@@ -33,16 +35,14 @@ function getPermissionBasedAllRoutes()
     return $routes;
 }
 
-function sql_select($query,$is_single_row="", $new_conn="", $un_buffered="", $connection="")
+function sql_select($query, $is_single_row = false)
 {
     $results = DB::select($query);
-    $rows = array();
-    foreach($results as $row)
-    {
-        $rows[] = (array) $row;
-    }
-    return $rows;
+    $rows = array_map(fn($row) => (array) $row, $results);
+
+    return $is_single_row && !empty($rows) ? $rows[0] : $rows;
 }
+
 
 function csf($data) // checked 3
 {
@@ -1135,6 +1135,37 @@ function get_available_route($menu_id = null)
 
     return $availableRoutes;
 }
+
+function generate_system_no($company, $location, $category, $year, $num_length, $main_query, $str_fld_name, $num_fld_name = "")
+{
+    // Fetch the latest entry for the given parameters
+    $latestEntry = sql_select($main_query, true);
+
+    // Get company short name
+    $companyPrefix = $company ? (Company::find($company)->company_short_name ?? "") : "";
+
+    // Get location short name
+    $locationPrefix = $location ? (LibLocation::find($location)->location_name ?? "") : "";
+
+    // Format year as YY (last two digits)
+    $year = strlen($year) === 4 ? substr($year, 2, 2) : $year;
+
+    // Construct the prefix
+    $systemNoPrefix = implode("-", array_filter([$companyPrefix, $locationPrefix, $category, $year]));
+
+    // Determine the number (start from 1 if no previous entry)
+    $nextNumber = $latestEntry ? ($latestEntry[$num_fld_name] + 1) : 1;
+
+    // Generate final system number (padded number part)
+    $systemNo = $systemNoPrefix . "-" . str_pad($nextNumber, $num_length, "0", STR_PAD_LEFT);
+
+    return (object) [
+        'wo_no' => $systemNo,
+        'wo_no_prefix' => $systemNoPrefix,
+        'wo_no_prefix_num' => $nextNumber
+    ];
+}
+
 
 
 ?>
