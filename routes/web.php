@@ -52,6 +52,7 @@ use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
 use App\Http\Controllers\ProductDetailsMasterController;
+use App\Http\Controllers\WorkOrderMstController;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,6 +147,15 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
     Route::get('load_drop_down_field_level_access',[FieldLevelAccessController::class,'load_drop_down_field_level_access']);
     Route::get('set_field_name',[FieldLevelAccessController::class,'set_field_name']);
 
+
+
+    //Button Click Database Backup route
+    Route::resource('/db_backup',DbBackUpController::class);
+
+});
+
+Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function () {
+    Route::resource('/work_order',WorkOrderMstController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -186,8 +196,7 @@ Route::middleware(['auth'])->group(function () {
        Route::post('/permission',[PermissionController::class,'store'])->name('permission.store');
     });
 
-     //Button Click Database Backup route
-     Route::resource('/db_backup',DbBackUpController::class);
+     
 
     Route::get('/user_import', function () {
         $headers = [
@@ -212,12 +221,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
     Route::get('/html_content_export', [ReportController::class,'generateExcelFromHtmlContent']);
 
-
     Route::get('/room_details/{room_id}', [LibRoomController::class, 'load_details']);
     Route::get('/rack_details/{rack_id}', [LibRackController::class, 'load_details']);
     Route::get('/shelf_details/{shelf_id}', [LibShelfController::class, 'load_details']);
     Route::get('/bin_details/{bin_id}', [LibBinController::class, 'load_details']);
-
+    
 });
 
 
