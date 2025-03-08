@@ -2,9 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\LibUom;
 use App\Models\Company;
+use App\Models\LibSize;
+use App\Models\LibBrand;
+use App\Models\LibColor;
+use App\Models\LibGeneric;
 use App\Models\LibCategory;
+use App\Models\LibItemGroup;
+use App\Models\LibItemSubGroup;
 use App\Models\VariableSetting;
+use App\Models\LibItemSubCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -91,4 +99,86 @@ class ProductDetailsMaster extends Model
         // Format new code (padded with 5 digits)
         return $prefix . str_pad($next_number, 5, '0', STR_PAD_LEFT);
     }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(LibSupplier::class);
+    }
+
+
+    public function itemCategory()
+    {
+        return $this->belongsTo(LibCategory::class);
+    }
+
+    public function itemGroup()
+    {
+        return $this->belongsTo(LibItemGroup::class);
+    }
+
+    public function itemSubGroup()
+    {
+        return $this->belongsTo(LibItemSubGroup::class);
+    }
+
+    public function itemSubCategory()
+    {
+        return $this->belongsTo(LibItemSubCategory::class, 'item_sub_category_id', 'id');
+    }
+
+    public function productUom()
+    {
+        return $this->belongsTo(LibUom::class, 'uom', 'id');
+    }
+
+    public function generic()
+    {
+        return $this->belongsTo(LibGeneric::class, 'generic_id', 'id');
+    }
+    
+    //created_by
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    //updated_by
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    //color
+    public function color()
+    {
+        return $this->belongsTo(LibColor::class);
+    }
+    //size
+    public function size()
+    {
+        return $this->belongsTo(LibSize::class);
+    }
+
+    //orderUom
+    public function orderUom()
+    {
+        return $this->belongsTo(LibUom::class, 'order_uom', 'id');
+    }
+
+    //consuptionUom
+    public function consuptionUom()
+    {
+        return $this->belongsTo(LibUom::class, 'consuption_uom', 'id');
+    }
+
+    //brand
+    public function brand()
+    {
+        return $this->belongsTo(LibBrand::class, 'brand_id', 'id');
+    }
+    
 }
