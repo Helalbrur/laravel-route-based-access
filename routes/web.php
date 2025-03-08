@@ -224,6 +224,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lib_supplier_import', [LibSupplierController::class, 'import'])->name('lib_supplier_import');
     Route::get('/lib_supplier_export', [LibSupplierController::class, 'export'])->name('lib_supplier_export');
 
+    Route::post('/product_import', [ProductDetailsMasterController::class, 'import'])->name('product_import');
+    Route::get('/product_export', [ProductDetailsMasterController::class, 'export'])->name('product_export');
+
     Route::get('/generate-bangla-pdf', [PdfController::class,'generatePdf']);
     Route::get('/html_content_export', [ReportController::class,'generateExcelFromHtmlContent']);
 

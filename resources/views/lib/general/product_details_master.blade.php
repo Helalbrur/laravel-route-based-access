@@ -18,6 +18,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         <center>
             <div class="card">
                 <div class="card-body" style="justify-content:center;">
+                    <h5 class="card-title d-flex justify-content-between align-items-center">
+                        <a href="{{ url('/product_export') }}" class="btn btn-info">Download Format</a>
+                        <form action="{{ route('product_import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
+                            @csrf
+                            <input type="file" name="file" required class="form-control me-2">
+                            <button type="submit" class="btn btn-info">Import</button>
+                        </form>
+                    </h5>
                     <div class="card-text">
                         <form name="mainform_1" id="mainform_1" autocomplete="off">
                         <div class="form-group row">
@@ -150,11 +158,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         @endforeach
                                     </select>
                                 </div>
-                                <label for="txt_order_uom_qty" class="col-sm-2 col-form-label">Order UOM Qty</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_order_uom_qty" class="form-control" name="txt_order_uom_qty">
-                                </div>
-
                                 <label for="cbo_consuption_uom" class="col-sm-2 col-form-label">Consuption UOM</label>
                                 <div class="col-sm-4 col-lg-2">
                                     <select name="cbo_consuption_uom" id="cbo_consuption_uom" onchange="load_company_config(this.value)" class="form-control">
@@ -167,14 +170,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="txt_consuption_uom_qty" class="col-sm-2 col-form-label">Consuption UOM Qty</label>
+                                <label for="txt_consuption_uom_qty" class="col-sm-2 col-form-label">Re Order Level</label>
                                 <div class="col-sm-4 col-lg-2">
                                     <input type="text" id="txt_consuption_uom_qty" class="form-control" name="txt_consuption_uom_qty">
                                 </div>
+                            </div>
 
+                            <div class="form-group row">
                                 <label for="txt_conversion_fac" class="col-sm-2 col-form-label">Conversion fac.</label>
                                 <div class="col-sm-4 col-lg-2">
                                     <input type="text" id="txt_conversion_fac" class="form-control" name="txt_conversion_fac">
@@ -192,9 +194,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="txt_power" class="col-sm-2 col-form-label">Power</label>
                                 <div class="col-sm-4 col-lg-2">
                                     <input type="text" id="txt_power" class="form-control" name="txt_power">
@@ -209,7 +208,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         echo load_submit_buttons( $permission, "fnc_item_creation", 0,0 ,"reset_form('mainform_1','','',1)");
                                     ?>
                                 </div>
-                                
                             </div>
                         </form>
                     </div>
@@ -224,8 +222,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     <th width="10%">Item Code</th>
                                     <th width="12%">Item Category</th>
                                     <th width="13%">Brand</th>
-                                    <th width="13%">Item Color</th>
-                                    <th>Conversion fac.</th>
+                                    <th width="8%">Item Color</th>
+                                    <th width="8%">Conversion fac.</th>
+                                    <th width="8%">Type</th>
+                                    <th>Dosage Form</th>
                                 </tr>
                             </thead>
                             <tbody id="list_view">
@@ -238,7 +238,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                                 ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
                                                 ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
                                                 ->leftJoin('lib_color as e','a.color_id','=','e.id')
-                                                ->select('a.id','a.item_description','a.item_code','a.conversion_fac','b.generic_name','c.category_name','d.brand_name','e.color_name')
+                                                ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name')
                                                 ->where('a.deleted_at',null)
                                                 ->get();
                                 ?>
@@ -252,6 +252,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     <td>{{$lib_item->brand_name}}</td>
                                     <td>{{$lib_item->color_name}}</td>
                                     <td>{{$lib_item->conversion_fac}}</td>
+                                    <td>{{$lib_item->item_type}}</td>
+                                    <td>{{$lib_item->dosage_form}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -278,7 +280,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         else
         {
         
-            var formData = get_form_data('cbo_company_name,cbo_supplier_name,cbo_generic_name,cbo_item_category_name,cbo_sub_category_name,txt_item_type,txt_item_name,txt_item_code,txt_item_origin,cbo_brand_name,txt_dosage_form,cbo_color_name,cbo_order_uom,txt_order_uom_qty,cbo_consuption_uom,txt_consuption_uom_qty,txt_conversion_fac,cbo_size_name,txt_power,update_id');
+            var formData = get_form_data('cbo_company_name,cbo_supplier_name,cbo_generic_name,cbo_item_category_name,cbo_sub_category_name,txt_item_type,txt_item_name,txt_item_code,txt_item_origin,cbo_brand_name,txt_dosage_form,cbo_color_name,cbo_order_uom,cbo_consuption_uom,txt_consuption_uom_qty,txt_conversion_fac,cbo_size_name,txt_power,update_id');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -304,8 +306,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
 
     const load_php_data_to_form =async (menuId) =>
     {
-        var columns = 'company_id*supplier_id*generic_id*item_category_id*item_sub_category_id*item_type*item_description*item_code*item_origin*brand_id*dosage_form*color_id*order_uom*order_uom_qty*consuption_uom*consuption_uom_qty*conversion_fac*size_id*power*id';
-        var fields = 'cbo_company_name*cbo_supplier_name*cbo_generic_name*cbo_item_category_name*cbo_sub_category_name*txt_item_type*txt_item_name*txt_item_code*txt_item_origin*cbo_brand_name*txt_dosage_form*cbo_color_name*cbo_order_uom*txt_order_uom_qty*cbo_consuption_uom*txt_consuption_uom_qty*txt_conversion_fac*cbo_size_name*txt_power*update_id';
+        var columns = 'company_id*supplier_id*generic_id*item_category_id*item_sub_category_id*item_type*item_description*item_code*item_origin*brand_id*dosage_form*color_id*order_uom*consuption_uom*consuption_uom_qty*conversion_fac*size_id*power*id';
+        var fields = 'cbo_company_name*cbo_supplier_name*cbo_generic_name*cbo_item_category_name*cbo_sub_category_name*txt_item_type*txt_item_name*txt_item_code*txt_item_origin*cbo_brand_name*txt_dosage_form*cbo_color_name*cbo_order_uom*cbo_consuption_uom*txt_consuption_uom_qty*txt_conversion_fac*cbo_size_name*txt_power*update_id';
         var others = '';
        var get_return_value = await populate_form_data('id',menuId,'product_details_master',columns,fields,'{{csrf_token()}}');
        if(get_return_value == 1)

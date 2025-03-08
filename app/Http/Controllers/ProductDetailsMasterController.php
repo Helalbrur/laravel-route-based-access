@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\ProductDetailsMaster;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProductDetailsMaster;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreProductDetailsMasterRequest;
 use App\Http\Requests\UpdateProductDetailsMasterRequest;
 
@@ -50,7 +53,6 @@ class ProductDetailsMasterController extends Controller
                 'dosage_form'=>$request->input('txt_dosage_form'),
                 'color_id'=>$request->input('cbo_color_name'),
                 'order_uom'=>$request->input('cbo_order_uom'),
-                'order_uom_qty'=>$request->input('txt_order_uom_qty'),
                 'consuption_uom'=>$request->input('txt_consuption_uom_qty'),
                 'consuption_uom_qty'=>$request->input('txt_consuption_uom_qty'),
                 'conversion_fac'=>$request->input('txt_conversion_fac'),
@@ -135,7 +137,6 @@ class ProductDetailsMasterController extends Controller
                 'dosage_form'=>$request->input('txt_dosage_form'),
                 'color_id'=>$request->input('cbo_color_name'),
                 'order_uom'=>$request->input('cbo_order_uom'),
-                'order_uom_qty'=>$request->input('txt_order_uom_qty'),
                 'consuption_uom'=>$request->input('txt_consuption_uom_qty'),
                 'consuption_uom_qty'=>$request->input('txt_consuption_uom_qty'),
                 'conversion_fac'=>$request->input('txt_conversion_fac'),
@@ -191,5 +192,35 @@ class ProductDetailsMasterController extends Controller
                 ]
             ]);
         }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimetypes:text/plain,text/csv,application/csv,application/vnd.ms-excel',
+        ]);
+        
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if (!in_array($extension, ['csv', 'xlsx'])) {
+            return back()->withErrors(['file' => 'Invalid file format. Please upload a CSV or Excel file.']);
+        }
+
+        try {
+            Excel::import(new ProductImport, $request->file('file'));
+
+            return response()->json([
+                'code' => 0,
+                'message' => 'Import successful'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 10,
+                'message' => 'Error: ' . $e->getMessage(),
+            ]);
+        }
+    }
+    public function export()
+    {
+        return Excel::download(new ProductExport, 'item_creation.csv');
     }
 }
