@@ -123,4 +123,19 @@ function get_all_user()
 {
     return App\Models\User::pluck('name', 'id')->toArray();
 }
+
+function get_all_company()
+{
+    return App\Models\Company::pluck('company_name', 'id')->toArray();
+}
+
+function get_all_company_name()
+{
+    return App\Models\Company::pluck('company_name', 'id');
+}
+
+function variable_setting()
+{
+    return array(1 => "Item Code System Generated");
+}
 ?>
