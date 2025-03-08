@@ -50,7 +50,7 @@ class ProductDetailsMaster extends Model
              ->where('variable_id', 1)
              ->value('variable_value') ?? 0;
 
-            if ($is_item_code_system_generated == 1) {
+            if (($is_item_code_system_generated == 1 || $item->is_system_generated_item_code == 1) && empty($item->item_code)) {
                 $item->item_code = self::generate_item_code($item->company_id, $item->item_category_id);
                 $item->is_system_generated_item_code = 1;
             }
