@@ -46,14 +46,15 @@ use App\Http\Controllers\UserPrivMstController;
 use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\OtherCompanyController;
+use App\Http\Controllers\WorkOrderMstController;
 use App\Http\Controllers\ReportSettingController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
+use App\Http\Controllers\VariableSettingController;
 use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
 use App\Http\Controllers\ProductDetailsMasterController;
-use App\Http\Controllers\WorkOrderMstController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 
 
     Route::resource('/variable_setting/report_setting', ReportSettingController::class);
+    Route::resource('/variable_setting/setting', VariableSettingController::class);
 
     Route::resource('/item_details/item_category', LibCategoryController::class);
     Route::resource('/item_details/item_group', LibItemGroupController::class);
