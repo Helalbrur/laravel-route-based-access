@@ -7,11 +7,12 @@ use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\OtherCompany;
 use App\Models\LibItemSubGroup;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfController;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
@@ -93,6 +94,11 @@ Route::prefix('/tools')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/field_level_access', FieldLevelAccessController::class);
     Route::resource('/user_management', UserController::class);
     Route::resource('/field_manager',FieldManagerController::class);
+
+});
+
+Route::prefix('/tools')->middleware(['auth'])->group(function () {
+    Route::resource('/user_profile', UserProfileController::class);
 });
 
 Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () {
@@ -139,8 +145,6 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
     Route::get('field_manager_entry_form',[FieldManagerController::class,'entry_form_popup']);
     Route::get('load_drop_down_field_manager_item',[FieldManagerController::class,'load_drop_down_field_manager_item']);
     Route::get('field_manager_action_user_data',[FieldManagerController::class,'field_manager_action_user_data']);
-
-
     
     Route::get('field_level_access_user',[FieldLevelAccessController::class,'field_level_access_user']);
     Route::get('field_level_action_user_data',[FieldLevelAccessController::class,'field_level_action_user_data']);
