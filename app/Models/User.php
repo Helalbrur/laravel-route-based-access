@@ -70,4 +70,14 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function userPrivMsts()
+    {
+        return $this->hasMany(UserPrivMst::class, 'user_id', 'id');
+    }
+
+    public function userPrivModules()
+    {
+        return $this->hasMany(UserPrivModule::class, 'user_id', 'id');
+    }
 }

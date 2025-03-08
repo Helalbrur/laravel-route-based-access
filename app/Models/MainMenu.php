@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,5 +26,34 @@ class MainMenu extends Model
         $this->status_active = 0;
         $this->is_deleted = 1;
         $this->save();
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(MainModule::class, 'm_module_id', 'm_module_id');
+    }
+    public function subMenu()
+    {
+        return $this->hasMany(MainMenu::class, 'root_menu', 'm_menu_id');
+    }
+    public function subRootMenu()
+    {
+        return $this->hasMany(MainMenu::class, 'sub_root_menu', 'm_menu_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Automatically set created_by when creating
+        static::creating(function ($menu) {
+            $menu->inserted_by = Auth::id();
+            $menu->m_menu_id = MainMenu::max('m_menu_id') + 1;
+        });
+
+        // Automatically update updated_by when updating
+        static::updating(function ($menu) {
+            $menu->updated_by = Auth::id();
+        });
     }
 }

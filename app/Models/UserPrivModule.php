@@ -12,4 +12,13 @@ class UserPrivModule extends Model
     protected $fillable = [
         'user_id','module_id','user_only','valid','entry_date'
     ];
+
+    public function module()
+    {
+        return $this->belongsTo(MainModule::class, 'module_id', 'm_mod_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

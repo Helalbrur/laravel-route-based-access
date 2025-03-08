@@ -147,15 +147,15 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
     Route::get('load_drop_down_field_level_access',[FieldLevelAccessController::class,'load_drop_down_field_level_access']);
     Route::get('set_field_name',[FieldLevelAccessController::class,'set_field_name']);
 
-
-
-    //Button Click Database Backup route
-    Route::resource('/db_backup',DbBackUpController::class);
-
 });
 
 Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function () {
     Route::resource('/work_order',WorkOrderMstController::class);
+});
+
+Route::middleware(['auth','PagePermission'])->group(function () {
+    //Button Click Database Backup route
+    Route::resource('/db_backup',DbBackUpController::class);
 });
 
 Route::middleware(['auth'])->group(function () {

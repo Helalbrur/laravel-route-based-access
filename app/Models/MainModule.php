@@ -16,4 +16,9 @@ class MainModule extends Model
         'mod_slno'
     ];
     protected $table = 'main_module';
+    //MainMoudel has many MainMenu
+    public function mainMenu()
+    {
+        return $this->hasMany(MainMenu::class, 'm_module_id', 'm_mod_id');
+    }
 }

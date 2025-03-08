@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 class DbBackUpController extends Controller
 {
     public function index()
@@ -16,6 +17,55 @@ class DbBackUpController extends Controller
     }
 
     public function store(Request $request)
+    {
+        try {
+            // Path to the backup directory
+            $backupDirectory = storage_path('app/backups');
+
+            // Create the directory if it doesn't exist
+            if (!file_exists($backupDirectory)) {
+                mkdir($backupDirectory, 0755, true);
+            }
+
+            // Use glob to get the existing backup file
+            $sqlFiles = glob($backupDirectory . '/backup.sql');
+
+            // Rename the existing backup file (if any)
+            foreach ($sqlFiles as $sqlFile) {
+                $date = date('d_m_Y') . '-r-' . rand(1, 100);
+                $newName = $backupDirectory . "/backup-$date.sql";
+                rename($sqlFile, $newName);
+            }
+
+            // Define a filename for the new backup
+            $fileName = 'backup.sql';
+            $backupPath = $backupDirectory . '/' . $fileName;
+            // throw new Exception('Error: ' . $backupPath);
+
+            // Run the `db:dump` command
+            Artisan::call('db:dump', [
+                '--path' => "storage/app/backups/$fileName"
+            ]);
+
+            // Store the backup file
+            Storage::disk('local')->putFileAs('database/seeders', $backupPath, $fileName);
+
+            return response()->json([
+                'code' => 0,
+                'message' => 'success',
+                'data' => $backupPath
+            ]);
+        } catch (Exception $e) {
+            $error_message = "Error: " . $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine();
+            return response()->json([
+                'code' => 10,
+                'message' => $error_message,
+                'data' => []
+            ]);
+        }
+    }
+
+    public function store_backup(Request $request)
     {
         try
         {
