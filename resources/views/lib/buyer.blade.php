@@ -1,12 +1,12 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
-$title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
+$title = getMenuName(request('mid') ?? 0) ?? 'Buyer Profile';
 ?>
 @extends('layouts.app')
 @section('content_header')
 <div class="row mb-2">
-    <div class="col-sm-12">
-        <center><h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Buyer Profile'}}</strong></h1></center>
+    <div class="col-sm-12 d-flex justify-content-center">
+        <h1 class="m-0 text-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Buyer Profile'}}</strong></h1>
     </div>
 </div>
 @endsection()
@@ -133,7 +133,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                     </div>
                                 </div>
                                 <div class="mt-2 row d-flex justify-content-center">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-1">
                                         <input type="hidden" name="update_id" id="update_id">
                                     </div>
                                     <div class="col-sm-6">
@@ -165,7 +165,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                     <td>{{ implode(', ', $buyer->company->pluck('company_name')->toArray()) }}</td>
                                     <td>{{ $buyer->country->country_name ?? '' }}</td>
                                     <td>{{ $buyer->email }}</td>
-                                    <td>{{ $buyer->website }}</td>
+                                    <td>{{ $buyer->web_site }}</td>
                                     <td>{{ $buyer->contact_no }}</td>
                                     <td>{{ $buyer->address }}</td>
                                 </tr>
@@ -232,7 +232,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_buyer_list_view','list_view_div','mainform_1');
+            save_update_delete(operation,url,requestData,'id','show_buyer_list_view','list_view_div','buyerForm_1');
         }
     }
 

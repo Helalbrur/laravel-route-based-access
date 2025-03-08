@@ -2968,12 +2968,8 @@ button.ui-button::-moz-focus-inner {
 	height: 100px;
 	display: none;
 	z-index: 9999;
-	/* padding:0px;*/
-	/*padding-top:3px;*/
 	border: 3px solid #a7aeb7;
 	border-radius: .7em;
-
-
 }
 
 p {
@@ -2986,27 +2982,21 @@ p {
 
 /* Customize your modal window here, you can add background image too */
 #boxes #dialog {
-	width: 300px;
+	width: 370px;
 	height: 100px;
 	font-weight: bold;
-	/* background-image: -moz-linear-gradient(bottom, rgb(194,220,255) 0%, rgb(255,255,255) 10%, rgb(194,220,255) 96%);
-  */
-
 }
 
 #boxes #dialog .msg_header {
-	width: 300px;
-	height: 25px;
 	background-image: -moz-linear-gradient(rgb(181, 190, 202) 10%, rgb(151, 157, 164) 96%);
 	background-image: -webkit-linear-gradient(rgb(169, 173, 177) 10%, rgb(151, 156, 164) 96%);
 	border-top-right-radius: .4em;
 	border-top-left-radius: .4em;
-	color: #c0bfbf;
+	color: #ffffff;
 	font-size: 12px;
 	font-weight: bold;
 	text-align: left;
 }
-
 
 .verticalText {
 	position: absolute;
@@ -3041,7 +3031,6 @@ p {
 }
 
 .contextMenuPlugin {
-	/* -webkit-user-select: none; __off*/
 	display: none;
 	font-family: tahoma, arial, sans-serif;
 	font-size: 11px;
@@ -3130,7 +3119,6 @@ table.scroll tbody {
 	overflow-x: auto;
 }
 
-
 .go_top_button {
 	width: 25px;
 	height: 25px;
@@ -3158,21 +3146,6 @@ table.scroll tbody {
 	opacity: 1;
 }
 
-/*
-.rotate_90_deg {
-	width:auto;
-	height:auto;
-	text-wrap:normal;
-	vertical-align:bottom;
-	display: block;
-	position: !important;
-	-webkit-transform: rotate(-90deg)!important;
-	-moz-transform: rotate(-90deg)!important;
-}
-__off
-*/
-
-/* for alert msg */
 div.alert {
 	padding: 12px 35px 12px 14px;
 	margin-bottom: 18px;

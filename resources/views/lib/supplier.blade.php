@@ -1,17 +1,17 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
-$title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
+$title = getMenuName(request('mid') ?? 0) ?? 'Supplier Profile';
 ?>
 @extends('layouts.app')
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-12">
-            <center><h1 class="m-0 align-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Supplier Profile'}}</strong></h1></center>
-        </div>
-        
-    </div><!-- /.row -->
+<div class="row mb-2">
+    <div class="col-sm-12 d-flex justify-content-center">
+        <h1 class="m-0 text-center"><strong>{{getMenuName(request('mid') ?? 0) ?? 'Supplier Profile'}}</strong></h1>
+    </div>
+</div>
 @endsection()
 @section('content')
+<div class="container mt-1">
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -25,117 +25,147 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                     </form>
                 </h5>
                 <div class="card-text">
-                    <form name="mainform_1" id="mainform_1" autocomplete="off">
-                        
-                        <div class="form-group row">
-                           
-                            <label for="txt_supplier_name" class="col-sm-2 col-form-label must_entry_caption">Supplier Name</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="txt_supplier_name" class="form-control" name="txt_supplier_name">
+                    <div class="card p-4" style="background-color:rgb(241, 241, 241)">
+                        <form name="supplierForm_1" id="supplierForm_1" autocomplete="off">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_supplier_name" class="col-sm-4 col-form-label fw-bold text-start must_entry_caption">Supplier Name</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="text" id="txt_supplier_name" class="form-control" name="txt_supplier_name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_short_name" class="col-sm-4 col-form-label fw-bold text-start must_entry_caption">Short Name</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="text" id="txt_short_name" class="form-control" name="txt_short_name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="cbo_country_name" class="col-sm-4 col-form-label fw-bold text-start">Country Name</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <select name="cbo_country_name" id="cbo_country_name" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_country = App\Models\LibCountry::pluck('country_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_country as $id => $country_name)
+                                                        <option value="{{ $id }}">{{ $country_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_email" class="col-sm-4 col-form-label fw-bold text-start">Email</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="email" id="txt_email" class="form-control" name="txt_email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_website_name" class="col-sm-4 col-form-label fw-bold text-start">Website</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="text" id="txt_website_name" class="form-control" name="txt_website_name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_contact_no" class="col-sm-4 col-form-label fw-bold text-start">Contact No</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="text" id="txt_contact_no" class="form-control" name="txt_contact_no">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_contact_person" class="col-sm-4 col-form-label fw-bold text-start">Contact Person</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="text" id="txt_contact_person" class="form-control" name="txt_contact_person">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="txt_supplier_address" class="col-sm-4 col-form-label fw-bold text-start">Address</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <input type="text" id="txt_supplier_address" class="form-control" name="txt_supplier_address">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="cbo_tag_company_name" class="col-sm-4 col-form-label fw-bold text-start">Tag Company Name</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <select name="cbo_tag_company_name[]" id="cbo_tag_company_name" class="form-control" multiple>
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_company = App\Models\Company::pluck('company_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_company as $id => $company_name)
+                                                        <option value="{{ $id }}">{{ $company_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="cbo_tag_party_name" class="col-sm-4 col-form-label fw-bold text-start">Tag Party Name</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <select name="cbo_tag_party_name[]" id="cbo_tag_party_name" class="form-control" multiple>
+                                                    <?php
+                                                        $party_types = party_type_supplier();
+                                                    ?>
+                                                    @foreach($party_types as $id => $party_name)
+                                                        <option value="{{ $id }}">{{ $party_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="cbo_supplier_company" class="col-sm-4 col-form-label fw-bold text-start">Supplier Company</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <select name="cbo_supplier_company" id="cbo_supplier_company" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $other_company = App\Models\OtherCompany::pluck('name', 'id');
+                                                    ?>
+                                                    @foreach($other_company as $id => $supplier_company)
+                                                        <option value="{{ $id }}">{{ $supplier_company }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <label for="txt_short_name" class="col-sm-2 col-form-label must_entry_caption">Short Name</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="txt_short_name" class="form-control" name="txt_short_name">
+                            <div class="mt-2 row d-flex justify-content-center">
+                                <div class="col-sm-1">
+                                    <input type="hidden" name="update_id" id="update_id">
+                                </div>
+                                <div class="col-sm-6">
+                                    <?php echo load_submit_buttons($permission, "fnc_supplier_name", 0, 0, "reset_form('supplierForm_1','','',1)"); ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="cbo_country_name" class="col-sm-2 col-form-label">Country Name</label>
-                            <div class="col-sm-4">
-                                <select name="cbo_country_name" id="cbo_country_name" class="form-control">
-                                    <option value="0">SELECT</option>
-                                    <?php
-                                        $lib_country = App\Models\LibCountry::pluck('country_name', 'id');
-                                    ?>
-                                    @foreach($lib_country as $id => $country_name)
-                                        <option value="{{ $id }}">{{ $country_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <label for="txt_email" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-4">
-                                <input type="email" id="txt_email" class="form-control" name="txt_email">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="txt_website_name" class="col-sm-2 col-form-label">Website</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="txt_website_name" class="form-control" name="txt_website_name">
-                            </div>
-                            <label for="txt_contact_no" class="col-sm-2 col-form-label">Contact No</label>
-                            <div class="col-sm-4">
-                                <input type="email" id="txt_contact_no" class="form-control" name="txt_contact_no">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            
-                            <label for="txt_contact_person" class="col-sm-2 col-form-label">Contact Person</label>
-                            <div class="col-sm-4">
-                                <input type="email" id="txt_contact_person" class="form-control" name="txt_contact_person">
-                            </div>
-                            <label for="txt_supplier_address" class="col-sm-2 col-form-label">Address</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="txt_supplier_address" class="form-control" name="txt_supplier_address">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            
-                            <label for="cbo_tag_company_name"  class="col-sm-2 col-form-label">Tag Company Name</label>
-                            <div class="col-sm-4">
-                                <select name="cbo_tag_company_name[]" id="cbo_tag_company_name"  class="form-control" multiple>
-                                    <option value="0">SELECT</option>
-                                    <?php
-                                        $lib_company = App\Models\Company::pluck('company_name', 'id');
-                                    ?>
-                                    @foreach($lib_company as $id => $company_name)
-                                        <option value="{{ $id }}">{{ $company_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <label for="cbo_tag_party_name"  class="col-sm-2 col-form-label">Tag Party Name</label>
-                            <div class="col-sm-4">
-                                <select name="cbo_tag_party_name[]" id="cbo_tag_party_name" class="form-control" multiple>
-                                    
-                                    <?php
-                                        $party_types =party_type_supplier();
-                                    ?>
-                                    @foreach($party_types as $id => $party_name)
-                                        <option value="{{ $id }}">{{ $party_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="cbo_supplier_company" class="col-sm-2 col-form-label">Supplier Company</label>
-                            <div class="col-sm-4">
-                                <select name="cbo_supplier_company" id="cbo_supplier_company" class="form-control">
-                                    <option value="0">SELECT</option>
-                                    <?php
-                                        $other_company = App\Models\OtherCompany::pluck('name', 'id');
-                                    ?>
-                                    @foreach($other_company as $id => $company_name)
-                                        <option value="{{ $id }}">{{ $company_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                       
-                        <div class="from-group row">
-                            <div class="col-sm-2">
-                                <input type="hidden" name="update_id" id="update_id">
-                            </div>
-                            <div class="col-sm-7">
-                                <?php
-                                    echo load_submit_buttons( $permission, "fnc_supplier_name", 0,0 ,"reset_form('mainform_1','','',1)");
-                                ?>
-                            </div>
-                            
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-
-                <div class="card table-responsive table-info"  id="list_view_div" style="background-color:#F5FFFA">
-                    <table class="table table-bordered table-striped" >
-                        <thead>
+                <div class="card table-responsive table-info mx-auto p-3 mt-4" style="background-color:rgb(241, 241, 241);" id="list_view_div">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead class="table-secondary">
                             <tr>
                                 <th width="3%">Sl</th>
                                 <th width="12%">Supplier Name</th>
@@ -145,33 +175,32 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                 <th width="10%">Website</th>
                                 <th width="10%">Contact No</th>
                                 <th width="10%">Supplier Company</th>
-                                <th >Address</th>
+                                <th>Address</th>
                             </tr>
                         </thead>
                         <tbody id="list_view">
                             <?php
                                 $sl = 1;
                                 $suppliers = App\Models\LibSupplier::get();
-                            
                             ?>
                             @foreach($suppliers as $supplier)
-                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$supplier->id}}')" style="cursor:pointer">
-                                    <td>{{$sl++}}</td>
-                                    <td>{{$supplier->supplier_name}}</td>
+                                <tr id="tr_{{ $sl }}" onclick="load_php_data_to_form('{{ $supplier->id }}')" style="cursor:pointer">
+                                    <td>{{ $sl++ }}</td>
+                                    <td>{{ $supplier->supplier_name }}</td>
                                     <td>
-                                        <?php $i = 0;?>
+                                        <?php $i = 0; ?>
                                         @foreach($supplier->company as $com)
-                                            {{$com->company_name}}
+                                            {{ $com->company_name }}
                                             {{ $i > 0 ? ',' : '' }}
-                                            <?php $i++;?>
+                                            <?php $i++; ?>
                                         @endforeach
                                     </td>
-                                    <td>{{$supplier->country->country_name ?? ''}}</td>
-                                    <td>{{$supplier->email}}</td>
-                                    <td>{{$supplier->website}}</td>
-                                    <td>{{$supplier->contact_no}}</td>
-                                    <td>{{$supplier->other_company->name ?? ''}}</td>
-                                    <td>{{$supplier->address}}</td>
+                                    <td>{{ $supplier->country->country_name ?? '' }}</td>
+                                    <td>{{ $supplier->email }}</td>
+                                    <td>{{ $supplier->web_site }}</td>
+                                    <td>{{ $supplier->contact_no }}</td>
+                                    <td>{{ $supplier->other_company->name ?? '' }}</td>
+                                    <td>{{ $supplier->address }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -181,7 +210,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         </div>
     </div>
 </div>
-
+</div>
 @endsection
 
 @section('script')
@@ -238,7 +267,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_supplier_list_view','list_view_div','mainform_1');
+            save_update_delete(operation,url,requestData,'id','show_supplier_list_view','list_view_div','supplierForm_1');
         }
     }
 
@@ -259,6 +288,5 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
     setFilterGrid("list_view",-1);
     
    //set_multiselect('cbo_tag_company_name*cbo_tag_party_name','0*0','0*0','','0');
-
 </script>
 @endsection

@@ -48,9 +48,9 @@ use Illuminate\Support\Facades\URL;
                 }
 
                 $icons = [
-                    asset('svg/general.svg'),
                     asset('svg/cost.svg'),
                     asset('svg/contact.svg'),
+                    asset('svg/general.svg'),
                     asset('svg/items.svg'),
                     asset('svg/inventory.svg'),
                     asset('svg/settings.svg')
