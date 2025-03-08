@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,5 +37,26 @@ class LibSupplier extends Model
     public function tagParty()
     {
         return $this->hasMany(LibSupplierTagParty::class,'supplier_id','id');//->ddRawSql();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Automatically set created_by when creating
+        static::creating(function ($supplier) {
+            if ($supplier->short_name == null || $supplier->short_name == '') {
+                //generate short name from supplier name 
+                $supplier->short_name = substr($supplier->supplier_name, 0, 3);
+            }
+        });
+
+        // Automatically update updated_by when updating
+        static::updating(function ($supplier) {
+            if ($supplier->short_name == null || $supplier->short_name == '') {
+                //generate short name from supplier name 
+                $supplier->short_name = substr($supplier->supplier_name, 0, 3);
+            }
+        });
     }
 }

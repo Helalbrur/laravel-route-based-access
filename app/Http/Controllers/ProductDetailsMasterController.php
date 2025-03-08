@@ -202,21 +202,15 @@ class ProductDetailsMasterController extends Controller
         
         $extension = $request->file('file')->getClientOriginalExtension();
         if (!in_array($extension, ['csv', 'xlsx'])) {
-            return back()->withErrors(['file' => 'Invalid file format. Please upload a CSV or Excel file.']);
+            return back()->with('error', 'Invalid file format. Please upload a CSV or Excel file.');
         }
 
         try {
             Excel::import(new ProductImport, $request->file('file'));
 
-            return response()->json([
-                'code' => 0,
-                'message' => 'Import successful'
-            ]);
+            return back()->with('success', 'Users imported successfully.');
         } catch (\Exception $e) {
-            return response()->json([
-                'code' => 10,
-                'message' => 'Error: ' . $e->getMessage(),
-            ]);
+            return back()->with('error', $e->getMessage().' in '.$e->getFile().' at line '.$e->getLine());
         }
     }
     public function export()
