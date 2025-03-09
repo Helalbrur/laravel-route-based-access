@@ -1,4 +1,5 @@
-var st=2;
+//HTML search
+var st=4;//1=Exact,2=StartsWith,3=EndsWith,4=Contains 
 var operation_success_msg=new Array (22);
 operation_success_msg[0]="Data is Saved Successfully";
 operation_success_msg[1]="Data is Updated Successfully";
