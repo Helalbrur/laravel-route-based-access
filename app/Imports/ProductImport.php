@@ -16,19 +16,25 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Validators\Failure;
 
-class ProductImport implements ToModel, WithHeadingRow
+class ProductImport implements ToModel, WithHeadingRow, SkipsOnError
 {
-    public $importStats;
+    use SkipsErrors, SkipsFailures;
 
-    public function __construct(&$importStats)
-    {
-        $this->importStats = &$importStats;
-    }
-
+    public $importedCount = 0;
+    public $skippedRows = [];
+    
     public function model(array $row)
     {
-        // Define validation rules
+        static $rowNumber = 1; // Track row number
+        $rowNumber++;
+
+        // Validate row
         $validator = Validator::make($row, [
             'company'           => 'required|string',
             'supplier'          => 'required|string',
@@ -41,19 +47,21 @@ class ProductImport implements ToModel, WithHeadingRow
             'conversion_fac'    => 'required|numeric|min:0',
         ]);
 
-        // If validation fails, count and skip
         if ($validator->fails()) {
-            $this->importStats['skipped_due_to_validation']++;
+            $this->skippedRows[] = [
+                'row'       => $rowNumber,
+                'reason'    => $validator->errors()->all()
+            ];
             return null;
         }
 
+        // Check for duplicates
         $company_id        = optional(Company::where('company_name', $row['company'])->first())->id;
         $supplier_id       = $this->getOrCreateModel(LibSupplier::class, 'supplier_name', $row['supplier'])->id ?? null;
         $item_category_id  = $this->getOrCreateModel(LibCategory::class, 'category_name', $row['item_category'])->id ?? null;
         $item_group_id     = $this->getOrCreateModel(LibItemGroup::class, 'item_name', $row['item_group'])->id ?? null;
         $uom_id            = $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? null;
 
-        // Check if the product already exists
         $existingProduct = ProductDetailsMaster::where([
             'company_id'       => $company_id,
             'supplier_id'      => $supplier_id,
@@ -64,11 +72,14 @@ class ProductImport implements ToModel, WithHeadingRow
         ])->exists();
 
         if ($existingProduct) {
-            $this->importStats['skipped_due_to_existing']++;
-            return null; // Skip creating a duplicate record
+            $this->skippedRows[] = [
+                'row'       => $rowNumber,
+                'reason'    => ['Duplicate entry']
+            ];
+            return null;
         }
 
-        $this->importStats['imported']++;
+        $this->importedCount++;
 
         return new ProductDetailsMaster([
             'company_id'        => $company_id,
@@ -86,7 +97,7 @@ class ProductImport implements ToModel, WithHeadingRow
 
             // Other product fields
             'item_description'  => $row['item_description'] ?? '',
-            'product_name_details' => $row['product_name_details'] ?? '', 
+            'product_name_details' => $row['product_name_details'] ?? '',
             'lot'              => $row['lot'] ?? '',
             'item_code'        => $row['item_code'] ?? '',
             'item_account'     => $row['item_account'] ?? '',

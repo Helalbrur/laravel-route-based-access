@@ -199,35 +199,32 @@ class ProductDetailsMasterController extends Controller
         $request->validate([
             'file' => 'required|mimetypes:text/plain,text/csv,application/csv,application/vnd.ms-excel',
         ]);
-        
+
         $extension = $request->file('file')->getClientOriginalExtension();
         if (!in_array($extension, ['csv', 'xlsx'])) {
             return back()->with('error', 'Invalid file format. Please upload a CSV or Excel file.');
         }
-    
-        $importStats = [
-            'imported' => 0,
-            'skipped_due_to_existing' => 0,
-            'skipped_due_to_validation' => 0
-        ];
-    
+
         try {
-            Excel::import(new ProductImport($importStats), $request->file('file'));
-    
-            $message = "Import completed. {$importStats['imported']} records imported.";
-            if ($importStats['skipped_due_to_existing'] > 0) {
-                $message .= " {$importStats['skipped_due_to_existing']} records skipped (already exist).";
+            $import = new ProductImport();
+            Excel::import($import, $request->file('file'));
+
+            $message = "Import completed. {$import->importedCount} records imported.";
+            
+            if (count($import->skippedRows) > 0) {
+                $message .= " " . count($import->skippedRows) . " records skipped.";
+
+                foreach ($import->skippedRows as $skipped) {
+                    $message .= " Row {$skipped['row']} skipped due to: " . implode(", ", $skipped['reason']) . ".";
+                }
             }
-            if ($importStats['skipped_due_to_validation'] > 0) {
-                $message .= " {$importStats['skipped_due_to_validation']} records skipped (validation failed).";
-            }
-            dd( $message);
-    
+
             return back()->with('success', $message);
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage().' in '.$e->getFile().' at line '.$e->getLine());
+            return back()->with('error', "Import failed: " . $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine());
         }
     }
+
     
     public function export()
     {
