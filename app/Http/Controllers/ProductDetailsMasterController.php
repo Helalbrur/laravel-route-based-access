@@ -223,7 +223,7 @@ class ProductDetailsMasterController extends Controller
 
             return back()->with('success', $message);
         } catch (Exception $e) {
-            // dd($e->getMessage()." in ".$e->getFile()." at line ".$e->getLine());
+            dd($e->getMessage()." in ".$e->getFile()." at line ".$e->getLine());
             return back()->with('error', "Import failed: " . $e->getMessage());
         }
     }
