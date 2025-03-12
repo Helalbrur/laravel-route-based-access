@@ -51,7 +51,7 @@ class ProductDetailsMaster extends Model
 
             if(empty($item->product_name_details))
             {
-                $item->product_name_details = $item->item_description;
+                $item->product_name_details = $item->item_description ?? '';
             }
         });
 
@@ -70,7 +70,7 @@ class ProductDetailsMaster extends Model
 
             if(empty($item->product_name_details))
             {
-                $item->product_name_details = $item->item_description;
+                $item->product_name_details = $item->item_description ?? '';
             }
         });
     }
