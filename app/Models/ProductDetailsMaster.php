@@ -48,6 +48,11 @@ class ProductDetailsMaster extends Model
                 $item->item_code = self::generate_item_code($item->company_id, $item->item_category_id);
                 $item->is_system_generated_item_code = 1;
             }
+
+            if(empty($item->product_name_details))
+            {
+                $item->product_name_details = $item->item_description;
+            }
         });
 
         // Automatically update updated_by when updating
@@ -61,6 +66,11 @@ class ProductDetailsMaster extends Model
             if (($is_item_code_system_generated == 1 || $item->is_system_generated_item_code == 1) && empty($item->item_code)) {
                 $item->item_code = self::generate_item_code($item->company_id, $item->item_category_id);
                 $item->is_system_generated_item_code = 1;
+            }
+
+            if(empty($item->product_name_details))
+            {
+                $item->product_name_details = $item->item_description;
             }
         });
     }
