@@ -221,6 +221,7 @@ class ProductDetailsMasterController extends Controller
             if ($importStats['skipped_due_to_validation'] > 0) {
                 $message .= " {$importStats['skipped_due_to_validation']} records skipped (validation failed).";
             }
+            dd( $message);
     
             return back()->with('success', $message);
         } catch (\Exception $e) {
