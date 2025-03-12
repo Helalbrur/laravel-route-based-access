@@ -100,7 +100,6 @@ class ProductImport implements ToCollection, WithHeadingRow
                     'item_description'  => $row['item_description'] ?? '',
                     'product_name_details' => $row['product_name_details'] ?? '',
                     'lot'              => $row['lot'] ?? '',
-                    'item_code'        => $row['item_code'] ?? '',
                     'item_account'     => $row['item_account'] ?? '',
                     'packing_type'     => $row['packing_type'] ?? '',
                     'avg_rate_per_unit'=> $row['avg_rate_per_unit'] ?? 0,
