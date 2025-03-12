@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreProductDetailsMasterRequest;
 use App\Http\Requests\UpdateProductDetailsMasterRequest;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
 
 class ProductDetailsMasterController extends Controller
 {
@@ -212,16 +213,18 @@ class ProductDetailsMasterController extends Controller
             $message = "Import completed. {$import->importedCount} records imported.";
             
             if (count($import->skippedRows) > 0) {
-                $message .= " " . count($import->skippedRows) . " records skipped.";
+                $message = " " . count($import->skippedRows) . " records skipped.";
 
                 foreach ($import->skippedRows as $skipped) {
                     $message .= " Row {$skipped['row']} skipped due to: " . implode(", ", $skipped['reason']) . ".";
                 }
+                throw new Exception($message);
             }
 
             return back()->with('success', $message);
-        } catch (\Exception $e) {
-            return back()->with('error', "Import failed: " . $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine());
+        } catch (Exception $e) {
+            dd($e);
+            return back()->with('error', "Import failed: " . $e->getMessage());
         }
     }
 
