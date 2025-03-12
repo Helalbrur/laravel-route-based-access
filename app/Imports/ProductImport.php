@@ -98,7 +98,7 @@ class ProductImport implements ToCollection, WithHeadingRow
         
                     // Other product fields
                     'item_description'  => $row['item_description'] ?? '',
-                    'product_name_details' => $row['product_name_details'] ?? '',
+                    'product_name_details' => $row['product_name_details'] ?? $row['item_description'],
                     'lot'              => $row['lot'] ?? '',
                     'item_account'     => $row['item_account'] ?? '',
                     'packing_type'     => $row['packing_type'] ?? '',
