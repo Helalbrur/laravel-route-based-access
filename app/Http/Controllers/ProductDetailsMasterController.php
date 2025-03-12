@@ -208,7 +208,7 @@ class ProductDetailsMasterController extends Controller
         try {
             Excel::import(new ProductImport, $request->file('file'));
 
-            return back()->with('success', 'Users imported successfully.');
+            return back()->with('success', 'Product imported successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage().' in '.$e->getFile().' at line '.$e->getLine());
         }
