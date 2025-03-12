@@ -60,7 +60,7 @@ class ProductImport implements ToCollection, WithHeadingRow
                 $company_id        = optional(Company::where('company_name', $row['company'])->first())->id;
                 $supplier_id       = $this->getOrCreateModel(LibSupplier::class, 'supplier_name', $row['supplier'])->id ?? 0;
                 $item_category_id  = $this->getOrCreateModel(LibCategory::class, 'category_name', $row['item_category'])->id ?? 0;
-                $item_group_id     = $this->getOrCreateModel(LibItemGroup::class, 'item_name', $row['item_group'])->id ?? 0;
+                $item_group_id     = $this->getOrCreateModel(LibItemGroup::class, 'item_name', ($row['item_group'] ?? 0))->id ?? 0;
                 $uom_id            = $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? 0;
 
                 // Check for duplicates
