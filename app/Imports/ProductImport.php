@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Imports;
 
 use App\Models\LibUom;
@@ -20,6 +19,13 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ProductImport implements ToModel, WithHeadingRow
 {
+    public $importStats;
+
+    public function __construct(&$importStats)
+    {
+        $this->importStats = &$importStats;
+    }
+
     public function model(array $row)
     {
         // Define validation rules
@@ -35,8 +41,9 @@ class ProductImport implements ToModel, WithHeadingRow
             'conversion_fac'    => 'required|numeric|min:0',
         ]);
 
-        // If validation fails, skip this row
+        // If validation fails, count and skip
         if ($validator->fails()) {
+            $this->importStats['skipped_due_to_validation']++;
             return null;
         }
 
@@ -44,8 +51,8 @@ class ProductImport implements ToModel, WithHeadingRow
         $supplier_id       = $this->getOrCreateModel(LibSupplier::class, 'supplier_name', $row['supplier'])->id ?? null;
         $item_category_id  = $this->getOrCreateModel(LibCategory::class, 'category_name', $row['item_category'])->id ?? null;
         $item_group_id     = $this->getOrCreateModel(LibItemGroup::class, 'item_name', $row['item_group'])->id ?? null;
-        $uom_id            = $this->getOrCreateModel(LibUom::class, 'uom_name', $row['uom'])->id ?? null;
-        
+        $uom_id            = $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? null;
+
         // Check if the product already exists
         $existingProduct = ProductDetailsMaster::where([
             'company_id'       => $company_id,
@@ -53,12 +60,15 @@ class ProductImport implements ToModel, WithHeadingRow
             'item_category_id' => $item_category_id,
             'item_group_id'    => $item_group_id,
             'item_description' => $row['item_description'],
-            'uom'              => $uom_id
+            'consuption_uom'   => $uom_id
         ])->exists();
 
         if ($existingProduct) {
+            $this->importStats['skipped_due_to_existing']++;
             return null; // Skip creating a duplicate record
         }
+
+        $this->importStats['imported']++;
 
         return new ProductDetailsMaster([
             'company_id'        => $company_id,
@@ -76,7 +86,7 @@ class ProductImport implements ToModel, WithHeadingRow
 
             // Other product fields
             'item_description'  => $row['item_description'] ?? '',
-            'product_name_details' => $row['product_name_details'] ?? '', // Prevent null values
+            'product_name_details' => $row['product_name_details'] ?? '', 
             'lot'              => $row['lot'] ?? '',
             'item_code'        => $row['item_code'] ?? '',
             'item_account'     => $row['item_account'] ?? '',
@@ -108,5 +118,3 @@ class ProductImport implements ToModel, WithHeadingRow
         );
     }
 }
-
-

@@ -204,15 +204,30 @@ class ProductDetailsMasterController extends Controller
         if (!in_array($extension, ['csv', 'xlsx'])) {
             return back()->with('error', 'Invalid file format. Please upload a CSV or Excel file.');
         }
-
+    
+        $importStats = [
+            'imported' => 0,
+            'skipped_due_to_existing' => 0,
+            'skipped_due_to_validation' => 0
+        ];
+    
         try {
-            Excel::import(new ProductImport, $request->file('file'));
-
-            return back()->with('success', 'Product imported successfully.');
+            Excel::import(new ProductImport($importStats), $request->file('file'));
+    
+            $message = "Import completed. {$importStats['imported']} records imported.";
+            if ($importStats['skipped_due_to_existing'] > 0) {
+                $message .= " {$importStats['skipped_due_to_existing']} records skipped (already exist).";
+            }
+            if ($importStats['skipped_due_to_validation'] > 0) {
+                $message .= " {$importStats['skipped_due_to_validation']} records skipped (validation failed).";
+            }
+    
+            return back()->with('success', $message);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage().' in '.$e->getFile().' at line '.$e->getLine());
         }
     }
+    
     public function export()
     {
         return Excel::download(new ProductExport, 'item_creation.csv');
