@@ -119,7 +119,7 @@ class ProductImport implements ToCollection, WithHeadingRow
 
             // If there are no skipped rows, insert all data at once
             if (!empty($insertData)) {
-                ProductDetailsMaster::insert($insertData);
+                ProductDetailsMaster::create($insertData);
                 $this->importedCount = count($insertData);
             }
 
