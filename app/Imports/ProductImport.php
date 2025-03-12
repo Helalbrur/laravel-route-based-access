@@ -82,7 +82,7 @@ class ProductImport implements ToCollection, WithHeadingRow
                 }
 
                 // Prepare data for bulk insertion
-                $insertData[] = [
+                $insertData = [
                     'company_id'        => $company_id,
                     'supplier_id'       => $supplier_id,
                     'item_category_id'  => $item_category_id,
@@ -115,13 +115,15 @@ class ProductImport implements ToCollection, WithHeadingRow
                     'created_by'       => Auth::id(),
                     'updated_by'       => Auth::id(),
                 ];
+                if (!empty($insertData)) {
+               
+                    $this->importedCount++;
+                }
+                ProductDetailsMaster::create($insertData);
             }
 
             // If there are no skipped rows, insert all data at once
-            if (!empty($insertData)) {
-                ProductDetailsMaster::create($insertData);
-                $this->importedCount = count($insertData);
-            }
+            
 
             DB::commit(); // Commit transaction
 
