@@ -48,12 +48,12 @@ use Illuminate\Support\Facades\URL;
                 }
 
                 $icons = [
-                    asset('svg/cost.svg'),
-                    asset('svg/contact.svg'),
-                    asset('svg/general.svg'),
-                    asset('svg/items.svg'),
-                    asset('svg/inventory.svg'),
-                    asset('svg/settings.svg')
+                    'contact' => asset('svg/contact.svg'),
+                    'cost' => asset('svg/cost.svg'),
+                    'general' => asset('svg/general.svg'),
+                    'item' => asset('svg/items.svg'),
+                    'inventory' => asset('svg/inventory.svg'),
+                    'setting' => asset('svg/settings.svg')
                 ];
 
                 $iconIndex = 0; // Track SVG position
@@ -62,10 +62,16 @@ use Illuminate\Support\Facades\URL;
                 {
                     $i++;
                     $level2 = $child_menu1_arr[$m_id][$uid][$r_sql[csf('M_MENU_ID')]] ?? array();
-
-                    // Get SVG for main menu only and loop back if we exceed the array length
-                    $icon = $icons[$iconIndex % count($icons)];
-                    $iconIndex++;
+                
+                    // Match icon by menu name
+                    $menuName = strtolower($r_sql[csf('MENU_NAME')]);
+                    $icon = asset('svg/default.svg'); // Fallback icon
+                    foreach ($icons as $key => $svg) {
+                        if (stripos($menuName, $key) !== false) {
+                            $icon = $svg;
+                            break;
+                        }
+                    }                
 
                     if (count($level2) < 1) 
                     {
@@ -84,11 +90,16 @@ use Illuminate\Support\Facades\URL;
                     } 
                     else 
                     {
-                        echo '<li><a href="javascript:void(0);" class="has-arrow waves-effect">';
-                        echo '<img src="' . $icon . '" width="17" height="17" alt="icon">&nbsp;';
-                        echo '<span key="t-dashboards" style="color: rgb(202, 202, 202) !important">' . $r_sql[csf('MENU_NAME')] . '</span>';
-                        echo '</a><ul class="sub-menu" aria-expanded="false">';
-
+                        ?>
+                        <li>
+                            <a href="javascript:void(0);" class="has-arrow waves-effect">
+                                <img src="<?php echo $icon; ?>" width="17" height="17" alt="icon">&nbsp;
+                                <span key="t-dashboards" style="color: rgb(202, 202, 202) !important">
+                                <?php echo $r_sql[csf('MENU_NAME')]; ?>
+                                </span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                        <?php
                         foreach ($level2 as $level2_menu) 
                         {
                             $i++;
