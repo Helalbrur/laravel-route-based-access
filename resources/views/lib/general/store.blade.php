@@ -157,18 +157,31 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         }
     }
 
-    const load_php_data_to_form =async (menuId) =>
-    {
-        reset_form('libstorelocation_1','','',1);
+    const load_php_data_to_form = async (menuId) => {
+        reset_form('libstorelocation_1', '', '', 1);
         var columns = 'store_name*company_id*location_id*item_category_id*id';
-        var fields = 'txt_store_name*cbo_company_name*cbo_location_name*cbo_category_id*update_id';
-        var func_name = `load_drop_down( 'load_drop_down', document.getElementById('cbo_company_name').value, 'location_under_company', 'location_div' )`;
-       var get_return_value = await populate_form_data('id',menuId,'lib_store_location',columns,fields,'{{csrf_token()}}','','','');
-       if(get_return_value == 1)
-       {
-         set_button_status(1, permission, 'fnc_lib_store_location',1);
-       }
+        var response = await populate_field_data('id', menuId, 'lib_store_location', columns, '{{csrf_token()}}', '');
+        if (response.code === 18 && response.data) {
+            var data = response.data;
+            document.getElementById('txt_store_name').value = data.store_name;
+            $('#cbo_company_name').val(data.company_id);
+            await load_drop_down_v2('load_drop_down', data.company_id, 'location_under_company','location_div');
+            $('#cbo_location_name').val(data.location_id).trigger('change');            
+            var categoryValues = data.item_category_id.split(',');
+            $('#cbo_category_id').val(categoryValues).trigger('change');
+            document.getElementById('update_id').value = data.id;
+            set_button_status(1, permission, 'fnc_lib_store_location', 1);
+        } else {
+            console.warn("Unexpected data format:", response);
+        }
+    };
+
+    function log_data() {
+        console.log('location onchange called');
+        
     }
+
+
 
     //set_multiselect('cbo_category_id','0','0','','0');
     setFilterGrid("list_view",-1);

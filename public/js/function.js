@@ -896,6 +896,23 @@ function load_drop_down( plink, data, action, container , callback = "" )
     });
 }
 
+
+async function load_drop_down_v2(plink, data, action,container) {
+    return new Promise(async (resolve, reject) => {
+        var url = `/${plink}?data=${data}&action=${action}`;
+        try {
+            const response = await fetch(url);
+            const html = await response.text();
+			document.getElementById(container).innerHTML = html;
+			resolve($('.select2, select[id^="cbo"]').select2());
+        } catch (error) {
+            showNotification(error, 'error');
+            reject(error);
+        }
+    });
+}
+
+
 function getBaseUrl()
 {
     const protocol = window.location.protocol;
@@ -946,7 +963,7 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 					// (this works for both single and multiple select elements)
 					else if (type == 'select-one')
 					{
-						$(this).val('').trigger('change'); // Reset Select2
+						//$(this).val('').trigger('change'); // Reset Select2
 						this.selectedIndex = 0;
 					}
 					 
@@ -1078,6 +1095,49 @@ function readImage(input,displayImage)
 	}
 }
 
+async function populate_field_data(filter_column_name,filter_column_value,table_name,database_column_name,_token,others='')
+{
+	freeze_window(7);
+	var return_value = [] ;
+	var url = `/populate_common_data`;
+	await fetch(url,{
+		method: "POST" ,
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRF-TOKEN': _token
+		},
+		body: JSON.stringify({
+			filter_column_name:filter_column_name,
+			filter_column_value:filter_column_value,
+			table_name:table_name,
+			column_names:database_column_name,
+			_token:_token,
+			others: others
+		})
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		return response.json();
+	})
+	.then(data => {
+		return data;
+	})
+	.then(data=>{
+		return_value = data;
+		release_freezing();
+	})
+	.catch(error => {
+
+		showNotification(error,'warning');
+		release_freezing();
+	});
+	return return_value;
+}
+
+
 async function populate_form_data(filter_column_name,filter_column_value,table_name,database_column_name,form_field_name,_token,others='',multi_select_column ='',extra_function_on_chage_column='')
 {
 	freeze_window(7);
@@ -1176,7 +1236,7 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 						throw new Error(`${form_columns[row_no]} not found.`);
 					}
 				}
-				return_value = 1 ;
+				return_value = 1 ;z
 				if(multi_select_column.length > 0)
 				{
 					var multi_select_arr = [];
@@ -1256,7 +1316,6 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 	});
 	return return_value;
 }
-
 function save_update_delete(operation,url,request_data,column_name='',show_list_view_name='',show_list_view_div_id ='',reset_form_id='')
 {
 	freeze_window(operation);
