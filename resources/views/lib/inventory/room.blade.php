@@ -23,7 +23,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_company_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_company_name" id="cbo_company_name" onchange="load_drop_down('load_drop_down', this.value+'*store_under_location*store_div', 'location_under_company', 'location_div')" class="form-control">
+                                                <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChnage(this.value)" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
                                                     $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -62,7 +62,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_floor_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Floor</label>
-                                            <div class="col-sm-8 d-flex align-items-center" id="location_div">
+                                            <div class="col-sm-8 d-flex align-items-center" id="floor_div">
                                                 <select name="cbo_floor_name" id="cbo_floor_name" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
@@ -178,30 +178,48 @@ $permission = getPagePermission(request('mid') ?? 0);
             const response = await fetch(`/room_details/${room_id}`);
             if (!response.ok) throw new Error('Failed to fetch data');
             const data = await response.json();
-            console.log(data);
-
-            // 🏃 Company -> Location
-            $('#cbo_company_name').val(data.company_id);
-            triggerChangeEvent('cbo_company_name'); // Trigger change based on condition
-            await waitForDropdownUpdate('cbo_location_name', data.location_id); // Wait for correct location
-            triggerChangeEvent('cbo_location_name');
-
- 
-            await waitForDropdownUpdate('cbo_store_name', data.store_id); // Wait for correct store
-            // 🏃 Store -> Floor
-            triggerChangeEvent('cbo_store_name');
-
-
-            await waitForDropdownUpdate('cbo_floor_name', data.floor_id); // Wait for correct floor
-            // 🏃 Floor (final)
-            triggerChangeEvent('cbo_floor_name');
-
+            document.getElementById('cbo_company_name').value = data.company_id;
+            await handleCompanyChange(data.company_id); // Await the company change
+            $('#cbo_location_name').val(data.location_id);
+            await handleLocationChange(data.location_id); // Await the location change
+            $('#cbo_store_name').val(data.store_id)
+            await handleStoreChange(data.store_id); // Await the location change
+            $('#cbo_floor_name').val(data.floor_id).trigger('change');
             document.getElementById('txt_room_no').value = data.room_no;
             document.getElementById('update_id').value = data.id;
 
             set_button_status(1, permission, 'fnc_lib_room', 1);
+
         } catch (error) {
             console.error('Error:', error);
+        }
+
+
+        
+    }
+
+    async function handleCompanyChange(company_id) {
+        try {
+            await load_drop_down_v2('load_drop_down', company_id+'*store_under_location*store_div', 'location_under_company', 'location_div')
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleLocationChange(location_id) {
+        try {
+            await load_drop_down_v2('load_drop_down', location_id+'*floor_under_store*floor_div', 'store_under_location', 'store_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleStoreChange(store_id) {
+        try {
+            await load_drop_down_v2('load_drop_down', store_id, 'floor_under_store', 'floor_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
         }
     }
 

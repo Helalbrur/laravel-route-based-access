@@ -1,13 +1,13 @@
 <?php
     $data = explode("*",$data);
     $company_id = $data[0];
-    $is_floor_loaded = "";
+    $is_loaded = "";
     $on_change = "";
     if(count($data) > 1)
     {
-        $is_floor_loaded = $data[1];
+        $is_loaded = $data[1];
     }
-    if(!empty($is_floor_loaded))
+    if(!empty($is_loaded))
     {
        $on_change ="load_drop_down('load_drop_down',this.value, '".$data[1]."', '".$data[2]."' )" ;
     }

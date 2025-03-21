@@ -1,7 +1,7 @@
 
 <?php
     $data = explode("*",$data);
-    $location_id = $data[0];
+    $store_id = $data[0];
     $is_loaded = "";
     $on_change = "";
     if(count($data) > 1)
@@ -12,11 +12,11 @@
     {
        $on_change ="load_drop_down('load_drop_down',this.value, '".$data[1]."', '".$data[2]."' )" ;
     }
-    $stores = App\Models\LibStoreLocation::where('location_id',$location_id)->get();
+    $flores = App\Models\LibFloor::where('store_id',$store_id)->get();
 ?>
-<select name="cbo_store_name" id="cbo_store_name" class="form-control" onchange="<?php echo $on_change;?>">
+<select name="cbo_floor_name" id="cbo_floor_name" class="form-control" onchange="<?php echo $on_change;?>">
     <option value="0">SELECT</option>
-    @foreach($stores as $store)
-        <option value="{{$store->id}}" >{{$store->store_name}}</option>
+    @foreach($flores as $flore)
+        <option value="{{$flore->id}}" >{{$flore->floor_name}}</option>
     @endforeach
 </select>
