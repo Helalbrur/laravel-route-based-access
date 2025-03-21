@@ -26,7 +26,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                         <?php
                                             $categories = App\Models\LibCategory::get();
                                         ?>
-                                        <select name="cbo_category_id" id="cbo_category_id" onchange="load_drop_down( 'load_drop_down', this.value, 'item_group_under_category', 'item_group_div' )"  class="form-control">
+                                        <select name="cbo_category_id" id="cbo_category_id" onchange="handleCategoryChange()"  class="form-control">
                                             <option value="0">SELECT</option>
                                             @foreach($categories as $category)
                                                 <option value="{{$category->id}}" {{$category->id==1 ? 'selected' : ''}}>{{$category->category_name}}</option>
@@ -149,14 +149,36 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 
     const load_php_data_to_form =async (menuId) =>
     {
-        reset_form('itemsubgroupentry_1','','',1);
-        var columns = 'item_category_id*item_group_id*sub_group_name*sub_group_code*id';
-        var fields = 'cbo_category_id*cbo_item_group_id*txt_item_sub_group_name*txt_item_sum_group_code*update_id';
-       var get_return_value = await populate_form_data('id',menuId,'lib_item_sub_group',columns,fields,'{{csrf_token()}}');
-       if(get_return_value == 1)
-       {
-         set_button_status(1, permission, 'fnc_lib_item_sub_group',1);
+       try {
+            freeze_window(3);
+            reset_form('itemsubgroupentry_1','','',1);
+            var columns = 'item_category_id*item_group_id*sub_group_name*sub_group_code*id';
+            var response = await populate_field_data('id', menuId, 'lib_item_sub_group', columns, '{{csrf_token()}}', '');
+            if (response.code === 18 && response.data) {
+                var data = response.data;
+                document.getElementById('cbo_category_id').value = data.item_category_id;
+                await handleCategoryChange(); // Await the category change
+                $('#cbo_item_group_id').val(data.item_group_id).trigger('change');
+                document.getElementById('txt_item_sub_group_name').value = data.sub_group_name;
+                document.getElementById('txt_item_sum_group_code').value = data.sub_group_code;
+                document.getElementById('update_id').value = data.id;
+                set_button_status(1, permission, 'fnc_lib_item_sub_group', 1);
+            } else {
+               throw new Error("Failed to fetch data");
+            }
+        release_freezing();
+       } catch (error) {
+        release_freezing();
        }
+    }
+
+    async function handleCategoryChange() {
+        try {
+            //'item_group_under_category', 'item_group_div'
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'category_id':document.getElementById('cbo_category_id').value,'onchange':''}), 'item_group_under_category', 'item_group_div')
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
     }
 
     $("#txt_file").change(function() {
