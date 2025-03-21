@@ -29,7 +29,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                     </div>
                                     <label for="cbo_company_name"  class="col-sm-2 col-form-label must_entry_caption">Company Name</label>
                                     <div class="col-sm-4">
-                                        <select name="cbo_company_name" id="cbo_company_name" onchange="load_drop_down( 'load_drop_down', this.value, 'location_under_company', 'location_div' )" class="form-control">
+                                        <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange(this.value)" class="form-control">
                                             <option value="0">SELECT</option>
                                             <?php
                                                 $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -157,16 +157,18 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         }
     }
 
-    const load_php_data_to_form = async (menuId) => {
+    
+
+   const load_php_data_to_form = async (menuId) => {
         reset_form('libstorelocation_1', '', '', 1);
         var columns = 'store_name*company_id*location_id*item_category_id*id';
         var response = await populate_field_data('id', menuId, 'lib_store_location', columns, '{{csrf_token()}}', '');
         if (response.code === 18 && response.data) {
             var data = response.data;
             document.getElementById('txt_store_name').value = data.store_name;
-            $('#cbo_company_name').val(data.company_id);
-            await load_drop_down_v2('load_drop_down', data.company_id, 'location_under_company','location_div');
-            $('#cbo_location_name').val(data.location_id).trigger('change');            
+            document.getElementById('cbo_company_name').value = data.company_id;
+            await handleCompanyChange(data.company_id); // Await the company change
+            $('#cbo_location_name').val(data.location_id).trigger('change');
             var categoryValues = data.item_category_id.split(',');
             $('#cbo_category_id').val(categoryValues).trigger('change');
             document.getElementById('update_id').value = data.id;
@@ -176,12 +178,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         }
     };
 
-    function log_data() {
-        console.log('location onchange called');
-        
+    async function handleCompanyChange(value) {
+        try {
+            await load_drop_down_v2('load_drop_down', value, 'location_under_company', 'location_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
     }
-
-
 
     //set_multiselect('cbo_category_id','0','0','','0');
     setFilterGrid("list_view",-1);
