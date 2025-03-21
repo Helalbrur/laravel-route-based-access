@@ -29,7 +29,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                     </div>
                                     <label for="cbo_company_name"  class="col-sm-2 col-form-label must_entry_caption">Company Name</label>
                                     <div class="col-sm-4">
-                                        <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange(this.value)" class="form-control">
+                                        <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange()" class="form-control">
                                             <option value="0">SELECT</option>
                                             <?php
                                                 $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -178,9 +178,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
         }
     };
 
-    async function handleCompanyChange(value) {
+    async function handleCompanyChange() {
         try {
-            await load_drop_down_v2('load_drop_down', value, 'location_under_company', 'location_div');
+            await load_drop_down_v2('load_drop_down', JSON.stringify({ 'company_id': document.getElementById('cbo_company_name').value, 'onchange': '' }), 'location_under_company', 'location_div');
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
