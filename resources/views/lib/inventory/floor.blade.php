@@ -29,7 +29,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_company_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_company_name" id="cbo_company_name" onchange="load_drop_down('load_drop_down', this.value+'*store_under_location*store_div', 'location_under_company', 'location_div')" class="form-control">
+                                                <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange(this.value)" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
                                                     $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -159,11 +159,39 @@ $permission = getPagePermission(request('mid') ?? 0);
     const load_php_data_to_form = async (menuId) => {
         reset_form('libfloor_1', '', '', 1);
         var columns = 'floor_name*company_id*location_id*store_id*seq*id';
-        var fields = 'txt_floor_name*cbo_company_name*cbo_location_name*cbo_store_name*txt_floor_seq*update_id';
-        var func_name = `load_drop_down( 'load_drop_down', ${$("#cbo_company_name").val()}+'*store_under_location*store_div', 'location_under_company', 'location_div' )`;
-        var get_return_value = await populate_form_data('id', menuId, 'lib_floor', columns, fields, '{{csrf_token()}}', '', '', '');
-        if (get_return_value == 1) {
+        var response = await populate_field_data('id', menuId, 'lib_floor', columns, '{{csrf_token()}}', '');
+        if (response.code === 18 && response.data) {
+            var data = response.data;
+            document.getElementById('txt_floor_name').value = data.floor_name;
+            document.getElementById('cbo_company_name').value = data.company_id;
+            await handleCompanyChange(data.company_id); // Await the company change
+            $('#cbo_location_name').val(data.location_id);
+            await handleLocationChange(data.location_id); // Await the location change
+            $('#cbo_store_name').val(data.store_id).trigger('change');
+            document.getElementById('txt_floor_seq').value = data.seq;
+            document.getElementById('update_id').value = data.id;
             set_button_status(1, permission, 'fnc_lib_floor', 1);
+        } else {
+            console.warn("Unexpected data format:", response);
+        }
+    }
+
+    async function handleCompanyChange(company_id) {
+
+        try {
+            await load_drop_down_v2('load_drop_down', company_id+'*store_under_location*store_div', 'location_under_company', 'location_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleLocationChange(location_id) {
+        try {
+            await load_drop_down_v2('load_drop_down', location_id, 'store_under_location', 'store_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
         }
     }
     setFilterGrid("list_view", -1);
