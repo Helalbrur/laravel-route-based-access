@@ -897,16 +897,26 @@ function load_drop_down( plink, data, action, container , callback = "" )
 }
 
 
-async function load_drop_down_v2(plink, data, action,container) {
+async function load_drop_down_v2(plink, data, action,container,callback = "") {
     return new Promise(async (resolve, reject) => {
         var url = `/${plink}?data=${data}&action=${action}`;
         try {
             const response = await fetch(url);
             const html = await response.text();
 			document.getElementById(container).innerHTML = html;
+			if(typeof callback === "function")
+			{
+				// Call the callback function
+				callback();
+			}
 			resolve($('.select2, select[id^="cbo"]').select2());
         } catch (error) {
             showNotification(error, 'error');
+			if(typeof callback === "function")
+			{
+				// Call the callback function
+				callback();
+			}
             reject(error);
         }
     });
@@ -963,7 +973,7 @@ function reset_form( forms, divs, fields, default_val, extra_func, non_refresh_i
 					// (this works for both single and multiple select elements)
 					else if (type == 'select-one')
 					{
-						//$(this).val('').trigger('change'); // Reset Select2
+						$(this).val('').trigger('change'); // Reset Select2
 						this.selectedIndex = 0;
 					}
 					 

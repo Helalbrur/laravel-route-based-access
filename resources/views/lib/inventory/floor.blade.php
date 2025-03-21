@@ -157,6 +157,7 @@ $permission = getPagePermission(request('mid') ?? 0);
     }
 
     const load_php_data_to_form = async (menuId) => {
+        freeze_window(3);
         reset_form('libfloor_1', '', '', 1);
         var columns = 'floor_name*company_id*location_id*store_id*seq*id';
         var response = await populate_field_data('id', menuId, 'lib_floor', columns, '{{csrf_token()}}', '');
@@ -164,9 +165,9 @@ $permission = getPagePermission(request('mid') ?? 0);
             var data = response.data;
             document.getElementById('txt_floor_name').value = data.floor_name;
             document.getElementById('cbo_company_name').value = data.company_id;
-            await handleCompanyChange(data.company_id); // Await the company change
+            await handleCompanyChange(); // Await the company change
             $('#cbo_location_name').val(data.location_id);
-            await handleLocationChange(data.location_id); // Await the location change
+            await handleLocationChange(); // Await the location change
             $('#cbo_store_name').val(data.store_id).trigger('change');
             document.getElementById('txt_floor_seq').value = data.seq;
             document.getElementById('update_id').value = data.id;
@@ -174,21 +175,22 @@ $permission = getPagePermission(request('mid') ?? 0);
         } else {
             console.warn("Unexpected data format:", response);
         }
+        release_freezing();
     }
 
     async function handleCompanyChange(company_id) {
 
         try {
-            await load_drop_down_v2('load_drop_down', company_id+'*store_under_location*store_div', 'location_under_company', 'location_div');
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':'handleLocationChange()'}), 'location_under_company', 'location_div');
 
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
 
-    async function handleLocationChange(location_id) {
+    async function handleLocationChange() {
         try {
-            await load_drop_down_v2('load_drop_down', location_id, 'store_under_location', 'store_div');
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'location_id':document.getElementById('cbo_location_name').value,'onchange':''}), 'store_under_location', 'store_div');
 
         } catch (error) {
             console.error('Error loading dropdown:', error);

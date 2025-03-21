@@ -30,7 +30,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_company_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_company_name" id="cbo_company_name" onchange="load_drop_down('load_drop_down', this.value+'*store_under_location*store_div', 'location_under_company', 'location_div')" class="form-control">
+                                                <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange()" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
                                                     @foreach($lib_company as $id => $company_name)
@@ -65,7 +65,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_floor_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Floor Name</label>
-                                            <div class="col-sm-8 d-flex align-items-center" id="store_div">
+                                            <div class="col-sm-8 d-flex align-items-center" id="floor_div">
                                                 <?php $floors = App\Models\LibFloor::get(); ?>
                                                 <select name="cbo_floor_name" id="cbo_floor_name" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -90,6 +90,21 @@ $permission = getPagePermission(request('mid') ?? 0);
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group row d-flex justify-content-center">
+                                            <label for="cbo_rack_no" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Rack No</label>
+                                            <div class="col-sm-8 d-flex align-items-center" id="rack_div">
+                                                <?php 
+                                                    
+                                                    $racks = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
+                                                ?>
+                                                <select name="cbo_rack_no" id="cbo_rack_no" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    @foreach($racks as $rack)
+                                                        <option value="{{$rack->id}}">{{$rack->floor_room_rack_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row d-flex justify-content-center mt-4">
@@ -107,11 +122,12 @@ $permission = getPagePermission(request('mid') ?? 0);
                                 <thead class="table-secondary">
                                     <tr>
                                         <th width="5%">Sl</th>
-                                        <th width="20%">Company Name</th>
+                                        <th width="15%">Company Name</th>
                                         <th width="15%">Location Name</th>
                                         <th width="15%">Store</th>
-                                        <th width="15%">Floor Name</th>
-                                        <th width="15%">Room No</th>
+                                        <th width="10%">Floor Name</th>
+                                        <th width="10%">Room No</th>
+                                        <th width="10%">Rack No</th>
                                         <th>Shelf No</th>
                                     </tr>
                                 </thead>
@@ -128,7 +144,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         ->leftJoin('lib_company as e', 'a.company_id', 'e.id')
                                         ->leftJoin('lib_floor as f', 'b.floor_id', 'f.id')
                                         ->leftJoin('lib_floor_room_rack_mst as room', 'b.room_id', 'room.id')
-                                        ->leftJoin('lib_floor_room_rack_mst as shelf', 'b.shelf_id', 'shelf.id')
+                                        ->leftJoin('lib_floor_room_rack_mst as rack', 'b.rack_id', 'rack.id')
                                         ->select(
                                             'a.id',
                                             'd.store_name',
@@ -136,7 +152,8 @@ $permission = getPagePermission(request('mid') ?? 0);
                                             'c.location_name',
                                             'f.floor_name',
                                             'room.floor_room_rack_name as room_no',
-                                            'shelf.floor_room_rack_name as shelf_no'
+                                            'a.floor_room_rack_name as shelf_no',
+                                            'rack.floor_room_rack_name as rack_no'
                                         )
                                         ->whereNull('a.deleted_at')
                                         ->whereNull('b.deleted_at')
@@ -151,6 +168,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <td>{{$shelf->store_name}}</td>
                                         <td>{{$shelf->floor_name}}</td>
                                         <td>{{$shelf->room_no}}</td>
+                                        <td>{{$shelf->rack_no}}</td>
                                         <td>{{$shelf->shelf_no}}</td>
                                     </tr>
                                     @endforeach
@@ -170,13 +188,13 @@ $permission = getPagePermission(request('mid') ?? 0);
      var permission ='{{$permission}}';
     function fnc_lib_shelf( operation )
     {
-        if (form_validation('txt_shelf_no*cbo_company_name*cbo_location_name*cbo_store_name*cbo_floor_name*cbo_room_no','Shelf No* Company Name*Location*Store Name*Floor Name*Room No')==false)
+        if (form_validation('txt_shelf_no*cbo_company_name*cbo_location_name*cbo_store_name*cbo_floor_name*cbo_room_no*cbo_rack_no','Shelf No* Company Name*Location*Store Name*Floor Name*Room No*Rack No')==false)
         {
             return;
         }
         else
         {
-            var formData = get_form_data('txt_shelf_no,cbo_company_name,cbo_location_name,cbo_store_name,cbo_floor_name,cbo_room_no,update_id');
+            var formData = get_form_data('txt_shelf_no,cbo_company_name,cbo_location_name,cbo_store_name,cbo_floor_name,cbo_room_no,update_id,cbo_rack_no');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -202,6 +220,7 @@ $permission = getPagePermission(request('mid') ?? 0);
 
     async function load_php_data_to_form(rack_id) {
         try {
+            freeze_window(3);
             reset_form('libShelf_1', '', '', 1);
             const response = await fetch(`/shelf_details/${rack_id}`);
             if (!response.ok) throw new Error('Failed to fetch data');
@@ -210,26 +229,69 @@ $permission = getPagePermission(request('mid') ?? 0);
 
             // 🏃 Company -> Location
             $('#cbo_company_name').val(data.company_id);
-            triggerChangeEvent('cbo_company_name'); // Trigger change based on condition
+            await handleCompanyChange();
 
-            await waitForDropdownUpdate('cbo_location_name', data.location_id); // Wait for correct location
-            triggerChangeEvent('cbo_location_name');
+            $('#cbo_location_name').val(data.location_id);
+            await handleLocationChange();
 
-            await waitForDropdownUpdate('cbo_store_name', data.store_id); // Wait for correct store
-            triggerChangeEvent('cbo_store_name');
+            $('#cbo_store_name').val(data.store_id);
+            await handleStoreChange();
 
-            await waitForDropdownUpdate('cbo_floor_name', data.floor_id); // Wait for correct floor
-            triggerChangeEvent('cbo_floor_name');
+            $('#cbo_floor_name').val(data.floor_id);
+            await handleFloorChange(data.floor_id);
 
-            await waitForDropdownUpdate('cbo_room_no', data.room_id); // Wait for correct floor
-            triggerChangeEvent('cbo_room_no');
+            $('#cbo_room_no').val(data.room_id);
+            await handleRoomChange(data.room_id);
+
+            $('#cbo_rack_no').val(data.rack_id).trigger('change');
 
             document.getElementById('txt_shelf_no').value = data.shelf_no;
             document.getElementById('update_id').value = data.id;
 
             set_button_status(1, permission, 'fnc_lib_shelf', 1);
+            release_freezing();
         } catch (error) {
             console.error('Error:', error);
+            release_freezing();
+        }
+    }
+
+    async function handleCompanyChange() {
+        try {
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':'handleLocationChange()'}), 'location_under_company', 'location_div')
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleLocationChange() {
+        try {
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'location_id':document.getElementById('cbo_location_name').value,'onchange':'handleStoreChange()'}), 'store_under_location', 'store_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleStoreChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'store_id':document.getElementById('cbo_store_name').value,'onchange':'handleFloorChange()'}), 'floor_under_store', 'floor_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    async function handleFloorChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'floor_id':document.getElementById('cbo_floor_name').value,'onchange':'handleRoomChange()'}), 'room_under_floor', 'room_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    async function handleRoomChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'room_id':document.getElementById('cbo_room_no').value,'onchange':''}), 'rack_under_room', 'rack_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
         }
     }
 

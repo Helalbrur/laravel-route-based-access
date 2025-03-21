@@ -46,6 +46,7 @@ class LibShelfController extends Controller
                 'store_id' => $request->input('cbo_store_name'),
                 'floor_id' => $request->input('cbo_floor_name'),
                 'room_id' => $request->input('cbo_room_no'),
+                'rack_id' => $request->input('cbo_rack_no'),
                 'shelf_id' => $shelf->id,
                 'created_by' => Auth::user()->id
             ]);
@@ -61,6 +62,7 @@ class LibShelfController extends Controller
                     'store_id' => $shelf_dtls->store_id,
                     'floor_id' => $shelf_dtls->floor_id,
                     'room_id' => $shelf_dtls->room_id,
+                    'rack_id' => $shelf_dtls->rack_id,
                     'shelf_id' => $shelf->id,
                     'created_by' => Auth::user()->id
                 ]
@@ -114,6 +116,7 @@ class LibShelfController extends Controller
                     'store_id' => $request->input('cbo_store_name'),
                     'floor_id' => $request->input('cbo_floor_name'),
                     'room_id' => $request->input('cbo_room_no'),
+                    'rack_id' => $request->input('cbo_rack_no'),
                     'updated_by' => Auth::user()->id
                 ]);
             }
@@ -130,6 +133,7 @@ class LibShelfController extends Controller
                     'store_id' => $shelf_dtls->store_id,
                     'floor_id' => $shelf_dtls->floor_id,
                     'room_id' => $shelf_dtls->room_id,
+                    'rack_id' => $shelf_dtls->rack_id,
                     'shelf_id' => $shelf->id,
                     'updated_by' => Auth::user()->id
                 ]
@@ -191,6 +195,7 @@ class LibShelfController extends Controller
             'store_id' => $shelf->shelf_details->store_id ?? null,
             'floor_id' => $shelf->shelf_details->floor_id ?? null,
             'room_id' => $shelf->shelf_details->room_id ?? null,
+            'rack_id' => $shelf->shelf_details->rack_id ?? null,
             'shelf_no' => $shelf->floor_room_rack_name,
             'shelf_id' => $shelf->id,
             'created_by' => $shelf->created_by
