@@ -65,13 +65,48 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_pay_mode" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Pay Mode</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_pay_mode" id="cbo_pay_mode"  class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    @foreach(get_pay_mode() as $id => $name)
+                                                        @if(!in_array($id, [2,3,5]))  <!-- Exclude unwanted options -->
+                                                            <option value="{{ $id }}">{{ $name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_source" class="col-sm-6 col-form-label">Source</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_source" id="cbo_source" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    @foreach(get_source() as $id => $name)
+                                                        <option value="{{$id}}">{{$name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_delivery_date" class="col-sm-6 col-form-label fw-bold text-start">Remarks Date</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="date" id="txt_delivery_date" class="form-control flatpickr" name="txt_delivery_date" value="{{ date('Y-m-d') }}">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
+                               
 
                                 <div class="row">
-                                   
-                                    
-                                    
                                     <div class="mb-3 row d-flex justify-content-center mt-2">
                                         <div class="col-sm-2">
                                             <input type="hidden" name="update_id" id="update_id">

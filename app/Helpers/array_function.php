@@ -56,9 +56,9 @@ function currency()
     return array(1 => "BDT", 2 => "USD", 3 => "EURO", 4 => "CHF", 5 => "SGD", 6 => "Pound", 7 => "YEN");
 }
 
-function pay_mode()
+function get_pay_mode()
 {
-    return array(1 => "Credit", 2 => "Import", 3 => "In House", 4 => "Cash", 5 => "Within Group");
+    return array(1 => "Credit", 2 => "Import", 3 => "In House", 4 => "Cash", 5 => "Within Group",6=>"Bank",7=>"Mobile Fund");
 }
 
 function party_type()
@@ -137,5 +137,10 @@ function get_all_company_name()
 function variable_setting()
 {
     return array(1 => "Item Code System Generated");
+}
+
+function get_source()
+{
+    return array(1 => "Foreign", 2 => "Local");
 }
 ?>
