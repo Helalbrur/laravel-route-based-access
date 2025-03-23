@@ -21,7 +21,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                             <form name="workorder_1" id="workorder_1" autocomplete="off">
 
                                 <div class="row">
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -35,7 +35,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="txt_work_order_date" class="col-sm-6 col-form-label fw-bold text-start">Work Order Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -43,7 +43,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="txt_item_group_code" class="col-sm-6 col-form-label">Supplier</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -57,7 +57,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="txt_delivery_date" class="col-sm-6 col-form-label fw-bold text-start">Delivery Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -65,7 +65,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="cbo_pay_mode" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Pay Mode</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -81,7 +81,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="cbo_source" class="col-sm-6 col-form-label">Source</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -94,7 +94,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 form-group">
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="txt_delivery_date" class="col-sm-6 col-form-label fw-bold text-start">Remarks Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
