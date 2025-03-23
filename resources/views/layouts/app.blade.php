@@ -34,6 +34,9 @@
     {{-- custom style --}}
     <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+
+    <link rel="stylesheet" href="{{asset('css/flatpickr.min.css')}}">
+    
     <script>
         var sessionData = {!! json_encode([
         'data_arr' => session('laravel_stater.data_arr', []),
@@ -176,6 +179,7 @@
     <script src="{{asset('js/function.js')}}"></script>
     <script src="{{asset('js/multi_select.js')}}"></script>
     <script src="{{asset('js/select2.min.js')}}"></script>
+    <script src="{{asset('js/flatpickr.js')}}"></script>
 
     <script>
         // $(document).ready(function() {
@@ -188,6 +192,10 @@
                 $(this).attr('title', 'Must Entry Field.');
             });
             $('.select2, select[id^="cbo"]').select2();
+            flatpickr(".flatpickr", {
+                dateFormat: "Y-m-d",
+                enableTime: false
+            });
         });
 
         // $(document).on('DOMNodeInserted', function() {
