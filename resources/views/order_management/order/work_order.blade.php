@@ -21,11 +21,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                             <form name="workorder_1" id="workorder_1" autocomplete="off">
 
                                 <div class="row">
-                                    <div class="form-group col-3">
+                                    <div class="col-md-3 form-group">
                                         <div class="row">
                                             <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
-                                                <select name="cbo_company_name" id="cbo_company_name" onchange="load_company_config()" class="form-control">
+                                                <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" onchange="load_company_config()" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
                                                     @foreach($lib_company as $id => $company_name)
@@ -35,7 +35,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-3">
+                                    <div class="col-md-3 form-group">
                                         <div class="row">
                                             <label for="txt_work_order_date" class="col-sm-6 col-form-label fw-bold text-start">Work Order Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
@@ -43,12 +43,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-3">
+                                    <div class="col-md-3 form-group">
                                         <div class="row">
                                             <label for="txt_item_group_code" class="col-sm-6 col-form-label">Supplier</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <?php $suppliers = App\Models\LibSupplier::get(); ?>
-                                                <select name="cbo_supplier" id="cbo_supplier" class="form-control">
+                                                <select style="width: 100%" name="cbo_supplier" id="cbo_supplier" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     @foreach($suppliers as $supplier)
                                                         <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
@@ -57,7 +57,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-3">
+                                    <div class="col-md-3 form-group">
                                         <div class="row">
                                             <label for="txt_delivery_date" class="col-sm-6 col-form-label fw-bold text-start">Delivery Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
