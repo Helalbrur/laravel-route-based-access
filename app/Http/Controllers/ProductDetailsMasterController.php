@@ -40,7 +40,7 @@ class ProductDetailsMasterController extends Controller
         DB::beginTransaction();
         try
         {
-            $lib_location=ProductDetailsMaster::create([
+            $lib_items=ProductDetailsMaster::create([
                 'company_id'=>$request->input('cbo_company_name'),
                 'supplier_id'=>$request->input('cbo_supplier_name'),
                 'generic_id'=>$request->input('cbo_generic_name'),
@@ -62,11 +62,13 @@ class ProductDetailsMasterController extends Controller
                 'created_by'=>Auth::user()->id 
             ]);
 
+            //dd($lib_items);
+
             DB::commit();
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
-                'data'=>$lib_location
+                'data'=>$lib_items
             ]);
         }
         catch(Exception $e)

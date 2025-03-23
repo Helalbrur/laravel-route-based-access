@@ -31,7 +31,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                         <div class="form-group row">
                                 <label for="cbo_company_name" class="col-sm-2 col-form-label must_entry_caption">Company</label>
                                 <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_company_name" id="cbo_company_name" onchange="load_company_config(this.value)" class="form-control">
+                                    <select name="cbo_company_name" id="cbo_company_name" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -43,7 +43,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                 </div>
                                 <label for="cbo_supplier_name"  class="col-sm-2 col-form-label must_entry_caption">Supplier</label>
                                 <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_supplier_name" id="cbo_supplier_name" onchange="load_company_config(this.value)" class="form-control">
+                                    <select name="cbo_supplier_name" id="cbo_supplier_name" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_supplier = App\Models\LibSupplier::pluck('supplier_name', 'id');
@@ -55,7 +55,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                 </div>
                                 <label for="cbo_generic_name"  class="col-sm-2 col-form-label">Generic Name</label>
                                 <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_generic_name" id="cbo_generic_name" onchange="load_company_config(this.value)" class="form-control">
+                                    <select name="cbo_generic_name" id="cbo_generic_name" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_generic = App\Models\LibGeneric::pluck('generic_name', 'id');
@@ -67,9 +67,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="cbo_item_category_name"  class="col-sm-2 col-form-label must_entry_caption">Item Category</label>
+                                <label for="cbo_item_category_name" class="col-sm-2 col-form-label must_entry_caption">Item Category</label>
                                 <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_item_category_name" id="cbo_item_category_name" onchange="load_company_config(this.value)" class="form-control">
+                                    <select name="cbo_item_category_name" id="cbo_item_category_name" class="form-control" onchange="handleCategoryChange()">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_category = App\Models\LibCategory::pluck('category_name', 'id');
@@ -79,9 +79,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         @endforeach
                                     </select>
                                 </div>
-                                <label for="cbo_sub_category_name"  class="col-sm-2 col-form-label">Item Sub-Category</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_sub_category_name" id="cbo_sub_category_name" onchange="load_company_config(this.value)" class="form-control">
+                                <label for="cbo_sub_category_name" class="col-sm-2 col-form-label">Item Sub-Category</label>
+                                <div class="col-sm-4 col-lg-2" id="sub_category_div">
+                                    <select name="cbo_sub_category_name" id="cbo_sub_category_name" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_sub_category = App\Models\LibItemSubCategory::pluck('sub_category_name', 'id');
@@ -115,7 +115,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                             <div class="form-group row"> 
                                 <label for="cbo_brand_name" class="col-sm-2 col-form-label">Brand</label>
                                 <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_brand_name" id="cbo_brand_name" onchange="load_company_config(this.value)" class="form-control">
+                                    <select name="cbo_brand_name" id="cbo_brand_name" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_brand = App\Models\LibBrand::pluck('brand_name', 'id');
@@ -133,7 +133,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
 
                                 <label for="cbo_color_name" class="col-sm-2 col-form-label">Color</label>
                                 <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_color_name" id="cbo_color_name" onchange="load_company_config(this.value)" class="form-control">
+                                    <select name="cbo_color_name" id="cbo_color_name" class="form-control">
                                         <option value="0">SELECT</option>
                                         <?php
                                             $lib_color = App\Models\LibColor::pluck('color_name', 'id');
@@ -197,6 +197,32 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                 <label for="txt_power" class="col-sm-2 col-form-label">Power</label>
                                 <div class="col-sm-4 col-lg-2">
                                     <input type="text" id="txt_power" class="form-control" name="txt_power">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cbo_group_name" class="col-sm-2 col-form-label">Item Group</label>
+                                <div class="col-sm-4 col-lg-2">
+                                    <select name="cbo_group_name" id="cbo_group_name" onchange="handleSubGroupChange()" class="form-control">
+                                        <option value="0">SELECT</option>
+                                        <?php
+                                            $lib_group_name = App\Models\LibItemGroup::pluck('item_name', 'id');
+                                        ?>
+                                        @foreach($lib_group_name as $id => $lib_group_name)
+                                            <option value="{{ $id }}">{{ $lib_group_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <label for="cbo_sub_group_name" class="col-sm-2 col-form-label">Item Sub Group</label>
+                                <div class="col-sm-4 col-lg-2" id="sub_group_div">
+                                    <select name="cbo_sub_group_name" id="cbo_sub_group_name" class="form-control">
+                                        <option value="0">SELECT</option>
+                                        <?php 
+                                            $lib_sub_group_name = App\Models\LibItemSubGroup::pluck('sub_group_name', 'id');
+                                        ?>
+                                        @foreach($lib_sub_group_name as $id => $lib_sub_group_name)
+                                            <option value="{{ $id }}">{{ $lib_sub_group_name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="from-group row">
@@ -281,6 +307,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         {
         
             var formData = get_form_data('cbo_company_name,cbo_supplier_name,cbo_generic_name,cbo_item_category_name,cbo_sub_category_name,txt_item_type,txt_item_name,txt_item_code,txt_item_origin,cbo_brand_name,txt_dosage_form,cbo_color_name,cbo_order_uom,cbo_consuption_uom,txt_consuption_uom_qty,txt_conversion_fac,cbo_size_name,txt_power,update_id');
+           // console.log(formData);
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -307,13 +334,56 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
     const load_php_data_to_form =async (menuId) =>
     {
         var columns = 'company_id*supplier_id*generic_id*item_category_id*item_sub_category_id*item_type*item_description*item_code*item_origin*brand_id*dosage_form*color_id*order_uom*consuption_uom*consuption_uom_qty*conversion_fac*size_id*power*id';
-        var fields = 'cbo_company_name*cbo_supplier_name*cbo_generic_name*cbo_item_category_name*cbo_sub_category_name*txt_item_type*txt_item_name*txt_item_code*txt_item_origin*cbo_brand_name*txt_dosage_form*cbo_color_name*cbo_order_uom*cbo_consuption_uom*txt_consuption_uom_qty*txt_conversion_fac*cbo_size_name*txt_power*update_id';
-        var others = '';
-       var get_return_value = await populate_form_data('id',menuId,'product_details_master',columns,fields,'{{csrf_token()}}');
-       if(get_return_value == 1)
-       {
-         set_button_status(1, permission, 'fnc_item_creation',1);
-       }
+
+        var response = await populate_field_data('id', menuId, 'product_details_master', columns, '{{csrf_token()}}', '');
+        
+        if (response.code === 18 && response.data) {
+            var data = response.data;
+            //console.table(data);
+            $('#cbo_company_name').val(data.company_id);
+            $('#cbo_supplier_name').val(data.supplier_id);
+            $('#cbo_generic_name').val(data.generic_id);
+            $('#cbo_item_category_name').val(data.item_category_id);
+            await handleCategoryChange(); // Await the company change
+            $('#cbo_sub_category_name').val(data.item_sub_category_id).trigger('change');
+            $('#txt_item_type').val(data.item_type);
+            $('#txt_item_name').val(data.item_description);
+            $('#txt_item_code').val(data.item_code);
+            $('#txt_item_origin').val(data.item_origin);
+            $('#cbo_brand_name').val(data.brand_id);
+            $('#txt_dosage_form').val(data.dosage_form);
+            $('#cbo_color_name').val(data.color_id);
+            $('#cbo_order_uom').val(data.order_uom);
+            $('#cbo_consuption_uom').val(data.consuption_uom);
+            $('#txt_consuption_uom_qty').val(data.consuption_uom_qty);
+            $('#txt_conversion_fac').val(data.conversion_fac);
+            $('#cbo_size_name').val(data.size_id);
+            $('#txt_power').val(data.power);
+            document.getElementById('update_id').value = data.id;
+            set_button_status(1, permission, 'fnc_item_creation',1);
+        } else {
+            console.warn("Unexpected data format:", response);
+        }
+        release_freezing();
+    }
+
+
+    async function handleCategoryChange() {
+        try {
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'category_id':document.getElementById('cbo_item_category_name').value,'onchange':''}), 'sub_category_under_category', 'sub_category_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    
+    async function handleSubGroupChange() {
+        try {
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'group_id':document.getElementById('cbo_group_name').value,'onchange':''}), 'sub_group_under_group', 'sub_group_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
     }
 
     make_mandatory(8);
