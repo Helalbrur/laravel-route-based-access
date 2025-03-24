@@ -7,12 +7,11 @@ use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\OtherCompany;
 use App\Models\LibItemSubGroup;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfController;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
@@ -42,7 +41,9 @@ use App\Http\Controllers\LibEmployeeController;
 use App\Http\Controllers\LibGenericController; 
 use App\Http\Controllers\LibLocationController;
 use App\Http\Controllers\LibSupplierController;
+use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\UserPrivMstController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\OtherCompanyController;
@@ -157,6 +158,7 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
 
 Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function () {
     Route::resource('/work_order',WorkOrderMstController::class);
+    Route::resource('/requisition',RequisitionController::class);
 });
 
 Route::middleware(['auth','PagePermission'])->group(function () {
