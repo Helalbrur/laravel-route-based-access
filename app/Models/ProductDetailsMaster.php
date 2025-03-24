@@ -28,7 +28,7 @@ class ProductDetailsMaster extends Model
         'item_description', 'product_name_details', 'lot', 'item_code', 'item_account', 'packing_type', 'uom',
         'avg_rate_per_unit', 'current_stock', 'stock_value', 'generic_id', 'item_sub_category_id', 'item_type',
         'item_origin', 'brand_id', 'dosage_form', 'color_id', 'order_uom', 'order_uom_qty', 'consuption_uom',
-        'consuption_uom_qty', 'conversion_fac', 'size_id', 'power', 'created_by', 'updated_by','is_system_generated_item_code'
+        'consuption_uom_qty', 'conversion_fac', 'size_id', 'power', 'created_by', 'updated_by','is_system_generated_item_code','item_group_id', 'item_sub_group_id'
     ];
 
     protected static function boot()

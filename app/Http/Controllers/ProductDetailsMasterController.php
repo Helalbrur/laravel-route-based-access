@@ -40,7 +40,7 @@ class ProductDetailsMasterController extends Controller
         DB::beginTransaction();
         try
         {
-            $lib_items=ProductDetailsMaster::create([
+            $item=ProductDetailsMaster::create([
                 'company_id'=>$request->input('cbo_company_name'),
                 'supplier_id'=>$request->input('cbo_supplier_name'),
                 'generic_id'=>$request->input('cbo_generic_name'),
@@ -59,16 +59,18 @@ class ProductDetailsMasterController extends Controller
                 'conversion_fac'=>$request->input('txt_conversion_fac'),
                 'size_id'=>$request->input('cbo_size_name'),
                 'power'=>$request->input('txt_power'),
+                'item_group_id'=>$request->input('cbo_group_name'),
+                'item_sub_group_id'=>$request->input('cbo_sub_group_name'),
                 'created_by'=>Auth::user()->id 
             ]);
 
-            //dd($lib_items);
+            // dd($item); die;
 
             DB::commit();
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
-                'data'=>$lib_items
+                'data'=>$item
             ]);
         }
         catch(Exception $e)
@@ -145,8 +147,11 @@ class ProductDetailsMasterController extends Controller
                 'conversion_fac'=>$request->input('txt_conversion_fac'),
                 'size_id'=>$request->input('cbo_size_name'),
                 'power'=>$request->input('txt_power'),
+                'item_group_id'=>$request->input('cbo_group_name'),
+                'item_sub_group_id'=>$request->input('cbo_sub_group_name'),
                 'updated_by'=>Auth::user()->id
             ]);
+            //dd($item); die;
     
             DB::commit();
             return response()->json([

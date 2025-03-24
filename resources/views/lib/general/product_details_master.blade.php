@@ -290,7 +290,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         </center>
     </div>
 </div>
-
 @endsection
 
 @section('script')
@@ -306,8 +305,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         else
         {
         
-            var formData = get_form_data('cbo_company_name,cbo_supplier_name,cbo_generic_name,cbo_item_category_name,cbo_sub_category_name,txt_item_type,txt_item_name,txt_item_code,txt_item_origin,cbo_brand_name,txt_dosage_form,cbo_color_name,cbo_order_uom,cbo_consuption_uom,txt_consuption_uom_qty,txt_conversion_fac,cbo_size_name,txt_power,update_id');
-           // console.log(formData);
+            var formData = get_form_data('cbo_company_name,cbo_supplier_name,cbo_generic_name,cbo_item_category_name,cbo_sub_category_name,txt_item_type,txt_item_name,txt_item_code,txt_item_origin,cbo_brand_name,txt_dosage_form,cbo_color_name,cbo_order_uom,cbo_consuption_uom,txt_consuption_uom_qty,txt_conversion_fac,cbo_size_name,txt_power,update_id,cbo_group_name,cbo_sub_group_name');
+            //console.log(formData);
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -333,7 +332,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
 
     const load_php_data_to_form =async (menuId) =>
     {
-        var columns = 'company_id*supplier_id*generic_id*item_category_id*item_sub_category_id*item_type*item_description*item_code*item_origin*brand_id*dosage_form*color_id*order_uom*consuption_uom*consuption_uom_qty*conversion_fac*size_id*power*id';
+        var columns = 'company_id*supplier_id*generic_id*item_category_id*item_sub_category_id*item_type*item_description*item_code*item_origin*brand_id*dosage_form*color_id*order_uom*consuption_uom*consuption_uom_qty*conversion_fac*size_id*power*id*item_group_id*item_sub_group_id';
 
         var response = await populate_field_data('id', menuId, 'product_details_master', columns, '{{csrf_token()}}', '');
         
@@ -359,6 +358,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
             $('#txt_conversion_fac').val(data.conversion_fac);
             $('#cbo_size_name').val(data.size_id);
             $('#txt_power').val(data.power);
+            $('#cbo_group_name').val(data.item_group_id);
+            await handleSubGroupChange(); // Await the company change
+            $('#cbo_sub_group_name').val(data.item_sub_group_id).trigger('change');
             document.getElementById('update_id').value = data.id;
             set_button_status(1, permission, 'fnc_item_creation',1);
         } else {
