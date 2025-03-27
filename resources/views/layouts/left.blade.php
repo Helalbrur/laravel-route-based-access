@@ -45,7 +45,8 @@ use Illuminate\Support\Facades\URL;
                         'general' => asset('svg/general.svg'),
                         'item' => asset('svg/items.svg'),
                         'inventory' => asset('svg/inventory.svg'),
-                        'setting' => asset('svg/settings.svg')
+                        'setting' => asset('svg/settings.svg'),
+                        'order' => asset('svg/order.svg')
                     ];
 
                     $iconIndex = 0;
@@ -70,7 +71,7 @@ use Illuminate\Support\Facades\URL;
                                 <li>
                                     <a id="lid<?php echo $r_sql[csf('M_MENU_ID')]; ?>"
                                        href="<?php echo trim($r_sql[csf('F_LOCATION')]) == "" ? "#" : $url; ?>">
-                                        <!-- <img src="<?php //echo $icon; ?>" alt="icon"> -->
+                                        <!-- <img src="<?php //echo $icon; ?>"> -->
                                         <?php echo $r_sql[csf('MENU_NAME')]; ?>
                                     </a>
                                 </li>
@@ -82,7 +83,7 @@ use Illuminate\Support\Facades\URL;
                             ?>
                             <li>
                                 <a href="javascript:void(0);" class="has-arrow waves-effect">
-                                    <img src="<?php echo $icon; ?>" width="17" height="17" alt="icon"> 
+                                    <img src="<?php echo $icon; ?>" width="17" height="17"> 
                                     <span key="t-dashboards" style="color: rgb(202, 202, 202) !important">
                                         <?php echo $r_sql[csf('MENU_NAME')]; ?>
                                     </span>
