@@ -46,6 +46,8 @@ class WorkOrderDtls extends Model
         // Automatically update updated_by when updating
         static::updating(function ($order) {
             $order->updated_by = Auth::id();
+            $order->net_amount = ($order->amount - $order->discount) + $order->vat + $order->tax;
+            $order->net_rate = $order->quantity > 0 ? ($order->net_amount / $order->quantity) : 0;
         });
     }
 

@@ -29,7 +29,7 @@ $permission = getPagePermission(request('mid') ?? 0);
                                         <div class="form-group row d-flex justify-content-center">
                                             <label for="cbo_company_name" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange(this.value)" class="form-control">
+                                                <select name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange()" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
                                                     $lib_company = App\Models\Company::pluck('company_name', 'id');
@@ -178,7 +178,7 @@ $permission = getPagePermission(request('mid') ?? 0);
         release_freezing();
     }
 
-    async function handleCompanyChange(company_id) {
+    async function handleCompanyChange() {
 
         try {
             await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':'handleLocationChange()'}), 'location_under_company', 'location_div');
