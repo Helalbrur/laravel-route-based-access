@@ -62,6 +62,10 @@ class ProductImport implements ToCollection, WithHeadingRow
                 $item_category_id  = $this->getOrCreateModel(LibCategory::class, 'category_name', $row['item_category'])->id ?? 0;
                 $item_group_id     = $this->getOrCreateModel(LibItemGroup::class, 'item_name', ($row['item_group'] ?? 0))->id ?? 0;
                 $uom_id            = $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? 0;
+                $item_sub_category = $this->getOrCreateModel(LibItemSubCategory::class, 'sub_category_name', $row['item_sub_category'])->id ?? 0;
+                $generic_id        = $this->getOrCreateModel(LibGeneric::class, 'generic_name', $row['generic'])->id ?? 0;
+                $brand_id          = $this->getOrCreateModel(LibBrand::class, 'brand_name', $row['brand'])->id ?? 0;
+                $size_id           = $this->getOrCreateModel(LibSize::class, 'size_name', $row['size'])->id ?? 0;
 
                 // Check for duplicates
                 $existingProduct = ProductDetailsMaster::where([
@@ -70,7 +74,13 @@ class ProductImport implements ToCollection, WithHeadingRow
                     'item_category_id' => $item_category_id,
                     'item_group_id'    => $item_group_id,
                     'item_description' => $row['item_description'],
-                    'consuption_uom'   => $uom_id
+                    'consuption_uom'   => $uom_id,
+                    'item_sub_category_id' => $item_sub_category,
+                    'generic_id'       => $generic_id,
+                    'brand_id'         => $brand_id,
+                    'size_id'          => $size_id,
+                    'dosage_form'      => $row['dosage_form'] ?? '',
+                    'power'            => $row['power'] ?? '',
                 ])->exists();
 
                 if ($existingProduct) {
@@ -87,11 +97,11 @@ class ProductImport implements ToCollection, WithHeadingRow
                     'supplier_id'       => $supplier_id,
                     'item_category_id'  => $item_category_id,
                     'item_group_id'     => $item_group_id,
-                    'item_sub_category_id' => $this->getOrCreateModel(LibItemSubCategory::class, 'sub_category_name', $row['item_sub_category'])->id ?? 0,
-                    'brand_id'         => $this->getOrCreateModel(LibBrand::class, 'brand_name', $row['brand'])->id ?? 0,
+                    'item_sub_category_id' => $item_sub_category,
+                    'brand_id'         => $brand_id,
                     'color_id'         => $this->getOrCreateModel(LibColor::class, 'color_name', $row['color'])->id ?? 0,
-                    'size_id'          => $this->getOrCreateModel(LibSize::class, 'size_name', $row['size'])->id ?? 0,
-                    'generic_id'       => $this->getOrCreateModel(LibGeneric::class, 'generic_name', $row['generic'])->id ?? 0,
+                    'size_id'          => $size_id,
+                    'generic_id'       => $generic_id,
                     'uom'              => $uom_id,
                     'order_uom'        => $this->getOrCreateModel(LibUom::class, 'uom_name', $row['order_uom'])->id ?? 0,
                     'consuption_uom'   => $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? $uom_id,
