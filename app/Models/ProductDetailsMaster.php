@@ -45,7 +45,7 @@ class ProductDetailsMaster extends Model
                 ->value('variable_value') ?? 0;
 
             if ($is_item_code_system_generated == 1) {
-                $item->item_code = self::generate_item_code($item->company_id, $item->item_category_id);
+                $item->item_code = self::generate_item_code($item);
                 $item->is_system_generated_item_code = 1;
             }
 
@@ -64,7 +64,7 @@ class ProductDetailsMaster extends Model
              ->value('variable_value') ?? 0;
 
             if (($is_item_code_system_generated == 1 || $item->is_system_generated_item_code == 1) && empty($item->item_code)) {
-                $item->item_code = self::generate_item_code($item->company_id, $item->item_category_id);
+                $item->item_code = self::generate_item_code($item);
                 $item->is_system_generated_item_code = 1;
             }
 
@@ -75,26 +75,29 @@ class ProductDetailsMaster extends Model
         });
     }
 
-    protected static function generate_item_code($company_id, $category_id)
+    protected static function generate_item_code($item)
     {
         // Get Company Short Name (First 3 letters)
-        $company_short = Company::where('id', $company_id)->value('company_short_name');
+        $company_short = Company::where('id', $item->company_id)->value('company_short_name');
         $company_short = strtoupper(substr($company_short, 0, 3));
 
         // Get Category Short Name (First 3 letters)
-        $category_short = LibCategory::where('id', $category_id)->value('short_name');
+        $category_short = LibCategory::where('id', $item->category_id)->value('short_name');
         $category_short = strtoupper(substr($category_short, 0, 3));
 
-        // Get Current Year
-        $year = now()->format('Y');
+        if(!empty($category_short)) $category_short = $category_short ."-";
+
+        $sub_category_name = LibItemSubCategory::where('id', $item->item_sub_category_id)->value('sub_category_name');
+        $sub_category_name = strtoupper(substr($sub_category_name, 0, 3));
+
+        if(!empty($sub_category_name)) $sub_category_name = $sub_category_name ."-";
 
         // Define Prefix
-        $prefix = "{$company_short}-{$category_short}-{$year}-";
+        $prefix = "{$company_short}-{$category_short}{$sub_category_name}";
 
         // Get the latest item code matching the prefix
-        $last_item = self::where('company_id', $company_id)
-        ->where('item_category_id', $category_id)
-        ->whereYear('created_at', $year)
+        $last_item = self::where('company_id', $item->company_id)
+        ->where('item_category_id', $item->category_id)
         ->where('is_system_generated_item_code',1)
         ->orderBy('item_code', 'desc')
         ->first();

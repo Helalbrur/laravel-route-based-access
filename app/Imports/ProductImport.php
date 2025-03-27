@@ -46,6 +46,11 @@ class ProductImport implements ToCollection, WithHeadingRow
                     'order_uom'         => 'required|string',
                     'consuption_uom'    => 'required|string',
                     'conversion_fac'    => 'required|numeric|min:0',
+                    'item_sub_category' => 'required|string',
+                    'brand'             => 'required|string',
+                    'size'              => 'required|string',
+                    'dosage_form'       => 'required|string',
+                    'power'             => 'required|string',
                 ]);
 
                 if ($validator->fails()) {
