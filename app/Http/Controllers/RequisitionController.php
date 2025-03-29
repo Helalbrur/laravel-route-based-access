@@ -61,4 +61,9 @@ class RequisitionController extends Controller
     {
         //
     }
+    
+    public function item_list_popup()
+    {
+        return view('ajax.item_list_popup');
+    }
 }
