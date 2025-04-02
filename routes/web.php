@@ -140,6 +140,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 });
 
 Route::prefix('/tools')->middleware(['auth'])->group(function(){
+    Route::get('/item_list_popup',[RequisitionController::class,'item_list_popup']);
     Route::get('mandatory_field_entry_form',[MandatoryFieldController::class,'entry_form_popup']);
     Route::get('load_drop_down_mandatory_field_item',[MandatoryFieldController::class,'load_drop_down_mandatory_field_item']);
     Route::get('mandatory_action_user_data',[MandatoryFieldController::class,'mandatory_action_user_data']);
