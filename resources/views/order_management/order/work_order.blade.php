@@ -45,7 +45,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         <div class="row">
                                             <label for="cbo_location_name" class="col-sm-6 col-form-label fw-bold text-start">Location</label>
                                             <div class="col-sm-6 d-flex align-items-center" id="location_div">
-                                                <select name="cbo_location_name" id="cbo_location_name" class="form-control">
+                                                <select style="width: 100%" name="cbo_location_name" id="cbo_location_name" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php
                                                     $lib_location = App\Models\LibLocation::pluck('location_name', 'id');
@@ -67,7 +67,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                     </div>
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="txt_item_group_code" class="col-sm-6 col-form-label">Supplier</label>
+                                            <label for="cbo_supplier" class="col-sm-6 col-form-label">Supplier</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <?php $suppliers = App\Models\LibSupplier::get(); ?>
                                                 <select style="width: 100%" name="cbo_supplier" id="cbo_supplier" class="form-control">
@@ -147,7 +147,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             <tr id="tr_1">
                                                 <td id="sl_1">1</td>
                                                 <td>
-                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" ondbclick="fn_item_popup(1)">
+                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" ondblclick="fn_item_popup(1)">
                                                     <input type="hidden" name="txt_item_id_1" id="txt_item_id_1" class="form-control" value="">
                                                 </td>
                                                 <td><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
@@ -338,7 +338,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             $('#sl_' + i).text(i);
             $('#txt_cur_rate_' + i).removeAttr("onkeyup").attr("onkeyup", "calculate_amount(" + i + ");");
             $('#txt_work_order_qty_' + i).removeAttr("onkeyup").attr("onkeyup", "calculate_amount(" + i + ");");
-            $('#txt_item_name_' + i).removeAttr("ondbclick").attr("ondbclick", "fn_item_popup(" + i + ");");
+            $('#txt_item_name_' + i).removeAttr("ondblclick").attr("ondblclick", "fn_item_popup(" + i + ");");
             $('#btn_add_row_' + i).removeAttr("onClick").attr("onClick", "add_row(" + i + ");");
             $('#btn_remove_row_' + i).removeAttr("onClick").attr("onClick", "remove_row(" + i + ");");
             i++;
@@ -354,6 +354,38 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
     function fnc_sys_no_popup() {
         
+    }
+
+    function fn_item_popup(row_id) {
+        if(form_validation('cbo_supplier','Supplier')==false)
+        {
+            return;
+        }
+        var supplier_id = $("#cbo_supplier").val();
+        var item_id = $('#txt_item_id_' + row_id).val();
+        var item_name = $('#txt_item_name_' + row_id).val();
+        var item_code = $('#txt_item_code_' + row_id).val();
+        var item_category = $('#txt_item_category_' + row_id).val();
+
+       
+        var param = JSON.stringify({
+            'supplier_id': supplier_id,
+            'item_id': item_id,
+            'item_name': item_name,
+            'category_id': item_category,
+            'item_code': item_code
+           
+        });
+        console.log(param);
+		var title = 'Item Search';
+		var page_link='/show_common_popup_view?page=work_order_item_search&param='+param;
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+			console.log(`popup_value=${popup_value}`);
+            $('#sys_no').val(popup_value);
+		}
     }
 </script>
 @endsection

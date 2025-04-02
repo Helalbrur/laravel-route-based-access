@@ -142,6 +142,23 @@ class CommonController extends Controller
         $param = $request->query('param') ?? '';
         return view('ajax.list_view.'.$show_list_view,compact('param'));
     }
+    public function show_common_popup_view(Request $request)
+    {
+        //dd($request->all());
+        try
+        {
+            $param = $request->query('param') ?? '';
+            $page = $request->query('page');
+            if(empty($page)) throw new Exception("Page Not Found");
+            $param = $request->query('param') ?? '';
+            return view('ajax.popup_view.'.$page,compact('param'));
+        }
+        catch(Exception $e)
+        {
+            $error = $e->getMessage();
+            return view('ajax.popup_view.show_common_popup_view',compact('error'));
+        }
+    }
     public function common_file_popup(Request $request)
     {
         $sys_no = $request->query('sys_no') ?? '';

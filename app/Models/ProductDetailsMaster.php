@@ -85,19 +85,25 @@ class ProductDetailsMaster extends Model
         $category_short = LibCategory::where('id', $item->category_id)->value('short_name');
         $category_short = strtoupper(substr($category_short, 0, 3));
 
-        if(!empty($category_short)) $category_short = $category_short ."-";
-
         $sub_category_name = LibItemSubCategory::where('id', $item->item_sub_category_id)->value('sub_category_name');
         $sub_category_name = strtoupper(substr($sub_category_name, 0, 3));
 
-        if(!empty($sub_category_name)) $sub_category_name = $sub_category_name ."-";
+
+        $brand_name = LibBrand::where('id', $item->brand_id)->value('brand_name');
+        $brand_name = strtoupper(substr($brand_name, 0, 3));
+
+        $dosage_form = strtoupper(substr($item->dosage_form, 0, 3));
+        
 
         // Define Prefix
-        $prefix = "{$company_short}-{$category_short}{$sub_category_name}";
+        $prefix = "{$company_short}-{$category_short}-{$sub_category_name}-{$brand_name}-{$dosage_form}";
 
         // Get the latest item code matching the prefix
         $last_item = self::where('company_id', $item->company_id)
         ->where('item_category_id', $item->category_id)
+        ->where('item_sub_category_id', $item->item_sub_category_id)
+        ->where('brand_id', $item->brand_id)
+        ->where('dosage_form', $item->dosage_form)
         ->where('is_system_generated_item_code',1)
         ->orderBy('item_code', 'desc')
         ->first();
