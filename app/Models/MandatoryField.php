@@ -15,4 +15,9 @@ class MandatoryField extends Model
     protected $casts = [
         'is_mandatory' => 'boolean'
     ];
+
+    public function getIsMandatoryAttribute($value)
+    {
+        return $value ? 1 : 0;
+    }
 }

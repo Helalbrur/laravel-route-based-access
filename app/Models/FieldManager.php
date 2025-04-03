@@ -23,4 +23,8 @@ class FieldManager extends Model
     protected $casts = [
         'is_hide' => 'boolean'
     ];
+    public function getIsHideAttribute($value)
+    {
+        return $value ? 1 : 0;
+    }
 }
