@@ -1630,53 +1630,79 @@ function make_mandatory(entry_form)
 }
 
 
-function field_manager(entry_form)
-{
-	console.log(`field_manager(${entry_form})`);
-	const url = `/get_field_manager_data?entry_form=${entry_form}`;
-    fetch(url,{
-		method: 'GET' ,
-		headers: {
-			'Content-Type': 'application/json',
-			'X-Requested-With': 'XMLHttpRequest',
-			'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
-		}
-	})
-	.then(response => response.text())
-	.then(data => {
-		try {
-            if (data.length > 0) {
-                var field_manager_data = data.split("*");
-                for (var property in field_manager_data) {
-                    let fieldId = field_manager_data[property];
-                    console.log('fieldId',fieldId);
-                   // Hide the input field
-					$("#" + fieldId).css("visibility", "hidden");
-
-					// Hide parent elements (label, div, td, etc.)
-					$("#" + fieldId).closest('.form-group').css("visibility", "hidden");
-
-                }
+function field_manager(entry_form) {
+    console.log(`Fetching field manager data for: ${entry_form}`);
+    
+    fetch(`/get_field_manager_data?entry_form=${entry_form}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(fieldNames => {
+        try {
+            if (Array.isArray(fieldNames) && fieldNames.length) {
+                console.log('Fields to hide:', fieldNames);
+                
+                // Process all tables on the page
+                $('table').each(function() {
+                    const $table = $(this);
+                    const $headers = $table.find('thead th');
+                    const columnIndices = new Set();
+                    
+                    // First pass: Find all columns to hide by their fields
+                    fieldNames.forEach(fieldName => {
+                        $(`[id^="${fieldName}_"], #${fieldName}`).each(function() {
+                            const $field = $(this);
+                            // Find the containing TD (if in a table)
+                            const $td = $field.closest('td');
+                            if ($td.length) {
+                                const index = $td.index();
+                                columnIndices.add(index);
+                                
+                                // Hide the cell and its contents
+                                $td.addClass('d-none');
+                                $field.addClass('d-none');
+                            } else {
+                                // Handle div structure
+                                $field.addClass('d-none');
+                                $field.closest('.form-group, .row, .col').addClass('d-none');
+                                $(`label[for="${$field.attr('id')}"]`).addClass('d-none');
+                            }
+                        });
+                    });
+                    
+                    // Second pass: Hide corresponding headers
+                    columnIndices.forEach(index => {
+                        $headers.eq(index).addClass('d-none');
+                    });
+                });
+            } else {
+                console.log('No fields to hide or empty response');
             }
         } catch (error) {
-            throw new Error(error);
+            console.error('Error processing fields:', error);
+            showNotification('Error processing field visibility', 'error');
         }
-	})
+    })
     .catch(error => {
-		showNotification(error,'error');
+        console.error('Fetch error:', error);
+        showNotification('Failed to load field settings', 'error');
     });
-
 }
-
 
 function load_all_setup(entry_form) {
 	var field_level_data = sessionData.data_arr[entry_form] || {};
 	var mandatoryField = sessionData.mandatory_field[entry_form] ? sessionData.mandatory_field[entry_form].join('*') : "";
 	var mandatoryMessage = sessionData.mandatory_message[entry_form] ? sessionData.mandatory_message[entry_form].join('*') : "";
-
 	make_mandatory(entry_form);
 	field_manager(entry_form);
-
 	return {
 		field_level_data: field_level_data,
 		mandatoryField: mandatoryField,
@@ -1731,5 +1757,18 @@ async function waitForDropdownUpdate(selector, expectedValue, timeout = 300) {
 				reject(`Timeout: ${selector} did not resolve to ${expectedValue}`);
 			}
 		}, timeout);
+	});
+}
+
+
+function initializeSelect2() {
+	$('select').each(function() {
+		// Only initialize if not already a Select2 control
+		if (!$(this).hasClass('select2-hidden-accessible')) {
+			$(this).select2({
+				width: '100%',
+				dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal') : document.body
+			});
+		}
 	});
 }

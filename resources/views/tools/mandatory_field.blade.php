@@ -45,10 +45,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                                         <tbody id="dtls_body">
                                             <tr>
                                                 <td id="field_td">
-                                                    <?php echo create_drop_down("cboFieldId_1", 200, blank_array(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_field_id[]"); ?>
+                                                    <?php echo create_drop_down("cboFieldId_1","100%", blank_array(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cboFieldId[]"); ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo create_drop_down("cboIsMandatory_1", 150, yes_no(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cbo_permission_id[]"); ?>
+                                                    <?php echo create_drop_down("cboIsMandatory_1","100%", yes_no(), "", 1, "-- Select --", 0, "", "", "", "", "", "", "", "", "cboIsMandatory[]"); ?>
                                                 </td>
                                                 <td id="increment_1">
                                                     <input type="button" id="incrementfactor_1" name="incrementfactor_1" class="btn btn-success" value="+" onclick="add_break_down_tr(1)" />
@@ -157,22 +157,22 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                         set_button_status(1, permission, 'fnc_mandatory_field', 1);
                         var row_num = $('#tbl_dtls tbody tr').length;
                         for (var i = 1; i <= row_num; i++) {
-                            $('#cboFieldId_' + i).val(0);
-                            $('#cboIsMandatory_' + i).val(0);
+                            $('#cboFieldId_' + i).val(0).trigger('change');
+                            $('#cboIsMandatory_' + i).val(0).trigger('change');
                             fn_deletebreak_down_tr(i);
                         }
                         var i = 1;
                         for (row of data) {
                             if (i < data.length) add_break_down_tr(i);
-                            $('#cboFieldId_' + i).val(row.field_id);
-                            $('#cboIsMandatory_' + i).val(row.is_mandatory);
+                            $('#cboFieldId_' + i).val(row.field_id).trigger('change');
+                            $('#cboIsMandatory_' + i).val(row.is_mandatory).trigger('change');
                             i++;
                         }
                     } else {
                         var row_num = $('#tbl_dtls tbody tr').length;
                         for (var i = 1; i <= row_num; i++) {
-                            $('#cboFieldId_' + i).val(0);
-                            $('#cboIsMandatory_' + i).val(0);
+                            $('#cboFieldId_' + i).val(0).trigger('change');
+                            $('#cboIsMandatory_' + i).val(0).trigger('change');
                             fn_deletebreak_down_tr(i);
                         }
                         set_button_status(0, permission, 'fnc_mandatory_field', 1);
@@ -184,8 +184,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
             .catch(error => {
                 var row_num = $('#tbl_dtls tbody tr').length;
                 for (var i = 1; i <= row_num; i++) {
-                    $('#cboFieldId_' + i).val(0);
-                    $('#cboIsMandatory_' + i).val(0);
+                    $('#cboFieldId_' + i).val(0).trigger('change');
+                    $('#cboIsMandatory_' + i).val(0).trigger('change');
                     fn_deletebreak_down_tr(i);
                 }
                 showNotification(error, 'error');
@@ -194,7 +194,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 
     }
 
-    function add_break_down_tr(i) {
+   
+
+    
+    function add_break_down_tr_backup(i) {
         var chargefor = 0;
         var row_num = $('#tbl_dtls tbody tr').length;
         if (row_num != i) {
@@ -230,6 +233,61 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 
     }
 
+    function add_break_down_tr(i) {
+        var chargefor = 0;
+        var row_num = $('#tbl_dtls tbody tr').length;
+        if (row_num != i) {
+            return false;
+        }
+        i++;
+
+        if (form_validation('cbo_page_id', 'Page Name') == false) {
+            alert("Please Select Page Name Field");
+            return;
+        }
+
+        // Clone the row and clean up Select2 elements
+        var newRow = $("#tbl_dtls tbody tr:last").clone()
+            .find('select').each(function() {
+                $(this).removeClass('select2-hidden-accessible')
+                    .next('.select2-container').remove()
+                    .removeAttr('data-select2-id');
+            }).end()
+            
+            // Update IDs, names and values for inputs/selects
+            .find("input,select").each(function() {
+                $(this).attr({
+                    'id': function(_, id) {
+                        var id = id.split("_");
+                        id.pop();
+                        return id.join("_") + "_" + i;
+                    },
+                    'name': function(_, name) {
+                        var name = name.split("_");
+                        return name; // Fixed to include index in name
+                    },
+                    'value': function(_, value) {
+                        return $(this).is('select') ? '0' : ''; // Reset values
+                    }
+                });
+            }).end()
+            
+            // Add to table
+            .appendTo("#tbl_dtls");
+
+        // Initialize Select2 for new selects
+        newRow.find('select').select2({
+            width: '100%',
+            dropdownParent: newRow.closest('.modal').length ? 
+            newRow.closest('.modal') : document.body
+        });
+
+        // Update button events
+        $('#incrementfactor_' + i).removeAttr("onClick").attr("onClick", "add_break_down_tr(" + i + ");").val("+");
+        $('#decrementfactor_' + i).removeAttr("onClick").attr("onClick", "fn_deletebreak_down_tr(" + i + ");").val("-");
+        initializeSelect2();
+    }
+
     function fn_deletebreak_down_tr(rowNo) {
         if (rowNo != 1) {
             var index = rowNo - 1
@@ -240,7 +298,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
                     $(this).attr({
                         'id': function(_, id) {
                             var id = id.split("_");
-                            return id[0] + "_" + i
+                            id.pop();
+                            return id.join("_") + "_" + i
                         },
                         'value': function(_, value) {
                             return value
@@ -254,5 +313,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
             }
         }
     }
+    
 </script>
 @endsection

@@ -19,4 +19,8 @@ class FieldManager extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected $casts = [
+        'is_hide' => 'boolean'
+    ];
 }

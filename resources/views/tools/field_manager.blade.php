@@ -186,16 +186,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                         var row_num=$('#tbl_dtls tbody tr').length;
                         for (var i=1; i<=row_num; i++)
                         {
-                            $('#cboFieldId_'+i).val(0);
-                            $('#cboIsHide_'+i).val(0);
+                            $('#cboFieldId_'+i).val(0).trigger('change');
+                            $('#cboIsHide_'+i).val(0).trigger('change');
                             fn_deletebreak_down_tr(i);
                         }		
                         var i = 1;
                         for(row of data)
                         {
                             if(i<data.length)add_break_down_tr( i );
-                            $('#cboFieldId_'+i).val(row.field_id);
-                            $('#cboIsHide_'+i).val(row.is_hide);
+                            console.log(i,row.field_id,row.is_hide);
+                            $('#cboFieldId_'+i).val(row.field_id).trigger('change');
+                            $('#cboIsHide_'+i).val(row.is_hide).trigger('change');
                            i++;
                         }
                     }
@@ -204,8 +205,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                         var row_num=$('#tbl_dtls tbody tr').length;
                         for (var i=1; i<=row_num; i++)
                         {
-                            $('#cboFieldId_'+i).val(0);
-                            $('#cboIsHide_'+i).val(0);
+                            $('#cboFieldId_'+i).val(0).trigger('change');
+                            $('#cboIsHide_'+i).val(0).trigger('change');
                             fn_deletebreak_down_tr(i);
                         }
                         set_button_status(0, permission, 'fnc_field_manager',1);
@@ -220,8 +221,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Field Manager';
                 var row_num=$('#tbl_dtls tbody tr').length;
                 for (var i=1; i<=row_num; i++)
                 {
-                    $('#cboFieldId_'+i).val(0);
-                    $('#cboIsHide_'+i).val(0);
+                    $('#cboFieldId_'+i).val(0).trigger('change');
+                    $('#cboIsHide_'+i).val(0).trigger('change');
                     fn_deletebreak_down_tr(i);
                 }
                 showNotification(error,'error');

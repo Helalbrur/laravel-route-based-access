@@ -130,28 +130,28 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                     <table class="table table-bordered table-striped text-center" id="dtls_list_view">
                                         <thead>
                                             <tr>
-                                                <th width="3%">Sl</th>
-                                                <th width="10%">Item Name</th>
-                                                <th width="10%">Item Code</th>
-                                                <th width="10%">Item Category</th>
-                                                <th width="10%">UOM</th>
-                                                <th width="10%">Required QTY</th>
-                                                <th width="10%">Work Order Qty</th>
-                                                <th width="10%">Previous Rate</th>
-                                                <th width="10%">Cur. Rate</th>
-                                                <th width="10%">Item Total Amount</th>
-                                                <th>Action</th>
+                                                <th class="form-group" width="3%">Sl</th>
+                                                <th class="form-group" width="10%">Item Name</th>
+                                                <th class="form-group" width="10%">Item Code</th>
+                                                <th class="form-group" width="10%">Item Category</th>
+                                                <th class="form-group" width="10%">UOM</th>
+                                                <th class="form-group" width="10%">Required QTY</th>
+                                                <th class="form-group" width="10%">Work Order Qty</th>
+                                                <th class="form-group" width="10%">Previous Rate</th>
+                                                <th class="form-group" width="10%">Cur. Rate</th>
+                                                <th class="form-group" width="10%">Item Total Amount</th>
+                                                <th class="form-group">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody >
                                             <tr id="tr_1">
-                                                <td id="sl_1">1</td>
-                                                <td>
+                                                <td class="form-group" id="sl_1">1</td>
+                                                <td class="form-group">
                                                     <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" ondblclick="fn_item_popup(1)">
                                                     <input type="hidden" name="txt_item_id_1" id="txt_item_id_1" class="form-control" value="">
                                                 </td>
-                                                <td><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
-                                                <td>
+                                                <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
+                                                <td class="form-group">
                                                     <select name="cbo_item_category_1" id="cbo_item_category_1" class="form-control">
                                                         <option value="0">SELECT</option>
                                                         @foreach(get_item_category() as $id => $name)
@@ -159,7 +159,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td>
+                                                <td class="form-group">
                                                     <select name="cbo_uom_1" id="cbo_uom_1" class="form-control">
                                                         <option value="0">SELECT</option>
                                                         @foreach(get_uom() as $id => $name)
@@ -167,12 +167,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
-                                                <td><input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" onkeyup="calculate_amount(1)" class="form-control" value=""></td>
-                                                <td><input type="text" name="txt_previous_rate_1" id="txt_previous_rate_1" class="form-control" value=""></td>
-                                                <td><input type="text" name="txt_cur_rate_1" id="txt_cur_rate_1" onkeyup="calculate_amount(1)" class="form-control" value=""></td>
-                                                <td><input type="text" name="txt_item_total_amount_1" id="txt_item_total_amount_1" class="form-control" value=""></td>
-                                                <td>
+                                                <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" onkeyup="calculate_amount(1)" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_previous_rate_1" id="txt_previous_rate_1" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_cur_rate_1" id="txt_cur_rate_1" onkeyup="calculate_amount(1)" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_item_total_amount_1" id="txt_item_total_amount_1" class="form-control" value=""></td>
+                                                <td class="form-group">
                                                     <button type="button" class="btn btn-success" name="btn_add_row_1"  id="btn_add_row_1" onclick="add_row(1)"><i class="fa fa-plus"></i></button> 
                                                     <button type="button" class="btn btn-danger" name="btn_remove_row_1" id="btn_remove_row_1" onclick="remove_row(1)"><i class="fa fa-minus"></i></button>
                                                 </td>
@@ -205,7 +205,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 @section('script')
 <script>
     var permission = '{{$permission}}';
-
+    var setup_data = load_all_setup(12); // Pass the entry_form dynamically
     function fnc_work_order(operation) {
         if (form_validation('txt_name', 'Name') == false) {
             return;
@@ -252,54 +252,87 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         }
     }
 
-    
 
     function add_row(insertIndex) {
-        var row_num = $('#dtls_list_view tbody tr').length;
-        var newRow = $("#dtls_list_view tbody tr:last").clone();
-        newRow.find("input,select,button").each(function() {
-            $(this).attr({
-                'id': function(_, id) {
-                    var idParts = id.split("_");
-                    idParts.pop();
-                    return idParts.join("_") + "_" + (insertIndex + 1);
-                },
-                'name': function(_, name) {
-                    
-                    var nameParts = name.split("_");
-                    nameParts.pop();
-                    return nameParts.join("_") + "_"+(insertIndex + 1);
-                },
-                'value': function(_, value) {
-                    return value;
-                }
-            });
+
+        var rows = $("#dtls_list_view tbody tr");
+        var row_num = rows.length;
+        
+        if (insertIndex < 0 || insertIndex >= row_num) {
+            var newRow = $("#dtls_list_view tbody tr:last").clone(false);
+        }
+        else
+        {
+            var newRow = rows.eq(insertIndex).clone(false);
+        }
+        
+        
+        // Clean up Select2 artifacts from the clone
+        newRow.find('select').each(function() {
+            $(this).removeClass('select2-hidden-accessible');
+            $(this).next('.select2-container').remove();
+            $(this).removeAttr('data-select2-id');
+        });
+        
+        // Update IDs and names
+        newRow.find("input, select, button").each(function() {
+            var oldId = $(this).attr('id');
+            var oldName = $(this).attr('name');
+            
+            if (oldId) {
+                var idParts = oldId.split("_");
+                idParts.pop();
+                var newId = idParts.join("_") + "_" + (insertIndex + 1);
+                $(this).attr('id', newId);
+            }
+            
+            if (oldName) {
+                var nameParts = oldName.split("_");
+                nameParts.pop();
+                var newName = nameParts.join("_") + "_" + (insertIndex + 1);
+                $(this).attr('name', newName);
+            }
+
+            if ($(this).is('input')) {
+                $(this).val(''); // Reset input values
+            } else if ($(this).is('select')) {
+                $(this).val('0'); // Reset select values
+            }
         });
 
         newRow.removeAttr('id').attr('id', 'tr_' + (insertIndex + 1));
 
-        // Insert the new row at the specified index
+        // Insert the new row
         var rows = $("#dtls_list_view tbody tr");
         if (insertIndex <= row_num - 1) {
             rows.eq(insertIndex).before(newRow);
         } else {
             rows.eq(row_num - 1).after(newRow);
         }
-        assign_id();
+
+        // Initialize Select2 for the new selects
+        newRow.find('select').select2({
+            width: '100%',
+            dropdownParent: newRow.closest('.modal').length ? newRow.closest('.modal') : document.body
+        });
+
+        assign_id(); // Renumber rows and update attributes
     }
 
     function remove_row(rowNo) {
-        var update_id = $("#update_id").val();
-        if (update_id != "") {
-            var index = rowNo - 1;
+        var row_num = $('#dtls_list_view tbody tr').length;
+        if (row_num == 1) return;
 
-        } else {
-            var index = rowNo;
-        }
-        if (rowNo == 1) {
-            return;
-        }
-        $("#dtls_list_view tbody tr:eq(" + index + ")").remove();
+        var rowToRemove = $("#tr_" + rowNo);
+        
+        // Properly destroy Select2 if it exists
+        // rowToRemove.find('select').each(function() {
+        //     if ($(this).hasClass('select2-hidden-accessible')) {
+        //         $(this).select2('destroy');
+        //     }
+        // });
+        
+        rowToRemove.remove();
         assign_id();
     }
 
@@ -307,43 +340,46 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         var i = 1;
         $("#dtls_list_view tbody").find('tr').each(function() {
             $(this).removeAttr('id').attr('id', 'tr_' + i);
-
             var tr_id = $(this).attr('id');
-            // console.log('tr => ' + tr_id);
 
             $("#" + tr_id).find("input,select,button").each(function() {
                 $(this).attr({
                     'id': function(_, id) {
-                        var id = id.split("_");
-                        id.pop();
-                        return id.join("_") + "_" + i;
+                        if (!id) return;
+                        var idParts = id.split("_");
+                        idParts.pop();
+                        return idParts.join("_") + "_" + i;
                     },
                     'name': function(_, name) {
+                        if (!name) return;
                         var nameParts = name.split("_");
                         nameParts.pop();
-                        return nameParts.join("_") + "_"+i;
+                        return nameParts.join("_") + "_" + i;
                     }
                 });
             });
+
             $("#" + tr_id).find("td").each(function() {
                 var td_id = $(this).attr('id');
                 if (td_id) {
-                    var td_id = td_id.split("_");
-                    td_id = td_id[0] + "_" + i;
-                    $(this).attr('id', td_id);
+                    var tdParts = td_id.split("_");
+                    tdParts.pop();
+                    $(this).attr('id', tdParts.join("_") + "_" + i);
                 }
             });
 
-           
             $('#sl_' + i).text(i);
-            $('#txt_cur_rate_' + i).removeAttr("onkeyup").attr("onkeyup", "calculate_amount(" + i + ");");
-            $('#txt_work_order_qty_' + i).removeAttr("onkeyup").attr("onkeyup", "calculate_amount(" + i + ");");
-            $('#txt_item_name_' + i).removeAttr("ondblclick").attr("ondblclick", "fn_item_popup(" + i + ");");
-            $('#btn_add_row_' + i).removeAttr("onClick").attr("onClick", "add_row(" + i + ");");
-            $('#btn_remove_row_' + i).removeAttr("onClick").attr("onClick", "remove_row(" + i + ");");
+            $('#txt_cur_rate_' + i).off("keyup").on("keyup", function() { calculate_amount(i); });
+            $('#txt_work_order_qty_' + i).off("keyup").on("keyup", function() { calculate_amount(i); });
+            $('#txt_item_name_' + i).off("dblclick").on("dblclick", function() { fn_item_popup(i); });
+            $('#btn_add_row_' + i).off("click").on("click", function() { add_row(i); });
+            $('#btn_remove_row_' + i).off("click").on("click", function() { remove_row(i); });
+
             i++;
         });
+        initializeSelect2();
     }
+
 
     function calculate_amount(row_id) {
         var rate = $('#txt_cur_rate_' + row_id).val() * 1;

@@ -139,7 +139,7 @@ class MandatoryFieldController extends Controller
         $data = $request->query('data') ?? 0;
         $field_arr=get_fieldlevel_arr($data);
         //dd($field_arr);
-        echo create_drop_down( "cboFieldId_1",200,$field_arr,"",1,"----Select----",0,"","","","","","","","","cbo_field_id[]" );
+        echo create_drop_down( "cboFieldId_1","100%",$field_arr,"",1,"----Select----",0,"","","","","","","","","cboFieldId[]" );
 	    exit();
     }
     public function mandatory_action_user_data(Request $request)

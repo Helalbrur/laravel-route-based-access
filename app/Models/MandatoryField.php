@@ -12,4 +12,7 @@ class MandatoryField extends Model
         'page_id','field_id','field_name','field_message','is_mandatory','created_by','updated_by'
     ];
     protected $table = 'mandatory_field';
+    protected $casts = [
+        'is_mandatory' => 'boolean'
+    ];
 }
