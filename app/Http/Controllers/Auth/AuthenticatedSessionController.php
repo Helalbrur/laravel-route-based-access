@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\View\View;
+use App\Models\FieldManager;
 use Illuminate\Http\Request;
+use App\Models\MandatoryField;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\LoginRequest;
@@ -31,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         $user = Auth::user();
-        
+       // dd($user);
         $sql = "SELECT page_id, company_id, user_id, field_id, field_name, is_disable, default_value FROM field_level_access WHERE user_id = ?";
         $sql_exe = DB::select($sql, [$user->id]);
 
@@ -57,7 +60,33 @@ class AuthenticatedSessionController extends Controller
             Session::put('laravel_stater.field_manager_message.'.$row->entry_form.'.'.$row->field_id, $row->field_message);
         }
 
+        $this->cacheFieldManagerData($user->id);
+
         return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
+    protected function cacheFieldManagerData($userId)
+    {
+        Cache::forget("field_manager_{$userId}");
+        Cache::forget("mandatory_field");
+        $data = FieldManager::where('user_id', $userId)
+            ->get()
+            ->groupBy('entry_form')
+            ->map(function($items) {
+                return $items->where('is_hide', 1)
+                            ->pluck('field_name')
+                            ->toArray();
+            });
+        $mandatory = MandatoryField::get()
+            ->groupBy('page_id')
+            ->map(function($items) {
+                return $items->where('is_mandatory', 1)
+                            ->pluck('field_name')
+                            ->toArray();
+            });
+        
+        Cache::put("field_manager_{$userId}", $data, now()->addDay());
+        Cache::put("mandatory_field", $mandatory, now()->addDay());
     }
 
     /**

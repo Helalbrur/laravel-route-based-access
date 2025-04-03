@@ -7,6 +7,7 @@ use App\Models\MainMenu;
 use App\Models\UserPrivMst;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class PagePermission
@@ -25,6 +26,8 @@ class PagePermission
 
         if ($user)
         {
+            $data = Cache::get("field_manager_".Auth::id(), []);
+            view()->share('fieldManagerData', $data);
             $segments = array_slice(explode('/', $request->path()), 0, -1);
             $urlPath = implode('/', $segments);
             $mainMenu = MainMenu::where(function($query) use ($urlPath,$request) {

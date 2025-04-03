@@ -4,10 +4,17 @@
 <head>
     <meta charset="utf-8" />
     <?php 
+    if(!empty(Cache::get("company_name"))){
+        $company_name = Cache::get("company_name");
+    }
+    else{
+        $company = \App\Models\Company::orderBy('id','desc')->first();
+        $company_name = $company->company_name ?? '';
+        Cache::put("company_name", $company_name,now()->addDay());
+    }
     
-    $company = \App\Models\Company::orderBy('id','desc')->first();
     ?>
-    <title> {{$company->company_name ?? ''}} {{ !empty($title) ?  '-' : '' }}{{ @$title }}</title>
+    <title> {{$company_name ?? ''}} {{ !empty($title) ?  '-' : '' }}{{ @$title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ @$description ?? '' }}" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -34,9 +41,15 @@
     {{-- custom style --}}
     <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-
-    <link rel="stylesheet" href="{{asset('css/flatpickr.min.css')}}">
     
+    <link rel="stylesheet" href="{{asset('css/flatpickr.min.css')}}">
+    @if(Auth::check())
+        <script>
+            window.fieldManagerData = @json(Cache::get("field_manager_".Auth::id()) ?? []);
+            window.MandatoryFieldData = @json(Cache::get("mandatory_field") ?? []);
+            window.userId = {{ Auth::id() }};
+        </script>
+    @endif
     <script>
         var sessionData = {!! json_encode([
         'data_arr' => session('laravel_stater.data_arr', []),

@@ -7,6 +7,7 @@ use App\Models\FieldManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StoreFieldManagerRequest;
 use App\Http\Requests\UpdateFieldManagerRequest;
 
@@ -68,6 +69,8 @@ class FieldManagerController extends Controller
                     ]);      
                 }
                 DB::commit();
+                Cache::forget("field_manager_{$request->cbo_user_id}");
+                $this->cacheFieldManagerData($request->cbo_user_id);
                 return response([
                     'code' => $request->operation,
                     'message' => 'success',
@@ -99,6 +102,21 @@ class FieldManagerController extends Controller
                 }
             }
         }
+    }
+
+    protected function cacheFieldManagerData($userId)
+    {
+        Cache::forget("field_manager_{$userId}");
+        $data = FieldManager::where('user_id', $userId)
+            ->get()
+            ->groupBy('entry_form')
+            ->map(function($items) {
+                return $items->where('is_hide', 1)
+                            ->pluck('field_name')
+                            ->toArray();
+            });
+        
+        Cache::put("field_manager_{$userId}", $data, now()->addDay());
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use Illuminate\Http\Client\Request as ClientRequest;
@@ -57,6 +58,10 @@ class CompanyController extends Controller
             }
 
             DB::commit();
+            Cache::forget("company_name");
+            $company = Company::orderBy('id','desc')->first();
+            $company_name = $company->company_name ?? '';
+            Cache::put("company_name", $company_name,now()->addDay());
             return response()->json([
                 'code'=>0,
                 'message'=>'success',
@@ -126,6 +131,10 @@ class CompanyController extends Controller
             }
 
             DB::commit();
+            Cache::forget("company_name");
+            $company = Company::orderBy('id','desc')->first();
+            $company_name = $company->company_name ?? '';
+            Cache::put("company_name", $company_name,now()->addDay());
             return response()->json([
                 'code'=>1,
                 'message'=>'success',
@@ -154,6 +163,10 @@ class CompanyController extends Controller
             $ret = ImageUpload::removeFiles($company->id,'company_profile');
             $company->delete();
             DB::commit();
+            Cache::forget("company_name");
+            $company = Company::orderBy('id','desc')->first();
+            $company_name = $company->company_name ?? '';
+            Cache::put("company_name", $company_name,now()->addDay());
             return response()->json([
                 'code'=>2,
                 'message'=>'success',

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\MandatoryField;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class MandatoryFieldController extends Controller
 {
@@ -65,6 +66,7 @@ class MandatoryFieldController extends Controller
                     ]);      
                 }
                 DB::commit();
+                $this->updateMandatoryFieldCache();
                 return response([
                     'code' => $request->operation,
                     'message' => 'success',
@@ -95,7 +97,22 @@ class MandatoryFieldController extends Controller
                     $dup->delete();
                 }
             }
+            $this->updateMandatoryFieldCache();
         }
+    }
+
+    protected function updateMandatoryFieldCache()
+    {
+        Cache::forget("mandatory_field");
+
+        $mandatory = MandatoryField::get()
+            ->groupBy('page_id')
+            ->map(function($items) {
+                return $items->where('is_mandatory', 1)
+                            ->pluck('field_name')
+                            ->toArray();
+            });
+        Cache::put("mandatory_field", $mandatory, now()->addDay());
     }
 
     /**

@@ -1598,39 +1598,17 @@ function set_field_level_access( company )
 
 function make_mandatory(entry_form)
 {
-	const url = `/get_mandatory_and_field_level_data?entry_form=${entry_form}`;
-    fetch(url,{
-		method: 'GET' ,
-		headers: {
-			'Content-Type': 'application/json',
-			'X-Requested-With': 'XMLHttpRequest',
-			'X-CSRF-TOKEN': '{{csrf_token()}}'// Add the CSRF token to the headers
-		}
-	})
-	.then(response => response.text())
-	.then(data => {
-		try {
-			if(data.length > 0)
-			{
-				var mandatory_field_leve_data = data.split("#");
-				var mandatory_field_arr = mandatory_field_leve_data[0].split("*");
-				for (var property in mandatory_field_arr) {
-					$("#" + mandatory_field_arr[property]).parent().prev('label').css("color", "blue");
-					$("#" + mandatory_field_arr[property]).parent().prev('td').css("color", "blue");
-				}
-			}
-		} catch (error) {
-			throw new Error(error);
-		}
-	})
-    .catch(error => {
-		showNotification(error,'error');
-    });
-
+	const fieldNames = window.MandatoryFieldData?.[entry_form] || [];
+	if (Array.isArray(fieldNames) && fieldNames.length) {
+		fieldNames.forEach(fieldName => {
+			$("#" + fieldName).parent().prev('label').css("color", "blue");
+			$("#" + fieldName).parent().prev('td').css("color", "blue");
+		});
+	}
 }
 
 
-function field_manager(entry_form) {
+function field_manager_if_fail(entry_form) {
     console.log(`Fetching field manager data for: ${entry_form}`);
     
     fetch(`/get_field_manager_data?entry_form=${entry_form}`, {
@@ -1646,56 +1624,124 @@ function field_manager(entry_form) {
         return response.json();
     })
     .then(fieldNames => {
-        try {
-            if (Array.isArray(fieldNames) && fieldNames.length) {
-                console.log('Fields to hide:', fieldNames);
-                
-                // Process all tables on the page
-                $('table').each(function() {
-                    const $table = $(this);
-                    const $headers = $table.find('thead th');
-                    const columnIndices = new Set();
-                    
-                    // First pass: Find all columns to hide by their fields
-                    fieldNames.forEach(fieldName => {
-                        $(`[id^="${fieldName}_"], #${fieldName}`).each(function() {
-                            const $field = $(this);
-                            // Find the containing TD (if in a table)
-                            const $td = $field.closest('td');
-                            if ($td.length) {
-                                const index = $td.index();
-                                columnIndices.add(index);
-                                
-                                // Hide the cell and its contents
-                                $td.addClass('d-none');
-                                $field.addClass('d-none');
-                            } else {
-                                // Handle div structure
-                                $field.addClass('d-none');
-                                $field.closest('.form-group, .row, .col').addClass('d-none');
-                                $(`label[for="${$field.attr('id')}"]`).addClass('d-none');
-                            }
-                        });
-                    });
-                    
-                    // Second pass: Hide corresponding headers
-                    columnIndices.forEach(index => {
-                        $headers.eq(index).addClass('d-none');
-                    });
-                });
-            } else {
-                console.log('No fields to hide or empty response');
-            }
-        } catch (error) {
-            console.error('Error processing fields:', error);
-            showNotification('Error processing field visibility', 'error');
+        if (!Array.isArray(fieldNames) || !fieldNames.length) {
+            console.log('No fields to hide or empty response');
+            return;
         }
+
+        console.log('Fields to hide:', fieldNames);
+        
+        // Use requestAnimationFrame for smoother UI updates
+        requestAnimationFrame(() => {
+            // Prepare all selectors at once
+            const selectors = fieldNames.map(name => 
+                `[id^="${name}_"], #${name}, label[for^="${name}_"], label[for="${name}"]`
+            ).join(', ');
+            
+            // Find all matching elements in one DOM query
+            const $elements = $(selectors);
+            const tablesToUpdate = new Set();
+            
+            // First pass: Hide elements and collect tables that need header updates
+            $elements.each(function() {
+                const $element = $(this);
+                
+                if ($element.is('th, td')) {
+                    // Handle table headers/cells
+                    const $table = $element.closest('table');
+                    if ($table.length) {
+                        tablesToUpdate.add($table[0]);
+                    }
+                    $element.addClass('d-none');
+                } else {
+                    // Handle other elements (inputs, selects, labels)
+                    $element.addClass('d-none');
+                    
+                    // Hide containers for form elements
+                    if ($element.is('input, select, textarea')) {
+                        $element.closest('.form-group, .row, .col').addClass('d-none');
+                    }
+                }
+            });
+            
+            // Second pass: Update table headers
+            tablesToUpdate.forEach(table => {
+                const $table = $(table);
+                const $headers = $table.find('thead th');
+                const $cells = $table.find('tbody td, tfoot td');
+                
+                // Find which columns have hidden cells
+                const hiddenColumns = new Set();
+                $cells.filter('.d-none').each(function() {
+                    hiddenColumns.add($(this).index());
+                });
+                
+                // Hide corresponding headers
+                $headers.each(function() {
+                    if (hiddenColumns.has($(this).index())) {
+                        $(this).addClass('d-none');
+                    }
+                });
+            });
+        });
     })
     .catch(error => {
-        console.error('Fetch error:', error);
+        console.error('Error:', error);
         showNotification('Failed to load field settings', 'error');
     });
 }
+
+function field_manager(entry_form) {
+    try {
+        // Get from window object injected by Laravel
+        const fieldNames = window.fieldManagerData?.[entry_form] || [];
+		console.log('fieldNames',fieldNames);
+        
+        if (!fieldNames.length) {
+            console.log('No fields to hide for', entry_form);
+            return;
+        }
+
+        // Batch DOM operations
+        const selectors = [
+            ...fieldNames.map(name => `[id^="${name}_"]`),
+            ...fieldNames.map(name => `#${name}`),
+            ...fieldNames.map(name => `label[for^="${name}_"]`),
+            ...fieldNames.map(name => `label[for="${name}"]`)
+        ].join(', ');
+
+        document.querySelectorAll(selectors).forEach(el => {
+            el.classList.add('d-none');
+            
+            // Hide containers
+            if (el.matches('input, select, textarea')) {
+                el.closest('.form-group, .row, .col')?.classList.add('d-none');
+            }
+        });
+
+        // Process tables
+        document.querySelectorAll('table').forEach(table => {
+            const hiddenCols = new Set();
+            
+            // Find hidden columns
+            table.querySelectorAll('tbody td.d-none, tfoot td.d-none').forEach(td => {
+                hiddenCols.add([...td.parentElement.children].indexOf(td));
+            });
+            
+            // Hide headers
+            table.querySelectorAll('thead th').forEach((th, index) => {
+                if (hiddenCols.has(index)) th.classList.add('d-none');
+            });
+        });
+
+    } catch (error) {
+        console.error('Field manager error:', error);
+        // Fallback to AJAX if needed
+        field_manager_if_fail(entry_form);
+    }
+}
+
+
 
 function load_all_setup(entry_form) {
 	var field_level_data = sessionData.data_arr[entry_form] || {};
