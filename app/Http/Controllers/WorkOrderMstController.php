@@ -104,4 +104,11 @@ class WorkOrderMstController extends Controller
     {
         //
     }
+
+    public function product_search_list_view(Request $request)
+    {
+    
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.product_search_list_view',compact('param'));
+    }
 }

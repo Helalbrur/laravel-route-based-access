@@ -162,6 +162,10 @@ Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/requisition',RequisitionController::class);
 });
 
+Route::prefix('/order')->middleware(['auth'])->group(function () {
+    Route::get('/product_search_list_view',[WorkOrderMstController::class,'product_search_list_view']);
+});
+
 Route::middleware(['auth','PagePermission'])->group(function () {
     //Button Click Database Backup route
     Route::resource('/db_backup',DbBackUpController::class);

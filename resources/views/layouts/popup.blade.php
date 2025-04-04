@@ -25,11 +25,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <link href="{{asset('sweetalert2/sweetalert2.css')}}" rel="stylesheet" type="text/css" />
   <script src="{{asset('sweetalert2/sweetalert2.all.js')}}" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/flatpickr.min.css')}}">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-
+  <div id="boxes">
+      <div id="dialog" class="window">
+          <div id="msg" class="msg_header">
+          </div>
+          <div style="width:400;padding:20px; height:150px; vertical-align:middle">
+              <img src="{{asset('images/loading.gif')}}" width="20" height="20" clear="all" style="vertical-align:middle;" /> &nbsp; &nbsp;<span id="msg_text" style="font-size:14px; color:#ffffff"> </span>
+          </div>
+      </div>
+      <div id="mask"></div>
+  </div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -68,6 +79,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset('modal_window/modal_window.js')}}"></script>
 <script src="{{asset('js/tablefilter.js')}}"></script>
 <script src="{{asset('js/function.js')}}"></script>
+
+<script src="{{asset('js/select2.min.js')}}"></script>
+<script src="{{asset('js/flatpickr.js')}}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2, select[id^="cbo"]').select2();
+        flatpickr(".flatpickr", {
+            dateFormat: "Y-m-d",
+            enableTime: false
+        });
+    });
+
+    // $(document).on('DOMNodeInserted', function() {
+    //     $('.select2, select[id^="cbo_"]').select2();
+    // });
+</script>
 @yield('script')
 </body>
 </html>

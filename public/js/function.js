@@ -524,9 +524,9 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
 		return;
 	}
 
-    var base_url = getBaseUrl();
+	const BASE_URL = getBaseUrl();
 
-    var url = `${base_url}${path}?data=${data}&action=${action}&param=${param}`;
+	var url = `${BASE_URL}/${action}?param=${data}`;
 	//console.log(`list view url : ${url}`);
     fetch(url, {
 		method: 'GET',
