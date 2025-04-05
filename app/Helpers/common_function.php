@@ -1160,9 +1160,9 @@ function generate_system_no($company, $location, $category, $year, $num_length, 
     $systemNo = $systemNoPrefix . "-" . str_pad($nextNumber, $num_length, "0", STR_PAD_LEFT);
 
     return (object) [
-        'wo_no' => $systemNo,
-        'wo_no_prefix' => $systemNoPrefix,
-        'wo_no_prefix_num' => $nextNumber
+        'sys_no' => $systemNo,
+        'sys_no_prefix' => $systemNoPrefix,
+        'sys_no_prefix_num' => $nextNumber
     ];
 }
 

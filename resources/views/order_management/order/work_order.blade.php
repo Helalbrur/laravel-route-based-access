@@ -22,9 +22,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                 <div class="row d-flex align-items-center">
                                     <label for="txt_sys_no" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Work Order No</label>
                                     <div class="col-sm-3 d-flex align-items-center">
-                                        <input id="txt_sys_no" name="txt_sys_no" placeholder="Browse" ondbclick="fnc_sys_no_popup()" class="form-control">
+                                        <input id="txt_sys_no" name="txt_sys_no" placeholder="Browse" ondblclick="fnc_sys_no_popup()" class="form-control">
                                         <input type="hidden" name="update_id" id="update_id">
                                     </div>
+                                    
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
@@ -43,7 +44,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                     </div>
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_location_name" class="col-sm-6 col-form-label fw-bold text-start">Location</label>
+                                            <label for="cbo_location_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Location</label>
                                             <div class="col-sm-6 d-flex align-items-center" id="location_div">
                                                 <select style="width: 100%" name="cbo_location_name" id="cbo_location_name" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -59,7 +60,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                     </div>
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="txt_work_order_date" class="col-sm-6 col-form-label fw-bold text-start">Work Order Date</label>
+                                            <label for="txt_work_order_date" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Work Order Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <input type="date" id="txt_work_order_date" class="form-control flatpickr" name="txt_work_order_date" value="{{ date('Y-m-d') }}">
                                             </div>
@@ -67,7 +68,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                     </div>
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_supplier" class="col-sm-6 col-form-label">Supplier</label>
+                                            <label for="cbo_supplier" class="col-sm-6 col-form-label must_entry_caption">Supplier</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <?php $suppliers = App\Models\LibSupplier::get(); ?>
                                                 <select style="width: 100%" name="cbo_supplier" id="cbo_supplier" class="form-control">
@@ -148,7 +149,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                 <td class="form-group" id="sl_1">1</td>
                                                 <td class="form-group">
                                                     <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" ondblclick="fn_item_popup(1)">
-                                                    <input type="hidden" name="txt_item_id_1" id="txt_item_id_1" class="form-control" value="">
+                                                    <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
+                                                    <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
                                                 </td>
                                                 <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
                                                 <td class="form-group">
@@ -175,7 +177,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                 <td class="form-group">
                                                     <button type="button" class="btn btn-success" name="btn_add_row_1"  id="btn_add_row_1" onclick="add_row(1)"><i class="fa fa-plus"></i></button> 
                                                     <button type="button" class="btn btn-danger" name="btn_remove_row_1" id="btn_remove_row_1" onclick="remove_row(1)"><i class="fa fa-minus"></i></button>
+
                                                 </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -207,10 +211,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
     function fnc_work_order(operation) {
-        if (form_validation('txt_name', 'Name') == false) {
+        if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier*cbo_pay_mode', 'Company Name*Location*Work Order Date*Supplier*Pay Mode') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_name,txt_short_name,update_id');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks');
             var method = "POST";
             var param = "";
             if (operation == 1 || operation == 2) {
@@ -219,7 +223,38 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 else formData.append('_method', 'DELETE');
             }
             formData.append('_token', '{{csrf_token()}}');
-            var url = `/lib/other_company${param}`;
+            var rows = $("#dtls_list_view tbody tr");
+            var row_num = rows.length;
+            formData.append('row_num', row_num);
+            formData.append('operation', operation);
+
+            var flag = 0;
+            for (var i = 1; i <=row_num; i++) {
+                if(form_validation('txt_item_name_'+i+'*txt_work_order_qty_'+i+'*txt_cur_rate_'+i,'Item Name*Work Order Qty*Cur. Rate')==false)
+                {
+                    flag = i;
+                    break;
+                }
+                formData.append(`hidden_product_id_${i}`, document.getElementById(`hidden_product_id_${i}`).value);
+                formData.append(`txt_item_name_${i}`, document.getElementById(`txt_item_name_${i}`).value);
+                formData.append(`hidden_dtls_id_${i}`, document.getElementById(`hidden_dtls_id_${i}`).value);
+                formData.append(`txt_item_code_${i}`, document.getElementById(`txt_item_code_${i}`).value);
+                formData.append(`cbo_item_category_${i}`, document.getElementById(`cbo_item_category_${i}`).value);
+                formData.append(`cbo_uom_${i}`, document.getElementById(`cbo_uom_${i}`).value);
+                formData.append(`txt_required_qty_${i}`, document.getElementById(`txt_required_qty_${i}`).value);
+                formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
+                formData.append(`txt_previous_rate_${i}`, document.getElementById(`txt_previous_rate_${i}`).value);
+                formData.append(`txt_cur_rate_${i}`, document.getElementById(`txt_cur_rate_${i}`).value);
+                formData.append(`txt_item_total_amount_${i}`, document.getElementById(`txt_item_total_amount_${i}`).value);
+            }
+
+            if(flag > 0)
+            {
+                alert('Please fill up item name, work order qty and cur. rate for row '+flag);
+                return;
+            }
+
+            var url = `/order/work_order${param}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -229,17 +264,18 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 body: formData
             };
 
-            save_update_delete(operation, url, requestData, 'id', 'show_other_company_list_view', 'list_view_div', 'workorder_1');
+            save_update_delete(operation, url, requestData, 'id', '', '', 'workorder_1');
         }
     }
 
-    const load_php_data_to_form = async (menuId) => {
-        var columns = 'name*short_name*id';
-        var fields = 'txt_name*txt_short_name*update_id';
+    const load_php_data_to_form = async (update_id) => {
+        var columns = 'wo_no*id*company_id*location_id*supplier_id*pay_mode*wo_date*delivery_date*source*remarks';
+        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_supplier*cbo_pay_mode*txt_work_order_date*txt_delivery_date*cbo_source*txt_remarks';
         var others = '';
-        var get_return_value = await populate_form_data('id', menuId, 'other_companies', columns, fields, '{{csrf_token()}}');
+        var get_return_value = await populate_form_data('id', update_id, 'work_order_mst', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {
             set_button_status(1, permission, 'fnc_work_order', 1);
+            load_details();
         }
     }
 
@@ -389,7 +425,50 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
     }
 
     function fnc_sys_no_popup() {
+        if(form_validation('cbo_company_name','Company Name')==false)
+        {
+            return;
+        }
         
+        var param = JSON.stringify({
+            'supplier_id': $("#cbo_supplier").val(),
+            'company_id': $("#cbo_company_name").val()
+        });
+        console.log(param);
+		var title = 'Work Order Search';
+		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			
+			try {
+                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var data = JSON.parse(popup_value);
+                console.log(data);
+                if (data) {
+                    $('#update_id').val(data.id);
+                    //txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks
+                    $('#txt_sys_no').val(data.wo_no);
+                    $('#cbo_company_name').val(data.company_id).trigger('change');
+                    $('#cbo_location_name').val(data.location_id).trigger('change');
+                    $('#cbo_supplier').val(data.supplier_id).trigger('change');
+                    $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
+                    $('#txt_work_order_date').val(data.wo_date);
+                    $('#txt_delivery_date').val(data.delivery_date);
+                    $('#cbo_source').val(data.source).trigger('change');
+                    $('#txt_remarks').val(data.remarks);
+                    load_details();
+                    set_button_status(1, permission, 'fnc_work_order', 1);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                
+            }
+		}
     }
 
     function fn_item_popup(row_id) {
@@ -398,7 +477,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             return;
         }
         var supplier_id = $("#cbo_supplier").val();
-        var item_id = $('#txt_item_id_' + row_id).val();
+        var item_id = $('#hidden_product_id_' + row_id).val();
         var item_name = $('#txt_item_name_' + row_id).val();
         var item_code = $('#txt_item_code_' + row_id).val();
         var item_category = $('#txt_item_category_' + row_id).val();
@@ -418,10 +497,41 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
 		emailwindow.onclose=function()
 		{
-			var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
-			console.log(`popup_value=${popup_value}`);
-            $('#sys_no').val(popup_value);
+			
+			try {
+                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var data = JSON.parse(popup_value);
+                console.log(data);
+                if (data) {
+                    $('#hidden_product_id_' + row_id).val(data.product_id).trigger('change');
+                    $('#txt_item_name_' + row_id).val(data.item_name);
+                    $('#txt_item_code_' + row_id).val(data.item_code);
+                    $('#cbo_item_category_' + row_id).val(data.category_id).trigger('change');
+                    $('#cbo_uom_' + row_id).val(data.uom_id).trigger('change');
+                    $('#txt_previous_rate_' + row_id).val(data.current_rate);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                
+            }
 		}
+    }
+
+   async function load_details() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+     await fetch(`/order/work_order_details/${$('#update_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('div_dtls_list_view').innerHTML = html;
+                initializeSelect2();
+                field_manager(12);
+            })
+            .catch(error => console.error('Error loading details:', error));
+            
     }
 </script>
 @endsection

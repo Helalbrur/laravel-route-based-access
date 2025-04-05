@@ -4,6 +4,7 @@
     $category_id    = $data['category_id'];
     $product_id     = $data['product_id'];
     $item_code      = $data['item_code'];
+    $supplier_id    = $data['supplier_id'];
     
     $query_builder = App\Models\ProductDetailsMaster::query();
     if(!empty($category_id))
@@ -21,6 +22,11 @@
         $query_builder = $query_builder->where('item_code', $item_code);
     }
     
+    if(!empty($supplier_id))
+    {
+        $query_builder = $query_builder->where('supplier_id', $supplier_id);
+    }
+    
     $lib_product = $query_builder->get();
     
 ?>
@@ -30,16 +36,34 @@
             <th>Item Category</th>
             <th>Item Name</th>
             <th>Item Code</th>
-            <th></th>
+            <th>Uom</th>
         </tr>
     </thead>
     <tbody>
+        <?php $sl = 1;?>
         @foreach($lib_product as $product)
-            <tr>
-                <td>{{ get_item_category()[$product->item_category_id] }}</td>
+            <?php 
+                if($sl % 2 == 0)
+                {
+                    $class = 'even';
+                }
+                else
+                {
+                    $class = 'odd';
+                }
+                $sl++;
+                $param = json_encode(array('product_id'=>$product->id,
+                                          'item_code'=>$product->item_code,
+                                          'item_name'=>$product->item_description,
+                                          'category_id'=>$product->item_category_id,
+                                          'uom_id'=>$product->uom_id,
+                                          'current_rate'=>$product->avg_rate_per_unit));
+            ?>
+            <tr id="tr_{{$product->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" class="{{ $class }}">
+                <td>{{ get_item_category()[$product->item_category_id] ?? '' }}</td>
                 <td>{{ $product->item_description }}</td>
                 <td>{{ $product->item_code }}</td>
-                <td><input type="button" name="button2" class="formbutton" value="Select" onClick="selectProduct({{ $product->id }}, '{{ $product->item_description }}', '{{ $product->item_code }}')" style="width:70px;" /></td>
+                <td>{{ get_uom()[$product->uom_id] ?? '' }}</td>
             </tr>
         @endforeach
     </tbody>

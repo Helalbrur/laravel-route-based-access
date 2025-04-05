@@ -58,19 +58,19 @@ class WorkOrderDtls extends Model
     }
 
     // Define relationship with ProductDetailsMaster
-    public function productDetailsMaster()
+    public function product()
     {
         return $this->belongsTo(ProductDetailsMaster::class, 'product_id');
     }
 
     // Define relationship with LibUom
-    public function libUom()
+    public function uom()
     {
         return $this->belongsTo(LibUom::class, 'uom');
     }
 
     // Define relationship with LibCategory
-    public function libCategory()
+    public function category()
     {
         return $this->belongsTo(LibCategory::class, 'category_id');
     }

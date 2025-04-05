@@ -22,10 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('supplier_id');
             $table->integer('pay_mode');
-            $table->string('source', 191);
-            $table->string('remarks', 191);
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('updated_by');
+            $table->string('source', 191)->nullable();
+            $table->string('remarks', 191)->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -143,4 +143,9 @@ function get_source()
 {
     return array(1 => "Foreign", 2 => "Local");
 }
+
+function get_all_supplier()
+{
+    return App\Models\LibSupplier::pluck('supplier_name', 'id')->toArray();
+}
 ?>
