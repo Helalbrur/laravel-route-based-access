@@ -148,4 +148,10 @@ function get_all_supplier()
 {
     return App\Models\LibSupplier::pluck('supplier_name', 'id')->toArray();
 }
+
+function transaction_type()
+{
+    return array(1 => "Receive", 2 => "Issue", 3 => "Receive Return", 4 => "Issue Return", 5 => "Item Transfer Receive", 6 => "Item Transfer Issue");
+}
+
 ?>
