@@ -13,281 +13,337 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
     </div><!-- /.row -->
 @endsection()
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <center>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
             <div class="card">
-                <div class="card-body" style="justify-content:center;">
-                    <h5 class="card-title d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/product_export') }}" class="btn btn-info">Download Format</a>
-                        <form action="{{ route('product_import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
-                            @csrf
-                            <input type="file" name="file" required class="form-control me-2">
-                            <button type="submit" class="btn btn-info">Import</button>
-                        </form>
-                    </h5>
+                <div class="card-body">
                     <div class="card-text">
-                        <form name="mainform_1" id="mainform_1" autocomplete="off">
-                        <div class="form-group row">
-                                <label for="cbo_company_name" class="col-sm-2 col-form-label must_entry_caption">Company</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_company_name" id="cbo_company_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_company = App\Models\Company::pluck('company_name', 'id');
-                                        ?>
-                                        @foreach($lib_company as $id => $company_name)
-                                            <option value="{{ $id }}">{{ $company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="cbo_supplier_name"  class="col-sm-2 col-form-label must_entry_caption">Supplier</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_supplier_name" id="cbo_supplier_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_supplier = App\Models\LibSupplier::pluck('supplier_name', 'id');
-                                        ?>
-                                        @foreach($lib_supplier as $id => $supplier_name)
-                                            <option value="{{ $id }}">{{ $supplier_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="cbo_generic_name"  class="col-sm-2 col-form-label">Generic Name</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_generic_name" id="cbo_generic_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_generic = App\Models\LibGeneric::pluck('generic_name', 'id');
-                                        ?>
-                                        @foreach($lib_generic as $id => $generic_name)
-                                            <option value="{{ $id }}">{{ $generic_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="cbo_item_category_name" class="col-sm-2 col-form-label must_entry_caption">Item Category</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_item_category_name" id="cbo_item_category_name" class="form-control" onchange="handleCategoryChange()">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_category = App\Models\LibCategory::pluck('category_name', 'id');
-                                        ?>
-                                        @foreach($lib_category as $id => $category_name)
-                                            <option value="{{ $id }}">{{ $category_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="cbo_sub_category_name" class="col-sm-2 col-form-label">Item Sub-Category</label>
-                                <div class="col-sm-4 col-lg-2" id="sub_category_div">
-                                    <select name="cbo_sub_category_name" id="cbo_sub_category_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_sub_category = App\Models\LibItemSubCategory::pluck('sub_category_name', 'id');
-                                        ?>
-                                        @foreach($lib_sub_category as $id => $sub_category_name)
-                                            <option value="{{ $id }}">{{ $sub_category_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="txt_item_type" class="col-sm-2 col-form-label">Type</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_item_type" class="form-control" name="txt_item_type">
-                                </div>
-                            </div>
-                            <div class="form-group row"> 
-                                <label for="txt_item_name" class="col-sm-2 col-form-label must_entry_caption">Item Name</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_item_name" class="form-control" name="txt_item_name">
+                        <div class="card p-4" style="background-color: rgb(241, 241, 241);">
+                            <form name="mainform_1" id="mainform_1" autocomplete="off">
+                                <div class="row">
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
+                                                    @foreach($lib_company as $id => $company_name)
+                                                    <option value="{{ $id }}">{{ $company_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_supplier_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Supplier</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_supplier_name" id="cbo_supplier_name" class="form-control">
+                                                <option value="0">SELECT</option>
+                                                <?php
+                                                    $lib_supplier = App\Models\LibSupplier::pluck('supplier_name', 'id');
+                                                ?>
+                                                @foreach($lib_supplier as $id => $supplier_name)
+                                                    <option value="{{ $id }}">{{ $supplier_name }}</option>
+                                                @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_generic_name" class="col-sm-6 col-form-label fw-bold text-start">Generic Name</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_generic_name" id="cbo_generic_name" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_generic = App\Models\LibGeneric::pluck('generic_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_generic as $id => $generic_name)
+                                                        <option value="{{ $id }}">{{ $generic_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_item_category_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Item Category</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_item_category_name" id="cbo_item_category_name" onchange="handleCategoryChange()" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_category = App\Models\LibCategory::pluck('category_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_category as $id => $category_name)
+                                                        <option value="{{ $id }}">{{ $category_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_sub_category_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Sub-Category</label>
+                                            <div class="col-sm-6 d-flex align-items-center" id="sub_category_div">
+                                                <select style="width: 100%" name="cbo_sub_category_name" id="cbo_sub_category_name" onchange="handleCategoryChange()" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_sub_category = App\Models\LibItemSubCategory::pluck('sub_category_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_sub_category as $id => $sub_category_name)
+                                                        <option value="{{ $id }}">{{ $sub_category_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_item_type" class="col-sm-6 col-form-label fw-bold text-start">Type</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_item_type" class="form-control" name="txt_item_type">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_item_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Item Name</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_item_name" class="form-control" name="txt_item_name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_item_code" class="col-sm-6 col-form-label fw-bold text-start">Item Code</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_item_code" class="form-control" name="txt_item_code">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_item_origin" class="col-sm-6 col-form-label fw-bold text-start">Item Origin</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_item_origin" class="form-control" name="txt_item_origin">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_brand_name" class="col-sm-6 col-form-label fw-bold text-start">Brand</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_brand_name" id="cbo_brand_name" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_brand = App\Models\LibBrand::pluck('brand_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_brand as $id => $brand_name)
+                                                        <option value="{{ $id }}">{{ $brand_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_dosage_form" class="col-sm-6 col-form-label fw-bold text-start">Dosage Form</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_dosage_form" class="form-control" name="txt_dosage_form">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_color_name" class="col-sm-6 col-form-label fw-bold text-start">Color</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_color_name" id="cbo_color_name" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_color = App\Models\LibColor::pluck('color_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_color as $id => $color_name)
+                                                        <option value="{{ $id }}">{{ $color_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_order_uom" class="col-sm-6 col-form-label fw-bold text-start">Order UOM</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_order_uom" id="cbo_order_uom" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_uom = App\Models\LibUom::pluck('uom_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_uom as $id => $uom_name)
+                                                        <option value="{{ $id }}">{{ $uom_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_consuption_uom" class="col-sm-6 col-form-label fw-bold text-start">Consuption UOM</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_consuption_uom" id="cbo_consuption_uom" class="form-control">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_uom = App\Models\LibUom::pluck('uom_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_uom as $id => $uom_name)
+                                                        <option value="{{ $id }}">{{ $uom_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_consuption_uom_qty" class="col-sm-6 col-form-label fw-bold text-start">Re Order Level</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_consuption_uom_qty" class="form-control" name="txt_consuption_uom_qty">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_conversion_fac" class="col-sm-6 col-form-label fw-bold text-start">Conversion fac.</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_conversion_fac" class="form-control" name="txt_conversion_fac">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_size_name" class="col-sm-6 col-form-label fw-bold text-start">Item Size</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_size_name" id="cbo_size_name" class="form-control" onchange="load_company_config(this.value)">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_size = App\Models\LibSize::pluck('size_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_size as $id => $size_name)
+                                                        <option value="{{ $id }}">{{ $size_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_power" class="col-sm-6 col-form-label fw-bold text-start">Power</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <input type="text" id="txt_power" class="form-control" name="txt_power">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_group_name" class="col-sm-6 col-form-label fw-bold text-start">Item Group</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_group_name" id="cbo_group_name" class="form-control" onchange="handleSubGroupChange()">
+                                                    <option value="0">SELECT</option>
+                                                    <?php
+                                                        $lib_group_name = App\Models\LibItemGroup::pluck('item_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_group_name as $id => $lib_group_name)
+                                                        <option value="{{ $id }}">{{ $lib_group_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="cbo_sub_group_name" class="col-sm-6 col-form-label fw-bold text-start">Sub Group</label>
+                                            <div class="col-sm-6 d-flex align-items-center" id="sub_group_div">
+                                                <select style="width: 100%" name="cbo_sub_group_name" id="cbo_sub_group_name" class="form-control" onchange="handleSubGroupChange()">
+                                                    <option value="0">SELECT</option>
+                                                    <?php 
+                                                        $lib_sub_group_name = App\Models\LibItemSubGroup::pluck('sub_group_name', 'id');
+                                                    ?>
+                                                    @foreach($lib_sub_group_name as $id => $lib_sub_group_name)
+                                                        <option value="{{ $id }}">{{ $lib_sub_group_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> 
                                 </div>
 
-                                <label for="txt_item_code" class="col-sm-2 col-form-label">Item Code</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_item_code" class="form-control" name="txt_item_code">
-                                </div>
-                                <label for="txt_item_origin" class="col-sm-2 col-form-label">Item Origin</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_item_origin" class="form-control" name="txt_item_origin">
-                                </div>
-                            </div>
-
-                            <div class="form-group row"> 
-                                <label for="cbo_brand_name" class="col-sm-2 col-form-label">Brand</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_brand_name" id="cbo_brand_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_brand = App\Models\LibBrand::pluck('brand_name', 'id');
-                                        ?>
-                                        @foreach($lib_brand as $id => $brand_name)
-                                            <option value="{{ $id }}">{{ $brand_name }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="row">
+                                    <div class="mb-3 row d-flex justify-content-center mt-2">
+                                        <div class="col-sm-2">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <?php  echo load_submit_buttons( $permission, "fnc_item_creation", 0,0 ,"reset_form('mainform_1','','',1)"); ?>
+                                            <input type="hidden" name="update_id" id="update_id">
+                                        </div>
+                                       
+                                    </div>
                                 </div>
 
-                                <label for="txt_dosage_form" class="col-sm-2 col-form-label">Dosage Form</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_dosage_form" class="form-control" name="txt_dosage_form">
-                                </div>
+                               <div class="row" id="div_dtls_list_view">
+                                    <table class="table table-bordered table-striped text-center" id="dtls_list_view">
+                                        <thead>
+                                            <tr>
+                                                <th width="3%">Sl</th>
+                                                <th width="12%">Generic Name</th>
+                                                <th width="15%">Item Name</th>
+                                                <th width="10%">Item Code</th>
+                                                <th width="12%">Item Category</th>
+                                                <th width="13%">Brand</th>
+                                                <th width="8%">Item Color</th>
+                                                <th width="8%">Conversion fac.</th>
+                                                <th width="8%">Type</th>
+                                                <th>Dosage Form</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="list_view">
+                                            <?php
+                                                use Illuminate\Support\Facades\DB;
+                                                $sl = 1;
 
-                                <label for="cbo_color_name" class="col-sm-2 col-form-label">Color</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_color_name" id="cbo_color_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_color = App\Models\LibColor::pluck('color_name', 'id');
-                                        ?>
-                                        @foreach($lib_color as $id => $color_name)
-                                            <option value="{{ $id }}">{{ $color_name }}</option>
-                                        @endforeach
-                                    </select>
+                                                $lib_items = DB::table('product_details_master as a')
+                                                            ->leftJoin('lib_generic as b','a.generic_id','=','b.id')
+                                                            ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
+                                                            ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
+                                                            ->leftJoin('lib_color as e','a.color_id','=','e.id')
+                                                            ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name')
+                                                            ->where('a.deleted_at',null)
+                                                            ->get();
+                                            ?>
+                                            @foreach($lib_items as $lib_item)
+                                            <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$lib_item->id}}')" style="cursor:pointer">
+                                                <td>{{$sl++}}</td>
+                                                <td>{{$lib_item->generic_name}}</td>
+                                                <td>{{$lib_item->item_description}}</td>
+                                                <td>{{$lib_item->item_code}}</td>
+                                                <td>{{$lib_item->category_name}}</td>
+                                                <td>{{$lib_item->brand_name}}</td>
+                                                <td>{{$lib_item->color_name}}</td>
+                                                <td>{{$lib_item->conversion_fac}}</td>
+                                                <td>{{$lib_item->item_type}}</td>
+                                                <td>{{$lib_item->dosage_form}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-
-                            <div class="form-group row"> 
-                                <label for="cbo_order_uom" class="col-sm-2 col-form-label">Order UOM</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_order_uom" id="cbo_order_uom" onchange="load_company_config(this.value)" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_uom = App\Models\LibUom::pluck('uom_name', 'id');
-                                        ?>
-                                        @foreach($lib_uom as $id => $uom_name)
-                                            <option value="{{ $id }}">{{ $uom_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="cbo_consuption_uom" class="col-sm-2 col-form-label">Consuption UOM</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_consuption_uom" id="cbo_consuption_uom" onchange="load_company_config(this.value)" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_uom = App\Models\LibUom::pluck('uom_name', 'id');
-                                        ?>
-                                        @foreach($lib_uom as $id => $uom_name)
-                                            <option value="{{ $id }}">{{ $uom_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="txt_consuption_uom_qty" class="col-sm-2 col-form-label">Re Order Level</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_consuption_uom_qty" class="form-control" name="txt_consuption_uom_qty">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="txt_conversion_fac" class="col-sm-2 col-form-label">Conversion fac.</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_conversion_fac" class="form-control" name="txt_conversion_fac">
-                                </div> 
-
-                                <label for="cbo_size_name" class="col-sm-2 col-form-label">Item Size</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_size_name" id="cbo_size_name" onchange="load_company_config(this.value)" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_size = App\Models\LibSize::pluck('size_name', 'id');
-                                        ?>
-                                        @foreach($lib_size as $id => $size_name)
-                                            <option value="{{ $id }}">{{ $size_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="txt_power" class="col-sm-2 col-form-label">Power</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <input type="text" id="txt_power" class="form-control" name="txt_power">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="cbo_group_name" class="col-sm-2 col-form-label">Item Group</label>
-                                <div class="col-sm-4 col-lg-2">
-                                    <select name="cbo_group_name" id="cbo_group_name" onchange="handleSubGroupChange()" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php
-                                            $lib_group_name = App\Models\LibItemGroup::pluck('item_name', 'id');
-                                        ?>
-                                        @foreach($lib_group_name as $id => $lib_group_name)
-                                            <option value="{{ $id }}">{{ $lib_group_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="cbo_sub_group_name" class="col-sm-2 col-form-label">Item Sub Group</label>
-                                <div class="col-sm-4 col-lg-2" id="sub_group_div">
-                                    <select name="cbo_sub_group_name" id="cbo_sub_group_name" class="form-control">
-                                        <option value="0">SELECT</option>
-                                        <?php 
-                                            $lib_sub_group_name = App\Models\LibItemSubGroup::pluck('sub_group_name', 'id');
-                                        ?>
-                                        @foreach($lib_sub_group_name as $id => $lib_sub_group_name)
-                                            <option value="{{ $id }}">{{ $lib_sub_group_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="from-group row">
-                                <div class="col-sm-2">
-                                    <input type="hidden" name="update_id" id="update_id">
-                                </div>
-                                <div class="col-sm-7">
-                                    <?php
-                                        echo load_submit_buttons( $permission, "fnc_item_creation", 0,0 ,"reset_form('mainform_1','','',1)");
-                                    ?>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="card table-responsive table-info"  id="list_view_div" style="background-color:#F5FFFA">
-                        <table class="table table-bordered table-striped" >
-                            <thead>
-                                <tr>
-                                    <th width="3%">Sl</th>
-                                    <th width="12%">Generic Name</th>
-                                    <th width="15%">Item Name</th>
-                                    <th width="10%">Item Code</th>
-                                    <th width="12%">Item Category</th>
-                                    <th width="13%">Brand</th>
-                                    <th width="8%">Item Color</th>
-                                    <th width="8%">Conversion fac.</th>
-                                    <th width="8%">Type</th>
-                                    <th>Dosage Form</th>
-                                </tr>
-                            </thead>
-                            <tbody id="list_view">
-                                <?php
-                                    use Illuminate\Support\Facades\DB;
-                                    $sl = 1;
-
-                                    $lib_items = DB::table('product_details_master as a')
-                                                ->leftJoin('lib_generic as b','a.generic_id','=','b.id')
-                                                ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
-                                                ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
-                                                ->leftJoin('lib_color as e','a.color_id','=','e.id')
-                                                ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name')
-                                                ->where('a.deleted_at',null)
-                                                ->get();
-                                ?>
-                                @foreach($lib_items as $lib_item)
-                                <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$lib_item->id}}')" style="cursor:pointer">
-                                    <td>{{$sl++}}</td>
-                                    <td>{{$lib_item->generic_name}}</td>
-                                    <td>{{$lib_item->item_description}}</td>
-                                    <td>{{$lib_item->item_code}}</td>
-                                    <td>{{$lib_item->category_name}}</td>
-                                    <td>{{$lib_item->brand_name}}</td>
-                                    <td>{{$lib_item->color_name}}</td>
-                                    <td>{{$lib_item->conversion_fac}}</td>
-                                    <td>{{$lib_item->item_type}}</td>
-                                    <td>{{$lib_item->dosage_form}}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                            </form>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
-        </center>
+        </div>
     </div>
 </div>
 @endsection
@@ -295,6 +351,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
 @section('script')
 <script>
      var permission ='{{$permission}}';
+     var setup_data = load_all_setup(13); // Pass the entry_form dynamically
+    // console.log(setup_data);
 
     function fnc_item_creation( operation )
     {

@@ -44,6 +44,8 @@ function field_manager_arr()
     $field_manager_arr[10][2] = "cbo_tag_party_name";
     $field_manager_arr[11][1] = "cbo_buyer_id";
     $field_manager_arr[12][1] = "txt_previous_rate";
+    $field_manager_arr[13][1] = "cbo_group_name";
+    $field_manager_arr[13][2] = "cbo_sub_group_name";
     return $field_manager_arr;
 }
 
