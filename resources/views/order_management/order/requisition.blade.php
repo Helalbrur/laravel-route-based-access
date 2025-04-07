@@ -192,9 +192,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
     function open_item_popup() 
     {
+        var param = JSON.stringify({
+            'location_id': $("#cbo_location").val(),
+            'company_id': $("#cbo_company_name").val()
+        });
+        console.log(param);
         var title = 'Item List View';
-        var page_link = '/tools/item_list_popup';
-        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=330px,height=370px,center=1,resize=1,scrolling=1', '../');
+        var page_link = '/show_common_popup_view?page=/item_search&param=' + param;
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+
         emailwindow.onclose = function() 
         {
             var item_id = this.contentDoc.getElementById('item_id').value;
