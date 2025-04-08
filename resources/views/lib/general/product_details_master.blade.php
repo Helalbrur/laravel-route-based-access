@@ -24,6 +24,31 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                 <div class="row">
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
+                                            <a href="{{ url('/product_export') }}" class="btn btn-info">Download Format</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-5 col-lg-5 form-group">
+                                        <div class="row"></div>
+                                    </div>
+                                    <div class="col-sm-4 col-md-4 col-lg-4 form-group">
+                                        <div class="row">
+                                            <form action="{{ route('product_import') }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
+                                                @csrf
+                                                <div class="d-flex">
+                                                    <div>
+                                                        <input type="file" name="file" required class="form-control me-2">
+                                                    </div>
+                                                    <div>
+                                                        <button type="submit" class="btn btn-info">Import</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
                                             <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control">
