@@ -53,6 +53,7 @@ use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\VariableSettingController;
 use App\Http\Controllers\FieldLevelAccessController;
+use App\Http\Controllers\InvReceiveMasterController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
 use App\Http\Controllers\ProductDetailsMasterController;
@@ -160,6 +161,7 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
 Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function () {
     Route::resource('/work_order',WorkOrderMstController::class);
     Route::resource('/requisition',RequisitionController::class);
+    Route::resource('/receive_entry',InvReceiveMasterController::class);
 });
 
 Route::prefix('/order')->middleware(['auth'])->group(function () {

@@ -1,12 +1,12 @@
 <?php
 $permission = getPagePermission(request('mid') ?? 0);
-$title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
+$title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 ?>
 @extends('layouts.app')
 @section('content_header')
 <div class="row">
     <div class="col-sm-12">
-        <center><h1 class="m-0 align-center"><strong>{{ getMenuName(request('mid') ?? 0) ?? 'Work Order'}}</strong></h1></center>
+        <center><h1 class="m-0 align-center"><strong>{{ getMenuName(request('mid') ?? 0) ?? 'Receive Entry'}}</strong></h1></center>
     </div>
 </div>
 @endsection()
@@ -20,12 +20,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                         <div class="card p-4" style="background-color: rgb(241, 241, 241);">
                             <form name="workorder_1" id="workorder_1" autocomplete="off">
                                 <div class="row d-flex align-items-center">
-                                    <label for="txt_sys_no" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Work Order No</label>
+                                    <label for="txt_sys_no" class="col-sm-3 col-form-label fw-bold text-start must_entry_caption">Receive Id</label>
                                     <div class="col-sm-3 d-flex align-items-center">
                                         <input id="txt_sys_no" name="txt_sys_no" placeholder="Browse" ondblclick="fnc_sys_no_popup()" class="form-control">
                                         <input type="hidden" name="update_id" id="update_id">
                                     </div>
-                                    
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
@@ -148,7 +147,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             <tr id="tr_1">
                                                 <td class="form-group" id="sl_1">1</td>
                                                 <td class="form-group">
-                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" placeholder="Browse" ondblclick="fn_item_popup(1)">
+                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" ondblclick="fn_item_popup(1)">
                                                     <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
                                                 </td>
@@ -208,330 +207,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
 @section('script')
 <script>
-    var permission = '{{$permission}}';
-    var setup_data = load_all_setup(12); // Pass the entry_form dynamically
-    function fnc_work_order(operation) {
-        if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier*cbo_pay_mode', 'Company Name*Location*Work Order Date*Supplier*Pay Mode') == false) {
-            return;
-        } else {
-            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks');
-            var method = "POST";
-            var param = "";
-            if (operation == 1 || operation == 2) {
-                param = `/${document.getElementById('update_id').value}`;
-                if (operation == 1) formData.append('_method', 'PUT');
-                else formData.append('_method', 'DELETE');
-            }
-            formData.append('_token', '{{csrf_token()}}');
-            var rows = $("#dtls_list_view tbody tr");
-            var row_num = rows.length;
-            formData.append('row_num', row_num);
-            formData.append('operation', operation);
 
-            var flag = 0;
-            for (var i = 1; i <=row_num; i++) {
-                if(form_validation('txt_item_name_'+i+'*txt_work_order_qty_'+i+'*txt_cur_rate_'+i,'Item Name*Work Order Qty*Cur. Rate')==false)
-                {
-                    flag = i;
-                    break;
-                }
-                formData.append(`hidden_product_id_${i}`, document.getElementById(`hidden_product_id_${i}`).value);
-                formData.append(`txt_item_name_${i}`, document.getElementById(`txt_item_name_${i}`).value);
-                formData.append(`hidden_dtls_id_${i}`, document.getElementById(`hidden_dtls_id_${i}`).value);
-                formData.append(`txt_item_code_${i}`, document.getElementById(`txt_item_code_${i}`).value);
-                formData.append(`cbo_item_category_${i}`, document.getElementById(`cbo_item_category_${i}`).value);
-                formData.append(`cbo_uom_${i}`, document.getElementById(`cbo_uom_${i}`).value);
-                formData.append(`txt_required_qty_${i}`, document.getElementById(`txt_required_qty_${i}`).value);
-                formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
-                formData.append(`txt_previous_rate_${i}`, document.getElementById(`txt_previous_rate_${i}`).value);
-                formData.append(`txt_cur_rate_${i}`, document.getElementById(`txt_cur_rate_${i}`).value);
-                formData.append(`txt_item_total_amount_${i}`, document.getElementById(`txt_item_total_amount_${i}`).value);
-            }
-
-            if(flag > 0)
-            {
-                alert('Please fill up item name, work order qty and cur. rate for row '+flag);
-                return;
-            }
-
-            var url = `/order/work_order${param}`;
-            var requestData = {
-                method: method,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                body: formData
-            };
-
-            save_update_delete(operation, url, requestData, 'id', '', '', 'workorder_1');
-        }
-    }
-
-    const load_php_data_to_form = async (update_id) => {
-        var columns = 'wo_no*id*company_id*location_id*supplier_id*pay_mode*wo_date*delivery_date*source*remarks';
-        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_supplier*cbo_pay_mode*txt_work_order_date*txt_delivery_date*cbo_source*txt_remarks';
-        var others = '';
-        var get_return_value = await populate_form_data('id', update_id, 'work_order_mst', columns, fields, '{{csrf_token()}}');
-        if (get_return_value == 1) {
-            set_button_status(1, permission, 'fnc_work_order', 1);
-            load_details();
-        }
-    }
-
-    async function handleCompanyChange() {
-        try {
-            await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':''}), 'location_under_company', 'location_div');
-
-        } catch (error) {
-            console.error('Error loading dropdown:', error);
-        }
-    }
-
-
-    function add_row(insertIndex) {
-
-        var rows = $("#dtls_list_view tbody tr");
-        var row_num = rows.length;
-        
-        if (insertIndex < 0 || insertIndex >= row_num) {
-            var newRow = $("#dtls_list_view tbody tr:last").clone(false);
-        }
-        else
-        {
-            var newRow = rows.eq(insertIndex).clone(false);
-        }
-        
-        
-        // Clean up Select2 artifacts from the clone
-        newRow.find('select').each(function() {
-            $(this).removeClass('select2-hidden-accessible');
-            $(this).next('.select2-container').remove();
-            $(this).removeAttr('data-select2-id');
-        });
-        
-        // Update IDs and names
-        newRow.find("input, select, button").each(function() {
-            var oldId = $(this).attr('id');
-            var oldName = $(this).attr('name');
-            
-            if (oldId) {
-                var idParts = oldId.split("_");
-                idParts.pop();
-                var newId = idParts.join("_") + "_" + (insertIndex + 1);
-                $(this).attr('id', newId);
-            }
-            
-            if (oldName) {
-                var nameParts = oldName.split("_");
-                nameParts.pop();
-                var newName = nameParts.join("_") + "_" + (insertIndex + 1);
-                $(this).attr('name', newName);
-            }
-
-            if ($(this).is('input')) {
-                $(this).val(''); // Reset input values
-            } else if ($(this).is('select')) {
-                $(this).val('0'); // Reset select values
-            }
-        });
-
-        newRow.removeAttr('id').attr('id', 'tr_' + (insertIndex + 1));
-
-        // Insert the new row
-        var rows = $("#dtls_list_view tbody tr");
-        if (insertIndex <= row_num - 1) {
-            rows.eq(insertIndex).before(newRow);
-        } else {
-            rows.eq(row_num - 1).after(newRow);
-        }
-
-        // Initialize Select2 for the new selects
-        newRow.find('select').select2({
-            width: '100%',
-            dropdownParent: newRow.closest('.modal').length ? newRow.closest('.modal') : document.body
-        });
-
-        assign_id(); // Renumber rows and update attributes
-    }
-
-    function remove_row(rowNo) {
-        var row_num = $('#dtls_list_view tbody tr').length;
-        if (row_num == 1) return;
-
-        var rowToRemove = $("#tr_" + rowNo);
-        
-        // Properly destroy Select2 if it exists
-        // rowToRemove.find('select').each(function() {
-        //     if ($(this).hasClass('select2-hidden-accessible')) {
-        //         $(this).select2('destroy');
-        //     }
-        // });
-        
-        rowToRemove.remove();
-        assign_id();
-    }
-
-    const assign_id = () => {
-        var i = 1;
-        $("#dtls_list_view tbody").find('tr').each(function() {
-            $(this).removeAttr('id').attr('id', 'tr_' + i);
-            var tr_id = $(this).attr('id');
-
-            $("#" + tr_id).find("input,select,button").each(function() {
-                $(this).attr({
-                    'id': function(_, id) {
-                        if (!id) return;
-                        var idParts = id.split("_");
-                        idParts.pop();
-                        return idParts.join("_") + "_" + i;
-                    },
-                    'name': function(_, name) {
-                        if (!name) return;
-                        var nameParts = name.split("_");
-                        nameParts.pop();
-                        return nameParts.join("_") + "_" + i;
-                    }
-                });
-            });
-
-            $("#" + tr_id).find("td").each(function() {
-                var td_id = $(this).attr('id');
-                if (td_id) {
-                    var tdParts = td_id.split("_");
-                    tdParts.pop();
-                    $(this).attr('id', tdParts.join("_") + "_" + i);
-                }
-            });
-
-            $('#sl_' + i).text(i);
-            $('#txt_cur_rate_' + i).off("keyup").on("keyup", function() { calculate_amount(i); });
-            $('#txt_work_order_qty_' + i).off("keyup").on("keyup", function() { calculate_amount(i); });
-            $('#txt_item_name_' + i).off("dblclick").on("dblclick", function() { fn_item_popup(i); });
-            $('#btn_add_row_' + i).off("click").on("click", function() { add_row(i); });
-            $('#btn_remove_row_' + i).off("click").on("click", function() { remove_row(i); });
-
-            i++;
-        });
-        initializeSelect2();
-    }
-
-
-    function calculate_amount(row_id) {
-        var rate = $('#txt_cur_rate_' + row_id).val() * 1;
-        var order_qty = $('#txt_work_order_qty_' + row_id).val() * 1;
-        var amount = (rate * order_qty * 1000000) / 1000000;
-        $("#txt_item_total_amount_"+row_id).val(amount);
-    }
-
-    function fnc_sys_no_popup() {
-        if(form_validation('cbo_company_name','Company Name')==false)
-        {
-            return;
-        }
-        
-        var param = JSON.stringify({
-            'supplier_id': $("#cbo_supplier").val(),
-            'company_id': $("#cbo_company_name").val()
-        });
-        console.log(param);
-		var title = 'Work Order Search';
-		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
-		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
-		{
-			
-			try {
-                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
-                console.log(popup_value);
-                if (popup_value == '') {
-                    return;
-                }
-                var data = JSON.parse(popup_value);
-                console.log(data);
-                if (data) {
-                    $('#update_id').val(data.id);
-                    //txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks
-                    $('#txt_sys_no').val(data.wo_no);
-                    $('#cbo_company_name').val(data.company_id).trigger('change');
-                    $('#cbo_location_name').val(data.location_id).trigger('change');
-                    $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                    $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
-                    $('#txt_work_order_date').val(data.wo_date);
-                    $('#txt_delivery_date').val(data.delivery_date);
-                    $('#cbo_source').val(data.source).trigger('change');
-                    $('#txt_remarks').val(data.remarks);
-                    load_details();
-                    set_button_status(1, permission, 'fnc_work_order', 1);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                
-            }
-		}
-    }
-
-    function fn_item_popup(row_id) {
-        if(form_validation('cbo_supplier','Supplier')==false)
-        {
-            return;
-        }
-        var supplier_id = $("#cbo_supplier").val();
-        var item_id = $('#hidden_product_id_' + row_id).val();
-        var item_name = $('#txt_item_name_' + row_id).val();
-        var item_code = $('#txt_item_code_' + row_id).val();
-        var item_category = $('#txt_item_category_' + row_id).val();
-
-       
-        var param = JSON.stringify({
-            'supplier_id': supplier_id,
-            'item_id': item_id,
-            'item_name': item_name,
-            'category_id': item_category,
-            'item_code': item_code
-           
-        });
-        console.log(param);
-		var title = 'Item Search';
-		var page_link='/show_common_popup_view?page=work_order_item_search&param='+param;
-		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
-		{
-			
-			try {
-                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
-                console.log(popup_value);
-                if (popup_value == '') {
-                    return;
-                }
-                var data = JSON.parse(popup_value);
-                console.log(data);
-                if (data) {
-                    $('#hidden_product_id_' + row_id).val(data.product_id).trigger('change');
-                    $('#txt_item_name_' + row_id).val(data.item_name);
-                    $('#txt_item_code_' + row_id).val(data.item_code);
-                    $('#cbo_item_category_' + row_id).val(data.category_id).trigger('change');
-                    $('#cbo_uom_' + row_id).val(data.uom_id).trigger('change');
-                    $('#txt_previous_rate_' + row_id).val(data.current_rate);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                
-            }
-		}
-    }
-
-   async function load_details() {
-        //fetch data from server as html and put in a div that id div_dtls_list_view
-     await fetch(`/order/work_order_details/${$('#update_id').val()}`)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('div_dtls_list_view').innerHTML = html;
-                initializeSelect2();
-                field_manager(12);
-            })
-            .catch(error => console.error('Error loading details:', error));
-            
-    }
 </script>
 @endsection

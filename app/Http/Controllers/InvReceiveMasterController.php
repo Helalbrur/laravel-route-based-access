@@ -12,7 +12,7 @@ class InvReceiveMasterController extends Controller
      */
     public function index()
     {
-        //
+        return view('order_management.order.receive_entry');
     }
 
     /**
