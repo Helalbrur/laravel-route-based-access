@@ -33,7 +33,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                         <div class="row">
                                             <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
-                                                <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange()" class="form-control">
+                                                <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
                                                     @foreach($lib_company as $id => $company_name)
@@ -106,7 +106,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                     </div>
                                 </div>
 
-                               <div class="row" id="div_dtls_list_view">
+                                <div class="row" id="div_dtls_list_view">
                                     <table class="table table-bordered table-striped text-center" id="dtls_list_view">
                                         <thead>
                                             <tr>
@@ -121,13 +121,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <th class="form-group" width="10%">Receive Qty</th>
                                                 <th class="form-group" width="10%">Lot/Batch No.</th>
                                                 <th class="form-group" width="10%">Expire Date</th>
-                                                <th class="form-group" width="8%">Rack</th>
-                                                <th class="form-group" width="8%">Self</th>
-                                                <th class="form-group" width="8%">Bin</th>
+                                                <th class="form-group" width="10%">Rack</th>
+                                                <th class="form-group" width="10%">Self</th>
+                                                <th class="form-group" width="10%">Bin</th>
                                                 <th class="form-group">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody >
+                                        <tbody>
                                             <tr id="tr_1">
                                                 <td class="form-group" id="sl_1">1</td>
                                                 <td class="form-group">
@@ -226,6 +226,54 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
 @section('script')
 <script>
+       function fnc_work_order_popup() {
+        if(form_validation('cbo_company_name','Company Name')==false)
+        {
+            return;
+        }
+        
+        var param = JSON.stringify({
+            'supplier_id': $("#cbo_supplier").val(),
+            'company_id': $("#cbo_company_name").val()
+        });
+        console
+        console.log(param);
+		var title = 'Work Order Search';
+		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			
+			try {
+                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var data = JSON.parse(popup_value);
+                console.log(data);
+                if (data) {
+                    $('#update_id').val(data.id);
+                    //txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks
+                    $('#txt_sys_no').val(data.wo_no);
+                    $('#cbo_company_name').val(data.company_id).trigger('change');
+                    $('#cbo_location_name').val(data.location_id).trigger('change');
+                    $('#cbo_supplier').val(data.supplier_id).trigger('change');
+                    $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
+                    $('#txt_work_order_date').val(data.wo_date);
+                    $('#txt_delivery_date').val(data.delivery_date);
+                    $('#cbo_source').val(data.source).trigger('change');
+                    $('#txt_remarks').val(data.remarks);
+                    load_details();
+                    set_button_status(1, permission, 'fnc_work_order', 1);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                
+            }
+		}
+    }
+
     function add_row(insertIndex) {
         var rows = $("#dtls_list_view tbody tr");
         var row_num = rows.length;
