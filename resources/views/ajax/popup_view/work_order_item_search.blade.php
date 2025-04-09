@@ -32,7 +32,7 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                         <tbody>
                             <tr>
                                 <td>
-                                    <select class="form-control" id="cbo_item_category" name="cbo_item_category" style="width: 100%" 
+                                    <select class="form-control form-control-sm" id="cbo_item_category" name="cbo_item_category" style="width: 100%" 
                                             onchange="handleCategoryChange()">
                                         <option value="">--All--</option>
                                         @foreach(get_item_category() as $category_id => $category_name)
@@ -42,15 +42,15 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                                 </td>
 
                                 <td id="product_div">
-                                    <select class="form-control" id="cbo_product" name="cbo_product" style="width: 100%">
+                                    <select class="form-control form-control-sm" id="cbo_product" name="cbo_product" style="width: 100%">
                                         <option value="">--All--</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="txt_item_code" name="txt_item_code" value="{{$item_code}}" placeholder="Item Code">
+                                    <input type="text" class="form-control form-control-sm" id="txt_item_code" name="txt_item_code" value="{{$item_code}}" placeholder="Item Code">
                                 </td>
                                 <td>
-                                    <input type="button" name="button2" class="formbutton btn btn-info" value="Show" onClick="show_list_view ( 
+                                    <input type="button" name="button2" class="formbutton btn btn-sm btn-info" value="Show" onClick="show_list_view ( 
                                         JSON.stringify({
                                         category_id: document.getElementById('cbo_item_category').value,
                                         product_id: document.getElementById('cbo_product').value,
@@ -74,17 +74,30 @@ $cbo_category_id    = $param['category_id'] ?? 0;
 <script>
 
    
-
-    function js_set_value( param )
+    var param_arr = [];
+    function js_set_value(param )
     {
-        $('#popup_value').val( param );
-        console.log(param);
-        parent.emailwindow.hide();
+        // Parse the param JSON string to get the object
+        var paramObj = JSON.parse(param);
+        toggle( document.getElementById( 'tr_' + paramObj.product_id ), '#FFFFCC' );
+       
+        // Find if this product is already in the array
+        var existingIndex = param_arr.findIndex(item => item.product_id === paramObj.product_id);
+        
+        if (existingIndex >= 0) {
+            // Remove if exists
+            param_arr.splice(existingIndex, 1);
+        } else {
+            // Add if doesn't exist
+            param_arr.push(paramObj);
+        }
+        
+        $('#popup_value').val(JSON.stringify(param_arr));
     }
 
     async function handleCategoryChange() {
         try {
-            await load_drop_down_v2('load_drop_down',JSON.stringify({'category_id':document.getElementById('cbo_item_category').value,'onchange':''}), 'product_under_category', 'product_div')
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'category_id':document.getElementById('cbo_item_category').value,'onchange':'','class':'form-control form-control-sm'}), 'product_under_category', 'product_div')
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }

@@ -39,7 +39,7 @@
             <th>Uom</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tbl_po_list">
         <?php $sl = 1;?>
         @foreach($lib_product as $product)
             <?php 
@@ -67,4 +67,11 @@
             </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4" class="text-center">
+                <button type="button" class="btn btn-primary" onclick="parent.emailwindow.hide()"><i class="fa fa-close"></i> Close</button>
+            </td>
+        </tr>
+    </tfoot>
 </table>

@@ -504,16 +504,38 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 if (popup_value == '') {
                     return;
                 }
-                var data = JSON.parse(popup_value);
-                console.log(data);
-                if (data) {
-                    $('#hidden_product_id_' + row_id).val(data.product_id).trigger('change');
-                    $('#txt_item_name_' + row_id).val(data.item_name);
-                    $('#txt_item_code_' + row_id).val(data.item_code);
-                    $('#cbo_item_category_' + row_id).val(data.category_id).trigger('change');
-                    $('#cbo_uom_' + row_id).val(data.uom_id).trigger('change');
-                    $('#txt_previous_rate_' + row_id).val(data.current_rate);
-                }
+                var product_arr = JSON.parse(popup_value);
+                //iterate product_arr using foreach and extrat data
+
+                var cur_row_id = row_id;
+                product_arr.forEach(data => {
+                    console.log(data);
+                    if (data) {
+                        if(cur_row_id> row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+
+                        $('#hidden_product_id_' + cur_row_id).val(data.product_id).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val(data.item_name);
+                        $('#txt_item_code_' + cur_row_id).val(data.item_code);
+                        $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
+                        $('#cbo_uom_' + cur_row_id).val(data.uom_id).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+                        cur_row_id++;
+                    }
+                    else
+                    {
+                        if(cur_row_id> row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+                        $('#hidden_product_id_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val('');
+                        $('#txt_item_code_' + cur_row_id).val('');
+                        $('#cbo_item_category_' + cur_row_id).val(0).trigger('change');
+                        $('#cbo_uom_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(0);
+                    }
+                });
             } catch (error) {
                 console.error('Error:', error);
                 
