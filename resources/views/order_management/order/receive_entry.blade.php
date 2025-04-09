@@ -85,7 +85,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                         <div class="row">
                                             <label for="cbo_supplier" class="col-sm-6 col-form-label must_entry_caption">Work Order No.</label>
                                             <div class="col-sm-6 d-flex align-items-center">
-                                                <input id="txt_sys_no" name="txt_sys_no" placeholder="Browse" ondblclick="fnc_work_order_popup()" class="form-control">
+                                                <input id="txt_work_order_no" name="txt_work_order_no" placeholder="Browse" ondblclick="fnc_work_order_popup()" class="form-control">
                                                 <input type="hidden" name="work_order_id" id="work_order_id">
                                             </div>
                                         </div>
@@ -239,7 +239,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         console
         console.log(param);
 		var title = 'Work Order Search';
-		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
+		var page_link='/show_common_popup_view?page=receive_work_order_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
 		emailwindow.onclose=function()
 		{
@@ -253,17 +253,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 var data = JSON.parse(popup_value);
                 console.log(data);
                 if (data) {
-                    $('#update_id').val(data.id);
-                    //txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks
-                    $('#txt_sys_no').val(data.wo_no);
+                    $('#work_order_id').val(data.id);
+                    $('#txt_work_order_no').val(data.wo_no);
                     $('#cbo_company_name').val(data.company_id).trigger('change');
                     $('#cbo_location_name').val(data.location_id).trigger('change');
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                    $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
-                    $('#txt_work_order_date').val(data.wo_date);
-                    $('#txt_delivery_date').val(data.delivery_date);
-                    $('#cbo_source').val(data.source).trigger('change');
-                    $('#txt_remarks').val(data.remarks);
                     load_details();
                     set_button_status(1, permission, 'fnc_work_order', 1);
                 }
