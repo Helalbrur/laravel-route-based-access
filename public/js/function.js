@@ -1818,3 +1818,12 @@ function initializeSelect2() {
 		}
 	});
 }
+
+function toggle( x, origColor )
+{
+	var newColor = 'yellow';
+	if ( x.style ) 
+	{ 
+		x.style.backgroundColor = ( newColor == x.style.backgroundColor )? origColor : newColor;
+	}
+}
