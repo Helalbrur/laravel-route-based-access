@@ -39,7 +39,7 @@
                     <select name="cbo_uom_{{ $i }}" id="cbo_uom_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach(get_uom() as $id => $name)
-                            <option value="{{$id}}" {{ $id == $order->uom_id ? 'selected' : '' }}>{{$name}}</option>
+                            <option value="{{$id}}" {{ $id == $order->uom ? 'selected' : '' }}>{{$name}}</option>
                         @endforeach
                     </select>
                 </td>

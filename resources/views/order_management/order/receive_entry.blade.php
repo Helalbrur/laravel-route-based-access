@@ -131,7 +131,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                             <tr id="tr_1">
                                                 <td class="form-group" id="sl_1">1</td>
                                                 <td class="form-group">
-                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" ondblclick="fn_item_popup(1)">
+                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
                                                 </td>
