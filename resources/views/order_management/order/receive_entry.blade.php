@@ -226,6 +226,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
 @section('script')
 <script>
+     var permission = '{{$permission}}';
     function fnc_receive_entry(operation) {
         if (form_validation('cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date* Work Order No.*Supplier') == false) {
             return;
@@ -265,7 +266,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
             if(flag > 0)
             {
-                alert('Please fill up item name, work order qty and receive qty '+flag);
+                alert('Please fill up item name and receive qty '+flag);
                 return;
             }
 

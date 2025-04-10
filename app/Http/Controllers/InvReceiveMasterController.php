@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\WorkOrderDtls;
+use App\Models\InvTransaction;
 use App\Models\InvReceiveMaster;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Doctrine\DBAL\Exception;
 
 class InvReceiveMasterController extends Controller
 {
@@ -30,6 +33,7 @@ class InvReceiveMasterController extends Controller
      */
     public function store(Request $request)
     {
+        //($request->all());
         $request->validate([
             'cbo_company_name' => 'required',
             'cbo_supplier' => 'required',
@@ -100,7 +104,7 @@ class InvReceiveMasterController extends Controller
             }
            
             DB::commit();
-            return response()->json(['success' => 'Receive Created Successfully', 'wo_no' => $InvReceiveMaster->wo_no, 'id' => $InvReceiveMaster->id]);
+            return response()->json(['success' => 'Receive Created Successfully', 'sys_number' => $InvReceiveMaster->sys_number, 'id' => $InvReceiveMaster->id]);
         }
         catch (Exception $e)
         {
