@@ -61,7 +61,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                     </div>
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_store" class="col-sm-6 col-form-label">Store</label>
+                                            <label for="cbo_store" class="col-sm-6 col-form-label must_entry_caption">Store</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <?php $stores = App\Models\LibStoreLocation::get(); ?>
                                                 <select style="width: 100%" name="cbo_store" id="cbo_store" class="form-control">
@@ -157,7 +157,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group"><input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value=""></td>
                                                 <td class="form-group">
                                                     <?php 
                                                         $racks = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
@@ -226,7 +226,75 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
 @section('script')
 <script>
-       function fnc_work_order_popup() {
+    function fnc_receive_entry(operation) {
+        if (form_validation('cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date* Work Order No.*Supplier') == false) {
+            return;
+        } else {
+            var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier');
+            var method = "POST";
+            var param = "";
+            if (operation == 1 || operation == 2) {
+                param = `/${document.getElementById('update_id').value}`;
+                if (operation == 1) formData.append('_method', 'PUT');
+                else formData.append('_method', 'DELETE');
+            }
+            formData.append('_token', '{{csrf_token()}}');
+            var rows = $("#dtls_list_view tbody tr");
+            var row_num = rows.length;
+            formData.append('row_num', row_num);
+            formData.append('operation', operation);
+
+            var flag = 0;
+            for (var i = 1; i <=row_num; i++) {
+                if(form_validation('txt_item_name_'+i+'*txt_work_order_qty_'+i+'*txt_receive_qty_'+i,'Item Name*Work Order Qty*Receive Qty')==false)
+                {
+                    flag = i;
+                    break;
+                }
+                formData.append(`hidden_product_id_${i}`, document.getElementById(`hidden_product_id_${i}`).value);
+                formData.append(`hidden_dtls_id_${i}`, document.getElementById(`hidden_dtls_id_${i}`).value);
+                formData.append(`txt_required_qty_${i}`, document.getElementById(`txt_required_qty_${i}`).value);
+                formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
+                formData.append(`txt_receive_qty_${i}`, document.getElementById(`txt_receive_qty_${i}`).value);
+                formData.append(`txt_lot_batch_no_${i}`, document.getElementById(`txt_lot_batch_no_${i}`).value);
+                formData.append(`txt_expire_date_${i}`, document.getElementById(`txt_expire_date_${i}`).value);
+                formData.append(`cbo_rack_no_${i}`, document.getElementById(`cbo_rack_no_${i}`).value);
+                formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
+                formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
+            }
+
+            if(flag > 0)
+            {
+                alert('Please fill up item name, work order qty and receive qty '+flag);
+                return;
+            }
+
+            var url = `/order/receive_entry${param}`;
+            var requestData = {
+                method: method,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                body: formData
+            };
+
+            save_update_delete(operation, url, requestData, 'id', '', '', 'receiventry_1');
+        }
+    }
+
+    const load_php_data_to_form = async (update_id) => {
+        var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
+        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
+        var others = '';
+        var get_return_value = await populate_form_data('id', update_id, 'work_order_mst', columns, fields, '{{csrf_token()}}');
+        if (get_return_value == 1) {
+            set_button_status(1, permission, 'fnc_receive_entry', 1);
+            //load_details();
+        }
+    }
+
+    function fnc_work_order_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
         {
             return;

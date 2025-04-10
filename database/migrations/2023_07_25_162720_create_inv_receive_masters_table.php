@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('inv_receive_master', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('compoany_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('sys_number_prefix');
             $table->string('sys_number_prefix_num');
             $table->string('sys_number');
             $table->unsignedBigInteger('supplier_id')->nullable();
-            $table->date('date')->default(Carbon::now());
+            $table->date('receive_date')->default(Carbon::now());
             $table->softDeletes();
             $table->timestamps();
         });

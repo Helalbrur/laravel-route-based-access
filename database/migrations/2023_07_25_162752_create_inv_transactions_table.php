@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('inv_transaction', function (Blueprint $table) {
             $table->id();
-            $table->integer('type');
+            $table->integer('transaction_type');
             $table->unsignedBigInteger('mst_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('store_id')->nullable();

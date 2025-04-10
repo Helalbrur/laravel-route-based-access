@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WorkOrderDtls;
 use App\Models\InvReceiveMaster;
+use Illuminate\Support\Facades\Auth;
 
 class InvReceiveMasterController extends Controller
 {
@@ -29,7 +30,83 @@ class InvReceiveMasterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'cbo_company_name' => 'required',
+            'cbo_supplier' => 'required',
+            'cbo_location_name' => 'required',
+            'txt_receive_date' => 'required',
+            'row_num' => 'required|integer|min:1'
+        ]);
+
+        //return response()->json(['error' => '','request'=>$request->all()]);
+
+        DB::beginTransaction();
+        try
+        {
+            
+            // Generate system no for receive
+
+            $system_no_info=generate_system_no( $request->cbo_company_name, '', '', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
+
+            
+            $InvReceiveMaster = InvReceiveMaster::create([
+                'sys_number_prefix' => $system_no_info->sys_no_prefix,
+                'sys_number_prefix_num' => $system_no_info->sys_no_prefix_num,
+                'sys_number ' => $system_no_info->sys_no,
+                'company_id' => $request->cbo_company_name,
+                'location_id' => $request->cbo_location_name,
+                'store_id' => $request->cbo_store_name,
+                'receive_date' => $request->txt_receive_date,
+                'work_order_no' => $request->txt_work_order_no,
+                'work_order_id' => $request->txt_work_order_id,
+                'supplier_id' => $request->cbo_supplier,
+                'created_at' => now(),
+                'created_by' => Auth::id(),
+            ]);
+
+            // Insert work order details
+            $receiveDetails = [];
+
+            if(empty($request->row_num) && $request->row_num == 0)
+            {
+                throw new Exception("row not found");
+            }
+
+            for($i = 1; $i <= $request->row_num; $i++)
+            {
+                if($request["hidden_product_id_$i"] == null)
+                    continue;
+               $dtls_receive = InvTransaction::create([
+                    'mst_id' => $InvReceiveMaster->id,
+                    'transaction_type' => 1,
+                    'product_id' => $request["hidden_product_id_$i"],
+                    'required_qty' => $request["txt_required_qty_$i"],
+                    'work_order_qty' => $request["txt_work_order_qty_$i"],
+                    'quantity' => $request["txt_receive_qty_$i"],
+                    'lot' => $request["txt_lot_batch_no_$i"],
+                    'expire_date' => $request["txt_expire_date_$i"],
+                    'rack_no' => $request["cbo_rack_no_$i"],
+                    'shelf_no' => $request["cbo_shelf_no_$i"],
+                    'bin_no' => $request["cbo_bin_no_$i"],
+                    'created_at' => now(),
+                    'created_by' => Auth::id(),
+                ]);
+                $receiveDetails[] = $dtls_receive;
+            }
+
+            if(count($receiveDetails) == 0)
+            {
+                throw new Exception("No product found");
+            }
+           
+            DB::commit();
+            return response()->json(['success' => 'Receive Created Successfully', 'wo_no' => $InvReceiveMaster->wo_no, 'id' => $InvReceiveMaster->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()." in ".$e->getFile()." at line ".$e->getLine()]);
+        }
     }
 
     /**
