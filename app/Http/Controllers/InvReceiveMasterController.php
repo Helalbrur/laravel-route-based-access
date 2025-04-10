@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InvReceiveMaster;
 use Illuminate\Http\Request;
+use App\Models\WorkOrderDtls;
+use App\Models\InvReceiveMaster;
 
 class InvReceiveMasterController extends Controller
 {
@@ -61,5 +62,17 @@ class InvReceiveMasterController extends Controller
     public function destroy(InvReceiveMaster $invReceiveMaster)
     {
         //
+    }
+
+    public function receive_work_order_search_list_view(Request $request)
+    {
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.receive_work_order_search_list_view',compact('param'));
+    }
+
+    public function receive_work_order_details($id)
+    {
+        $orders = WorkOrderDtls::where('mst_id', $id)->get();
+        return view('order_management.order.receive_work_order_details',compact('orders'));
     }
 }

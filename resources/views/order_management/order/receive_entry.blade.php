@@ -153,16 +153,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     </select>
                                                 </td>
                                                 <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" onkeyup="calculate_amount(1)" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" onkeyup="calculate_amount(1)" class="form-control" value=""></td>
+                                                <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control" value=""></td>
                                                 <td class="form-group">
                                                     <?php 
                                                         $racks = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
                                                     ?>
-                                                    <select name="cbo_rack_no" id="cbo_rack_no" class="form-control">
+                                                    <select name="cbo_rack_no_1" id="cbo_rack_no_1" class="form-control">
                                                         <option value="0">SELECT</option>
                                                         @foreach($racks as $rack)
                                                             <option value="{{$rack->id}}">{{$rack->floor_room_rack_name}}</option>
@@ -173,7 +173,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     <?php 
                                                          $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
                                                     ?>
-                                                    <select name="cbo_shelf_no" id="cbo_shelf_no" class="form-control">
+                                                    <select name="cbo_shelf_no_1" id="cbo_shelf_no_1" class="form-control">
                                                         <option value="0">SELECT</option>
                                                         @foreach($shelfs as $shelf)
                                                             <option value="{{$shelf->id}}">{{$shelf->floor_room_rack_name}}</option>
@@ -184,7 +184,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     <?php 
                                                         $bins = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
                                                     ?>
-                                                    <select name="cbo_bin_no" id="cbo_bin_no" class="form-control">
+                                                    <select name="cbo_bin_no_1" id="cbo_bin_no_1" class="form-control">
                                                         <option value="0">SELECT</option>
                                                         @foreach($bins as $bin)
                                                             <option value="{{$bin->id}}">{{$bin->floor_room_rack_name}}</option>
@@ -259,7 +259,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     $('#cbo_location_name').val(data.location_id).trigger('change');
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
                     load_details();
-                    set_button_status(1, permission, 'fnc_work_order', 1);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -388,6 +387,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             i++;
         });
         initializeSelect2();
+    }
+
+    async function load_details() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/receive_work_order_details/${$('#work_order_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('div_dtls_list_view').innerHTML = html;
+                initializeSelect2();
+                field_manager(12);
+            })
+            .catch(error => console.error('Error loading details:', error));
+            
     }
 </script>
 @endsection

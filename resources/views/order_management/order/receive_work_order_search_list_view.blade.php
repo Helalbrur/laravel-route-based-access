@@ -1,5 +1,5 @@
 <?php
-    echo "Palash";
+
     $data = json_decode($param,true);
 
     

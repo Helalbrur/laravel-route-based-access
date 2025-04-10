@@ -60,7 +60,7 @@ $company_id         = $param['company_id'] ?? '';
                                             supplier_id: document.getElementById('cbo_supplier').value,
                                             'txt_from_date': document.getElementById('txt_from_date').value,
                                             'txt_to_date': document.getElementById('txt_to_date').value
-                                        }), 'order/work_order_search_list_view', 'search_div', '', 'setFilterGrid(\'tbl_po_list\',-1)')">
+                                        }), 'order/receive_work_order_search_list_view', 'search_div', '', 'setFilterGrid(\'tbl_po_list\',-1)')">
                                         Show
                                     </button>
                                 </td>

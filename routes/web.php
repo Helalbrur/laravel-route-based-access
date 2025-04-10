@@ -168,7 +168,9 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/product_search_list_view',[WorkOrderMstController::class,'product_search_list_view']);
     Route::get('/work_order_search_list_view',[WorkOrderMstController::class,'work_order_search_list_view']);
     Route::get('/work_order_details/{id}',[WorkOrderMstController::class,'work_order_details']);
-});
+    Route::get('/receive_work_order_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
+    Route::get('/receive_work_order_details/{id}',[InvReceiveMasterController::class,'receive_work_order_details']);
+});  
 
 Route::middleware(['auth','PagePermission'])->group(function () {
     //Button Click Database Backup route
