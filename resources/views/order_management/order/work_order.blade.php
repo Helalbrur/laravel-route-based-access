@@ -405,12 +405,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             });
 
             $('#sl_' + i).text(i);
-            $('#txt_cur_rate_' + i).off("keyup").on("keyup", function() { calculate_amount(i); });
-            $('#txt_work_order_qty_' + i).off("keyup").on("keyup", function() { calculate_amount(i); });
-            $('#txt_item_name_' + i).off("dblclick").on("dblclick", function() { fn_item_popup(i); });
-            $('#btn_add_row_' + i).off("click").on("click", function() { add_row(i); });
-            $('#btn_remove_row_' + i).off("click").on("click", function() { remove_row(i); });
-
+            $('#txt_cur_rate_' + i).removeAttr("onkeyup").attr("onkeyup","calculate_amount("+i+")");
+            $('#txt_work_order_qty_' + i).removeAttr("onkeyup").attr("onkeyup","calculate_amount("+i+")");
+            $('#txt_item_name_' + i).removeAttr("ondblclick").attr("ondblclick","fn_item_popup("+i+")");
+            $('#btn_add_row_' + i).removeAttr("onclick").attr("onclick", "add_row(" + i + ")");
+            $('#btn_remove_row_' + i).removeAttr("onclick").attr("onclick", "remove_row(" + i + ")");
             i++;
         });
         initializeSelect2();
