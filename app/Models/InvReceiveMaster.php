@@ -14,13 +14,32 @@ class InvReceiveMaster extends Model
         'sys_number_prefix',
         'sys_number_prefix_num',
         'sys_number',
-        'receive_date',
         'company_id',
-        'supplier_id',
         'location_id',
         'store_id',
+        'receive_date',
+        'work_order_no',
+        'work_order_id',
+        'supplier_id',
         'created_by',
-        'updated_by',
+        'updated_by', 
+        'created_at',
+        'updated_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Automatically set created_by when creating
+        static::creating(function ($receive) {
+            $receive->created_by = Auth::id();
+        });
+
+        // Automatically update updated_by when updating
+        static::updating(function ($receive) {
+            $receive->updated_by = Auth::id();
+        });
+    }
     
 }

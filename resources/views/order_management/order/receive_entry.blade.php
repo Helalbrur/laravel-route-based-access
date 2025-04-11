@@ -226,9 +226,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
 @section('script')
 <script>
-     var permission = '{{$permission}}';
-    function fnc_receive_entry(operation) {
-        if (form_validation('cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date* Work Order No.*Supplier') == false) {
+    var permission = '{{$permission}}';
+    function fnc_receive_entry(operation) { 
+        if (form_validation('cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date*Work Order No.*Supplier') == false) {
             return;
         } else {
             var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier');
@@ -263,6 +263,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
             }
+            //console.log(formData);
 
             if(flag > 0)
             {

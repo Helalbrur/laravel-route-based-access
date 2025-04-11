@@ -51,24 +51,23 @@ class InvReceiveMasterController extends Controller
             // Generate system no for receive
 
             $system_no_info=generate_system_no( $request->cbo_company_name, '', '', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
-
             
-            $InvReceiveMaster = InvReceiveMaster::create([
+            $invReceiveMaster = InvReceiveMaster::create([
                 'sys_number_prefix' => $system_no_info->sys_no_prefix,
                 'sys_number_prefix_num' => $system_no_info->sys_no_prefix_num,
-                'sys_number ' => $system_no_info->sys_no,
+                'sys_number' => $system_no_info->sys_no,
                 'company_id' => $request->cbo_company_name,
                 'location_id' => $request->cbo_location_name,
-                'store_id' => $request->cbo_store_name,
+                'store_id' => $request->cbo_store,
                 'receive_date' => $request->txt_receive_date,
                 'work_order_no' => $request->txt_work_order_no,
-                'work_order_id' => $request->txt_work_order_id,
+                'work_order_id' => $request->work_order_id,
                 'supplier_id' => $request->cbo_supplier,
                 'created_at' => now(),
                 'created_by' => Auth::id(),
             ]);
 
-            // Insert work order details
+            // Insert receive details
             $receiveDetails = [];
 
             if(empty($request->row_num) && $request->row_num == 0)
@@ -78,10 +77,9 @@ class InvReceiveMasterController extends Controller
 
             for($i = 1; $i <= $request->row_num; $i++)
             {
-                if($request["hidden_product_id_$i"] == null)
-                    continue;
+            
                $dtls_receive = InvTransaction::create([
-                    'mst_id' => $InvReceiveMaster->id,
+                    'mst_id' => $invReceiveMaster->id,
                     'transaction_type' => 1,
                     'product_id' => $request["hidden_product_id_$i"],
                     'required_qty' => $request["txt_required_qty_$i"],
@@ -89,11 +87,9 @@ class InvReceiveMasterController extends Controller
                     'quantity' => $request["txt_receive_qty_$i"],
                     'lot' => $request["txt_lot_batch_no_$i"],
                     'expire_date' => $request["txt_expire_date_$i"],
-                    'rack_no' => $request["cbo_rack_no_$i"],
-                    'shelf_no' => $request["cbo_shelf_no_$i"],
-                    'bin_no' => $request["cbo_bin_no_$i"],
-                    'created_at' => now(),
-                    'created_by' => Auth::id(),
+                    'room_rack_id' => $request["cbo_rack_no_$i"],
+                    'room_self_id' => $request["cbo_shelf_no_$i"],
+                    'room_bin_id' => $request["cbo_bin_no_$i"],
                 ]);
                 $receiveDetails[] = $dtls_receive;
             }
@@ -104,7 +100,7 @@ class InvReceiveMasterController extends Controller
             }
            
             DB::commit();
-            return response()->json(['success' => 'Receive Created Successfully', 'sys_number' => $InvReceiveMaster->sys_number, 'id' => $InvReceiveMaster->id]);
+            return response()->json(['success' => 'Receive Created Successfully', 'sys_number' => $invReceiveMaster->sys_number, 'id' => $invReceiveMaster->id]);
         }
         catch (Exception $e)
         {
