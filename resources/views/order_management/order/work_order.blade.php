@@ -358,16 +358,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
     function remove_row(rowNo) {
         var row_num = $('#dtls_list_view tbody tr').length;
         if (row_num == 1) return;
-
         var rowToRemove = $("#tr_" + rowNo);
-        
-        // Properly destroy Select2 if it exists
-        // rowToRemove.find('select').each(function() {
-        //     if ($(this).hasClass('select2-hidden-accessible')) {
-        //         $(this).select2('destroy');
-        //     }
-        // });
-        
         rowToRemove.remove();
         assign_id();
     }
@@ -504,6 +495,23 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                     return;
                 }
                 var product_arr = JSON.parse(popup_value);
+
+                var row_num = $('#dtls_list_view tbody tr').length;
+
+                for (let index = 1; index <= row_num; index++) {
+                   var product_id = $('#hidden_product_id_' + index).val() * 1;
+                   if(product_id == 0 && row_id > 1) {
+                       remove_row(index);
+                       row_id--;
+                   }
+                }
+                var row_num = $('#dtls_list_view tbody tr').length;
+                for (let index = row_id + 1; index <= row_num; index++) {
+                    var product_id = $('#hidden_product_id_' + index).val() * 1;
+                    if(product_id == 0 ) {
+                        remove_row(index);
+                    }
+                }
                 //iterate product_arr using foreach and extrat data
 
                 var cur_row_id = row_id;
