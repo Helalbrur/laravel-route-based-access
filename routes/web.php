@@ -25,6 +25,7 @@ use App\Http\Controllers\LibUomController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
 use App\Http\Controllers\LibBrandController;
+use App\Http\Controllers\LibDepartmentController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
 use App\Http\Controllers\LibFloorController;
@@ -128,6 +129,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/general/country', LibCountryController::class);
     Route::resource('/general/store', LibStoreLocationController::class);
     Route::resource('/general/brand', LibBrandController::class);
+    Route::resource('/general/department', LibDepartmentController::class);
     Route::resource('/general/product_details_master', ProductDetailsMasterController::class);
 
 
