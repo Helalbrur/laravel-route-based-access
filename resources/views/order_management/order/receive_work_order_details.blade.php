@@ -28,7 +28,7 @@
         ?>
         <?php $i = 1;?>
         @foreach ($orders as $order)
-        <tr id="tr_1">
+        <tr id="tr_{{ $i }}">
                 <td class="form-group" id="sl_{{ $i }}">{{ $i }}</td>
                 <td class="form-group">
                     <input type="text" name="txt_item_name_{{ $i }}" id="txt_item_name_{{ $i }}" class="form-control" value="{{ $order->product->item_description }}" disabled>

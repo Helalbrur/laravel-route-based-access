@@ -42,8 +42,6 @@ class InvReceiveMasterController extends Controller
             'row_num' => 'required|integer|min:1'
         ]);
 
-        //return response()->json(['error' => '','request'=>$request->all()]);
-
         DB::beginTransaction();
         try
         {
