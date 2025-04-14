@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use App\Models\WorkOrderDtls;
 use App\Models\InvTransaction;
 use App\Models\InvReceiveMaster;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProductDetailsMaster;
 use Illuminate\Support\Facades\Auth;
-use Doctrine\DBAL\Exception;
 
 class InvReceiveMasterController extends Controller
 {
@@ -82,8 +83,10 @@ class InvReceiveMasterController extends Controller
                     'mst_id' => $invReceiveMaster->id,
                     'transaction_type' => 1,
                     'product_id' => $request["hidden_product_id_$i"],
-                    'required_qty' => $request["txt_required_qty_$i"],
-                    'work_order_qty' => $request["txt_work_order_qty_$i"],
+                    'order_uom' => $request["cbo_order_uom_$i"],
+                    'order_qnty' => $request["txt_work_order_qty_$i"], 
+                    'order_rate' => $request["txt_work_order_rate_$i"],
+                    'order_amount' => $request["txt_work_order_amount_$i"],
                     'quantity' => $request["txt_receive_qty_$i"],
                     'lot' => $request["txt_lot_batch_no_$i"],
                     'expire_date' => $request["txt_expire_date_$i"],
@@ -151,6 +154,7 @@ class InvReceiveMasterController extends Controller
     public function receive_work_order_details($id)
     {
         $orders = WorkOrderDtls::where('mst_id', $id)->get();
-        return view('order_management.order.receive_work_order_details',compact('orders'));
+        $product = ProductDetailsMaster::where('deleted_at', null)->get();
+        return view('order_management.order.receive_work_order_details',compact('orders','product'));
     }
 }

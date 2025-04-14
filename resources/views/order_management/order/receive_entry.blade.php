@@ -145,7 +145,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     </select>
                                                 </td>
                                                 <td class="form-group">
-                                                    <select name="cbo_uom_1" id="cbo_uom_1" class="form-control">
+                                                    <select name="cbo_order_uom_1" id="cbo_order_uom_1" class="form-control">
                                                         <option value="0">SELECT</option>
                                                         @foreach(get_uom() as $id => $name)
                                                             <option value="{{$id}}">{{$name}}</option>
@@ -153,7 +153,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     </select>
                                                 </td>
                                                 <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control" value=""></td>
+                                                <td class="form-group">
+                                                    <input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control" value="">
+                                                    <input type="hiddent" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
+                                                    <input type="hiddent" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control" value="">
+                                                </td>
                                                 <td class="form-group"><input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
@@ -254,8 +258,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 }
                 formData.append(`hidden_product_id_${i}`, document.getElementById(`hidden_product_id_${i}`).value);
                 formData.append(`hidden_dtls_id_${i}`, document.getElementById(`hidden_dtls_id_${i}`).value);
-                formData.append(`txt_required_qty_${i}`, document.getElementById(`txt_required_qty_${i}`).value);
+                formData.append(`cbo_order_uom_${i}`, document.getElementById(`cbo_order_uom_${i}`).value);
                 formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
+                formData.append(`txt_work_order_rate_${i}`, document.getElementById(`txt_work_order_rate_${i}`).value);
+                formData.append(`txt_work_order_amount_${i}`, document.getElementById(`txt_work_order_amount_${i}`).value);
                 formData.append(`txt_receive_qty_${i}`, document.getElementById(`txt_receive_qty_${i}`).value);
                 formData.append(`txt_lot_batch_no_${i}`, document.getElementById(`txt_lot_batch_no_${i}`).value);
                 formData.append(`txt_expire_date_${i}`, document.getElementById(`txt_expire_date_${i}`).value);
@@ -263,7 +269,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
             }
-            //console.log(formData);
+            console.log(formData);
 
             if(flag > 0)
             {
