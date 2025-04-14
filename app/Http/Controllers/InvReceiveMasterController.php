@@ -73,10 +73,12 @@ class InvReceiveMasterController extends Controller
                 throw new Exception("row not found");
             }
 
+            $details_count = 0;
             for($i = 1; $i <= $request->row_num; $i++)
             {
-            
-               $dtls_receive = InvTransaction::create([
+                //throw new Exception($request["hidden_product_id_$i"]);
+
+                $dtls_receive = InvTransaction::create([
                     'mst_id' => $invReceiveMaster->id,
                     'transaction_type' => 1,
                     'product_id' => $request["hidden_product_id_$i"],
@@ -90,9 +92,10 @@ class InvReceiveMasterController extends Controller
                     'room_bin_id' => $request["cbo_bin_no_$i"],
                 ]);
                 $receiveDetails[] = $dtls_receive;
+                $details_count++;
             }
 
-            if(count($receiveDetails) == 0)
+            if(count($receiveDetails) == 0 || $details_count == 0)
             {
                 throw new Exception("No product found");
             }

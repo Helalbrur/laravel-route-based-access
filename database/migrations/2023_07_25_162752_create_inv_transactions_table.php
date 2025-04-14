@@ -20,9 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('store_id')->nullable();
             $table->unsignedBigInteger('room_rack_id')->nullable();
-            $table->double('quantity',15,6)->default(0);
-            $table->double('rate',15,6)->default(0);
-            $table->double('amount',15,6)->default(0);
+            $table->int('cons_uom')->nullable();
+            $table->double('cons_qnty',15,6)->default(0);
+            $table->double('cons_rate',15,6)->default(0);
+            $table->double('cons_amount',15,6)->default(0);
             $table->date('date')->default(Carbon::now());
             $table->softDeletes();
             $table->timestamps();

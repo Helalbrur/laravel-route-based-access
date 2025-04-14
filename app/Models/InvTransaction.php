@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class InvTransaction extends Model
 {
     use HasFactory;
-    protected $table = 'inv_receive_master';
+    protected $table = 'inv_transaction';
     protected $fillable = [
         'mst_id',
         'transaction_type',
