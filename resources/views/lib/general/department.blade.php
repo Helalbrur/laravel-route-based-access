@@ -136,7 +136,5 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Department Entry';
         }
     }
     setFilterGrid("list_view", -1);
-
-    field_manager(11);
 </script>
 @endsection
