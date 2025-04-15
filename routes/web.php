@@ -173,7 +173,7 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/receive_work_order_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
     Route::get('/receive_work_order_details/{id}',[InvReceiveMasterController::class,'receive_work_order_details']);
 
-    Route::get('/receive_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
+    Route::get('/receive_search_list_view',[InvReceiveMasterController::class,'receive_search_list_view']);
     Route::get('/receive_details/{id}',[InvReceiveMasterController::class,'receive_details']);
 });  
 
