@@ -269,14 +269,31 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
     }
 
     const load_php_data_to_form = async (update_id) => {
+       
+        freeze_window(3);
+        reset_form('workorder_1', '', '', 1);
         var columns = 'wo_no*id*company_id*location_id*supplier_id*pay_mode*wo_date*delivery_date*source*remarks';
-        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_supplier*cbo_pay_mode*txt_work_order_date*txt_delivery_date*cbo_source*txt_remarks';
-        var others = '';
-        var get_return_value = await populate_form_data('id', update_id, 'work_order_mst', columns, fields, '{{csrf_token()}}');
-        if (get_return_value == 1) {
+        var response = await populate_field_data('id', update_id, 'work_order_mst', columns, '{{csrf_token()}}', '');
+        if (response.code === 18 && response.data) {
+            var data = response.data;
+            document.getElementById('txt_sys_no').value = data.wo_no;
+            document.getElementById('update_id').value = data.id;
+            document.getElementById('cbo_company_name').value = data.company_id;
+            await handleCompanyChange(); // Await the company change
+            $('#cbo_location_name').val(data.location_id).trigger('change');
+            $('#cbo_supplier').val(data.supplier_id).trigger('change');
+            $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
+            $('#cbo_source').val(data.source).trigger('change');
+            document.getElementById('txt_work_order_date').value = data.wo_date;
+            document.getElementById('txt_delivery_date').value = data.delivery_date;
+            document.getElementById('txt_remarks').value = data.remarks;
+            document.getElementById('txt_sys_no').readOnly = true;
             set_button_status(1, permission, 'fnc_work_order', 1);
             load_details();
+        } else {
+            console.warn("Unexpected data format:", response);
         }
+        release_freezing();
     }
 
     async function handleCompanyChange() {
@@ -428,7 +445,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 		var title = 'Work Order Search';
 		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
+		emailwindow.onclose= async function()
 		{
 			
 			try {
@@ -443,7 +460,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                     $('#update_id').val(data.id);
                     //txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks
                     $('#txt_sys_no').val(data.wo_no);
-                    $('#cbo_company_name').val(data.company_id).trigger('change');
+                    document.getElementById('cbo_company_name').value = data.company_id;
+                    await handleCompanyChange(); // Await the company change
                     $('#cbo_location_name').val(data.location_id).trigger('change');
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
                     $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
