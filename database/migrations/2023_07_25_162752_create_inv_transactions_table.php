@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('cons_qnty',15,6)->default(0);
             $table->double('cons_rate',15,6)->default(0);
             $table->double('cons_amount',15,6)->default(0);
+            $table->double('quantity')->default(0);
             $table->date('date')->default(Carbon::now());
             $table->softDeletes();
             $table->timestamps();

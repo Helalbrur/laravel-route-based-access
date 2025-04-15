@@ -27,22 +27,22 @@
             $bins   = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
         ?>
         <?php $i = 1;?>
-        @foreach ($orders as $order)
+        @foreach ($receives as $receive)
         <tr id="tr_{{ $i }}">
                 <td class="form-group" id="sl_{{ $i }}">{{ $i }}</td>
                 <td class="form-group">
-                    <input type="text" name="txt_item_name_{{ $i }}" id="txt_item_name_{{ $i }}" class="form-control" value="{{ $order->product->item_description }}" disabled>
-                    <input type="hidden" name="hidden_product_id_{{ $i }}" id="hidden_product_id_{{ $i }}" class="form-control" value="{{ $order->product_id }}">
-                    <input type="hidden" name="hidden_conversion_fac_{{ $i }}" id="hidden_conversion_fac_{{ $i }}" class="form-control" value="{{ $order->product->conversion_fac }}">
-                    <input type="hidden" name="hidden_consuption_uom_{{ $i }}" id="hidden_consuption_uom_{{ $i }}" class="form-control" value="{{ $order->product->consuption_uom }}">
+                    <input type="text" name="txt_item_name_{{ $i }}" id="txt_item_name_{{ $i }}" class="form-control" value="{{ $receive->product->item_description }}" disabled>
+                    <input type="hidden" name="hidden_product_id_{{ $i }}" id="hidden_product_id_{{ $i }}" class="form-control" value="{{ $receive->product_id }}">
+                    <input type="hidden" name="hidden_conversion_fac_{{ $i }}" id="hidden_conversion_fac_{{ $i }}" class="form-control" value="{{ $receive->product->conversion_fac }}">
+                    <input type="hidden" name="hidden_consuption_uom_{{ $i }}" id="hidden_consuption_uom_{{ $i }}" class="form-control" value="{{ $receive->product->consuption_uom }}">
                     <input type="hidden" name="hidden_dtls_id_{{ $i }}" id="hidden_dtls_id_{{ $i }}" class="form-control" value="">
                 </td>
-                <td class="form-group"><input type="text" name="txt_item_code_{{ $i }}" id="txt_item_code_{{ $i }}" class="form-control" value="{{ $order->product->item_code }}" disabled></td>
+                <td class="form-group"><input type="text" name="txt_item_code_{{ $i }}" id="txt_item_code_{{ $i }}" class="form-control" value="{{ $receive->product->item_code }}" disabled></td>
                 <td class="form-group">
                     <select name="cbo_item_category_{{ $i }}" id="cbo_item_category_{{ $i }}" class="form-control" disabled>
                         <option value="0">SELECT</option>
                         @foreach(get_item_category() as $id => $name)
-                            <option value="{{$id}}" {{ $id == $order->category_id ? 'selected' : '' }}>{{ $name }}</option>
+                            <option value="{{$id}}" {{ $id == $receive->product->item_category_id ? 'selected' : '' }}>{{ $name }}</option>
                         @endforeach
                     </select>
                 </td>
@@ -50,15 +50,15 @@
                     <select name="cbo_order_uom_{{ $i }}" id="cbo_order_uom_{{ $i }}" class="form-control" disabled>
                         <option value="0">SELECT</option>
                         @foreach(get_uom() as $id => $name)
-                            <option value="{{$id}}" {{ $id == $order->uom ? 'selected' : '' }}>{{$name}}</option>
+                            <option value="{{$id}}" {{ $id == $receive->product->order_uom ? 'selected' : '' }}>{{$name}}</option>
                         @endforeach
                     </select>
                 </td>
-                <td class="form-group"><input type="text" name="txt_required_qty_{{ $i }}" id="txt_required_qty_{{ $i }}" class="form-control" value="{{ $order->required_quantity }}" disabled></td>
+                <td class="form-group"><input type="text" name="txt_required_qty_{{ $i }}" id="txt_required_qty_{{ $i }}" class="form-control" value="{{ $receive->required_quantity }}" disabled></td>
                 <td class="form-group">
-                    <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $order->quantity }}" disabled>
-                    <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $order->rate }}">
-                    <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $order->quantity*$order->rate }}">
+                    <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $receive->quantity }}" disabled>
+                    <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->rate }}">
+                    <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $receive->quantity*$receive->rate }}">
                 </td>
                 <td class="form-group"><input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="" disabled></td>
                 <td class="form-group"><input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value=""></td>

@@ -4,47 +4,40 @@
 
     
     $company_id     = $data['company_id'];
-    $work_order_no  = $data['work_order_no'];
-    $supplier_id    = $data['supplier_id'];
+    $txt_receive_no  = $data['txt_receive_no'];
     $from_date      = $data['txt_from_date'];
     $to_date        = $data['txt_to_date'];
     
-    $query_builder = App\Models\WorkOrderMst::query();
+    $query_builder = App\Models\InvReceiveMaster::query();
     if(!empty($company_id))
     {
         $query_builder = $query_builder->where('company_id', $company_id);
     }
     
-    if(!empty($work_order_no))
+    if(!empty($txt_receive_no))
     {
-        $query_builder = $query_builder->where('wo_no' , 'like', '%'.trim($work_order_no).'%');
+        $query_builder = $query_builder->where('sys_number' , 'like', '%'.trim($txt_receive_no).'%');
     }
     
     if(!empty($from_date) && !empty($to_date))
     {
-        $query_builder = $query_builder->whereBetween('wo_date', [$from_date, $to_date]);
-    }
-
-    if(!empty($supplier_id))
-    {
-        $query_builder = $query_builder->where('supplier_id', $supplier_id);
+        $query_builder = $query_builder->whereBetween('receive_date', [$from_date, $to_date]);
     }
     
-    $work_orders = $query_builder->get();
+    $receives = $query_builder->get();
     
 ?>
 <table id="list_view" class="table table-striped" style="width: 100%">
     <thead>
         <tr>
             <th>Company</th>
-            <th>Work Order</th>
-            <th>Supplier</th>
-            <th>Work Order Date</th>
+            <th>Receive No</th>
+            <th>Receive Date</th>
         </tr>
     </thead>
     <tbody>
         <?php $sl = 1;?>
-        @foreach($work_orders as $order)
+        @foreach($receives as $receive)
             <?php 
                 if($sl % 2 == 0)
                 {
@@ -55,13 +48,12 @@
                     $class = 'odd';
                 }
                 $sl++;
-                $param = json_encode($order);
+                $param = json_encode($receive);
             ?>
-            <tr id="tr_{{$order->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" class="{{ $class }}">
-                <td>{{ get_all_company()[$order->company_id] ?? '' }}</td>
-                <td>{{ $order->wo_no }}</td>
-                <td>{{ get_all_supplier()[$order->supplier_id] ?? '' }}</td>
-                <td>{{ $order->wo_date }}</td>
+            <tr id="tr_{{$receive->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" class="{{ $class }}">
+                <td>{{ get_all_company()[$receive->company_id] ?? '' }}</td>
+                <td>{{ $receive->sys_number }}</td>
+                <td>{{ $receive->receive_date }}</td>
                 
             </tr>
         @endforeach

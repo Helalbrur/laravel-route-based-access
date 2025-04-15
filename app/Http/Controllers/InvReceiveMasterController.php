@@ -80,6 +80,11 @@ class InvReceiveMasterController extends Controller
                 //throw new Exception($request["hidden_product_id_$i"]);
 
                 $dtls_receive = InvTransaction::create([
+
+                    $cons_qnty = $request["txt_work_order_qty_$i"]*$request["hidden_conversion_fac_$i"],
+                    $cons_rate = $request["txt_work_order_rate_$i"]*1,
+                    $cons_amount = $cons_qnty*$cons_rate,
+
                     'mst_id' => $invReceiveMaster->id,
                     'transaction_type' => 1,
                     'product_id' => $request["hidden_product_id_$i"],
@@ -93,6 +98,10 @@ class InvReceiveMasterController extends Controller
                     'room_rack_id' => $request["cbo_rack_no_$i"],
                     'room_self_id' => $request["cbo_shelf_no_$i"],
                     'room_bin_id' => $request["cbo_bin_no_$i"],
+                    'cons_uom' => $request["hidden_consuption_uom_$i"],
+                    'cons_qnty' => $cons_qnty,
+                    'cons_rate' => $cons_rate,
+                    'cons_amount' => $cons_amount,
                 ]);
                 $receiveDetails[] = $dtls_receive;
                 $details_count++;
@@ -154,7 +163,21 @@ class InvReceiveMasterController extends Controller
     public function receive_work_order_details($id)
     {
         $orders = WorkOrderDtls::where('mst_id', $id)->get();
-        $product = ProductDetailsMaster::where('deleted_at', null)->get();
-        return view('order_management.order.receive_work_order_details',compact('orders','product'));
+        return view('order_management.order.receive_work_order_details',compact('orders'));
     }
+
+
+    public function receive_search_list_view(Request $request)
+    {
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.receive_search_list_view',compact('param'));
+    }
+
+    public function receive_details($id)
+    {
+        $receives = InvTransaction::where('mst_id', $id)->get();
+        return view('order_management.order.receive_details',compact('receives'));
+    }
+
+    
 }

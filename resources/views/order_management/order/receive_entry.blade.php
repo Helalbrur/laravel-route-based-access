@@ -133,6 +133,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group">
                                                     <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
+                                                    <input type="hidden" name="hidden_conversion_fac_1" id="hidden_conversion_fac_1" class="form-control" value="">
+                                                    <input type="hidden" name="hidden_consuption_uom_1" id="hidden_consuption_uom_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
                                                 </td>
                                                 <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
@@ -155,8 +157,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group">
                                                     <input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control" value="">
-                                                    <input type="hiddent" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
-                                                    <input type="hiddent" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control" value="">
+                                                    <input type="hidden" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
+                                                    <input type="hidden" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control" value="">
                                                 </td>
                                                 <td class="form-group"><input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
@@ -268,6 +270,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_rack_no_${i}`, document.getElementById(`cbo_rack_no_${i}`).value);
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
+                formData.append(`hidden_conversion_fac_${i}`, document.getElementById(`hidden_conversion_fac_${i}`).value);
+                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value);
             }
             console.log(formData);
 
@@ -291,16 +295,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         }
     }
 
-    const load_php_data_to_form = async (update_id) => {
-        var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
-        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
-        var others = '';
-        var get_return_value = await populate_form_data('id', update_id, 'work_order_mst', columns, fields, '{{csrf_token()}}');
-        if (get_return_value == 1) {
-            set_button_status(1, permission, 'fnc_receive_entry', 1);
-            //load_details();
-        }
-    }
+    // const load_php_data_to_form = async (update_id) => {
+    //     var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
+    //     var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
+    //     var others = '';
+    //     var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
+    //     if (get_return_value == 1) {
+    //         set_button_status(1, permission, 'fnc_receive_entry', 1);
+    //         //load_details();
+    //     }
+    // }
 
     function fnc_work_order_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
@@ -312,8 +316,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             'supplier_id': $("#cbo_supplier").val(),
             'company_id': $("#cbo_company_name").val()
         });
-        console
-        console.log(param);
+
+       // console.log(param);
 		var title = 'Work Order Search';
 		var page_link='/show_common_popup_view?page=receive_work_order_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
@@ -322,7 +326,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 			
 			try {
                 var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
-                console.log(popup_value);
+                //console.log(popup_value);
                 if (popup_value == '') {
                     return;
                 }
@@ -477,5 +481,61 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             .catch(error => console.error('Error loading details:', error));
             
     }
+
+    function fnc_sys_no_popup() {
+        if(form_validation('cbo_company_name','Company Name')==false)
+        {
+            return;
+        }
+        
+        var param = JSON.stringify({
+            'company_id': $("#cbo_company_name").val()
+        });
+        //console.log(param);
+		var title = 'Receive Search';
+		var page_link='/show_common_popup_view?page=receive_search&param='+param;
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			
+			try {
+                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var data = JSON.parse(popup_value);
+                console.log(data);
+                if (data) {
+                    $('#update_id').val(data.id);
+                    $('#txt_sys_no').val(data.sys_number);
+                    $('#cbo_company_name').val(data.company_id).trigger('change');
+                    $('#cbo_location_name').val(data.location_id).trigger('change');
+                    $('#cbo_store').val(data.store_id).trigger('change');
+                    $('#txt_receive_date').val(data.receive_date);
+                    $('#txt_work_order_no').val(data.work_order_no);
+                    $('#work_order_id').val(data.work_order_id);
+                    $('#cbo_supplier').val(data.supplier_id).trigger('change');
+                    load_receive_details();
+                    set_button_status(1, permission, 'fnc_receive_entry', 1);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+		}
+    }
+
+    async function load_receive_details() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/receive_details/${$('#update_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('div_dtls_list_view').innerHTML = html;
+                initializeSelect2();
+                field_manager(12);
+            })
+            .catch(error => console.error('Error loading details:', error));
+    }
+
 </script>
 @endsection

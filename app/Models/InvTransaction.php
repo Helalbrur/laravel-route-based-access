@@ -18,11 +18,17 @@ class InvTransaction extends Model
         'order_qnty',
         'order_rate',
         'order_amount',
+        'order_amount',
+        'quantity',
         'lot',
         'expire_date',
         'room_rack_id',
         'room_self_id',
         'room_bin_id',
+        'cons_uom',
+        'cons_qnty',
+        'cons_rate',
+        'cons_amount',
         'created_by',
         'updated_by',
         'created_at',
@@ -43,4 +49,10 @@ class InvTransaction extends Model
             $receive->updated_by = Auth::id();
         });
     }
+
+        // Define relationship with ProductDetailsMaster
+        public function product()
+        {
+            return $this->belongsTo(ProductDetailsMaster::class, 'product_id');
+        }
 }
