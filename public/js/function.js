@@ -526,7 +526,13 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
 
 	const BASE_URL = getBaseUrl();
 
-	var url = `${BASE_URL}/${action}?param=${data}`;
+	if(param == '')
+	{
+		param = data;
+	}
+	//var url = `${base_url}${path}?data=${data}&action=${action}&param=${param}`;
+
+	var url = `${BASE_URL}/${action}?data=${data}&action=${action}&param=${param}`;
 	//console.log(`list view url : ${url}`);
     fetch(url, {
 		method: 'GET',
@@ -1246,7 +1252,7 @@ async function populate_form_data(filter_column_name,filter_column_value,table_n
 						throw new Error(`${form_columns[row_no]} not found.`);
 					}
 				}
-				return_value = 1 ;z
+				return_value = 1 ;
 				if(multi_select_column.length > 0)
 				{
 					var multi_select_arr = [];
@@ -1338,37 +1344,51 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		}
 		return response.json();
 	})
-	.then(data => {
-		console.log(`data=${data}`);
+	.then(response => {
 		
-		if(data.code == 10)
+		if(response.code == 10)
 		{
 			
-			if(data.hasOwnProperty("message") && data.message.length > 0)
+			if(response.hasOwnProperty("message") && response.message.length > 0)
 			{
-				showNotification(operation_success_msg[data.message],'error');
+				showNotification(operation_success_msg[response.message],'error');
 			}
 			else
 			{
-				showNotification(operation_success_msg[data.code],'error');
+				showNotification(operation_success_msg[response.code],'error');
 			}
 			
 			return;
 		}
-		showNotification(operation_success_msg[data.code]);
-		if(data.code < 2)
+		showNotification(operation_success_msg[response.code]);
+		if(response.code < 2)
 		{
 			if(reset_form_id.length > 0)
 			{
 				reset_form(reset_form_id,'','',1);
 			}
-			if(column_name.length > 0 && data.data.length > 0)
-			{
-				
-				load_php_data_to_form(data.data[column_name]);
+			if (column_name?.length > 0) {
+				// First check response.data[column_name]
+				if (response?.data?.[column_name]?.length > 0) {
+					console.log(`Data from response.data:`, response.data[column_name]);
+					load_php_data_to_form(response.data[column_name]);
+				} 
+				// Then check direct response[column_name]
+				else if (response?.[column_name]?.length > 0) {
+					console.log(`Data from direct response:`, response[column_name]);
+					load_php_data_to_form(response[column_name]);
+				}
+				// Check other possible locations based on your response structure
+				else if (response?.data && typeof response.data === 'object' && column_name in response.data) {
+					console.log(`Data exists but might be empty:`, response.data[column_name]);
+					load_php_data_to_form(response.data[column_name]);
+				}
+				else {
+					console.warn(`Column "${column_name}" not found in response data`);
+				}
 			}
 		}
-		else if (data.code == 2)
+		else if (response.code == 2)
 		{
 			if(reset_form_id.length > 0)
 			{

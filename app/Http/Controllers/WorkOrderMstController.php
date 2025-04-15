@@ -98,7 +98,13 @@ class WorkOrderMstController extends Controller
             }
            
             DB::commit();
-            return response()->json(['success' => 'Work Order Created Successfully', 'wo_no' => $workOrderMst->wo_no, 'id' => $workOrderMst->id]);
+            return response()->json([
+                'code'=>0,
+                'message'=>'Work Order Created Successfully',
+                'data'=>$workOrderMst,
+                'wo_no' => $workOrderMst->wo_no, 
+                'id' => $workOrderMst->id
+            ]);
         }
         catch (Exception $e)
         {
@@ -126,7 +132,7 @@ class WorkOrderMstController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, WorkOrderMst $order)
+    public function update(Request $request, $update_id)
     {
         // Validate the request data
         $request->validate([
@@ -140,6 +146,12 @@ class WorkOrderMstController extends Controller
         DB::beginTransaction();
         try
         {
+            // Find the work order by ID
+            $order = WorkOrderMst::findOrFail($update_id);
+            if(!$order) {
+                throw new Exception("Work Order not found");
+            }
+ 
             $order->update([
                 'wo_date' => $request->txt_work_order_date,
                 'delivery_date' => $request->txt_delivery_date,
@@ -151,65 +163,78 @@ class WorkOrderMstController extends Controller
                 'remarks' => $request->txt_remarks,
             ]);
 
-             // Insert work order details
-             $workOrderDetails = [];
+              // Insert work order details
+            $workOrderDetails = [];
 
-            if(empty($request->row_num) && $request->row_num == 0)
-            {
+            if(empty($request->row_num) && $request->row_num == 0) {
                 throw new Exception("row not found");
             }
 
             // Update work order details
-            for($i = 1; $i <= $request->row_num; $i++)   
-            {
-                if($request->input("hidden_product_id_$i") == null)
+            for($i = 1; $i <= $request->row_num; $i++) {
+                if($request->input("hidden_product_id_$i") == null) {
                     continue;
-                //check dtls data exist whith hidden_dtls_id_$i or not . if exist then update it otherwise create new dtls
-                $workOrderDtls = WorkOrderDtls::where('id', $request->input("hidden_product_id_$i"))->first();
-                if($workOrderDtls == null)
-                {
-                  $order_dtls =  WorkOrderDtls::create([
-                        'mst_id' => $order->id,
-                        'product_id' => $request["hidden_product_id_$i"],
-                        'uom' => $request["cbo_uom_$i"],
-                        'category_id' => $request["cbo_item_category_$i"],
-                        'quantity' => $request["txt_work_order_qty_$i"],
-                        'required_quantity' => $request["txt_required_qty_$i"],
-                        'rate' => $request["txt_cur_rate_$i"],
-                        'amount' => $request["txt_item_total_amount_$i"],
-                        'date' => $request["txt_work_order_date"],
-                        'remarks' => $request["txt_remarks"],
-                    ]);
-                } 
-                else
-                {
-                    // Update the existing record
-                    $order_dtls =  WorkOrderDtls::where('id', $request->input("hidden_product_id_$i"))->update([
-                        'product_id' => $request["hidden_product_id_$i"],
-                        'uom' => $request["cbo_uom_$i"],
-                        'category_id' => $request["cbo_item_category_$i"],
-                        'quantity' => $request["txt_work_order_qty_$i"],
-                        'required_quantity' => $request["txt_required_qty_$i"],
-                        'rate' => $request["txt_cur_rate_$i"],
-                        'amount' => $request["txt_item_total_amount_$i"],
-                        'date' => $request["txt_work_order_date"],
-                        'remarks' => $request["txt_remarks"],
-                    ]);
                 }
-                $workOrderDetails[$order_dtls->id] = $order_dtls->id;
+                
+                $dtlsId = $request->input("hidden_dtls_id_$i"); // Make sure you have this field
+                $productId = $request->input("hidden_product_id_$i");
+                
+                if(empty($dtlsId)) {
+                    // Create new record
+                    $order_dtls = WorkOrderDtls::create([
+                        'mst_id' => $order->id,
+                        'product_id' => $productId,
+                        'uom' => $request["cbo_uom_$i"],
+                        'category_id' => $request["cbo_item_category_$i"],
+                        'quantity' => $request["txt_work_order_qty_$i"],
+                        'required_quantity' => $request["txt_required_qty_$i"],
+                        'rate' => $request["txt_cur_rate_$i"],
+                        'amount' => $request["txt_item_total_amount_$i"],
+                        'date' => $request["txt_work_order_date"],
+                        'remarks' => $request["txt_remarks"],
+                    ]);
+                    $workOrderDetails[] = $order_dtls->id;
+                } else {
+                    // Update existing record
+                    $order_dtls = WorkOrderDtls::find($dtlsId);
+                    if($order_dtls) {
+                        $order_dtls->update([
+                            'product_id' => $productId,
+                            'uom' => $request["cbo_uom_$i"],
+                            'category_id' => $request["cbo_item_category_$i"],
+                            'quantity' => $request["txt_work_order_qty_$i"],
+                            'required_quantity' => $request["txt_required_qty_$i"],
+                            'rate' => $request["txt_cur_rate_$i"],
+                            'amount' => $request["txt_item_total_amount_$i"],
+                            'date' => $request["txt_work_order_date"],
+                            'remarks' => $request["txt_remarks"],
+                        ]);
+                        $workOrderDetails[] = $order_dtls->id;
+                    }
+                }
             }
-            if(count($workOrderDetails) == 0)
-            {
+
+            if(count($workOrderDetails) == 0) {
                 throw new Exception("No product found");
             }
+
             // Delete work order details that are not in the updated list
-            $existingDtlsIds = WorkOrderDtls::where('mst_id', $order->id)->whereNotIn('id', $workOrderDetails)->pluck('id');
-            if(count($existingDtlsIds) > 0)
-            {
+            $existingDtlsIds = WorkOrderDtls::where('mst_id', $order->id)
+                ->whereNotIn('id', $workOrderDetails)
+                ->pluck('id');
+                
+            if(count($existingDtlsIds) > 0) {
                 WorkOrderDtls::whereIn('id', $existingDtlsIds)->delete();
             }
+            
             DB::commit();
-            return response()->json(['success' => 'Work Order Updated Successfully', 'wo_no' => $order->wo_no, 'id' => $order->id]);
+            return response()->json([
+                'code'=>1,
+                'message'=>'success',
+                'data'=>$order,
+                'wo_no' => $order->wo_no, 
+                'id' => $order->id
+            ]);
         }
         catch (Exception $e)
         {

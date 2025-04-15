@@ -18,6 +18,7 @@ class WorkOrderMst extends Model
         'delivery_date',
         'company_id',
         'supplier_id',
+        'location_id',
         'pay_mode',
         'source',
         'remarks',
