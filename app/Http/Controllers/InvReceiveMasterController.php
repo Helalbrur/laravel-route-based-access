@@ -113,6 +113,13 @@ class InvReceiveMasterController extends Controller
             }
            
             DB::commit();
+            return response()->json([
+                'code'=>0,
+                'message'=>'Receive Created Successfully',
+                'data'=>$invReceiveMaster,
+                'sys_number' => $invReceiveMaster->sys_number, 
+                'id' => $invReceiveMaster->id
+            ]);
             return response()->json(['success' => 'Receive Created Successfully', 'sys_number' => $invReceiveMaster->sys_number, 'id' => $invReceiveMaster->id]);
         }
         catch (Exception $e)

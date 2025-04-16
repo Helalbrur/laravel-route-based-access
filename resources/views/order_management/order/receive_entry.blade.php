@@ -295,16 +295,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         }
     }
 
-    // const load_php_data_to_form = async (update_id) => {
-    //     var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
-    //     var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
-    //     var others = '';
-    //     var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
-    //     if (get_return_value == 1) {
-    //         set_button_status(1, permission, 'fnc_receive_entry', 1);
-    //         //load_details();
-    //     }
-    // }
+    const load_php_data_to_form = async (update_id) => {
+        var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
+        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
+        var others = '';
+        var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
+        if (get_return_value == 1) {
+            set_button_status(1, permission, 'fnc_receive_entry', 1);
+            //load_details();
+        }
+    }
 
     function fnc_work_order_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)

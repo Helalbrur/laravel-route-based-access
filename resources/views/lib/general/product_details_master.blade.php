@@ -111,7 +111,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     </div>
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_sub_category_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Sub-Category</label>
+                                            <label for="cbo_sub_category_name" class="col-sm-6 col-form-label fw-bold text-start">Sub-Category</label>
                                             <div class="col-sm-6 d-flex align-items-center" id="sub_category_div">
                                                 <select style="width: 100%" name="cbo_sub_category_name" id="cbo_sub_category_name" onchange="handleCategoryChange()" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -199,7 +199,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     </div>
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_order_uom" class="col-sm-6 col-form-label fw-bold text-start">Order UOM</label>
+                                            <label for="cbo_order_uom" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Order UOM</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <select style="width: 100%" name="cbo_order_uom" id="cbo_order_uom" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -215,7 +215,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     </div>
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_consuption_uom" class="col-sm-6 col-form-label fw-bold text-start">Consuption UOM</label>
+                                            <label for="cbo_consuption_uom" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Consuption UOM</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <select style="width: 100%" name="cbo_consuption_uom" id="cbo_consuption_uom" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -289,7 +289,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         <div class="row">
                                             <label for="cbo_sub_group_name" class="col-sm-6 col-form-label fw-bold text-start">Sub Group</label>
                                             <div class="col-sm-6 d-flex align-items-center" id="sub_group_div">
-                                                <select style="width: 100%" name="cbo_sub_group_name" id="cbo_sub_group_name" class="form-control" onchange="handleSubGroupChange()">
+                                                <select style="width: 100%" name="cbo_sub_group_name" id="cbo_sub_group_name" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     <?php 
                                                         $lib_sub_group_name = App\Models\LibItemSubGroup::pluck('sub_group_name', 'id');
@@ -315,7 +315,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                     </div>
                                 </div>
 
-                               <div class="row" id="div_dtls_list_view">
+                               <div class="row" id="list_view_div">
                                     <table class="table table-bordered table-striped text-center" id="dtls_list_view">
                                         <thead>
                                             <tr>
@@ -381,7 +381,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
 
     function fnc_item_creation( operation )
     {
-        if (form_validation('cbo_company_name*cbo_supplier_name*cbo_item_category_name*txt_item_name','Company Name*Supplier Name*Item Category*Item Name')==false)
+        if (form_validation('cbo_company_name*cbo_supplier_name*cbo_item_category_name*txt_item_name*cbo_order_uom*cbo_consuption_uom','Company Name*Supplier Name*Item Category*Item Name*Order Uom*Consuption Uom')==false)
         {
             return;
         }
@@ -409,12 +409,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                 body: formData
             };
 
-            save_update_delete(operation,url,requestData,'id','show_product_details_master_list_view','list_view_div','mainform_1');
+            save_update_delete(operation,url,requestData,'id','show_product_details_master_list_view','list_view_div','');
+
         }
     }
+    
 
     const load_php_data_to_form =async (menuId) =>
     {
+        //reset_form('mainform_1', '', '', 1);
         var columns = 'company_id*supplier_id*generic_id*item_category_id*item_sub_category_id*item_type*item_description*item_code*item_origin*brand_id*dosage_form*color_id*order_uom*consuption_uom*consuption_uom_qty*conversion_fac*size_id*power*id*item_group_id*item_sub_group_id';
 
         var response = await populate_field_data('id', menuId, 'product_details_master', columns, '{{csrf_token()}}', '');
@@ -422,6 +425,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
         if (response.code === 18 && response.data) {
             var data = response.data;
             //console.table(data);
+            // const elementIds = ['cbo_company_name','cbo_supplier_name','cbo_generic_name','cbo_item_category_name','cbo_sub_category_name','txt_item_type','txt_item_name','txt_item_code','txt_item_origin','cbo_brand_name','txt_dosage_form','cbo_color_name','cbo_order_uom','cbo_consuption_uom','txt_consuption_uom_qty','txt_conversion_fac','cbo_size_name','txt_power','cbo_group_name','cbo_sub_group_name','update_id'];
+
+            // for (const id of elementIds) 
+            // {
+            //     if (!document.getElementById(id)) 
+            //     {
+            //         //throw new Error(`Element with ID '${id}' not found in document`);
+            //         alert(`Element with ID '${id}' not found in document`);
+            //     }
+            // }
+ 
             $('#cbo_company_name').val(data.company_id);
             $('#cbo_supplier_name').val(data.supplier_id);
             $('#cbo_generic_name').val(data.generic_id);
