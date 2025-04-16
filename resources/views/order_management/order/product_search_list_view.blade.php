@@ -7,8 +7,11 @@
     $supplier_id    = $data['supplier_id'];
     $item_origin    = $data['item_origin'];
     $generic_id     = $data['generic_id'];
+    $reorder_level  = $data['reorder_level'] ?? 0;
+
+  
     
-    $query_builder = App\Models\ProductDetailsMaster::query();
+    $query_builder = DB::table('product_details_master');
     if(!empty($category_id))
     {
         $query_builder = $query_builder->where('item_category_id', $category_id);
@@ -38,8 +41,15 @@
     {
         $query_builder = $query_builder->where('generic_id', $generic_id);
     }
+
+    if(!empty($reorder_level)) {
+        $query_builder = $query_builder->whereColumn('consuption_uom_qty', '>', 'current_stock');
+    }
+
     
+    //$lib_product = $query_builder->ddRawSql();
     $lib_product = $query_builder->get();
+
     
 ?>
 <table id="list_view" class="table table-striped table-bordered" style="width: 100%">

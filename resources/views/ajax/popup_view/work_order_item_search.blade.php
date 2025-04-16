@@ -22,10 +22,11 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                             <tr>
                                 
                                 <th width ="15%">Item Category</th>
-                                <th width ="20%">Item Name</th>
+                                <th width ="15%">Item Name</th>
                                 <th width ="15%">Item Code</th>
                                 <th width ="15%">Origin</th>
                                 <th width ="15%">Generic Name</th>
+                                <th width ="10%">Re Order Level</th>
                                 <th>
 
                                 </th>
@@ -63,6 +64,10 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                                     </select>
                                 </td>
                                 <td>
+                                    <input type="checkbox" id="txt_reorder_level" class="form-control form-control-sm" name="txt_reorder_level" value="0" onclick="check_uncheck()"  />
+                                </td>
+                                <td>
+                                    
                                     <input type="button" name="button2" class="formbutton btn btn-sm btn-info" value="Show" onClick="show_list_view ( 
                                         JSON.stringify({
                                         category_id: document.getElementById('cbo_item_category').value,
@@ -70,6 +75,7 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                                         item_code: document.getElementById('txt_item_code').value,
                                         item_origin: document.getElementById('txt_origin').value,
                                         generic_id: document.getElementById('cbo_generic_name').value,
+                                        reorder_level: document.getElementById('txt_reorder_level').value,
                                         'supplier_id': '{{$supplier_id}}',
                                     }), 'order/product_search_list_view', 'search_div', '', 'setFilterGrid(\'tbl_po_list\',-1)')" style="width:70px;" />
                                 </td>
@@ -88,6 +94,16 @@ $cbo_category_id    = $param['category_id'] ?? 0;
 @section('script')
 <script>
 
+    function check_uncheck()
+    {
+        var checkBox = document.getElementById("txt_reorder_level");
+        //if already checked then uncheck and set value to 0
+        if (checkBox.checked == true){
+            checkBox.value = 1;
+        } else {
+            checkBox.value = 0;
+        }
+    }
    
     var param_arr = [];
     function js_set_value(param )
