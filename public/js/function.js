@@ -1087,6 +1087,9 @@ function get_form_data(data,files ='')
 			var exp = data.split(",");
 			for(var ex of exp)
 			{
+				if (!document.getElementById(ex)) {
+					throw new Error(`Element with ID '${ex}' not found in parent document`);
+				}
 				formData.append(ex, $("#"+ex).val());
 			}
 		}
