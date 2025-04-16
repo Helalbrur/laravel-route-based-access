@@ -154,4 +154,9 @@ function transaction_type()
     return array(1 => "Receive", 2 => "Issue", 3 => "Receive Return", 4 => "Issue Return", 5 => "Item Transfer Receive", 6 => "Item Transfer Issue");
 }
 
+function get_generic_name()
+{
+    return App\Models\LibGeneric::pluck('generic_name', 'id')->toArray();
+}
+
 ?>

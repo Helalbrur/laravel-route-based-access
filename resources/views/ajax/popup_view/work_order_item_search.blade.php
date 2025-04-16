@@ -21,9 +21,11 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                         <thead>
                             <tr>
                                 
-                                <th width ="25%">Item Category</th>
-                                <th width ="30%">Item Name</th>
-                                <th width ="25%">Item Code</th>
+                                <th width ="15%">Item Category</th>
+                                <th width ="20%">Item Name</th>
+                                <th width ="15%">Item Code</th>
+                                <th width ="15%">Origin</th>
+                                <th width ="15%">Generic Name</th>
                                 <th>
 
                                 </th>
@@ -50,11 +52,24 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                                     <input type="text" class="form-control form-control-sm" id="txt_item_code" name="txt_item_code" value="{{$item_code}}" placeholder="Item Code">
                                 </td>
                                 <td>
+                                    <input type="text" class="form-control form-control-sm" id="txt_origin" name="txt_origin"  placeholder="Origin">
+                                </td>
+                                <td>
+                                    <select class="form-control form-control-sm" id="cbo_generic_name" name="cbo_generic_name" style="width: 100%" >
+                                        <option value="">--All--</option>
+                                        @foreach(get_generic_name() as $generic_id => $generic_name)
+                                            <option value="{{$generic_id}}" >{{$generic_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
                                     <input type="button" name="button2" class="formbutton btn btn-sm btn-info" value="Show" onClick="show_list_view ( 
                                         JSON.stringify({
                                         category_id: document.getElementById('cbo_item_category').value,
                                         product_id: document.getElementById('cbo_product').value,
                                         item_code: document.getElementById('txt_item_code').value,
+                                        item_origin: document.getElementById('txt_origin').value,
+                                        generic_id: document.getElementById('cbo_generic_name').value,
                                         'supplier_id': '{{$supplier_id}}',
                                     }), 'order/product_search_list_view', 'search_div', '', 'setFilterGrid(\'tbl_po_list\',-1)')" style="width:70px;" />
                                 </td>
