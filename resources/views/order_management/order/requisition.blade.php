@@ -207,13 +207,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         <tr id="tr_1">
                                             <td class="form-group align-middle" id="sl_1">1</td>
                                             <td class="form-group">
-                                                <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="">
-                                                <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
-                                                <input type="hidden" name="hidden_conversion_fac_1" id="hidden_conversion_fac_1" class="form-control" value="">
-                                                <input type="hidden" name="hidden_consuption_uom_1" id="hidden_consuption_uom_1" class="form-control" value="">
-                                                <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
+                                                <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control">
+                                                <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control">
+                                                <input type="hidden" name="hidden_conversion_fac_1" id="hidden_conversion_fac_1" class="form-control">
+                                                <input type="hidden" name="hidden_consuption_uom_1" id="hidden_consuption_uom_1" class="form-control">
+                                                <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control">
                                             </td>
-                                            <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
+                                            <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control"></td>
                                             <td class="form-group">
                                                 <select name="cbo_item_category_1" id="cbo_item_category_1" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -230,16 +230,24 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
+                                            <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control"></td>
                                             <td class="form-group">
-                                                <input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control" value="">
-                                                <input type="hidden" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
-                                                <input type="hidden" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control" value="">
+                                                <input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control">
+                                                <input type="hidden" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control">
+                                                <input type="hidden" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control">
                                             </td>
-                                            <td class="form-group"><input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value=""></td>
-                                            <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
-                                            <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
-                                            <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value=""></td>
+                                            <td class="form-group">
+                                                <input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control">
+                                            </td>
+                                            <td class="form-group">
+                                                <input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control">
+                                            </td>
+                                            <td class="form-group">
+                                                <input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control">
+                                            </td>
+                                            <td class="form-group">
+                                                <input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr">
+                                            </td>
                                             <td class="form-group">
                                                 <?php
                                                 $racks = LibFloorRoomRackMst::whereHas('rack_details')->get();
@@ -273,7 +281,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                     @endforeach
                                                 </select>
                                             </td>
-
                                             <td class="form-group" width="100">
                                                 <button type="button" class="btn btn-success" name="btn_add_row_1" id="btn_add_row_1" onclick="add_row(1)"><i class="fa fa-plus"></i></button>
                                                 <button type="button" class="btn btn-danger" name="btn_remove_row_1" id="btn_remove_row_1" onclick="remove_row(1)"><i class="fa fa-minus"></i></button>
@@ -420,14 +427,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         if (row_num == 1) return;
 
         var rowToRemove = $("#tr_" + rowNo);
-
-        // Properly destroy Select2 if it exists
-        // rowToRemove.find('select').each(function() {
-        //     if ($(this).hasClass('select2-hidden-accessible')) {
-        //         $(this).select2('destroy');
-        //     }
-        // });
-
         rowToRemove.remove();
         assign_id();
     }
@@ -466,17 +465,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
             $("#" + tr_id).find("input").each(function() {
                 if ($(this).hasClass('flatpickr')) {
-                    $(this).removeClass("flatpickr-input active").addClass("flatpickr-input active");
+                    $(this).removeClass("flatpickr-input").addClass("flatpickr");
                 }
             });
 
             $('#sl_' + i).text(i);
-            $('#btn_add_row_' + i).off("click").on("click", function() {
-                add_row(i);
-            });
-            $('#btn_remove_row_' + i).off("click").on("click", function() {
-                remove_row(i);
-            });
+            $('#btn_add_row_' + i).removeAttr("onclick").attr("onclick", "add_row(" + i + ")");
+            $('#btn_remove_row_' + i).removeAttr("onclick").attr("onclick", "remove_row(" + i + ")");
 
             i++;
         });
