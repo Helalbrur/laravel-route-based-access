@@ -11,7 +11,7 @@
 
   
     
-    $query_builder = DB::table('product_details_master');
+    $query_builder = DB::table('product_details_master')->whereNull('deleted_at');
     if(!empty($category_id))
     {
         $query_builder = $query_builder->where('item_category_id', $category_id);
