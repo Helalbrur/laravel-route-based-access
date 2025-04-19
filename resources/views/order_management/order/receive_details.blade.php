@@ -2,21 +2,21 @@
 <table class="table table-bordered table-striped text-center" id="dtls_list_view">
     <thead> 
         <tr>
-            <th class="form-group" width="3%">Sl</th>
-            <th class="form-group" width="10%">Item Name</th>
-            <th class="form-group" width="10%">Item Code</th>
-            <th class="form-group" width="10%">Item Category</th>
-            <th class="form-group" width="10%">UOM</th>
-            <th class="form-group" width="10%">Required QTY</th>
-            <th class="form-group" width="10%">Work Order Qty</th>
-            <th class="form-group" width="10%">Balance Qty</th>
-            <th class="form-group" width="10%">Receive Qty</th>
-            <th class="form-group" width="10%">Lot/Batch No.</th>
-            <th class="form-group" width="10%">Expire Date</th>
-            <th class="form-group" width="10%">Rack</th>
-            <th class="form-group" width="10%">Self</th>
-            <th class="form-group" width="10%">Bin</th>
-            <th class="form-group">Action</th>
+            <th class="form-group" width="2%">Sl</th>
+            <th class="form-group" width="7%">Item Name</th>
+            <th class="form-group" width="7%">Item Code</th>
+            <th class="form-group" width="7%">Item Category</th>
+            <th class="form-group" width="8%">UOM</th>
+            <th class="form-group" width="">Required QTY</th>
+            <th class="form-group" width="7%">WO Qty</th>
+            <th class="form-group" width="">Balance Qty</th>
+            <th class="form-group" width="">Receive Qty</th>
+            <th class="form-group" width="8%">Lot/Batch No.</th>
+            <th class="form-group" width="8%">Expire Date</th>
+            <th class="form-group" width="8%">Rack</th>
+            <th class="form-group" width="8%">Self</th>
+            <th class="form-group" width="8%">Bin</th>
+            <th class="form-group" width="9%">Action</th>                              
         </tr>
     </thead>
     <tbody >
@@ -25,9 +25,10 @@
             $racks  = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
             $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
             $bins   = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
+            
         ?>
         <?php $i = 1;?>
-        @foreach ($receives as $receive)
+        @foreach ($receives as $receive) 
             <tr id="tr_{{ $i }}">
                 <td class="form-group" id="sl_{{ $i }}">{{ $i }}</td>
                 <td class="form-group">
@@ -56,27 +57,27 @@
                 </td>
                 <td class="form-group"><input type="text" name="txt_required_qty_{{ $i }}" id="txt_required_qty_{{ $i }}" class="form-control" value="{{ $receive->required_quantity }}" disabled></td>
                 <td class="form-group">
-                    <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $receive->quantity }}" disabled>
-                    <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->rate }}">
-                    <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $receive->quantity*$receive->rate }}">
+                    <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty }}" disabled>
+                    <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->order_rate }}">
+                    <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $receive->order_qnty*$receive->order_rate }}">
                 </td>
-                <td class="form-group"><input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="" disabled></td>
+                <td class="form-group"><input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty-$receive->quantity }}" disabled></td>
                 <td class="form-group"><input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="{{ $receive->quantity }}"></td>
                 <td class="form-group"><input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="{{ $receive->lot }}"></td>
                 <td class="form-group"><input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="{{ $receive->receive_date }}"></td>
                 <td class="form-group">
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
-                            @foreach($shelfs as $id => $shelf)
-                                <option value="{{$id}}" {{ $id==$receive->room_self_id ? 'selected' : ''}}>{{$shelf->floor_room_rack_name}}</option>
+                            @foreach($racks as $id => $rack)
+                                <option value="{{$id}}" {{ $id == $receive->room_rack_id ? 'selected' : ''}}>{{$rack->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>
                 <td class="form-group">
                     <select name="cbo_shelf_no_{{ $i }}" id="cbo_shelf_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
-                            @foreach($racks as $rack)
-                                <option value="{{$rack->id}}">{{$rack->floor_room_rack_name}}</option>
+                            @foreach($shelfs as $id => $shelf)
+                                <option value="{{$id}}" {{ $id==$receive->room_self_id ? 'selected' : ''}}>{{$shelf->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>

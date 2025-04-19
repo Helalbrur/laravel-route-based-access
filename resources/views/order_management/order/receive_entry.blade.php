@@ -110,21 +110,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                     <table class="table table-bordered table-striped text-center" id="dtls_list_view">
                                         <thead>
                                             <tr>
-                                                <th class="form-group" width="3%">Sl</th>
-                                                <th class="form-group" width="10%">Item Name</th>
-                                                <th class="form-group" width="10%">Item Code</th>
-                                                <th class="form-group" width="10%">Item Category</th>
-                                                <th class="form-group" width="10%">UOM</th>
-                                                <th class="form-group" width="10%">Required QTY</th>
-                                                <th class="form-group" width="10%">Work Order Qty</th>
-                                                <th class="form-group" width="10%">Balance Qty</th>
-                                                <th class="form-group" width="10%">Receive Qty</th>
-                                                <th class="form-group" width="10%">Lot/Batch No.</th>
-                                                <th class="form-group" width="10%">Expire Date</th>
-                                                <th class="form-group" width="10%">Rack</th>
-                                                <th class="form-group" width="10%">Self</th>
-                                                <th class="form-group" width="10%">Bin</th>
-                                                <th class="form-group">Action</th>
+                                                <th class="form-group" width="2%">Sl</th>
+                                                <th class="form-group" width="7%">Item Name</th>
+                                                <th class="form-group" width="7%">Item Code</th>
+                                                <th class="form-group" width="7%">Item Category</th>
+                                                <th class="form-group" width="8%">UOM</th>
+                                                <th class="form-group" width="">Required QTY</th>
+                                                <th class="form-group" width="7%">WO Qty</th>
+                                                <th class="form-group" width="">Balance Qty</th>
+                                                <th class="form-group" width="">Receive Qty</th>
+                                                <th class="form-group" width="8%">Lot/Batch No.</th>
+                                                <th class="form-group" width="8%">Expire Date</th>
+                                                <th class="form-group" width="8%">Rack</th>
+                                                <th class="form-group" width="8%">Self</th>
+                                                <th class="form-group" width="8%">Bin</th>
+                                                <th class="form-group" width="9%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -457,6 +457,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     var tdParts = td_id.split("_");
                     tdParts.pop();
                     $(this).attr('id', tdParts.join("_") + "_" + i);
+                }
+            });
+
+            $("#" + tr_id).find("input").each(function() {
+                if ($(this).hasClass('flatpickr')) {
+                    $(this).removeClass("hasflatpickr").addClass("flatpickr");
                 }
             });
 
