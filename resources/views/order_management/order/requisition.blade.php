@@ -418,6 +418,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             width: '100%',
             dropdownParent: newRow.closest('.modal').length ? newRow.closest('.modal') : document.body
         });
+        
+        // Re-initialize flatpickr for the newly cloned date picker
+        newRow.find('.flatpickr').flatpickr();
+
 
         assign_id(); // Renumber rows and update attributes
     }
@@ -463,11 +467,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 }
             });
 
-            $("#" + tr_id).find("input").each(function() {
-                if ($(this).hasClass('flatpickr')) {
-                    $(this).removeClass("flatpickr-input").addClass("flatpickr");
-                }
-            });
 
             $('#sl_' + i).text(i);
             $('#btn_add_row_' + i).removeAttr("onclick").attr("onclick", "add_row(" + i + ")");

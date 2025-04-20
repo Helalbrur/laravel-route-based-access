@@ -32,7 +32,7 @@
     $work_orders = $query_builder->get();
     
 ?>
-<table id="list_view" class="table table-striped" style="width: 100%">
+<table id="list_view" class="table table-striped table-bordered" style="width: 100%">
     <thead>
         <tr>
             <th>Company</th>
@@ -45,14 +45,6 @@
         <?php $sl = 1;?>
         @foreach($work_orders as $order)
             <?php 
-                if($sl % 2 == 0)
-                {
-                    $class = 'even';
-                }
-                else
-                {
-                    $class = 'odd';
-                }
                 $sl++;
                 $param = json_encode($order);
             ?>
