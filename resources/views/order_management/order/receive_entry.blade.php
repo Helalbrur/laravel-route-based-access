@@ -408,6 +408,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             dropdownParent: newRow.closest('.modal').length ? newRow.closest('.modal') : document.body
         });
 
+        // Re-initialize flatpickr for the newly cloned date picker
+        newRow.find('.flatpickr').flatpickr();
+
         assign_id(); // Renumber rows and update attributes
     }
 
@@ -457,12 +460,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     var tdParts = td_id.split("_");
                     tdParts.pop();
                     $(this).attr('id', tdParts.join("_") + "_" + i);
-                }
-            });
-
-            $("#" + tr_id).find("input").each(function() {
-                if ($(this).hasClass('flatpickr')) {
-                    $(this).removeClass("hasflatpickr").addClass("flatpickr");
                 }
             });
 
