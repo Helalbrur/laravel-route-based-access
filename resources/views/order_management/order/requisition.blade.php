@@ -3,7 +3,7 @@
 use App\Models\LibFloorRoomRackMst;
 
 $permission = getPagePermission(request('mid') ?? 0);
-$title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
+$title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
 ?>
 @extends('layouts.app')
 @section('content_header')
@@ -17,7 +17,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 @endsection()
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-lg-12">
+    <div class="col-lg-10">
         <div class="card">
             <div class="card-body">
                 <div class="card-text">
@@ -113,93 +113,18 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3 col-lg-3 form-group">
-                                    <div class="row">
-                                        <label for="cbo_item_category" class="col-sm-6 col-form-label">Item Category</label>
-                                        <div class="col-sm-6 d-flex align-items-center">
-                                            <?php $categories = App\Models\LibCategory::get(); ?>
-                                            <select style="width: 100%" name="cbo_item_category" id="cbo_item_category" class="form-control">
-                                                <option value="0">SELECT</option>
-                                                @foreach($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->category_name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-3 form-group">
-                                    <div class="row">
-                                        <label for="txt_item_name" class="col-sm-6 col-form-label">Item Name</label>
-                                        <div class="col-sm-6 d-flex align-items-center">
-                                            <input type="text" id="txt_item_name" name="txt_item_name" class="form-control" placeholder="Browse" onclick="open_item_popup()">
-                                            <input type="hidden" name="txt_item_id" id="txt_item_id">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-3 form-group">
-                                    <div class="row">
-                                        <label for="cbo_item_code" class="col-sm-6 col-form-label">Item Code</label>
-                                        <div class="col-sm-6 d-flex align-items-center">
-                                            <?php $item_codes = App\Models\ProductDetailsMaster::pluck('item_code', 'id'); ?>
-                                            <select style="width: 100%" name="cbo_item_code" id="cbo_item_code" class="form-control">
-                                                <option value="0">SELECT</option>
-                                                @foreach($item_codes as $id => $item_code)
-                                                <option value="{{$id}}">{{$item_code}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-3 form-group">
-                                    <div class="row">
-                                        <label for="cbo_uom" class="col-sm-6 col-form-label">Cons UOM</label>
-                                        <div class="col-sm-6 d-flex align-items-center">
-                                            <select name="cbo_uom" id="cbo_uom" class="form-control">
-                                                <option value="0">SELECT</option>
-                                                @foreach(get_uom() as $id => $name)
-                                                <option value="{{$id}}">{{$name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-3 form-group">
-                                    <div class="row">
-                                        <label for="txt_stock_qty" class="col-sm-6 col-form-label">Stock Qty</label>
-                                        <div class="col-sm-6 d-flex align-items-center">
-                                            <input type="text" id="txt_stock_qty" name="txt_stock_qty" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-3 form-group">
-                                    <div class="row">
-                                        <label for="txt_requisition_qty" class="col-sm-6 col-form-label">Requisition Qty</label>
-                                        <div class="col-sm-6 d-flex align-items-center">
-                                            <input type="text" id="txt_requisition_qty" name="txt_requisition_qty" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-
 
                             <div class="row" id="div_dtls_list_view">
                                 <table class="table table-bordered table-striped text-center" id="dtls_list_view">
                                     <thead>
                                         <tr>
                                             <th class="form-group" width="3%">Sl</th>
-                                            <th class="form-group" width="8%">Item Name</th>
-                                            <th class="form-group" width="8%">Item Code</th>
-                                            <th class="form-group" width="7%">Item Category</th>
-                                            <th class="form-group" width="7%">UOM</th>
-                                            <th class="form-group" width="">Required QTY</th>
-                                            <th class="form-group" width="">WO Qty</th>
-                                            <th class="form-group" width="">Balance Qty</th>
-                                            <th class="form-group" width="">Receive Qty</th>
-                                            <th class="form-group" width="">Lot/Batch No.</th>
-                                            <th class="form-group" width="">Expire Date</th>
-                                            <th class="form-group" width="7%">Rack</th>
-                                            <th class="form-group" width="7%">Self</th>
-                                            <th class="form-group" width="7%">Bin</th>
+                                            <th class="form-group" width="20%">Item Name</th>
+                                            <th class="form-group" width="20%">Item Code</th>
+                                            <th class="form-group" width="15%">Item Category</th>
+                                            <th class="form-group" width="15%">UOM</th>
+                                            <th class="form-group" width="15%">Requisition Qty</th>
                                             <th class="form-group">Action</th>
                                         </tr>
                                     </thead>
@@ -207,13 +132,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         <tr id="tr_1">
                                             <td class="form-group align-middle" id="sl_1">1</td>
                                             <td class="form-group">
-                                                <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control">
-                                                <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control">
-                                                <input type="hidden" name="hidden_conversion_fac_1" id="hidden_conversion_fac_1" class="form-control">
-                                                <input type="hidden" name="hidden_consuption_uom_1" id="hidden_consuption_uom_1" class="form-control">
-                                                <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control">
+                                                <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" placeholder="Browse" ondblclick="fn_item_popup(1)">
+                                                <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
+                                                <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
                                             </td>
-                                            <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control"></td>
+                                            <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
                                             <td class="form-group">
                                                 <select name="cbo_item_category_1" id="cbo_item_category_1" class="form-control">
                                                     <option value="0">SELECT</option>
@@ -223,65 +146,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                 </select>
                                             </td>
                                             <td class="form-group">
-                                                <select name="cbo_order_uom_1" id="cbo_order_uom_1" class="form-control">
+                                                <select name="cbo_uom_1" id="cbo_uom_1" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     @foreach(get_uom() as $id => $name)
                                                     <option value="{{$id}}">{{$name}}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control"></td>
                                             <td class="form-group">
-                                                <input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control">
-                                                <input type="hidden" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control">
-                                                <input type="hidden" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control">
+                                                <input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value="">
                                             </td>
                                             <td class="form-group">
-                                                <input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control">
-                                            </td>
-                                            <td class="form-group">
-                                                <input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control">
-                                            </td>
-                                            <td class="form-group">
-                                                <input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control">
-                                            </td>
-                                            <td class="form-group">
-                                                <input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr">
-                                            </td>
-                                            <td class="form-group">
-                                                <?php
-                                                $racks = LibFloorRoomRackMst::whereHas('rack_details')->get();
-                                                ?>
-                                                <select name="cbo_rack_no_1" id="cbo_rack_no_1" class="form-control">
-                                                    <option value="0">SELECT</option>
-                                                    @foreach($racks as $rack)
-                                                    <option value="{{$rack->id}}">{{$rack->floor_room_rack_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="form-group">
-                                                <?php
-                                                $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get();
-                                                ?>
-                                                <select name="cbo_shelf_no_1" id="cbo_shelf_no_1" class="form-control">
-                                                    <option value="0">SELECT</option>
-                                                    @foreach($shelfs as $shelf)
-                                                    <option value="{{$shelf->id}}">{{$shelf->floor_room_rack_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="form-group">
-                                                <?php
-                                                $bins = LibFloorRoomRackMst::whereHas('bin_details')->get();
-                                                ?>
-                                                <select name="cbo_bin_no_1" id="cbo_bin_no_1" class="form-control">
-                                                    <option value="0">SELECT</option>
-                                                    @foreach($bins as $bin)
-                                                    <option value="{{$bin->id}}">{{$bin->floor_room_rack_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="form-group" width="100">
                                                 <button type="button" class="btn btn-success" name="btn_add_row_1" id="btn_add_row_1" onclick="add_row(1)"><i class="fa fa-plus"></i></button>
                                                 <button type="button" class="btn btn-danger" name="btn_remove_row_1" id="btn_remove_row_1" onclick="remove_row(1)"><i class="fa fa-minus"></i></button>
                                             </td>
@@ -313,31 +188,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 @section('script')
 <script>
     var permission = '{{$permission}}';
-
-    function open_item_popup() {
-        var param = JSON.stringify({
-            'location_id': $("#cbo_location").val(),
-            'company_id': $("#cbo_company_name").val()
-        });
-        console.log(param);
-        var title = 'Item List View';
-        var page_link = '/show_common_popup_view?page=/item_search&param=' + param;
-        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
-
-        emailwindow.onclose = function() {
-            var item_id = this.contentDoc.getElementById('item_id').value;
-            var item_description = this.contentDoc.getElementById('item_name').value;
-            $("#txt_item_id").val(item_id);
-            $("#txt_item_name").val(item_description);
-            //fn_set_item(entry_form_id);
-        }
-    }
+    var setup_data = load_all_setup(12); // Pass the entry_form dynamically
 
     function fnc_work_order(operation) {
-        if (form_validation('txt_name', 'Name') == false) {
+        if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier*cbo_pay_mode', 'Company Name*Location*Work Order Date*Supplier*Pay Mode') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_name,txt_short_name,update_id');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks');
             var method = "POST";
             var param = "";
             if (operation == 1 || operation == 2) {
@@ -346,7 +203,36 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 else formData.append('_method', 'DELETE');
             }
             formData.append('_token', '{{csrf_token()}}');
-            var url = `/lib/other_company${param}`;
+            var rows = $("#dtls_list_view tbody tr");
+            var row_num = rows.length;
+            formData.append('row_num', row_num);
+            formData.append('operation', operation);
+
+            var flag = 0;
+            for (var i = 1; i <= row_num; i++) {
+                if (form_validation('txt_item_name_' + i + '*txt_work_order_qty_' + i + '*txt_cur_rate_' + i, 'Item Name*Work Order Qty*Cur. Rate') == false) {
+                    flag = i;
+                    break;
+                }
+                formData.append(`hidden_product_id_${i}`, document.getElementById(`hidden_product_id_${i}`).value);
+                formData.append(`txt_item_name_${i}`, document.getElementById(`txt_item_name_${i}`).value);
+                formData.append(`hidden_dtls_id_${i}`, document.getElementById(`hidden_dtls_id_${i}`).value);
+                formData.append(`txt_item_code_${i}`, document.getElementById(`txt_item_code_${i}`).value);
+                formData.append(`cbo_item_category_${i}`, document.getElementById(`cbo_item_category_${i}`).value);
+                formData.append(`cbo_uom_${i}`, document.getElementById(`cbo_uom_${i}`).value);
+                formData.append(`txt_required_qty_${i}`, document.getElementById(`txt_required_qty_${i}`).value);
+                formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
+                formData.append(`txt_previous_rate_${i}`, document.getElementById(`txt_previous_rate_${i}`).value);
+                formData.append(`txt_cur_rate_${i}`, document.getElementById(`txt_cur_rate_${i}`).value);
+                formData.append(`txt_item_total_amount_${i}`, document.getElementById(`txt_item_total_amount_${i}`).value);
+            }
+
+            if (flag > 0) {
+                alert('Please fill up item name, work order qty and cur. rate for row ' + flag);
+                return;
+            }
+
+            var url = `/order/work_order${param}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -356,11 +242,52 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 body: formData
             };
 
-            save_update_delete(operation, url, requestData, 'id', 'show_other_company_list_view', 'list_view_div', 'requisition_1');
+            save_update_delete(operation, url, requestData, 'id', '', '', 'workorder_1');
+        }
+    }
+
+    const load_php_data_to_form = async (update_id) => {
+
+        freeze_window(3);
+        reset_form('workorder_1', '', '', 1);
+        var columns = 'wo_no*id*company_id*location_id*supplier_id*pay_mode*wo_date*delivery_date*source*remarks';
+        var response = await populate_field_data('id', update_id, 'work_order_mst', columns, '{{csrf_token()}}', '');
+        if (response.code === 18 && response.data) {
+            var data = response.data;
+            document.getElementById('txt_sys_no').value = data.wo_no;
+            document.getElementById('update_id').value = data.id;
+            document.getElementById('cbo_company_name').value = data.company_id;
+            await handleCompanyChange(); // Await the company change
+            $('#cbo_location_name').val(data.location_id).trigger('change');
+            $('#cbo_supplier').val(data.supplier_id).trigger('change');
+            $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
+            $('#cbo_source').val(data.source).trigger('change');
+            document.getElementById('txt_work_order_date').value = data.wo_date;
+            document.getElementById('txt_delivery_date').value = data.delivery_date;
+            document.getElementById('txt_remarks').value = data.remarks;
+            document.getElementById('txt_sys_no').readOnly = true;
+            set_button_status(1, permission, 'fnc_work_order', 1);
+            load_details();
+        } else {
+            console.warn("Unexpected data format:", response);
+        }
+        release_freezing();
+    }
+
+    async function handleCompanyChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'company_id': document.getElementById('cbo_company_name').value,
+                'onchange': ''
+            }), 'location_under_company', 'location_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
         }
     }
 
     function add_row(insertIndex) {
+
         var rows = $("#dtls_list_view tbody tr");
         var row_num = rows.length;
 
@@ -369,6 +296,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         } else {
             var newRow = rows.eq(insertIndex).clone(false);
         }
+
 
         // Clean up Select2 artifacts from the clone
         newRow.find('select').each(function() {
@@ -418,10 +346,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             width: '100%',
             dropdownParent: newRow.closest('.modal').length ? newRow.closest('.modal') : document.body
         });
-        
-        // Re-initialize flatpickr for the newly cloned date picker
-        newRow.find('.flatpickr').flatpickr();
-
 
         assign_id(); // Renumber rows and update attributes
     }
@@ -429,7 +353,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
     function remove_row(rowNo) {
         var row_num = $('#dtls_list_view tbody tr').length;
         if (row_num == 1) return;
-
         var rowToRemove = $("#tr_" + rowNo);
         rowToRemove.remove();
         assign_id();
@@ -467,35 +390,41 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 }
             });
 
-
             $('#sl_' + i).text(i);
+            $('#txt_cur_rate_' + i).removeAttr("onkeyup").attr("onkeyup", "calculate_amount(" + i + ")");
+            $('#txt_work_order_qty_' + i).removeAttr("onkeyup").attr("onkeyup", "calculate_amount(" + i + ")");
+            $('#txt_item_name_' + i).removeAttr("ondblclick").attr("ondblclick", "fn_item_popup(" + i + ")");
             $('#btn_add_row_' + i).removeAttr("onclick").attr("onclick", "add_row(" + i + ")");
             $('#btn_remove_row_' + i).removeAttr("onclick").attr("onclick", "remove_row(" + i + ")");
-
             i++;
         });
         initializeSelect2();
     }
 
+    function calculate_amount(row_id) {
+        var rate = $('#txt_cur_rate_' + row_id).val() * 1;
+        var order_qty = $('#txt_work_order_qty_' + row_id).val() * 1;
+        var amount = (rate * order_qty * 1000000) / 1000000;
+        $("#txt_item_total_amount_" + row_id).val(amount);
+    }
+
     function fnc_sys_no_popup() {
-        if(form_validation('cbo_company_name','Company Name')==false)
-        {
+        if (form_validation('cbo_company_name', 'Company Name') == false) {
             return;
         }
-        
+
         var param = JSON.stringify({
             'supplier_id': $("#cbo_supplier").val(),
             'company_id': $("#cbo_company_name").val()
         });
         console.log(param);
-		var title = 'Work Order Search';
-		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
-		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose= async function()
-		{
-			
-			try {
-                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+        var title = 'Work Order Search';
+        var page_link = '/show_common_popup_view?page=work_order_search&param=' + param;
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+        emailwindow.onclose = async function() {
+
+            try {
+                var popup_value = this.contentDoc.getElementById("popup_value").value; //Access form field
                 console.log(popup_value);
                 if (popup_value == '') {
                     return;
@@ -520,24 +449,107 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                
+
             }
-		}
-    }
-
-
-    const load_php_data_to_form = async (menuId) => {
-        var columns = 'name*short_name*id';
-        var fields = 'txt_name*txt_short_name*update_id';
-        var others = '';
-        var get_return_value = await populate_form_data('id', menuId, 'other_companies', columns, fields, '{{csrf_token()}}');
-        if (get_return_value == 1) {
-            set_button_status(1, permission, 'fnc_work_order', 1);
         }
     }
 
-    async function load_company_config() {
-        // var company = document.getElementById('cbo_company_name').value;
+    function fn_item_popup(row_id) {
+        // if (form_validation('cbo_supplier', 'Supplier') == false) {
+        //     return;
+        // }
+        var supplier_id = $("#cbo_supplier").val();
+        var item_id = $('#hidden_product_id_' + row_id).val();
+        var item_name = $('#txt_item_name_' + row_id).val();
+        var item_code = $('#txt_item_code_' + row_id).val();
+        var item_category = $('#txt_item_category_' + row_id).val();
+
+
+        var param = JSON.stringify({
+            'supplier_id': supplier_id,
+            'item_id': item_id,
+            'item_name': item_name,
+            'category_id': item_category,
+            'item_code': item_code
+
+        });
+        console.log(param);
+        var title = 'Item Search';
+        var page_link = '/show_common_popup_view?page=work_order_item_search&param=' + param;
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+        emailwindow.onclose = function() {
+
+            try {
+                var popup_value = this.contentDoc.getElementById("popup_value").value; //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var product_arr = JSON.parse(popup_value);
+
+                var row_num = $('#dtls_list_view tbody tr').length;
+
+                for (let index = 1; index <= row_num; index++) {
+                    var product_id = $('#hidden_product_id_' + index).val() * 1;
+                    if (product_id == 0 && row_id > 1) {
+                        remove_row(index);
+                        row_id--;
+                    }
+                }
+                var row_num = $('#dtls_list_view tbody tr').length;
+                for (let index = row_id + 1; index <= row_num; index++) {
+                    var product_id = $('#hidden_product_id_' + index).val() * 1;
+                    if (product_id == 0) {
+                        remove_row(index);
+                    }
+                }
+                //iterate product_arr using foreach and extrat data
+
+                var cur_row_id = row_id;
+                product_arr.forEach(data => {
+                    console.log(data);
+                    if (data) {
+                        if (cur_row_id > row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+
+                        $('#hidden_product_id_' + cur_row_id).val(data.product_id).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val(data.item_name);
+                        $('#txt_item_code_' + cur_row_id).val(data.item_code);
+                        $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
+                        $('#cbo_uom_' + cur_row_id).val(data.uom_id).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+                        cur_row_id++;
+                    } else {
+                        if (cur_row_id > row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+                        $('#hidden_product_id_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val('');
+                        $('#txt_item_code_' + cur_row_id).val('');
+                        $('#cbo_item_category_' + cur_row_id).val(0).trigger('change');
+                        $('#cbo_uom_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(0);
+                    }
+                });
+            } catch (error) {
+                console.error('Error:', error);
+
+            }
+        }
+    }
+
+    async function load_details() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/work_order_details/${$('#update_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('div_dtls_list_view').innerHTML = html;
+                initializeSelect2();
+                field_manager(12);
+            })
+            .catch(error => console.error('Error loading details:', error));
+
     }
 </script>
 @endsection
