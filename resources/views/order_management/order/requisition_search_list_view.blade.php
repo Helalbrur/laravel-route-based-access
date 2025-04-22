@@ -17,11 +17,11 @@ if (!empty($requisition_no)) {
     $query_builder = $query_builder->where('requisition_no', 'like', '%' . trim($requisition_no) . '%');
 }
 
-if (!empty($supplier_id)) {
+if (!empty($store_id)) {
     $query_builder = $query_builder->where('store_id', $store_id);
 }
 
-if (!empty($supplier_id)) {
+if (!empty($department_id)) {
     $query_builder = $query_builder->where('department_id', $department_id);
 }
 
