@@ -42,7 +42,7 @@ use App\Http\Controllers\LibEmployeeController;
 use App\Http\Controllers\LibGenericController; 
 use App\Http\Controllers\LibLocationController;
 use App\Http\Controllers\LibSupplierController;
-use App\Http\Controllers\RequisitionController;
+use App\Http\Controllers\RequisitionMstController;
 use App\Http\Controllers\UserPrivMstController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\FieldManagerController;
@@ -143,7 +143,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
 });
 
 Route::prefix('/tools')->middleware(['auth'])->group(function(){
-    Route::get('/item_list_popup',[RequisitionController::class,'item_list_popup']);
+    Route::get('/item_list_popup',[RequisitionMstController::class,'item_list_popup']);
     Route::get('mandatory_field_entry_form',[MandatoryFieldController::class,'entry_form_popup']);
     Route::get('load_drop_down_mandatory_field_item',[MandatoryFieldController::class,'load_drop_down_mandatory_field_item']);
     Route::get('mandatory_action_user_data',[MandatoryFieldController::class,'mandatory_action_user_data']);
@@ -162,7 +162,7 @@ Route::prefix('/tools')->middleware(['auth'])->group(function(){
 
 Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function () {
     Route::resource('/work_order',WorkOrderMstController::class);
-    Route::resource('/requisition',RequisitionController::class);
+    Route::resource('/requisition',RequisitionMstController::class);
     Route::resource('/receive_entry',InvReceiveMasterController::class);
 });
 
@@ -170,6 +170,11 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/product_search_list_view',[WorkOrderMstController::class,'product_search_list_view']);
     Route::get('/work_order_search_list_view',[WorkOrderMstController::class,'work_order_search_list_view']);
     Route::get('/work_order_details/{id}',[WorkOrderMstController::class,'work_order_details']);
+
+    Route::get('/product_search_list_view',[RequisitionMstController::class,'product_search_list_view']);
+    Route::get('/requisition_search_list_view',[RequisitionMstController::class,'requisition_search_list_view']);
+    Route::get('/requisition_details/{id}',[RequisitionMstController::class,'requisition_details']);
+
     Route::get('/receive_work_order_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
     Route::get('/receive_work_order_details/{id}',[InvReceiveMasterController::class,'receive_work_order_details']);
 
