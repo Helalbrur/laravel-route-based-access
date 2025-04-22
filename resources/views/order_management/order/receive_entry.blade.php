@@ -121,10 +121,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <th class="form-group" width="">Receive Qty</th>
                                                 <th class="form-group" width="8%">Lot/Batch No.</th>
                                                 <th class="form-group" width="8%">Expire Date</th>
+                                                <th class="form-group" width="8%">Floor Name</th>
+                                                <th class="form-group" width="8%">Room No</th>
                                                 <th class="form-group" width="8%">Rack</th>
                                                 <th class="form-group" width="8%">Self</th>
                                                 <th class="form-group" width="8%">Bin</th>
-                                                <th class="form-group" width="9%">Action</th>
+                                                <th class="form-group" width="">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -164,6 +166,28 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value=""></td>
+                                                <td class="form-group">
+                                                    <?php 
+                                                        $floors = App\Models\LibFloor::get();
+                                                    ?>
+                                                    <select name="cbo_floor_name_1" id="cbo_floor_name_1" class="form-control">
+                                                        <option value="0">SELECT</option>
+                                                        @foreach($floors as $floor)
+                                                            <option value="{{$floor->id}}">{{$floor->floor_name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td class="form-group">
+                                                    <?php 
+                                                        $rooms = LibFloorRoomRackMst::whereHas('room_details')->get(); 
+                                                    ?>
+                                                    <select name="cbo_room_no_1" id="cbo_room_no_1" class="form-control">
+                                                        <option value="0">SELECT</option>
+                                                        @foreach($rooms as $room)
+                                                            <option value="{{$room->id}}">{{$room->floor_room_rack_name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
                                                 <td class="form-group">
                                                     <?php 
                                                         $racks = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
@@ -215,13 +239,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                         <div class="col-sm-6">
                                             <?php echo load_submit_buttons($permission, "fnc_receive_entry", 0, 0, "reset_form('receiventry_1','','',1)"); ?>
                                         </div>
-                                       
-                                    </div>
-                                    
+                                    </div>     
                                 </div>
                             </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -267,6 +288,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`txt_receive_qty_${i}`, document.getElementById(`txt_receive_qty_${i}`).value);
                 formData.append(`txt_lot_batch_no_${i}`, document.getElementById(`txt_lot_batch_no_${i}`).value);
                 formData.append(`txt_expire_date_${i}`, document.getElementById(`txt_expire_date_${i}`).value);
+                formData.append(`cbo_floor_name_${i}`, document.getElementById(`cbo_floor_name_${i}`).value);
+                formData.append(`cbo_room_no_${i}`, document.getElementById(`cbo_room_no_${i}`).value);
                 formData.append(`cbo_rack_no_${i}`, document.getElementById(`cbo_rack_no_${i}`).value);
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);

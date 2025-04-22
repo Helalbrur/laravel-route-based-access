@@ -18,6 +18,8 @@ return new class extends Migration
             $table->double('order_amount')->after('room_rack_id')->nullable();
             $table->string('lot')->after('date')->nullable();;
             $table->date('expire_date')->after('date')->nullable();
+            $table->unsignedBigInteger('floor_id')->after('store_id')->nullable();
+            $table->unsignedBigInteger('room_id')->after('store_id')->nullable();
             $table->unsignedBigInteger('room_self_id')->after('room_rack_id')->nullable();
             $table->unsignedBigInteger('room_bin_id')->after('room_rack_id')->nullable();
             $table->unsignedBigInteger('created_by')->after('date');

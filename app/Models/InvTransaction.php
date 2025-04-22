@@ -25,6 +25,8 @@ class InvTransaction extends Model
         'quantity',
         'lot',
         'expire_date',
+        'floor_id',
+        'room_id',
         'room_rack_id',
         'room_self_id',
         'room_bin_id',

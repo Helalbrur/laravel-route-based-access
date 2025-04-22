@@ -13,6 +13,8 @@
             <th class="form-group" width="">Receive Qty</th>
             <th class="form-group" width="8%">Lot/Batch No.</th>
             <th class="form-group" width="8%">Expire Date</th>
+            <th class="form-group" width="8%">Floor Name</th>
+            <th class="form-group" width="8%">Room No</th>
             <th class="form-group" width="8%">Rack</th>
             <th class="form-group" width="8%">Self</th>
             <th class="form-group" width="8%">Bin</th>
@@ -22,9 +24,12 @@
     <tbody >
         <?php 
             use App\Models\LibFloorRoomRackMst;
+            $floors = App\Models\LibFloor::get();
+            $rooms  = LibFloorRoomRackMst::whereHas('room_details')->get(); 
             $racks  = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
             $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
             $bins   = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
+            
         ?>
         <?php $i = 1;?>
         @foreach ($orders as $order)
@@ -64,6 +69,22 @@
                 <td class="form-group"><input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value=""></td>
                 <td class="form-group"><input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value=""></td>
                 <td class="form-group"><input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value=""></td>
+                <td class="form-group">
+                    <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
+                        <option value="0">SELECT</option>
+                        @foreach($floors as $floor)
+                            <option value="{{$floor->id}}">{{$floor->floor_name}}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td class="form-group">
+                    <select name="cbo_room_no_{{ $i }}" id="cbo_room_no_{{ $i }}" class="form-control">
+                        <option value="0">SELECT</option>
+                        @foreach($rooms as $room)
+                            <option value="{{$room->id}}">{{$room->floor_room_rack_name}}</option>
+                        @endforeach
+                    </select>
+                </td>
                 <td class="form-group">
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>

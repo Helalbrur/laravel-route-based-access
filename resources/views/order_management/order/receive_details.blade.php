@@ -13,6 +13,8 @@
             <th class="form-group" width="">Receive Qty</th>
             <th class="form-group" width="8%">Lot/Batch No.</th>
             <th class="form-group" width="8%">Expire Date</th>
+            <th class="form-group" width="8%">Floor Name</th>
+            <th class="form-group" width="8%">Room No</th>
             <th class="form-group" width="8%">Rack</th>
             <th class="form-group" width="8%">Self</th>
             <th class="form-group" width="8%">Bin</th>
@@ -22,6 +24,8 @@
     <tbody >
         <?php 
             use App\Models\LibFloorRoomRackMst;
+            $floors = App\Models\LibFloor::get();
+            $rooms  = LibFloorRoomRackMst::whereHas('room_details')->get(); 
             $racks  = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
             $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
             $bins   = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
@@ -66,10 +70,26 @@
                 <td class="form-group"><input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="{{ $receive->lot }}"></td>
                 <td class="form-group"><input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="{{ $receive->receive_date }}"></td>
                 <td class="form-group">
+                    <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
+                        <option value="0">SELECT</option>
+                        @foreach($floors as $id => $floor)
+                            <option value="{{$floor->id}}" {{ $id == $receive->floor_id ? 'selected' : ''}}>{{$floor->floor_name}}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td class="form-group">
+                    <select name="cbo_room_no_{{ $i }}" id="cbo_room_no_{{ $i }}" class="form-control">
+                        <option value="0">SELECT</option>
+                        @foreach($rooms as $id => $room)
+                            <option value="{{$room->id}}" {{ $id == $receive->room_id ? 'selected' : ''}}>{{$room->floor_room_rack_name}}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td class="form-group">
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($racks as $id => $rack)
-                                <option value="{{$id}}" {{ $id == $receive->room_rack_id ? 'selected' : ''}}>{{$rack->floor_room_rack_name}}</option>
+                                <option value="{{$rack->id}}" {{ $id == $receive->room_rack_id ? 'selected' : ''}}>{{$rack->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>
@@ -77,15 +97,15 @@
                     <select name="cbo_shelf_no_{{ $i }}" id="cbo_shelf_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($shelfs as $id => $shelf)
-                                <option value="{{$id}}" {{ $id==$receive->room_self_id ? 'selected' : ''}}>{{$shelf->floor_room_rack_name}}</option>
+                                <option value="{{$shelf->id}}" {{ $id==$receive->room_self_id ? 'selected' : ''}}>{{$shelf->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>
                 <td class="form-group">
                     <select name="cbo_bin_no_{{ $i }}" id="cbo_bin_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
-                            @foreach($bins as $bin)
-                                <option value="{{$bin->id}}">{{$bin->floor_room_rack_name}}</option>
+                            @foreach($bins as $id => $bin)
+                                <option value="{{$bin->id}}" {{ $id==$receive->room_bin_id ? 'selected' : ''}}>{{$bin->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>
