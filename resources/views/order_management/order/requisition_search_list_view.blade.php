@@ -5,8 +5,8 @@ $company_id     = $data['company_id'];
 $requisition_no = $data['requisition_no'];
 $store_id       = $data['store_id'];
 $department_id  = $data['department_id'];
-$from_date      = $data['txt_from_date'];
-$to_date        = $data['txt_to_date'];
+$from_date      = $data['from_date'] ?? '';
+$to_date        = $data['to_date'] ?? '';
 
 $query_builder = App\Models\RequisitionMst::query();
 if (!empty($company_id)) {
@@ -49,7 +49,7 @@ $requisitions = $query_builder->get();
         $sl++;
         $param = json_encode($requisition);
         ?>
-        <tr id="tr_{{$requisition->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" class="{{ $class }}">
+        <tr id="tr_{{$requisition->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;">
             <td>{{ get_all_company()[$requisition->company_id] ?? '' }}</td>
             <td>{{ $requisition->requisition_no }}</td>
             <td>{{ get_all_store()[$requisition->store_id] ?? '' }}</td>

@@ -14,7 +14,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
 @endsection()
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-lg-10">
+    <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
                 <div class="card-text">

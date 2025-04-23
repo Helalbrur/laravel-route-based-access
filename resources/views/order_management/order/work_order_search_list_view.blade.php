@@ -48,7 +48,7 @@
                 $sl++;
                 $param = json_encode($order);
             ?>
-            <tr id="tr_{{$order->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" class="{{ $class }}">
+            <tr id="tr_{{$order->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" >
                 <td>{{ get_all_company()[$order->company_id] ?? '' }}</td>
                 <td>{{ $order->wo_no }}</td>
                 <td>{{ get_all_supplier()[$order->supplier_id] ?? '' }}</td>
