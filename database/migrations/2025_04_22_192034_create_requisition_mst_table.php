@@ -18,7 +18,7 @@ class CreateRequisitionMstTable extends Migration
             $table->unsignedBigInteger('location_id');
             $table->unsignedTinyInteger('store_dept');
             $table->unsignedBigInteger('store_id')->nullable();
-            $table->unsignedBigInteger('depertment_id')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
             $table->date('requisition_date')->default(Carbon::now()->format('Y-m-d'));
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

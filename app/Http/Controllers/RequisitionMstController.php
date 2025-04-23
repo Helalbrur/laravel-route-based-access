@@ -140,9 +140,9 @@ class RequisitionMstController extends Controller
             $requistion_mst->update([
                 'company_id' => $request->cbo_company_name,
                 'location_id' => $request->cbo_location_name,
-                'store_dept' => $request->txt_delivery_date,
-                'store_id' => $request->cbo_supplier,
-                'department_id' => $request->cbo_pay_mode,
+                'store_dept' => $request->cbo_store_dept,
+                'store_id' => $request->cbo_store,
+                'department_id' => $request->cbo_department,
                 'requisition_date' => $request->txt_requisition_date,
             ]);
 
@@ -224,11 +224,10 @@ class RequisitionMstController extends Controller
         //
     }
 
-    public function product_search_list_view(Request $request)
+    public function item_search_list_view(Request $request)
     {
-
         $param = $request->query('param') ?? '';
-        return view('order_management.order.product_search_list_view', compact('param'));
+        return view('order_management.order.item_search_list_view', compact('param'));
     }
 
     public function requisition_search_list_view(Request $request)

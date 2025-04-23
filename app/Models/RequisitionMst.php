@@ -19,7 +19,7 @@ class RequisitionMst extends Model
         'location_id',
         'store_dept',
         'store_id',
-        'depertment_id',
+        'department_id',
         'requisition_date',
         'created_by',
         'updated_by'

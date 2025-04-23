@@ -7,12 +7,12 @@ use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\OtherCompany;
 use App\Models\LibItemSubGroup;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PdfController;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\PdfController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\LibBinController;
@@ -171,7 +171,7 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/work_order_search_list_view',[WorkOrderMstController::class,'work_order_search_list_view']);
     Route::get('/work_order_details/{id}',[WorkOrderMstController::class,'work_order_details']);
 
-    Route::get('/product_search_list_view',[RequisitionMstController::class,'product_search_list_view']);
+    Route::get('/item_search_list_view',[RequisitionMstController::class,'item_search_list_view']);
     Route::get('/requisition_search_list_view',[RequisitionMstController::class,'requisition_search_list_view']);
     Route::get('/requisition_details/{id}',[RequisitionMstController::class,'requisition_details']);
 

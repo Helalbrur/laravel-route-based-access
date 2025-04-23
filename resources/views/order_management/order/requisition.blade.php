@@ -19,6 +19,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
             <div class="card-body">
                 <div class="card-text">
                     <div class="card pt-4 px-4" style="background-color: rgb(241, 241, 241);">
+
                         <form name="requisition_1" id="requisition_1" autocomplete="off">
 
                             <div class="row justify-content-center">
@@ -241,13 +242,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
     }
 
     const load_php_data_to_form = async (update_id) => {
-
+        alert(update_id);
         freeze_window(3);
         reset_form('requisition_1', '', '', 1);
         var columns = 'requisition_no*id*company_id*location_id*store_dept*store_id*department_id*requisition_date';
         var response = await populate_field_data('id', update_id, 'requisition_mst', columns, '{{csrf_token()}}', '');
         if (response.code === 18 && response.data) {
             var data = response.data;
+            // console.table(data);
+            // alert(data)
             document.getElementById('txt_sys_no').value = data.requisition_no;
             document.getElementById('update_id').value = data.id;
             document.getElementById('cbo_company_name').value = data.company_id;
@@ -264,18 +267,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
             console.warn("Unexpected data format:", response);
         }
         release_freezing();
-    }
-
-    async function handleCompanyChange() {
-        try {
-            await load_drop_down_v2('load_drop_down', JSON.stringify({
-                'company_id': document.getElementById('cbo_company_name').value,
-                'onchange': ''
-            }), 'location_under_company', 'location_div');
-
-        } catch (error) {
-            console.error('Error loading dropdown:', error);
-        }
     }
 
     function add_row(insertIndex) {
@@ -399,37 +390,60 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
         var param = JSON.stringify({
             'company_id': $("#cbo_company_name").val()
         });
-        console.log(param);
+        //console.log(param);
         var title = 'Requisition Search';
         var page_link = '/show_common_popup_view?page=requisition_search&param=' + param;
         emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
         emailwindow.onclose = async function() {
 
             try {
-                var popup_value = this.contentDoc.getElementById("popup_value").value; //Access form field
-                console.log(popup_value);
-                if (popup_value == '') {
+                const popupField = this.contentDoc?.getElementById("popup_value");
+                if (!popupField || popupField.value === '') {
                     return;
                 }
-                var data = JSON.parse(popup_value);
+
+                const data = JSON.parse(popupField.value);
                 console.log(data);
+
                 if (data) {
-                    $('#update_id').val(data.id);
-                    $('#txt_sys_no').val(data.requisition_no);
-                    document.getElementById('cbo_company_name').value = data.company_id;
-                    await handleCompanyChange(); // Await the company change
-                    $('#cbo_location_name').val(data.location_id);
-                    $('#cbo_store_dept').val(data.store_dept_id);
-                    $('#cbo_store').val(data.store_id);
-                    $('#cbo_department').val(data.store_id);
-                    $('#txt_requisition_date').val(data.requisition_date);
+                    const {
+                        id,
+                        requisition_no,
+                        company_id,
+                        location_id,
+                        store_dept,
+                        store_id,
+                        department_id,
+                        requisition_date
+                    } = data;
+                    console.log(`location = ${location_id}`)
+                    $('#update_id').val(id);
+                    $('#txt_sys_no').val(requisition_no);
+                    document.getElementById('cbo_company_name').value = company_id;
+                    await handleCompanyChange();
+                    $('#cbo_location_name').val(location_id).trigger('change');
+                    $('#cbo_store_dept').val(store_dept).trigger('change');
+                    $('#cbo_store').val(store_id).trigger('change');
+                    $('#cbo_department').val(department_id).trigger('change');
+                    $('#txt_requisition_date').val(requisition_date);
                     load_details();
                     set_button_status(1, permission, 'fnc_requisition', 1);
                 }
             } catch (error) {
                 console.error('Error:', error);
-
             }
+        }
+    }
+
+    async function handleCompanyChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'company_id': document.getElementById('cbo_company_name').value,
+                'onchange': ''
+            }), 'location_under_company', 'location_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
         }
     }
 
@@ -440,17 +454,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
         var item_code = $('#txt_item_code_' + row_id).val();
         var item_category = $('#txt_item_category_' + row_id).val();
 
-
         var param = JSON.stringify({
             'item_id': item_id,
             'item_name': item_name,
             'category_id': item_category,
             'item_code': item_code
-
         });
         console.log(param);
+
         var title = 'Item Search';
-        var page_link = '/show_common_popup_view?page=work_order_item_search&param=' + param;
+        var page_link = '/show_common_popup_view?page=requisition_item_search&param=' + param;
         emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
         emailwindow.onclose = function() {
 
@@ -518,7 +531,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                field_manager(12);
+                // field_manager(12);
             })
             .catch(error => console.error('Error loading details:', error));
 

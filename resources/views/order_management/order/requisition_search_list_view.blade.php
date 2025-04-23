@@ -53,7 +53,7 @@ $requisitions = $query_builder->get();
             <td>{{ get_all_company()[$requisition->company_id] ?? '' }}</td>
             <td>{{ $requisition->requisition_no }}</td>
             <td>{{ get_all_store()[$requisition->store_id] ?? '' }}</td>
-            <td>{{ get_all_department()[$requisition->department_id_id] ?? '' }}</td>
+            <td>{{ get_all_department()[$requisition->department_id] ?? '' }}</td>
             <td>{{ $requisition->requisition_date }}</td>
         </tr>
         @endforeach
