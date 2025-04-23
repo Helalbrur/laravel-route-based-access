@@ -33,7 +33,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                         <div class="row">
                                             <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company Name</label>
                                             <div class="col-sm-6 d-flex align-items-center">
-                                                <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control">
+                                                <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control" onchange="handleCompanyChange()">
                                                     <option value="0">SELECT</option>
                                                     <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
                                                     @foreach($lib_company as $id => $company_name)
@@ -61,10 +61,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                     </div>
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_store" class="col-sm-6 col-form-label must_entry_caption">Store</label>
-                                            <div class="col-sm-6 d-flex align-items-center">
+                                            <label for="cbo_store_name" class="col-sm-6 col-form-label must_entry_caption">Store</label>
+                                            <div class="col-sm-6 d-flex align-items-center" id="store_div">
                                                 <?php $stores = App\Models\LibStoreLocation::get(); ?>
-                                                <select style="width: 100%" name="cbo_store" id="cbo_store" class="form-control">
+                                                <select style="width: 100%" name="cbo_store_name" id="cbo_store_name" class="form-control">
                                                     <option value="0">SELECT</option>
                                                     @foreach($stores as $store)
                                                         <option value="{{$store->id}}">{{$store->store_name}}</option>
@@ -166,7 +166,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
                                                 <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value=""></td>
-                                                <td class="form-group">
+                                                <td class="form-group" id="floor_div">
                                                     <?php 
                                                         $floors = App\Models\LibFloor::get();
                                                     ?>
@@ -177,7 +177,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group">
+                                                <td class="form-group" id="room_div">
                                                     <?php 
                                                         $rooms = LibFloorRoomRackMst::whereHas('room_details')->get(); 
                                                     ?>
@@ -188,7 +188,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group">
+                                                <td class="form-group" id="rack_div">
                                                     <?php 
                                                         $racks = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
                                                     ?>
@@ -199,7 +199,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group">
+                                                <td class="form-group" id="shelf_div">
                                                     <?php 
                                                          $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
                                                     ?>
@@ -210,7 +210,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group">
+                                                <td class="form-group" id="bin_div">
                                                     <?php 
                                                         $bins = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
                                                     ?>
@@ -255,10 +255,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 <script>
     var permission = '{{$permission}}';
     function fnc_receive_entry(operation) { 
-        if (form_validation('cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date*Work Order No.*Supplier') == false) {
+        if (form_validation('cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date*Work Order No.*Supplier') == false) {
             return;
         } else {
-            var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier');
+            var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store_name,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier');
             var method = "POST";
             var param = "";
             if (operation == 1 || operation == 2) {
@@ -320,7 +320,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
     const load_php_data_to_form = async (update_id) => {
         var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
-        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
+        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
         var others = '';
         var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {
@@ -537,7 +537,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     $('#txt_sys_no').val(data.sys_number);
                     $('#cbo_company_name').val(data.company_id).trigger('change');
                     $('#cbo_location_name').val(data.location_id).trigger('change');
-                    $('#cbo_store').val(data.store_id).trigger('change');
+                    $('#cbo_store_name').val(data.store_id).trigger('change');
                     $('#txt_receive_date').val(data.receive_date);
                     $('#txt_work_order_no').val(data.work_order_no);
                     $('#work_order_id').val(data.work_order_id);
@@ -561,6 +561,59 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 field_manager(12);
             })
             .catch(error => console.error('Error loading details:', error));
+    }
+
+    async function handleCompanyChange() {
+        try {
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':'handleLocationChange()'}), 'location_under_company', 'location_div')
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleLocationChange() {
+        try {
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'location_id':document.getElementById('cbo_location_name').value,'onchange':'handleStoreChange()'}), 'store_under_location', 'store_div');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handleStoreChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'store_id':document.getElementById('cbo_store_name').value,'onchange':'handleFloorChange()'}), 'floor_under_store', 'floor_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    async function handleFloorChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'floor_id':document.getElementById('cbo_floor_name').value,'onchange':'handleRoomChange()'}), 'room_under_floor', 'room_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    async function handleRoomChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'room_id':document.getElementById('cbo_room_no').value,'onchange':'handleRackChange()'}), 'rack_under_room', 'rack_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    async function handleRackChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'rack_id':document.getElementById('cbo_rack_no').value,'onchange':'handleBinChange'}), 'shelf_under_rack', 'shelf_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+    async function handleBinChange() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'bin_id':document.getElementById('cbo_bin_no').value,'onchange':''}), 'bin_under_shelf', 'bin_div');
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
     }
 
 </script>

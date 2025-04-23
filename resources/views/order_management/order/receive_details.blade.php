@@ -69,7 +69,7 @@
                 <td class="form-group"><input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="{{ $receive->quantity }}"></td>
                 <td class="form-group"><input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="{{ $receive->lot }}"></td>
                 <td class="form-group"><input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="{{ $receive->receive_date }}"></td>
-                <td class="form-group">
+                <td class="form-group" id="floor_div">
                     <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($floors as $id => $floor)
@@ -77,7 +77,7 @@
                         @endforeach
                     </select>
                 </td>
-                <td class="form-group">
+                <td class="form-group" id="room_div">
                     <select name="cbo_room_no_{{ $i }}" id="cbo_room_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($rooms as $id => $room)
@@ -85,7 +85,7 @@
                         @endforeach
                     </select>
                 </td>
-                <td class="form-group">
+                <td class="form-group" id="rack_div">
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($racks as $id => $rack)
@@ -93,7 +93,7 @@
                             @endforeach
                     </select>
                 </td>
-                <td class="form-group">
+                <td class="form-group" id="shelf_div">
                     <select name="cbo_shelf_no_{{ $i }}" id="cbo_shelf_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($shelfs as $id => $shelf)
@@ -101,7 +101,7 @@
                             @endforeach
                     </select>
                 </td>
-                <td class="form-group">
+                <td class="form-group" id="bin_div">
                     <select name="cbo_bin_no_{{ $i }}" id="cbo_bin_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($bins as $id => $bin)

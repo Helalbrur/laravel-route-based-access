@@ -57,7 +57,7 @@ class InvReceiveMasterController extends Controller
                 'sys_number' => $system_no_info->sys_no,
                 'company_id' => $request->cbo_company_name,
                 'location_id' => $request->cbo_location_name,
-                'store_id' => $request->cbo_store,
+                'store_id' => $request->cbo_store_name,
                 'receive_date' => $request->txt_receive_date,
                 'work_order_no' => $request->txt_work_order_no,
                 'work_order_id' => $request->work_order_id,
@@ -174,7 +174,7 @@ class InvReceiveMasterController extends Controller
             $invReceiveMaster->update([
                 'company_id' => $request->cbo_company_name,
                 'location_id' => $request->cbo_location_name,
-                'store_id' => $request->cbo_store,
+                'store_id' => $request->cbo_store_name,
                 'receive_date' => $request->txt_receive_date,
                 'work_order_no' => $request->txt_work_order_no,
                 'work_order_id' => $request->work_order_id,
