@@ -530,6 +530,7 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
 	{
 		param = data;
 	}
+	console.log(`list view url : ${BASE_URL}/${action}?data=${data}&action=${action}&param=${param}&path=${path}`);
 	//var url = `${base_url}${path}?data=${data}&action=${action}&param=${param}`;
 
 	var url = `${BASE_URL}/${action}?data=${data}&action=${action}&param=${param}`;
@@ -552,6 +553,63 @@ function show_list_view( data, action, div, path, extra_func, is_append , tabe_i
 		if(tabe_id!='')
 		{
 			setFilterGrid(tabe_id,-1);
+		}
+		release_freezing();
+    })
+    .catch(error => {
+		showNotification(error,'error');
+    	release_freezing();
+    });
+
+
+}
+
+function show_list_view2( data, url, container, others)
+{
+	freeze_window(6);
+	others = JSON.parse(others);
+	var path = others.path || '';
+	var extra_func = others.extra_func || '';
+	var is_append = others.is_append || '';
+	var table_id = others.table_id;
+	var param = others.param;
+
+	if (!extra_func) extra_func="";
+	if (!data) data="";
+	if (!is_append) is_append="";
+	document.getElementById(container).innerHTML='<span style="font-size:24px; font-weight:bold; color:#FF0000; margin-top:10px">Please wait, Data is Loading...</span>';
+	if( trim(data).length == 0 ) {
+		document.getElementById(container).innerHTML = "";
+		return;
+	}
+
+	const BASE_URL = getBaseUrl();
+
+	if(param == '')
+	{
+		param = data;
+	}
+
+	var url = `${BASE_URL}/${url}?data=${data}`;
+
+    fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'text/plain',
+			'Access-Control-Allow-Origin': '*'
+		}
+    })
+    .then(response => response.text())
+    .then(html => {
+		if (is_append != 1) {
+			document.getElementById(container).innerHTML = html;
+		} else {
+			document.getElementById(container).innerHTML += html;
+		}
+		eval(extra_func);
+		if(table_id!='')
+		{
+			setFilterGrid(table_id,-1);
 		}
 		release_freezing();
     })
@@ -1521,17 +1579,6 @@ function fetchData(data, route,form_field_name)
 		showNotification(error,'error');
     });
 }
-
-jQuery(document).on('change', '.field_level_access', function() {
-	var str = $(this).attr('id');
-	if (str.indexOf("company") > -1)
-	{
-		if (str != avoidCompany[0])
-		{
-			set_field_level_access($(this).val());
-		}
-	}
-});
 
 
 var first_values=new Array;

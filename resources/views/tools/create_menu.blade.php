@@ -287,7 +287,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Color Entry';
 
 
     function loadList(search = '') {
-        show_list_view(search + '_' + document.getElementById('cbo_module_name').value, 'create_menu_search_list_view', 'search_div', '/tools/create_menu_search_list_view', '', '', 'list_view');
+        var param = JSON.stringify({
+            "search": search,
+            "cbo_module_name": document.getElementById('cbo_module_name').value,
+            'blade': 'create_menu_search_list_view'
+        });
+        show_list_view(param, 'tools/create_menu_search_list_view', 'search_div', '', '', '', 'list_view');
     }
     const load_php_data_to_form = (menuId, url) => {
         //toastr.success('Welcome to load_php_data_to_form !', 'Congrats');

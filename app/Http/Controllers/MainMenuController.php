@@ -181,10 +181,15 @@ class MainMenuController extends Controller
     public function create_menu_search_list_view(Request $request)
     {
         $data = $request->query('data') ?? 0;
-        $data=explode('_',$data);
-        if ($data[0]!='') $menu_name="%".strtolower($data[0])."%"; else $menu_name="%%";
-        if ($data[1]!=0) $m_module_id="$data[1]"; else $m_module_id="";
-        if($data[1]==0)
+        $data=json_decode($data,true);
+        $search     = $data["search"] ?? '';
+        $module_id  = $data["cbo_module_name"] ?? '';
+        $blade      = $data["blade"] ?? '';
+
+
+        if (!empty($search)) $menu_name="%".strtolower($search)."%"; else $menu_name="%%";
+        if (!empty($module_id)) $m_module_id="$module_id"; else $m_module_id="";
+        if(empty($module_id))
         {
             echo "<b>Select Main Module Name then Enter Menu Name </b>";
             die;
