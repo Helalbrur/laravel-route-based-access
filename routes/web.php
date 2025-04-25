@@ -55,6 +55,7 @@ use App\Http\Controllers\RequisitionMstController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\VariableSettingController;
 use App\Http\Controllers\FieldLevelAccessController;
+use App\Http\Controllers\InvIssueMasterController;
 use App\Http\Controllers\InvReceiveMasterController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
@@ -166,6 +167,7 @@ Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/requisition',RequisitionMstController::class);
     Route::resource('/receive_entry',InvReceiveMasterController::class);
     Route::resource('/transfer',TransferController::class);
+    Route::resource('/issue',InvIssueMasterController::class);
 });
 
 Route::prefix('/order')->middleware(['auth'])->group(function () {

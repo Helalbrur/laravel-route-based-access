@@ -12,7 +12,7 @@ class InvIssueMasterController extends Controller
      */
     public function index()
     {
-        //
+        return view('order_management.order.issue');
     }
 
     /**

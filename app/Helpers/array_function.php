@@ -169,4 +169,9 @@ function get_generic_name()
     return App\Models\LibGeneric::pluck('generic_name', 'id')->toArray();
 }
 
+function get_issue_basis()
+{
+    return array(1 => "Independent", 2 => "Requisition");
+}
+
 ?>
