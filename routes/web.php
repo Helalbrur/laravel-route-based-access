@@ -7,12 +7,12 @@ use App\Models\UserPrivMst;
 use App\Models\LibItemGroup;
 use App\Models\OtherCompany;
 use App\Models\LibItemSubGroup;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\PdfController;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\LibBinController;
@@ -25,12 +25,12 @@ use App\Http\Controllers\LibUomController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DbBackUpController;
 use App\Http\Controllers\LibBrandController;
-use App\Http\Controllers\LibDepartmentController;
 use App\Http\Controllers\LibBuyerController;
 use App\Http\Controllers\LibColorController;
 use App\Http\Controllers\LibFloorController;
 use App\Http\Controllers\LibShelfController;
 use App\Http\Controllers\MainMenuController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LibCountryController;
 use App\Http\Controllers\MainModuleController;
@@ -42,15 +42,16 @@ use App\Http\Controllers\LibEmployeeController;
 use App\Http\Controllers\LibGenericController; 
 use App\Http\Controllers\LibLocationController;
 use App\Http\Controllers\LibSupplierController;
-use App\Http\Controllers\RequisitionMstController;
 use App\Http\Controllers\UserPrivMstController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\FieldManagerController;
 use App\Http\Controllers\LibItemGroupController;
 use App\Http\Controllers\OtherCompanyController;
 use App\Http\Controllers\WorkOrderMstController;
+use App\Http\Controllers\LibDepartmentController;
 use App\Http\Controllers\ReportSettingController;
 use App\Http\Controllers\MandatoryFieldController;
+use App\Http\Controllers\RequisitionMstController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\VariableSettingController;
 use App\Http\Controllers\FieldLevelAccessController;
@@ -164,6 +165,7 @@ Route::prefix('/order')->middleware(['auth','PagePermission'])->group(function (
     Route::resource('/work_order',WorkOrderMstController::class);
     Route::resource('/requisition',RequisitionMstController::class);
     Route::resource('/receive_entry',InvReceiveMasterController::class);
+    Route::resource('/transfer',TransferController::class);
 });
 
 Route::prefix('/order')->middleware(['auth'])->group(function () {
@@ -174,6 +176,9 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/item_search_list_view',[RequisitionMstController::class,'item_search_list_view']);
     Route::get('/requisition_search_list_view',[RequisitionMstController::class,'requisition_search_list_view']);
     Route::get('/requisition_details/{id}',[RequisitionMstController::class,'requisition_details']);
+
+    Route::get('/item_search_list_view',[TransferController::class,'item_search_list_view']);
+    Route::get('/requisition_search_list_view',[TransferController::class,'requisition_search_list_view']);
 
     Route::get('/receive_work_order_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
     Route::get('/receive_work_order_details/{id}',[InvReceiveMasterController::class,'receive_work_order_details']);
