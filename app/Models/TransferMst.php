@@ -5,50 +5,56 @@ namespace App\Models;
 use App\Models\TransferDtls;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TransferMst extends Model
 {
-    use HasFactory;
-    protected $table = 'requisition_mst';
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'transfer_mst';
     protected $fillable = [
-        'requisition_no_prefix',
-        'requisition_no_prefix_num',
-        'requisition_no',
+        'transfer_no_prefix',
+        'transfer_no_prefix_num',
+        'transfer_no',
         'company_id',
-        'location_id',
-        'store_dept',
-        'store_id',
-        'department_id',
-        'requisition_date',
+        'transfer_date',
+        'requisition_id',
+        'category_id',
+        'product_id',
+        'current_stock',
+        'avg_rate',
+        'transfer_qty',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
+
 
     protected static function boot()
     {
         parent::boot();
 
         // Automatically set created_by when creating
-        static::creating(function ($order) {
-            $order->created_by = Auth::id();
+        static::creating(function ($transfer) {
+            $transfer->created_by = Auth::id();
         });
 
         // Automatically update updated_by when updating
-        static::updating(function ($order) {
-            $order->updated_by = Auth::id();
+        static::updating(function ($transfer) {
+            $transfer->updated_by = Auth::id();
         });
     }
 
     // Define relationship with TransferDtls
-    public function TransferDtls()
+    public function transferDtls()
     {
         return $this->hasMany(TransferDtls::class, 'mst_id');
     }
 
     // Define relationship with LibCompany
-    public function Company()
+    public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
 }
+

@@ -29,60 +29,81 @@ class TransferController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'cbo_company_name' => 'required',
-            'cbo_location_name' => 'required',
-            'cbo_store_dept' => 'required',
-            'cbo_store' => 'required',
-            'cbo_department' => 'required',
-            'txt_transfer_date' => 'required',
-            'row_num' => 'required|integer|min:1'
+            'cbo_company_name'      => 'required',
+            'txt_transfer_date'     => 'required|date',
+            'cbo_item_category'     => 'required',
+            'hidden_product_id'     => 'required|integer',
+            'txt_current_stock'     => 'required|numeric|min:1',
+            'txt_avg_rate'          => 'required|numeric|min:1',
+            'txt_transfer_qty'      => 'required|numeric|min:1',
+            'cbo_location_from'     => 'required',
+            'cbo_store_from'        => 'required',
+            'cbo_floor_name_from'   => 'required',
+            'cbo_room_no_from'      => 'required',
+            'cbo_rack_no_from'      => 'required',
+            'cbo_shelf_no_from'     => 'required',
+            'cbo_bin_no_from'       => 'required',
+            'cbo_location_to'       => 'required',
+            'cbo_store_to'          => 'required',
+            'cbo_floor_name_to'     => 'required',
+            'cbo_room_no_to'        => 'required',
+            'cbo_rack_no_to'        => 'required',
+            'cbo_shelf_no_to'       => 'required',
+            'cbo_bin_no_to'         => 'required',
         ]);
-
-        //return response()->json(['error' => '','request'=>$request->all()]);
 
         DB::beginTransaction();
         try {
-            // Generate system no for transfer
-
-            $system_no_info = generate_system_no($request->cbo_company_name, '', '', date("Y", time()), 5, "SELECT transfer_no_prefix,transfer_no_prefix_num from transfer_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y', time()) . " order by transfer_no_prefix_num desc ", "transfer_no_prefix", "transfer_no_prefix_num");
-
+            $system_no_info = generate_system_no(
+                $request->cbo_company_name,
+                '',
+                '',
+                date("Y"),
+                5,
+                "SELECT transfer_no_prefix,transfer_no_prefix_num from transfer_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y') . " order by transfer_no_prefix_num desc ",
+                "transfer_no_prefix",
+                "transfer_no_prefix_num"
+            );
 
             $transferMaster = TransferMst::create([
                 'transfer_no_prefix' => $system_no_info->sys_no_prefix,
                 'transfer_no_prefix_num' => $system_no_info->sys_no_prefix_num,
                 'transfer_no' => $system_no_info->sys_no,
                 'company_id' => $request->cbo_company_name,
-                'location_id' => $request->cbo_location_name,
-                'store_dept' => $request->cbo_store_dept,
-                'store_id' => $request->cbo_store,
-                'department_id' => $request->cbo_department,
                 'transfer_date' => $request->txt_transfer_date,
+                'requisition_id' => $request->hidden_requisition_id,
+                'category_id' => $request->cbo_item_category,
+                'product_id' => $request->hidden_product_id,
+                'current_stock' => $request->txt_current_stock,
+                'avg_rate' => $request->txt_avg_rate,
+                'transfer_qty' => $request->txt_transfer_qty
             ]);
 
-            // Insert transfer details
-            $transferDetails = [];
+            // FROM transfer details
+            TransferDtls::create([
+                'mst_id' => $transferMaster->id,
+                'transaction_type' => '6',
+                'location_id' => $request->cbo_location_from,
+                'store_id' => $request->cbo_store_from,
+                'floor_id' => $request->cbo_floor_name_from,
+                'room_id' => $request->cbo_room_no_from,
+                'room_rack_id' => $request->cbo_rack_no_from,
+                'room_self_id' => $request->cbo_shelf_no_from,
+                'room_bin_id' => $request->cbo_bin_no_from,
+            ]);
 
-            if (empty($request->row_num) && $request->row_num == 0) {
-                throw new Exception("row not found");
-            }
-
-            for ($i = 1; $i <= $request->row_num; $i++) {
-                if ($request["hidden_product_id_$i"] == null)
-                    continue;
-                $dtls_transfer = TransferDtls::create([
-                    'mst_id' => $transferMaster->id,
-                    'product_id' => $request["hidden_product_id_$i"],
-                    'item_code' => $request["txt_item_code_$i"],
-                    'category_id' => $request["cbo_item_category_$i"],
-                    'uom' => $request["cbo_uom_$i"],
-                    'transfer_qty' => $request["txt_transfer_qty_$i"]
-                ]);
-                $transferDetails[] = $dtls_transfer;
-            }
-
-            if (count($transferDetails) == 0) {
-                throw new Exception("No product found");
-            }
+            // TO transfer details
+            TransferDtls::create([
+                'mst_id' => $transferMaster->id,
+                'transaction_type' => '5',
+                'location_id' => $request->cbo_location_to,
+                'store_id' => $request->cbo_store_to,
+                'floor_id' => $request->cbo_floor_name_to,
+                'room_id' => $request->cbo_room_no_to,
+                'room_rack_id' => $request->cbo_rack_no_to,
+                'room_self_id' => $request->cbo_shelf_no_to,
+                'room_bin_id' => $request->cbo_bin_no_to,
+            ]);
 
             DB::commit();
             return response()->json([
@@ -94,9 +115,12 @@ class TransferController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine()]);
+            return response()->json([
+                'error' => $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine()
+            ]);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -117,117 +141,138 @@ class TransferController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, $update_id)
     {
-        // Validate the request data
         $request->validate([
-            'cbo_company_name' => 'required',
-            'cbo_location_name' => 'required',
-            'cbo_store_dept' => 'required',
-            'cbo_store' => 'required',
-            'cbo_department' => 'required',
-            'txt_transfer_date' => 'required',
-            'row_num' => 'required|integer|min:1'
+            'cbo_company_name'      => 'required',
+            'txt_transfer_date'     => 'required|date',
+            'cbo_item_category'     => 'required',
+            'hidden_product_id'     => 'required|integer',
+            'txt_current_stock'     => 'required|numeric|min:1',
+            'txt_avg_rate'          => 'required|numeric|min:1',
+            'txt_transfer_qty'      => 'required|numeric|min:1',
+            'cbo_location_from'     => 'required',
+            'cbo_store_from'        => 'required',
+            'cbo_floor_name_from'   => 'required',
+            'cbo_room_no_from'      => 'required',
+            'cbo_rack_no_from'      => 'required',
+            'cbo_shelf_no_from'     => 'required',
+            'cbo_bin_no_from'       => 'required',
+            'cbo_location_to'       => 'required',
+            'cbo_store_to'          => 'required',
+            'cbo_floor_name_to'     => 'required',
+            'cbo_room_no_to'        => 'required',
+            'cbo_rack_no_to'        => 'required',
+            'cbo_shelf_no_to'       => 'required',
+            'cbo_bin_no_to'         => 'required',
         ]);
+
         DB::beginTransaction();
         try {
-            // Find the transfer by ID
-            $requistion_mst = TransferMst::findOrFail($update_id);
-            if (!$requistion_mst) {
-                throw new Exception("Transfer not found");
-            }
+            // Update TransferMst
+            $transferMaster = TransferMst::findOrFail($update_id);
 
-            $requistion_mst->update([
+            $transferMaster->update([
                 'company_id' => $request->cbo_company_name,
-                'location_id' => $request->cbo_location_name,
-                'store_dept' => $request->cbo_store_dept,
-                'store_id' => $request->cbo_store,
-                'department_id' => $request->cbo_department,
                 'transfer_date' => $request->txt_transfer_date,
+                'requisition_id' => $request->hidden_requisition_id,
+                'category_id' => $request->cbo_item_category,
+                'product_id' => $request->hidden_product_id,
+                'current_stock' => $request->txt_current_stock,
+                'avg_rate' => $request->txt_avg_rate,
+                'transfer_qty' => $request->txt_transfer_qty
             ]);
 
-            // Insert transfer details
-            $transferDetails = [];
+            // Update TransferDtls - FROM
+            $transferFrom = TransferDtls::where('mst_id', $transferMaster->id)
+                ->where('transaction_type', 5)
+                ->first();
 
-            if (empty($request->row_num) && $request->row_num == 0) {
-                throw new Exception("row not found");
+            if ($transferFrom) {
+                $transferFrom->update([
+                    'location_id' => $request->cbo_location_from,
+                    'store_id' => $request->cbo_store_from,
+                    'floor_id' => $request->cbo_floor_name_from,
+                    'room_id' => $request->cbo_room_no_from,
+                    'room_rack_id' => $request->cbo_rack_no_from,
+                    'room_shelf_id' => $request->cbo_shelf_no_from,
+                    'room_bin_id' => $request->cbo_bin_no_from,
+                ]);
             }
 
-            // Update transfer details
-            for ($i = 1; $i <= $request->row_num; $i++) {
-                if ($request->input("hidden_product_id_$i") == null) {
-                    continue;
-                }
+            // Update TransferDtls - TO
+            $transferTo = TransferDtls::where('mst_id', $transferMaster->id)
+                ->where('transaction_type', 6)
+                ->first();
 
-                $dtlsId = $request->input("hidden_dtls_id_$i"); // Make sure you have this field
-                $productId = $request->input("hidden_product_id_$i");
-
-                if (empty($dtlsId)) {
-                    // Create new record
-                    $transfer_dtls = TransferDtls::create([
-                        'mst_id' => $requistion_mst->id,
-                        'product_id' => $productId,
-                        'item_code' => $request["txt_item_code_$i"],
-                        'category_id' => $request["cbo_item_category_$i"],
-                        'uom' => $request["cbo_uom_$i"],
-                        'transfer_qty' => $request["txt_transfer_qty_$i"]
-                    ]);
-                    $transferDetails[] = $transfer_dtls->id;
-                } else {
-                    // Update existing record
-                    $transfer_dtls = TransferDtls::find($dtlsId);
-                    if ($transfer_dtls) {
-                        $transfer_dtls->update([
-                            'product_id' => $productId,
-                            'item_code' => $request["txt_item_code_$i"],
-                            'category_id' => $request["cbo_item_category_$i"],
-                            'uom' => $request["cbo_uom_$i"],
-                            'transfer_qty' => $request["txt_transfer_qty_$i"]
-                        ]);
-                        $transferDetails[] = $transfer_dtls->id;
-                    }
-                }
-            }
-
-            if (count($transferDetails) == 0) {
-                throw new Exception("No product found");
-            }
-
-            // Delete transfer details that are not in the updated list
-            $existingDtlsIds = TransferDtls::where('mst_id', $requistion_mst->id)
-                ->whereNotIn('id', $transferDetails)
-                ->pluck('id');
-
-            if (count($existingDtlsIds) > 0) {
-                TransferDtls::whereIn('id', $existingDtlsIds)->delete();
+            if ($transferTo) {
+                $transferTo->update([
+                    'location_id' => $request->cbo_location_to,
+                    'store_id' => $request->cbo_store_to,
+                    'floor_id' => $request->cbo_floor_name_to,
+                    'room_id' => $request->cbo_room_no_to,
+                    'room_rack_id' => $request->cbo_rack_no_to,
+                    'room_shelf_id' => $request->cbo_shelf_no_to,
+                    'room_bin_id' => $request->cbo_bin_no_to,
+                ]);
             }
 
             DB::commit();
             return response()->json([
                 'code' => 1,
-                'message' => 'success',
-                'data' => $requistion_mst,
-                'transfer_no' => $requistion_mst->transfer_no,
-                'id' => $requistion_mst->id
+                'message' => 'Transfer Updated Successfully',
+                'data' => $transferMaster,
+                'transfer_no' => $transferMaster->transfer_no,
+                'id' => $transferMaster->id
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json([
+                'error' => $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine()
+            ]);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
+    
     public function destroy(TransferMst $transferMaster)
     {
-        //
+        DB::beginTransaction();
+        try {
+            // Soft delete related TransferDtls
+            TransferDtls::where('mst_id', $transferMaster->id)->delete();
+
+            // Soft delete TransferMst
+            $transferMaster->delete();
+
+            DB::commit();
+            return response()->json([
+                'code' => 1,
+                'message' => 'Transfer Deleted Successfully'
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine()
+            ]);
+        }
     }
 
-    public function item_search_list_view(Request $request)
+
+    public function requisition_search_list_view(Request $request)
     {
         $param = $request->query('param') ?? '';
-        return view('order_management.order.item_search_list_view', compact('param'));
+        return view('order_management.order.requisition_search_list_view', compact('param'));
+    }
+
+    public function transfer_item_list_view(Request $request)
+    {
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.transfer_item_list_view', compact('param'));
     }
 
     public function transfer_search_list_view(Request $request)
