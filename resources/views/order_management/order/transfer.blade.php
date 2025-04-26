@@ -36,7 +36,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                     <div class="row">
                                         <label for="cbo_company_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Company</label>
                                         <div class="col-sm-6 d-flex align-items-center">
-                                            <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control">
+                                            <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control" onchange="handleCompanyChange()">
                                                 <option value="0">SELECT</option>
                                                 <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
                                                 @foreach($lib_company as $id => $company_name)
@@ -323,12 +323,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         try {
             await load_drop_down_v2('load_drop_down', JSON.stringify({
                 'company_id': document.getElementById('cbo_company_name').value,
-                'onchange': ''
+                'onchange': '',
+                'field_name': 'cbo_location_from',
+                'field_id': 'cbo_location_from',
             }), 'location_under_company', 'location_div_from');
 
             await load_drop_down_v2('load_drop_down', JSON.stringify({
                 'company_id': document.getElementById('cbo_company_name').value,
-                'onchange': ''
+                'onchange': '',
+                'field_name': 'cbo_location_to',
+                'field_id': 'cbo_location_to',
             }), 'location_under_company', 'location_div_to');
 
         } catch (error) {

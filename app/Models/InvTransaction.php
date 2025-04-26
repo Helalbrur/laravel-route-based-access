@@ -21,7 +21,6 @@ class InvTransaction extends Model
         'order_qnty',
         'order_rate',
         'order_amount',
-        'order_amount',
         'quantity',
         'lot',
         'expire_date',
