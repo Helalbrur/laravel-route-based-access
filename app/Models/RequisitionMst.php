@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Models\RequisitionDtls;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RequisitionMst extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'requisition_mst';
     protected $fillable = [
         'requisition_no_prefix',
@@ -30,13 +31,13 @@ class RequisitionMst extends Model
         parent::boot();
 
         // Automatically set created_by when creating
-        static::creating(function ($order) {
-            $order->created_by = Auth::id();
+        static::creating(function ($requisition) {
+            $requisition->created_by = Auth::id();
         });
 
         // Automatically update updated_by when updating
-        static::updating(function ($order) {
-            $order->updated_by = Auth::id();
+        static::updating(function ($requisition) {
+            $requisition->updated_by = Auth::id();
         });
     }
 
@@ -47,7 +48,7 @@ class RequisitionMst extends Model
     }
 
     // Define relationship with LibCompany
-    public function Company()
+    public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');
     }

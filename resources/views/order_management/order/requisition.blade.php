@@ -164,14 +164,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
                                 </table>
                             </div>
 
-                            <div class="row">
-                                <div class="mb-3 row d-flex justify-content-center mt-2">
-                                    <div class="col-sm-2">
-                                        <input type="hidden" name="update_id" id="update_id">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <?php echo load_submit_buttons($permission, "fnc_requisition", 0, 0, "reset_form('requisition_1','','',1)"); ?>
-                                    </div>
+                            <div class="row justify-content-center">
+                                <div class="col-auto">
+                                    <input type="hidden" name="update_id" id="update_id">
+                                </div>
+                                <div class="col-auto">
+                                    <?php echo load_submit_buttons($permission, "fnc_requisition", 0, 0, "reset_form('requisition_1','','',1)"); ?>
                                 </div>
                             </div>
 

@@ -12,7 +12,6 @@ class RequisitionDtls extends Model
     use HasFactory;
 
     protected $table = 'requisition_dtls';
-
     protected $fillable =  [
         'mst_id',
         'product_id',
@@ -29,13 +28,13 @@ class RequisitionDtls extends Model
         parent::boot();
 
         // Automatically set created_by when creating
-        static::creating(function ($order) {
-            $order->created_by = Auth::id();
+        static::creating(function ($requisition) {
+            $requisition->created_by = Auth::id();
         });
 
         // Automatically update updated_by when updating
-        static::updating(function ($order) {
-            $order->updated_by = Auth::id();
+        static::updating(function ($requisition) {
+            $requisition->updated_by = Auth::id();
         });
     }
 
