@@ -111,21 +111,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                         <thead>
                                             <tr>
                                                 <th class="form-group" width="2%">Sl</th>
-                                                <th class="form-group" width="7%">Item Name</th>
-                                                <th class="form-group" width="7%">Item Code</th>
-                                                <th class="form-group" width="7%">Item Category</th>
-                                                <th class="form-group" width="8%">UOM</th>
-                                                <th class="form-group" width="">Required QTY</th>
-                                                <th class="form-group" width="7%">WO Qty</th>
-                                                <th class="form-group" width="">Balance Qty</th>
-                                                <th class="form-group" width="">Receive Qty</th>
-                                                <th class="form-group" width="8%">Lot/Batch No.</th>
-                                                <th class="form-group" width="8%">Expire Date</th>
-                                                <th class="form-group" width="8%">Floor Name</th>
-                                                <th class="form-group" width="8%">Room No</th>
-                                                <th class="form-group" width="8%">Rack</th>
-                                                <th class="form-group" width="8%">Self</th>
-                                                <th class="form-group" width="8%">Bin</th>
+                                                <th class="form-group" width="6%">Item Name</th>
+                                                <th class="form-group" width="5%">Item Code</th>
+                                                <th class="form-group" width="6%">Item Category</th>
+                                                <th class="form-group" width="6%">UOM</th>
+                                                <th class="form-group" width="5%">Required QTY</th>
+                                                <th class="form-group" width="5%">WO Qty</th>
+                                                <th class="form-group" width="5%">Balance Qty</th>
+                                                <th class="form-group" width="5%">Receive Qty</th>
+                                                <th class="form-group" width="6%">Lot/Batch No.</th>
+                                                <th class="form-group" width="5%">Expire Date</th>
+                                                <th class="form-group" width="6%">Floor Name</th>
+                                                <th class="form-group" width="6%">Room No</th>
+                                                <th class="form-group" width="6%">Rack</th>
+                                                <th class="form-group" width="6%">Self</th>
+                                                <th class="form-group" width="6%">Bin</th>
                                                 <th class="form-group" width="">Action</th>
                                             </tr>
                                         </thead>
@@ -162,11 +162,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     <input type="hidden" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
                                                     <input type="hidden" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control" value="">
                                                 </td>
-                                                <td class="form-group"><input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value=""></td>
-                                                <td class="form-group"><input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value=""></td>
-                                                <td class="form-group" id="floor_div">
+                                                <td class="form-group">
+                                                    <input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value="">
+                                                </td>
+                                                <td class="form-group">
+                                                    <input type="text" name="txt_receive_qty_1" id="txt_receive_qty_1" class="form-control" value="">
+                                                </td>
+                                                <td class="form-group">
+                                                    <input type="text" name="txt_lot_batch_no_1" id="txt_lot_batch_no_1" class="form-control" value="">
+                                                </td>
+                                                <td class="form-group">
+                                                    <input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value="">
+                                                </td>
+                                                <td class="form-group" id="floor_div_1">
                                                     <?php 
                                                         $floors = App\Models\LibFloor::get();
                                                     ?>
@@ -177,7 +185,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group" id="room_div">
+                                                <td class="form-group" id="room_div_1">
                                                     <?php 
                                                         $rooms = LibFloorRoomRackMst::whereHas('room_details')->get(); 
                                                     ?>
@@ -188,7 +196,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group" id="rack_div">
+                                                <td class="form-group" id="rack_div_1">
                                                     <?php 
                                                         $racks = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
                                                     ?>
@@ -199,7 +207,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group" id="shelf_div">
+                                                <td class="form-group" id="shelf_div_1">
                                                     <?php 
                                                          $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
                                                     ?>
@@ -210,7 +218,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="form-group" id="bin_div">
+                                                <td class="form-group" id="bin_div_1">
                                                     <?php 
                                                         $bins = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
                                                     ?>
@@ -563,54 +571,97 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             .catch(error => console.error('Error loading details:', error));
     }
 
-    async function handleCompanyChange() {
+    async function handleCompanyChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':'handleLocationChange()'}), 'location_under_company', 'location_div')
+            var container = "location_div";
+            if(row_id) {
+                container = "location_div_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'company_id':document.getElementById('cbo_company_name').value,'onchange':'handleLocationChange('+row_id+')','row_id':row_id}), 'location_under_company', container);
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
 
-    async function handleLocationChange() {
+    async function handleLocationChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down',JSON.stringify({'location_id':document.getElementById('cbo_location_name').value,'onchange':'handleStoreChange()'}), 'store_under_location', 'store_div');
+            var container = "store_div";
+            if(row_id) {
+                container = "store_div_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down',JSON.stringify({'location_id':document.getElementById('cbo_location_name').value,'onchange':'multirowStoreChange()','row_id':row_id}), 'store_under_location', container);
 
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
 
-    async function handleStoreChange() {
+    async function multirowStoreChange() {
+        var row_num = $('#dtls_list_view tbody tr').length;
+        for (let index = 1; index <= row_num; index++) {
+           await handleStoreChange(index);
+        }
+    }
+
+    async function handleStoreChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down', JSON.stringify({'store_id':document.getElementById('cbo_store_name').value,'onchange':'handleFloorChange()'}), 'floor_under_store', 'floor_div');
+            var container = "floor_div";
+            if(row_id) {
+                container = "floor_div_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'store_id':document.getElementById('cbo_store_name').value,'onchange':'handleFloorChange('+row_id+')','row_id':row_id}), 'floor_under_store', container);
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleFloorChange() {
+    async function handleFloorChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down', JSON.stringify({'floor_id':document.getElementById('cbo_floor_name').value,'onchange':'handleRoomChange()'}), 'room_under_floor', 'room_div');
+            var name_extra = '';
+            var container = "room_div";
+            if(row_id) {
+                container = "room_div_"+row_id;
+                name_extra = "_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'floor_id':document.getElementById('cbo_floor_name'+name_extra).value,'onchange':'handleRoomChange('+row_id+')','row_id':row_id}), 'room_under_floor', container);
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleRoomChange() {
+    async function handleRoomChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down', JSON.stringify({'room_id':document.getElementById('cbo_room_no').value,'onchange':'handleRackChange()'}), 'rack_under_room', 'rack_div');
+            var container = "rack_div";
+            var name_extra = '';
+            if(row_id) {
+                container = "rack_div_"+row_id;
+                name_extra = "_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'room_id':document.getElementById('cbo_room_no'+name_extra).value,'onchange':'handleRackChange('+row_id+')','row_id':row_id}), 'rack_under_room', container);
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleRackChange() {
+    async function handleRackChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down', JSON.stringify({'rack_id':document.getElementById('cbo_rack_no').value,'onchange':'handleBinChange'}), 'shelf_under_rack', 'shelf_div');
+            var name_extra = '';
+            var container = "shelf_div";
+            if(row_id) {
+                container = "shelf_div_"+row_id;
+                name_extra = "_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'rack_id':document.getElementById('cbo_rack_no'+name_extra).value,'onchange':'handleShelfChange('+row_id+')','row_id':row_id}), 'shelf_under_rack', container);
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleBinChange() {
+    async function handleShelfChange(row_id = null) {
         try {
-            await load_drop_down_v2('load_drop_down', JSON.stringify({'bin_id':document.getElementById('cbo_bin_no').value,'onchange':''}), 'bin_under_shelf', 'bin_div');
+            var name_extra = '';
+            var container = "bin_div";
+            if(row_id) {
+                container = "bin_div_"+row_id;
+                name_extra = "_"+row_id;
+            }
+            await load_drop_down_v2('load_drop_down', JSON.stringify({'shelf_id':document.getElementById('cbo_shelf_no'+name_extra).value,'onchange':'','row_id':row_id}), 'bin_under_shelf', container);
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }

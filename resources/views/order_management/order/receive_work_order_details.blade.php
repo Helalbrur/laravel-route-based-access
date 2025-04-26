@@ -3,22 +3,22 @@
     <thead> 
         <tr>
             <th class="form-group" width="2%">Sl</th>
-            <th class="form-group" width="7%">Item Name</th>
-            <th class="form-group" width="7%">Item Code</th>
-            <th class="form-group" width="7%">Item Category</th>
-            <th class="form-group" width="8%">UOM</th>
-            <th class="form-group" width="">Required QTY</th>
-            <th class="form-group" width="7%">WO Qty</th>
-            <th class="form-group" width="">Balance Qty</th>
-            <th class="form-group" width="">Receive Qty</th>
-            <th class="form-group" width="8%">Lot/Batch No.</th>
-            <th class="form-group" width="8%">Expire Date</th>
-            <th class="form-group" width="8%">Floor Name</th>
-            <th class="form-group" width="8%">Room No</th>
-            <th class="form-group" width="8%">Rack</th>
-            <th class="form-group" width="8%">Self</th>
-            <th class="form-group" width="8%">Bin</th>
-            <th class="form-group" width="9%">Action</th>
+            <th class="form-group" width="6%">Item Name</th>
+            <th class="form-group" width="5%">Item Code</th>
+            <th class="form-group" width="6%">Item Category</th>
+            <th class="form-group" width="6%">UOM</th>
+            <th class="form-group" width="5%">Required QTY</th>
+            <th class="form-group" width="5%">WO Qty</th>
+            <th class="form-group" width="5%">Balance Qty</th>
+            <th class="form-group" width="5%">Receive Qty</th>
+            <th class="form-group" width="6%">Lot/Batch No.</th>
+            <th class="form-group" width="5%">Expire Date</th>
+            <th class="form-group" width="6%">Floor Name</th>
+            <th class="form-group" width="6%">Room No</th>
+            <th class="form-group" width="6%">Rack</th>
+            <th class="form-group" width="6%">Self</th>
+            <th class="form-group" width="6%">Bin</th>
+            <th class="form-group" width="">Action</th>
         </tr>
     </thead>
     <tbody >
@@ -65,11 +65,19 @@
                     <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $order->rate }}">
                     <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $order->quantity*$order->rate }}">
                 </td>
-                <td class="form-group"><input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="" disabled></td>
-                <td class="form-group"><input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value=""></td>
-                <td class="form-group"><input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value=""></td>
-                <td class="form-group"><input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value=""></td>
-                <td class="form-group" id="floor_div">
+                <td class="form-group">
+                    <input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="" disabled>
+                </td>
+                <td class="form-group">
+                    <input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="">
+                </td>
+                <td class="form-group">
+                    <input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="">
+                </td>
+                <td class="form-group">
+                    <input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="">
+                </td>
+                <td class="form-group" id="floor_div_{{ $i }}">
                     <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($floors as $floor)
@@ -77,7 +85,7 @@
                         @endforeach
                     </select>
                 </td>
-                <td class="form-group" id="room_div">
+                <td class="form-group" id="room_div_{{ $i }}">
                     <select name="cbo_room_no_{{ $i }}" id="cbo_room_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($rooms as $room)
@@ -85,7 +93,7 @@
                         @endforeach
                     </select>
                 </td>
-                <td class="form-group" id="rack_div">
+                <td class="form-group" id="rack_div_{{ $i }}">
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($shelfs as $shelf)
@@ -93,7 +101,7 @@
                             @endforeach
                     </select>
                 </td>
-                <td class="form-group" id="shelf_div">
+                <td class="form-group" id="shelf_div_{{ $i }}">
                     <select name="cbo_shelf_no_{{ $i }}" id="cbo_shelf_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($racks as $rack)
@@ -101,7 +109,7 @@
                             @endforeach
                     </select>
                 </td>
-                <td class="form-group" id="bin_div">
+                <td class="form-group" id="bin_div_{{ $i }}">
                     <select name="cbo_bin_no_{{ $i }}" id="cbo_bin_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($bins as $bin)
