@@ -26,7 +26,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="txt_sys_no" class="col-sm-4 col-form-label fw-bold text-start must_entry_caption">Transfer No</label>
                                     <div class="col-sm-6 d-flex align-items-center">
-                                        <input id="txt_sys_no" name="txt_sys_no" placeholder="Browse" ondblclick="fnc_requisition_popup()" class="form-control">
+                                        <input id="txt_sys_no" name="txt_sys_no" placeholder="Browse" ondblclick="fnc_transfer_popup()" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -319,6 +319,61 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
 
+    function fnc_transfer_popup() {
+        if (form_validation('cbo_company_name', 'Company Name') == false) {
+            return;
+        }
+
+        var param = JSON.stringify({
+            'company_id': $("#cbo_company_name").val()
+        });
+        //console.log(param);
+        var title = 'Transfer Search';
+        var page_link = '/show_common_popup_view?page=transfer_search&param=' + param;
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+        emailwindow.onclose = async function() {
+
+            try {
+                const popupField = this.contentDoc?.getElementById("popup_value");
+                if (!popupField || popupField.value === '') {
+                    return;
+                }
+
+                const data = JSON.parse(popupField.value);
+                console.log(data);
+
+                if (data) {
+                    const {
+                        id,
+                        requisition_no
+                    } = data;
+
+                    var data = JSON.parse(popup_value);
+                    console.log(data);
+                    if (data) {
+
+                        $('#txt_sys_no').val(data.transfer_no);
+                        $('#update_id').val(data.id);
+                        $('#cbo_company_name').val(data.company_id).trigger('change');
+                        $('#txt_transfer_date').val(data.transfer_date);
+                        $('#hidden_requisition_id').val(data.requisition_id);
+                        $('#cbo_item_category').val(data.category_id).trigger('change');
+                        $('#hidden_product_id').val(data.product_id);
+                        $('#txt_current_stock').val(data.current_stock);
+                        $('#txt_avg_rate').val(data.avg_rate);
+                        $('#txt_transfer_qty').val(data.transfer_qty);
+                        $('#txt_sys_no').prop('readonly', true);
+
+                        load_transfer_dtls();
+                        set_button_status(1, permission, 'fnc_transfer', 1);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }
+
     async function handleCompanyChange() {
         try {
             await load_drop_down_v2('load_drop_down', JSON.stringify({
@@ -417,7 +472,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             release_freezing();
         }
     }
-
 
     function fnc_requisition_popup() {
         if (form_validation('cbo_company_name', 'Company Name') == false) {
