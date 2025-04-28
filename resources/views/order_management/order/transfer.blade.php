@@ -127,7 +127,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                     <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer From</div>
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="cbo_location_from" class="col-sm-4 col-form-label fw-bold text-start">Location</label>
+                                            <label for="cbo_location_from" class="col-sm-4 col-form-label">Location</label>
                                             <div class="col-sm-8 d-flex align-items-center" id="location_div_from">
                                                 <select name="cbo_location_from" id="cbo_location_from" class="form-control w-100">
                                                     <option value="0">SELECT</option>
@@ -214,7 +214,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                     <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer To</div>
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="cbo_location_to" class="col-sm-4 col-form-label fw-bold text-start">Location</label>
+                                            <label for="cbo_location_to" class="col-sm-4 col-form-label">Location</label>
                                             <div class="col-sm-8 d-flex align-items-center" id="location_div_to">
                                                 <select name="cbo_location_to" id="cbo_location_to" class="form-control w-100">
                                                     <option value="0">SELECT</option>

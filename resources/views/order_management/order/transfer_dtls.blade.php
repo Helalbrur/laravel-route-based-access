@@ -5,7 +5,7 @@
         <div class="card-body">
             
             <div class="form-group row">
-                <label for="cbo_location_from" class="col-sm-4 col-form-label fw-bold text-start">Location</label>
+                <label for="cbo_location_from" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-8 d-flex align-items-center" id="location_div_from">
                     <select name="cbo_location_from" id="cbo_location_from" class="form-control w-100">
                         <option value="0">SELECT</option>
@@ -62,7 +62,7 @@
                     <select name="cbo_rack_no_from" id="cbo_rack_no_from" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
-                        <option value="{{ $rack->id }}" {{ (isset($transferFrom) && $transferFrom->rack_id == $rack->id) ? 'selected' : '' }}>
+                        <option value="{{ $rack->id }}" {{ (isset($transferFrom) && $transferFrom->room_rack_id == $rack->id) ? 'selected' : '' }}>
                             {{ $rack->floor_room_rack_name }}
                         </option>
                         @endforeach
@@ -75,7 +75,7 @@
                     <select name="cbo_shelf_no_from" id="cbo_shelf_no_from" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('shelf_details')->get() as $shelf)
-                        <option value="{{ $shelf->id }}" {{ (isset($transferFrom) && $transferFrom->shelf_id == $shelf->id) ? 'selected' : '' }}>
+                        <option value="{{ $shelf->id }}" {{ (isset($transferFrom) && $transferFrom->room_self_id == $shelf->id) ? 'selected' : '' }}>
                             {{ $shelf->floor_room_rack_name }}
                         </option>
                         @endforeach
@@ -88,7 +88,7 @@
                     <select name="cbo_bin_no_from" id="cbo_bin_no_from" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('bin_details')->get() as $bin)
-                        <option value="{{ $bin->id }}" {{ (isset($transferFrom) && $transferFrom->bin_id == $bin->id) ? 'selected' : '' }}>
+                        <option value="{{ $bin->id }}" {{ (isset($transferFrom) && $transferFrom->room_bin_id == $bin->id) ? 'selected' : '' }}>
                             {{ $bin->floor_room_rack_name }}
                         </option>
                         @endforeach
@@ -107,7 +107,7 @@
         <div class="card-body">
 
             <div class="form-group row">
-                <label for="cbo_location_to" class="col-sm-4 col-form-label fw-bold text-start">Location</label>
+                <label for="cbo_location_to" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-8 d-flex align-items-center" id="location_div_to">
                     <select name="cbo_location_to" id="cbo_location_to" class="form-control w-100">
                         <option value="0">SELECT</option>
@@ -164,7 +164,7 @@
                     <select name="cbo_rack_no_to" id="cbo_rack_no_to" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
-                        <option value="{{ $rack->id }}" {{ (isset($transferTo) && $transferTo->rack_id == $rack->id) ? 'selected' : '' }}>
+                        <option value="{{ $rack->id }}" {{ (isset($transferTo) && $transferTo->room_rack_id == $rack->id) ? 'selected' : '' }}>
                             {{ $rack->floor_room_rack_name }}
                         </option>
                         @endforeach
@@ -177,7 +177,7 @@
                     <select name="cbo_shelf_no_to" id="cbo_shelf_no_to" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('shelf_details')->get() as $shelf)
-                        <option value="{{ $shelf->id }}" {{ (isset($transferTo) && $transferTo->shelf_id == $shelf->id) ? 'selected' : '' }}>
+                        <option value="{{ $shelf->id }}" {{ (isset($transferTo) && $transferTo->room_self_id == $shelf->id) ? 'selected' : '' }}>
                             {{ $shelf->floor_room_rack_name }}
                         </option>
                         @endforeach
@@ -190,7 +190,7 @@
                     <select name="cbo_bin_no_to" id="cbo_bin_no_to" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('bin_details')->get() as $bin)
-                        <option value="{{ $bin->id }}" {{ (isset($transferTo) && $transferTo->bin_id == $bin->id) ? 'selected' : '' }}>
+                        <option value="{{ $bin->id }}" {{ (isset($transferTo) && $transferTo->room_bin_id == $bin->id) ? 'selected' : '' }}>
                             {{ $bin->floor_room_rack_name }}
                         </option>
                         @endforeach

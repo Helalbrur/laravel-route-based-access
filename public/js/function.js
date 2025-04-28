@@ -1765,7 +1765,7 @@ function field_manager(entry_form) {
     try {
         // Get from window object injected by Laravel
         const fieldNames = window.fieldManagerData?.[entry_form] || [];
-		console.log('fieldNames',fieldNames);
+		//console.log('fieldNames',fieldNames);
         
         if (!fieldNames.length) {
             console.log('No fields to hide for', entry_form);

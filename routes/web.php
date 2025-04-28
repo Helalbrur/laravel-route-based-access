@@ -182,7 +182,7 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/transfer_search_list_view',[TransferController::class,'transfer_search_list_view']);
     Route::get('/item_search_list_view',[TransferController::class,'transfer_item_list_view']);
     Route::get('/requisition_search_list_view',[TransferController::class,'requisition_search_list_view']);
-    Route::get('/transfer_dtls',[TransferController::class,'load_transfer_dtls']);
+    Route::get('/transfer_dtls/{id}',[TransferController::class,'load_transfer_dtls']);
 
     Route::get('/receive_work_order_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
     Route::get('/receive_work_order_details/{id}',[InvReceiveMasterController::class,'receive_work_order_details']);

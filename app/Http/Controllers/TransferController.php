@@ -284,11 +284,11 @@ class TransferController extends Controller
     public function load_transfer_dtls($id)
     {
         $transferFrom = InvTransaction::where('mst_id', $id)
-            ->where('transaction_type', 5)
+            ->where('transaction_type', 6)
             ->first();
     
         $transferTo = InvTransaction::where('mst_id', $id)
-            ->where('transaction_type', 6)
+            ->where('transaction_type', 5)
             ->first();
     
         return view('order_management.order.transfer_dtls', compact('transferFrom', 'transferTo'));
