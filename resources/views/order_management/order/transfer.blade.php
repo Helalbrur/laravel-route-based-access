@@ -119,7 +119,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             <div class="card">
                 <div class="card-body">
                     <div class="card-text">
-                        <div class="row">
+                        <div class="row" id="transfer_dtls_div">
 
                             {{-- Transfer From Card --}}
                             <div class="col-md-6">
@@ -376,7 +376,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     }
 
     const load_php_data_to_form = async (update_id) => {
-        
+
         freeze_window(3);
 
         try {
@@ -402,35 +402,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 $('#txt_sys_no').prop('readonly', true);
 
                 // Now populate multiple rows for transfer details
-                var columns_dtls = 'location_id*store_id*floor_id*room_id*room_rack_id*room_bin_id*room_self_id*transaction_type';
-                var dtls_response = await populate_field_data('mst_id', update_id, 'inv_transaction', columns_dtls, '{{csrf_token()}}', 'multiple');
-
-                if (dtls_response.code === 18 && Array.isArray(dtls_response.data)) {
-                    let fromData = dtls_response.data.find(d => d.transaction_type == '5');
-                    let toData = dtls_response.data.find(d => d.transaction_type == '6');
-
-                    if (fromData) {
-                        $('#cbo_location_from').val(fromData.location_id).trigger('change');
-                        $('#cbo_store_from').val(fromData.store_id).trigger('change');
-                        $('#cbo_floor_name_from').val(fromData.floor_id).trigger('change');
-                        $('#cbo_room_no_from').val(fromData.room_id).trigger('change');
-                        $('#cbo_rack_no_from').val(fromData.room_rack_id).trigger('change');
-                        $('#cbo_shelf_no_from').val(fromData.room_self_id).trigger('change');
-                        $('#cbo_bin_no_from').val(fromData.room_bin_id).trigger('change');
-                    }
-
-                    if (toData) {
-                        $('#cbo_location_to').val(toData.location_id).trigger('change');
-                        $('#cbo_store_to').val(toData.store_id).trigger('change');
-                        $('#cbo_floor_name_to').val(toData.floor_id).trigger('change');
-                        $('#cbo_room_no_to').val(toData.room_id).trigger('change');
-                        $('#cbo_rack_no_to').val(toData.room_rack_id).trigger('change');
-                        $('#cbo_shelf_no_to').val(toData.room_self_id).trigger('change');
-                        $('#cbo_bin_no_to').val(toData.room_bin_id).trigger('change');
-                    }
-                } else {
-                    console.warn('No Transfer Details found.');
-                }
+                load_transfer_dtls();
 
                 set_button_status(1, permission, 'fnc_transfer', 1);
 
@@ -524,6 +496,18 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 console.error('Error:', error);
             }
         }
+    }
+
+    async function load_transfer_dtls() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/transfer_dtls/${$('#update_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('transfer_dtls_div').innerHTML = html;
+                initializeSelect2();
+                // field_manager(12);
+            })
+            .catch(error => console.error('Error loading details:', error));
     }
 </script>
 @endsection

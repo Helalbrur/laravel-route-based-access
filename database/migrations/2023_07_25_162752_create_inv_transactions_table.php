@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('transaction_type');
             $table->unsignedBigInteger('mst_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('location_id')->nullable();
             $table->unsignedBigInteger('store_id')->nullable();
             $table->unsignedBigInteger('room_rack_id')->nullable();
             $table->int('cons_uom')->nullable();

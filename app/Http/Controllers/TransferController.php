@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TransferMst;
-use App\Models\TransferDtls;
+use App\Models\InvTransaction;
 use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +80,7 @@ class TransferController extends Controller
             ]);
 
             // FROM transfer details
-            TransferDtls::create([
+            InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '6',
                 'location_id' => $request->cbo_location_from,
@@ -93,7 +93,7 @@ class TransferController extends Controller
             ]);
 
             // TO transfer details
-            TransferDtls::create([
+            InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '5',
                 'location_id' => $request->cbo_location_to,
@@ -184,8 +184,8 @@ class TransferController extends Controller
                 'transfer_qty' => $request->txt_transfer_qty
             ]);
 
-            // Update TransferDtls - FROM
-            $transferFrom = TransferDtls::where('mst_id', $transferMaster->id)
+            // Update InvTransaction - FROM
+            $transferFrom = InvTransaction::where('mst_id', $transferMaster->id)
                 ->where('transaction_type', 5)
                 ->first();
 
@@ -201,8 +201,8 @@ class TransferController extends Controller
                 ]);
             }
 
-            // Update TransferDtls - TO
-            $transferTo = TransferDtls::where('mst_id', $transferMaster->id)
+            // Update InvTransaction - TO
+            $transferTo = InvTransaction::where('mst_id', $transferMaster->id)
                 ->where('transaction_type', 6)
                 ->first();
 
@@ -243,8 +243,8 @@ class TransferController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Soft delete related TransferDtls
-            TransferDtls::where('mst_id', $transferMaster->id)->delete();
+            // Soft delete related InvTransaction
+            InvTransaction::where('mst_id', $transferMaster->id)->delete();
 
             // Soft delete TransferMst
             $transferMaster->delete();
@@ -281,9 +281,17 @@ class TransferController extends Controller
         return view('order_management.order.transfer_search_list_view', compact('param'));
     }
 
-    public function transfer_details($id)
+    public function load_transfer_dtls($id)
     {
-        $transfers = TransferDtls::where('mst_id', $id)->get();
-        return view('order_management.order.transfer_details', compact('transfers'));
+        $transferFrom = InvTransaction::where('mst_id', $id)
+            ->where('transaction_type', 5)
+            ->first();
+    
+        $transferTo = InvTransaction::where('mst_id', $id)
+            ->where('transaction_type', 6)
+            ->first();
+    
+        return view('order_management.order.transfer_dtls', compact('transferFrom', 'transferTo'));
     }
+    
 }
