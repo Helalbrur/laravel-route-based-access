@@ -187,6 +187,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
 
+    $('#cbo_store_dept').on('change', function() {
+        const val = $(this).val();
+        $('#cbo_store').prop('disabled', val === '2');
+        $('#cbo_department').prop('disabled', val === '1');
+    });
+
     function fnc_requisition(operation) {
         if (form_validation('cbo_company_name*cbo_location_name*cbo_store_dept*txt_requisition_date', 'Company Name*Location*Store/Department*Requisition Date') == false) {
             return;

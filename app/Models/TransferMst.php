@@ -48,7 +48,7 @@ class TransferMst extends Model
     // Define relationship with TransferDtls
     public function transferDtls()
     {
-        return $this->hasMany(TransferDtls::class, 'mst_id');
+        return $this->hasMany(InvTransaction::class, 'mst_id');
     }
 
     // Define relationship with LibCompany
@@ -56,5 +56,16 @@ class TransferMst extends Model
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
+
+    public function requisition()
+    {
+        return $this->belongsTo(RequisitionMst::class, 'requisition_id', 'id');
+    }    
+
+    public function product()
+    {
+        return $this->belongsTo(ProductDetailsMaster::class, 'product_id', 'id');
+    }
+    
 }
 

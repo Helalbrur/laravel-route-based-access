@@ -32,8 +32,8 @@ class RequisitionMstController extends Controller
             'cbo_company_name' => 'required',
             'cbo_location_name' => 'required',
             'cbo_store_dept' => 'required',
-            'cbo_store' => 'required',
-            'cbo_department' => 'required',
+            'cbo_store' => 'nullable',
+            'cbo_department' => 'nullable',
             'txt_requisition_date' => 'required',
             'row_num' => 'required|integer|min:1'
         ]);
@@ -124,8 +124,8 @@ class RequisitionMstController extends Controller
             'cbo_company_name' => 'required',
             'cbo_location_name' => 'required',
             'cbo_store_dept' => 'required',
-            'cbo_store' => 'required',
-            'cbo_department' => 'required',
+            'cbo_store' => 'nullable',
+            'cbo_department' => 'nullable',
             'txt_requisition_date' => 'required',
             'row_num' => 'required|integer|min:1'
         ]);

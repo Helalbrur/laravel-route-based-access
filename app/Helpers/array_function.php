@@ -159,6 +159,11 @@ function get_all_department()
     return App\Models\LibDepartment::pluck('department_name', 'id')->toArray();
 }
 
+function get_all_product()
+{
+    return App\Models\ProductDetailsMaster::pluck('item_description', 'id')->toArray();
+}
+
 function transaction_type()
 {
     return array(1 => "Receive", 2 => "Issue", 3 => "Receive Return", 4 => "Issue Return", 5 => "Item Transfer Receive", 6 => "Item Transfer Issue");

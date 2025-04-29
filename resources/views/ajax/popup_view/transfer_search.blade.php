@@ -3,26 +3,26 @@
 @section('content')
 <?php
 $param = json_decode($param, true);
-$company_id         = $param['company_id'] ?? '';
-$store_id           = $param['store_id'] ?? '';
-$department_id      = $param['department_id'] ?? '';
+$company_id      = $param['company_id'] ?? '';
+$category_id     = $param['category_id'] ?? '';
+$product_id      = $param['product_id'] ?? '';
 ?>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Requisition Search</h5>
+                <h5 class="card-title">Transfer Search</h5>
                 <div class="card-text">
                     <input type="hidden" id="popup_value" name="popup_value" value="" />
                     <table id="list_view" class="table table-bordered" style="width: 100%">
                         <thead>
                             <tr>
-                                <th width="15%">Company Name</th>
-                                <th width="15%">Requisition No</th>
-                                <th width="15%">Store</th>
-                                <th width="15%">Department</th>
-                                <th width="25%">Requisition Date</th>
-                                <th width="5%"></th>
+                                <th width="18%">Company Name</th>
+                                <th width="15%">Transfer No</th>
+                                <th width="15%">Category</th>
+                                <th width="15%">Product</th>
+                                <th width="30%">Transfer Date</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,23 +37,23 @@ $department_id      = $param['department_id'] ?? '';
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" id="txt_requisition_no" name="txt_requisition_no" placeholder="Requisition No">
+                                    <input type="text" class="form-control form-control-sm" id="txt_transfer_no" name="txt_transfer_no" placeholder="Transfer No">
                                 </td>
                                 <td>
-                                    <select name="cbo_store" id="cbo_store" class="form-control form-control-sm">
+                                    <select name="cbo_category" id="cbo_category" class="form-control form-control-sm">
                                         <option value="0">SELECT</option>
-                                        <?php $stores = App\Models\LibStoreLocation::pluck('store_name', 'id'); ?>
-                                        @foreach($stores as $id => $store_name)
-                                        <option value="{{ $id }}" {{ $id == $store_id ? 'selected' : '' }}>{{ $store_name }}</option>
+                                        <?php $categories = App\Models\LibCategory::pluck('category_name', 'id'); ?>
+                                        @foreach($categories as $id => $category_name)
+                                        <option value="{{ $id }}" {{ $id == $category_id ? 'selected' : '' }}>{{ $category_name }}</option>
                                         @endforeach
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="cbo_department" id="cbo_department" class="form-control form-control-sm">
+                                    <select name="cbo_product" id="cbo_product" class="form-control form-control-sm">
                                         <option value="0">SELECT</option>
-                                        <?php $departments = App\Models\LibDepartment::pluck('department_name', 'id'); ?>
-                                        @foreach($departments as $id => $department_name)
-                                        <option value="{{ $id }}" {{ $id == $department_id ? 'selected' : '' }}>{{ $department_name }}</option>
+                                        <?php $items = App\Models\ProductDetailsMaster::pluck('item_description', 'id'); ?>
+                                        @foreach($items as $id => $item_description)
+                                        <option value="{{ $id }}" {{ $id == $product_id ? 'selected' : '' }}>{{ $item_description }}</option>
                                         @endforeach
                                     </select>
                                 </td>
@@ -68,13 +68,13 @@ $department_id      = $param['department_id'] ?? '';
                                         onclick="show_list_view(
                                             JSON.stringify({
                                                 company_id: document.getElementById('cbo_company_name').value,
-                                                requisition_no: document.getElementById('txt_requisition_no').value,
-                                                store_id: document.getElementById('cbo_store').value,
-                                                department_id: document.getElementById('cbo_department').value,
+                                                transfer_no: document.getElementById('txt_transfer_no').value,
+                                                category_id: document.getElementById('cbo_category').value,
+                                                product_id: document.getElementById('cbo_product').value,
                                                 from_date: document.getElementById('txt_from_date').value,
                                                 to_date: document.getElementById('txt_to_date').value
                                             }),
-                                            'order/requisition_search_list_view',
+                                            'order/transfer_search_list_view',
                                             'search_div',
                                             '',
                                             'setFilterGrid(\'tbl_po_list\', -1)'

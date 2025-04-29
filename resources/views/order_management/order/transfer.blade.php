@@ -334,43 +334,34 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         emailwindow.onclose = async function() {
 
             try {
-                const popupField = this.contentDoc?.getElementById("popup_value");
-                if (!popupField || popupField.value === '') {
-                    return;
-                }
+                let popupField = this.contentDoc?.getElementById("popup_value");
+                if (!popupField || popupField.value === '') return;
 
-                const data = JSON.parse(popupField.value);
+                let data = JSON.parse(popupField.value);
                 console.log(data);
 
                 if (data) {
-                    const {
-                        id,
-                        requisition_no
-                    } = data;
+                    $('#txt_sys_no').val(data.transfer_no);
+                    $('#update_id').val(data.id);
+                    $('#cbo_company_name').val(data.company_id).trigger('change');
+                    $('#txt_transfer_date').val(data.transfer_date);
+                    $('#txt_requisition_no').val(data.requisition_no);
+                    $('#hidden_requisition_id').val(data.requisition_id);
+                    $('#cbo_item_category').val(data.category_id).trigger('change');
+                    $('#txt_item_name').val(data.item_description);
+                    $('#hidden_product_id').val(data.product_id);
+                    $('#txt_current_stock').val(data.current_stock);
+                    $('#txt_avg_rate').val(data.avg_rate);
+                    $('#txt_transfer_qty').val(data.transfer_qty);
+                    $('#txt_sys_no').prop('readonly', true);
 
-                    var data = JSON.parse(popup_value);
-                    console.log(data);
-                    if (data) {
-
-                        $('#txt_sys_no').val(data.transfer_no);
-                        $('#update_id').val(data.id);
-                        $('#cbo_company_name').val(data.company_id).trigger('change');
-                        $('#txt_transfer_date').val(data.transfer_date);
-                        $('#hidden_requisition_id').val(data.requisition_id);
-                        $('#cbo_item_category').val(data.category_id).trigger('change');
-                        $('#hidden_product_id').val(data.product_id);
-                        $('#txt_current_stock').val(data.current_stock);
-                        $('#txt_avg_rate').val(data.avg_rate);
-                        $('#txt_transfer_qty').val(data.transfer_qty);
-                        $('#txt_sys_no').prop('readonly', true);
-
-                        load_transfer_dtls();
-                        set_button_status(1, permission, 'fnc_transfer', 1);
-                    }
+                    load_transfer_dtls();
+                    set_button_status(1, permission, 'fnc_transfer', 1);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
+
         }
     }
 
@@ -488,16 +479,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         emailwindow.onclose = async function() {
 
             try {
-                const popupField = this.contentDoc?.getElementById("popup_value");
+                let popupField = this.contentDoc?.getElementById("popup_value");
                 if (!popupField || popupField.value === '') {
                     return;
                 }
 
-                const data = JSON.parse(popupField.value);
+                let data = JSON.parse(popupField.value);
                 console.log(data);
 
                 if (data) {
-                    const {
+                    let {
                         id,
                         requisition_no
                     } = data;
@@ -524,16 +515,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
             try {
 
-                const popupField = this.contentDoc?.getElementById("popup_value");
+                let popupField = this.contentDoc?.getElementById("popup_value");
                 if (!popupField || popupField.value === '') {
                     return;
                 }
 
-                const data = JSON.parse(popupField.value);
+                let data = JSON.parse(popupField.value);
                 console.log(data);
 
                 if (data) {
-                    const {
+                    let {
                         id,
                         item_category_id,
                         item_description,

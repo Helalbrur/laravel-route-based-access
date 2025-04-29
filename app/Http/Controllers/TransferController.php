@@ -186,7 +186,7 @@ class TransferController extends Controller
 
             // Update InvTransaction - FROM
             $transferFrom = InvTransaction::where('mst_id', $transferMaster->id)
-                ->where('transaction_type', 5)
+                ->where('transaction_type', 6)
                 ->first();
 
             if ($transferFrom) {
@@ -203,7 +203,7 @@ class TransferController extends Controller
 
             // Update InvTransaction - TO
             $transferTo = InvTransaction::where('mst_id', $transferMaster->id)
-                ->where('transaction_type', 6)
+                ->where('transaction_type', 5)
                 ->first();
 
             if ($transferTo) {
