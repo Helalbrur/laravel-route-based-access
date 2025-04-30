@@ -35,7 +35,16 @@ class TransferController extends Controller
             'hidden_product_id'     => 'required|integer',
             'txt_current_stock'     => 'required|numeric|min:1',
             'txt_avg_rate'          => 'required|numeric|min:1',
-            'txt_transfer_qty'      => 'required|numeric|min:1',
+            'txt_transfer_qty'      => [
+                'required',
+                'numeric',
+                'min:1',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($value > $request->txt_current_stock) {
+                        $fail('The transfer quantity must not exceed the current stock.');
+                    }
+                }
+            ],
             'cbo_location_from'     => 'required',
             'cbo_store_from'        => 'required',
             'cbo_floor_name_from'   => 'required',
@@ -151,7 +160,16 @@ class TransferController extends Controller
             'hidden_product_id'     => 'required|integer',
             'txt_current_stock'     => 'required|numeric|min:1',
             'txt_avg_rate'          => 'required|numeric|min:1',
-            'txt_transfer_qty'      => 'required|numeric|min:1',
+            'txt_transfer_qty'      => [
+                'required',
+                'numeric',
+                'min:1',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($value > $request->txt_current_stock) {
+                        $fail('The transfer quantity must not exceed the current stock.');
+                    }
+                }
+            ],
             'cbo_location_from'     => 'required',
             'cbo_store_from'        => 'required',
             'cbo_floor_name_from'   => 'required',

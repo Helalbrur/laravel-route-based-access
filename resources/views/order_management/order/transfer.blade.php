@@ -319,6 +319,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
 
+    $('#txt_transfer_qty').on('keyup', function() {
+        let currentStock = parseFloat($('#txt_current_stock').val()) || 0;
+        let transferQty = parseFloat($(this).val()) || 0;
+
+        if (transferQty > currentStock) {
+            $(this).val(''); // Clear the input if transfer quantity exceeds current stock
+            alert('Transfer quantity cannot exceed current stock.');
+        }
+    });
+
     function fnc_transfer_popup() {
         if (form_validation('cbo_company_name', 'Company Name') == false) {
             return;
