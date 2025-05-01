@@ -1,7 +1,10 @@
 <?php
-$data=explode('_',$data);
+$data=json_decode($data,true);
+$user_id = $data["user_id"];
+$module_id = $data["module_id"];
+
   
-$sql= "SELECT a.menu_name,a.m_menu_id, b.show_priv,b.save_priv,b.edit_priv,b.delete_priv,b.approve_priv,b.id FROM main_menu a, user_priv_mst b WHERE b.user_id='$data[0]' AND a.m_module_id = '$data[1]' AND a.m_menu_id = b.main_menu_id and a.status=1 and a.status_active=1 and a.is_deleted=0 ORDER BY main_menu_id ASC";
+$sql= "SELECT a.menu_name,a.m_menu_id, b.show_priv,b.save_priv,b.edit_priv,b.delete_priv,b.approve_priv,b.id FROM main_menu a, user_priv_mst b WHERE b.user_id='{$user_id}' AND a.m_module_id = '{$module_id}' AND a.m_menu_id = b.main_menu_id and a.status=1 and a.status_active=1 and a.is_deleted=0 ORDER BY main_menu_id ASC";
 $result = sql_select($sql);
 $sl = 1;
 $form_permission_type = form_permission_type();
