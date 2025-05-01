@@ -516,7 +516,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             
     }
 
-    function fnc_sys_no_popup() {
+    async function fnc_sys_no_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
         {
             return;
@@ -529,7 +529,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 		var title = 'Receive Search';
 		var page_link='/show_common_popup_view?page=receive_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
+		emailwindow.onclose=async function()
 		{
 			
 			try {
@@ -543,9 +543,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 if (data) {
                     $('#update_id').val(data.id);
                     $('#txt_sys_no').val(data.sys_number);
-                    $('#cbo_company_name').val(data.company_id).trigger('change');
-                    $('#cbo_location_name').val(data.location_id).trigger('change');
-                    $('#cbo_store_name').val(data.store_id).trigger('change');
+                    $('#cbo_company_name').val(data.company_id);
+                    await handleCompanyChange();
+                    $('#cbo_location_name').val(data.location_id);
+                    await handleLocationChange();
+                    $('#cbo_store_name').val(data.store_id);
+                    await multirowStoreChange();
                     $('#txt_receive_date').val(data.receive_date);
                     $('#txt_work_order_no').val(data.work_order_no);
                     $('#work_order_id').val(data.work_order_id);
