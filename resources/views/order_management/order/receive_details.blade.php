@@ -3,22 +3,22 @@
     <thead> 
         <tr>
             <th class="form-group" width="2%">Sl</th>
-            <th class="form-group" width="6%">Item Name</th>
+            <th class="form-group" width="5%">Item Name</th>
             <th class="form-group" width="5%">Item Code</th>
-            <th class="form-group" width="6%">Item Category</th>
-            <th class="form-group" width="6%">UOM</th>
+            <th class="form-group" width="5%">Item Category</th>
+            <th class="form-group" width="5%">UOM</th>
             <th class="form-group" width="5%">Required QTY</th>
             <th class="form-group" width="5%">WO Qty</th>
             <th class="form-group" width="5%">Balance Qty</th>
             <th class="form-group" width="5%">Receive Qty</th>
-            <th class="form-group" width="6%">Lot/Batch No.</th>
+            <th class="form-group" width="5%">Lot/Batch No.</th>
             <th class="form-group" width="5%">Expire Date</th>
-            <th class="form-group" width="6%">Floor Name</th>
-            <th class="form-group" width="6%">Room No</th>
-            <th class="form-group" width="6%">Rack</th>
-            <th class="form-group" width="6%">Self</th>
-            <th class="form-group" width="6%">Bin</th>
-            <th class="form-group" width="">Action</th>                           
+            <th class="form-group" width="5%">Floor Name</th>
+            <th class="form-group" width="5%">Room No</th>
+            <th class="form-group" width="5%">Rack</th>
+            <th class="form-group" width="5%">Self</th>
+            <th class="form-group" width="5%">Bin</th>
+            <th class="form-group" >Action</th>                           
         </tr>
     </thead>
     <tbody >
@@ -29,9 +29,11 @@
             $racks  = LibFloorRoomRackMst::whereHas('rack_details')->get(); 
             $shelfs = LibFloorRoomRackMst::whereHas('shelf_details')->get(); 
             $bins   = LibFloorRoomRackMst::whereHas('bin_details')->get(); 
+           // dd($bins);
             
         ?>
         <?php $i = 1;?>
+        {{-- {{ dd($receives) }} --}}
         @foreach ($receives as $receive) 
             <tr id="tr_{{ $i }}">
                 <td class="form-group" id="sl_{{ $i }}">{{ $i }}</td>
@@ -85,7 +87,7 @@
                     <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($floors as $id => $floor)
-                            <option value="{{$floor->id}}" {{ $id == $receive->floor_id ? 'selected' : ''}}>{{$floor->floor_name}}</option>
+                            <option value="{{$floor->id}}" {{ $floor->id == $receive->floor_id ? 'selected' : ''}}>{{$floor->floor_name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -93,7 +95,7 @@
                     <select name="cbo_room_no_{{ $i }}" id="cbo_room_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($rooms as $id => $room)
-                            <option value="{{$room->id}}" {{ $id == $receive->room_id ? 'selected' : ''}}>{{$room->floor_room_rack_name}}</option>
+                            <option value="{{$room->id}}" {{ $room->id == $receive->room_id ? 'selected' : ''}}>{{$room->floor_room_rack_name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -101,7 +103,7 @@
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($racks as $id => $rack)
-                                <option value="{{$rack->id}}" {{ $id == $receive->room_rack_id ? 'selected' : ''}}>{{$rack->floor_room_rack_name}}</option>
+                                <option value="{{$rack->id}}" {{ $rack->id == $receive->room_rack_id ? 'selected' : ''}}>{{$rack->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>
@@ -109,7 +111,7 @@
                     <select name="cbo_shelf_no_{{ $i }}" id="cbo_shelf_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($shelfs as $id => $shelf)
-                                <option value="{{$shelf->id}}" {{ $id==$receive->room_self_id ? 'selected' : ''}}>{{$shelf->floor_room_rack_name}}</option>
+                                <option value="{{$shelf->id}}" {{ $shelf->id==$receive->room_self_id ? 'selected' : ''}}>{{$shelf->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>
@@ -117,7 +119,7 @@
                     <select name="cbo_bin_no_{{ $i }}" id="cbo_bin_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                             @foreach($bins as $id => $bin)
-                                <option value="{{$bin->id}}" {{ $id==$receive->room_bin_id ? 'selected' : ''}}>{{$bin->floor_room_rack_name}}</option>
+                                <option value="{{$bin->id}}" {{ $bin->id==$receive->room_bin_id ? 'selected' : ''}}>{{$bin->floor_room_rack_name}}</option>
                             @endforeach
                     </select>
                 </td>

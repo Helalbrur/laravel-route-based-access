@@ -29,6 +29,18 @@
     {
         $query_builder = $query_builder->where('supplier_id', $supplier_id);
     }
+
+    /*
+    // Combine SQL and bindings
+    $sqlWithBindings = vsprintf(
+        str_replace('?', "'%s'", $query_builder->toSql()),
+        array_map(function ($binding) {
+            return is_numeric($binding) ? $binding : addslashes($binding);
+        }, $query_builder->getBindings())
+    );
+
+    dd($sqlWithBindings);
+    */
     
     $work_orders = $query_builder->get();
     
