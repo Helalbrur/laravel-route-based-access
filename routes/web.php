@@ -178,6 +178,7 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/item_search_list_view',[RequisitionMstController::class,'item_search_list_view']);
     Route::get('/requisition_search_list_view',[RequisitionMstController::class,'requisition_search_list_view']);
     Route::get('/requisition_details/{id}',[RequisitionMstController::class,'requisition_details']);
+    Route::get('/req_details_from_issue/{id}',[RequisitionMstController::class,'req_details_from_issue']);
 
     Route::get('/transfer_search_list_view',[TransferController::class,'transfer_search_list_view']);
     Route::get('/item_search_list_view',[TransferController::class,'transfer_item_list_view']);

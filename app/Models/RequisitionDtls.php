@@ -72,4 +72,22 @@ class RequisitionDtls extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(InvTransaction::class, 'ref_dtls_id')
+                    ->where('transaction_type', 2)
+                    ->whereNull('deleted_at');
+    }
+
+    public function getBalanceAttribute()
+    {
+        $consumedQty = $this->transactions()->sum('cons_qnty');
+        return $this->requisition_qty - $consumedQty;
+    }
+
+    /*
+        $requisition = RequisitionDtls::with('transactions')->find($id);
+        $balance = $requisition->balance;
+    */
 }

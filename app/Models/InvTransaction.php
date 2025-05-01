@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class InvTransaction extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'inv_transaction';
     protected $fillable = [
         'mst_id',
@@ -110,4 +112,10 @@ class InvTransaction extends Model
     {
         return $this->belongsTo(ProductDetailsMaster::class, 'product_id');
     }
+
+    public function requisitionDetail()
+    {
+        return $this->belongsTo(RequisitionDtls::class, 'ref_dtls_id')
+                    ->where('transaction_type', 2);
+    }    
 }
