@@ -48,7 +48,7 @@ class WorkOrderMstController extends Controller
             
             // Generate system no for work order
 
-            $system_no_info=generate_system_no( $request->cbo_company_name, '', '', date("Y",time()), 5, "SELECT wo_no_prefix,wo_no_prefix_num from work_order_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by wo_no_prefix_num desc ", "wo_no_prefix", "wo_no_prefix_num" );
+            $system_no_info=generate_system_no( $request->cbo_company_name, '', 'WO', date("Y",time()), 5, "SELECT wo_no_prefix,wo_no_prefix_num from work_order_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by wo_no_prefix_num desc ", "wo_no_prefix", "wo_no_prefix_num" );
 
             
             $workOrderMst = WorkOrderMst::create([

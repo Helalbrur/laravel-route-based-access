@@ -190,6 +190,7 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
 
     Route::get('/receive_search_list_view',[InvReceiveMasterController::class,'receive_search_list_view']);
     Route::get('/receive_details/{id}',[InvReceiveMasterController::class,'receive_details']);
+    Route::get('/isssue_details/{id}',[InvIssueMasterController::class,'isssue_details']);
 });  
 
 Route::middleware(['auth','PagePermission'])->group(function () {

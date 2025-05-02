@@ -49,7 +49,7 @@ class InvReceiveMasterController extends Controller
             
             // Generate system no for receive
 
-            $system_no_info=generate_system_no( $request->cbo_company_name, '', '', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
+            $system_no_info=generate_system_no( $request->cbo_company_name, '', 'GIR', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
             
             $invReceiveMaster = InvReceiveMaster::create([
                 'sys_number_prefix' => $system_no_info->sys_no_prefix,

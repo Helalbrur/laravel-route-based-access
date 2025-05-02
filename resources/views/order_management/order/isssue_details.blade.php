@@ -22,21 +22,21 @@
     </thead>
     <tbody>
         <?php $i = 1; ?>
-        @foreach ($requisitions as $requisition)
+        @foreach ($trans as $tran)
             <tr id="tr_{{ $i }}">
                 <td class="form-group" id="sl_{{ $i }}"> {{ $i }}</td>
                 <td class="form-group">
-                    <input type="text" name="txt_item_name_{{ $i }}" id="txt_item_name_{{ $i }}" class="form-control" value="{{ $requisition->product->item_description ?? '' }}" placeholder="Browse" ondblclick="fn_item_popup({{ $i }})">
-                    <input type="hidden" name="hidden_product_id_{{ $i }}" id="hidden_product_id_{{ $i }}" class="form-control" value="{{ $requisition->product_id }}">
-                    <input type="hidden" name="hidden_dtls_id_{{ $i }}" id="hidden_dtls_id_{{ $i }}" class="form-control" value="">
-                    <input type="hidden" name="req_dtls_id_{{ $i }}" id="req_dtls_id_{{ $i }}" class="form-control" value="{{ $requisition->id ?? '' }}">
+                    <input type="text" name="txt_item_name_{{ $i }}" id="txt_item_name_{{ $i }}" class="form-control" value="{{ $tran->product->item_description ?? '' }}" placeholder="Browse" ondblclick="fn_item_popup({{ $i }})">
+                    <input type="hidden" name="hidden_product_id_{{ $i }}" id="hidden_product_id_{{ $i }}" class="form-control" value="{{ $tran->product_id }}">
+                    <input type="hidden" name="hidden_dtls_id_{{ $i }}" id="hidden_dtls_id_{{ $i }}" class="form-control" value="{{ $tran->id }}">
+                    <input type="hidden" name="req_dtls_id_{{ $i }}" id="req_dtls_id_{{ $i }}" class="form-control" value="{{ $tran->ref_dtls_id ?? '' }}">
                 </td>
             
                 <td class="form-group">
                     <select name="cbo_item_category_{{ $i }}" id="cbo_item_category_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach(get_item_category() as $id => $name)
-                            <option value="{{$id}}" {{ $id == $requisition->category_id ? 'selected' : '' }}>{{$name}}</option>
+                            <option value="{{$id}}" {{ $id == $tran->product->item_category_id ? 'selected' : '' }}>{{$name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -47,27 +47,27 @@
                     <select name="cbo_uom_{{ $i }}" id="cbo_uom_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach(get_uom() as $id => $name)
-                            <option value="{{$id}}" {{ $id == $requisition->product->cons_uom ? 'selected' : '' }}>{{$name}}</option>
+                            <option value="{{$id}}" {{ $id == $tran->cons_uom ? 'selected' : '' }}>{{$name}}</option>
                         @endforeach
                     </select>
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_available_qty_{{ $i }}" id="txt_available_qty_{{ $i }}" class="form-control" readonly disabled value="{{ min($requisition->balance,$requisition->product->balance_qnty ?? 0)  }}">
+                    <input type="text" name="txt_available_qty_{{ $i }}" id="txt_available_qty_{{ $i }}" class="form-control" readonly disabled value="{{ min(max(($tran->requisition->balance ?? 0) + $tran->cons_qnty,0),(($tran->product->balance_qnty + $tran->cons_qnty) ?? 0))  }}">
                 </td>
-                <td class="form-group" title="requsition balance = {{ $requisition->balance }} , product balance = {{ $requisition->product->balance_qnty ?? 0 }} , min = {{ min($requisition->balance,$requisition->product->balance_qnty ?? 0) }}">
-                    <input type="text" name="txt_issue_qty_{{ $i }}" id="txt_issue_qty_{{ $i }}" onkeyup="calculate_amount({{ $i }})" class="form-control" value="{{  min($requisition->balance,$requisition->product->balance_qnty ?? 0) }}">
-                </td>
-                <td class="form-group">
-                    <input type="text" name="txt_weighted_rate_{{ $i }}" id="txt_weighted_rate_{{ $i }}" class="form-control" value="{{ $requisition->product->avg_rate ?? 0 }}">
-                </td>
-                <td class="form-group" title="requsition avg rate = {{ $requisition->product->avg_rate ?? 0 }} , product avg rate = {{ $requisition->product->avg_rate_per_unit ?? 0 }} ">
-                    <input type="text" name="txt_cur_rate_{{ $i }}" id="txt_cur_rate_{{ $i }}" onkeyup="calculate_amount({{ $i }})" class="form-control" value="{{ $requisition->product->avg_rate ?? 0 }}">
+                <td class="form-group" >
+                    <input type="text" name="txt_issue_qty_{{ $i }}" id="txt_issue_qty_{{ $i }}" onkeyup="calculate_amount({{ $i }})" class="form-control" value="{{  $tran->cons_qnty }}">
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_item_total_amount_{{ $i }}" id="txt_item_total_amount_{{ $i }}" class="form-control" value="">
+                    <input type="text" name="txt_weighted_rate_{{ $i }}" id="txt_weighted_rate_{{ $i }}" class="form-control" value="{{ $tran->product->avg_rate ?? 0 }}">
+                </td>
+                <td class="form-group" >
+                    <input type="text" name="txt_cur_rate_{{ $i }}" id="txt_cur_rate_{{ $i }}" onkeyup="calculate_amount({{ $i }})" class="form-control" value="{{ $tran->cons_rate ?? 0 }}">
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="">
+                    <input type="text" name="txt_item_total_amount_{{ $i }}" id="txt_item_total_amount_{{ $i }}" class="form-control" value="{{ $tran->cons_amount }}">
+                </td>
+                <td class="form-group">
+                    <input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="{{ $tran->cons_exp_date }}">
                 </td>
 
                 <td class="form-group" id="floor_div_{{ $i }}">
@@ -77,7 +77,7 @@
                     <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($floors as $floor)
-                            <option value="{{$floor->id}}">{{$floor->floor_name}}</option>
+                            <option value="{{$floor->id}}" {{ $floor->id == $tran->floor_id ? 'selected' : '' }}>{{$floor->floor_name }}</option>
                         @endforeach
                     </select>
                 </td>
@@ -88,7 +88,7 @@
                     <select name="cbo_room_no_{{ $i }}" id="cbo_room_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($rooms as $room)
-                            <option value="{{$room->id}}">{{$room->floor_room_rack_name}}</option>
+                            <option value="{{$room->id}}"  {{ $room->id == $tran->room_id ? 'selected' : '' }}>{{$room->floor_room_rack_name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -99,7 +99,7 @@
                     <select name="cbo_rack_no_{{ $i }}" id="cbo_rack_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($racks as $rack)
-                            <option value="{{$rack->id}}">{{$rack->floor_room_rack_name}}</option>
+                            <option value="{{$rack->id}}" {{ $rack->id == $tran->rack_id ? 'selected' : '' }}>{{$rack->floor_room_rack_name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -110,7 +110,7 @@
                     <select name="cbo_shelf_no_{{ $i }}" id="cbo_shelf_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($shelfs as $shelf)
-                            <option value="{{$shelf->id}}">{{$shelf->floor_room_rack_name}}</option>
+                            <option value="{{$shelf->id}}" {{ $shelf->id == $tran->shelf_id ? 'selected' : '' }}>{{$shelf->floor_room_rack_name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -121,7 +121,7 @@
                     <select name="cbo_bin_no_{{ $i }}" id="cbo_bin_no_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($bins as $bin)
-                            <option value="{{$bin->id}}">{{$bin->floor_room_rack_name}}</option>
+                            <option value="{{$bin->id}}"  {{ $bin->id == $tran->bin_id ? 'selected' : '' }}>{{$bin->floor_room_rack_name}}</option>
                         @endforeach
                     </select>
                 </td>

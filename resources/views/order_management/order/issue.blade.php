@@ -42,7 +42,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
                                             <label for="cbo_location_name" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Location</label>
@@ -73,11 +73,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="txt_work_order_date" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Issue Date</label>
+                                            <label for="txt_issue_date" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Issue Date</label>
                                             <div class="col-sm-6 d-flex align-items-center">
-                                                <input type="date" id="txt_work_order_date" class="form-control flatpickr" name="txt_work_order_date" value="{{ date('Y-m-d') }}">
+                                                <input type="date" id="txt_issue_date" class="form-control flatpickr" name="txt_issue_date" value="{{ date('Y-m-d') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -146,8 +147,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                     <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" placeholder="Browse" ondblclick="fn_item_popup(1)">
                                                     <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
+                                                    <input type="hidden" name="req_dtls_id_1" id="req_dtls_id_1" class="form-control" value="">
                                                 </td>
-                                               
+                                                
                                                 <td class="form-group">
                                                     <select name="cbo_item_category_1" id="cbo_item_category_1" class="form-control">
                                                         <option value="0">SELECT</option>
@@ -185,7 +187,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                 <td class="form-group">
                                                     <input type="text" name="txt_expire_date_1" id="txt_expire_date_1" class="form-control flatpickr" value="">
                                                 </td>
-
                                                 <td class="form-group" id="floor_div_1">
                                                     <?php 
                                                         $floors = App\Models\LibFloor::get();
@@ -256,7 +257,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         <div class="col-sm-2">
                                         </div>
                                         <div class="col-sm-6">
-                                            <?php echo load_submit_buttons($permission, "fnc_work_order", 0, 0, "reset_form('workorder_1','','',1)"); ?>
+                                            <?php echo load_submit_buttons($permission, "fnc_issue_dtls", 0, 0, "reset_form('workorder_1','','',1)"); ?>
                                         </div>
                                        
                                     </div>
@@ -277,11 +278,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 <script>
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
-    function fnc_work_order(operation) {
+    function fnc_issue_dtls(operation) {
         if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier*cbo_pay_mode', 'Company Name*Location*Work Order Date*Supplier*Pay Mode') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_store_name,txt_issue_date,cbo_issue_basis,txt_requisition_no,requisition_id,txt_remarks');
             var method = "POST";
             var param = "";
             if (operation == 1 || operation == 2) {
@@ -297,7 +298,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
             var flag = 0;
             for (var i = 1; i <=row_num; i++) {
-                if(form_validation('txt_item_name_'+i+'*txt_work_order_qty_'+i+'*txt_cur_rate_'+i,'Item Name*Work Order Qty*Cur. Rate')==false)
+                if(form_validation('txt_item_name_'+i+'*txt_issue_qty_'+i+'*txt_cur_rate_'+i,'Item Name*Issue Qty*Cur. Rate')==false)
                 {
                     flag = i;
                     break;
@@ -305,23 +306,30 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 formData.append(`hidden_product_id_${i}`, document.getElementById(`hidden_product_id_${i}`).value);
                 formData.append(`txt_item_name_${i}`, document.getElementById(`txt_item_name_${i}`).value);
                 formData.append(`hidden_dtls_id_${i}`, document.getElementById(`hidden_dtls_id_${i}`).value);
-                formData.append(`txt_item_code_${i}`, document.getElementById(`txt_item_code_${i}`).value);
+                formData.append(`req_dtls_id_${i}`, document.getElementById(`req_dtls_id_${i}`).value);
                 formData.append(`cbo_item_category_${i}`, document.getElementById(`cbo_item_category_${i}`).value);
+                formData.append(`txt_lot_batch_no_${i}`, document.getElementById(`txt_lot_batch_no_${i}`).value);
                 formData.append(`cbo_uom_${i}`, document.getElementById(`cbo_uom_${i}`).value);
-                formData.append(`txt_required_qty_${i}`, document.getElementById(`txt_required_qty_${i}`).value);
-                formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
-                formData.append(`txt_previous_rate_${i}`, document.getElementById(`txt_previous_rate_${i}`).value);
+                formData.append(`txt_available_qty_${i}`, document.getElementById(`txt_available_qty_${i}`).value);
+                formData.append(`txt_issue_qty_${i}`, document.getElementById(`txt_issue_qty_${i}`).value);
+                formData.append(`txt_weighted_rate_${i}`, document.getElementById(`txt_weighted_rate_${i}`).value);
                 formData.append(`txt_cur_rate_${i}`, document.getElementById(`txt_cur_rate_${i}`).value);
                 formData.append(`txt_item_total_amount_${i}`, document.getElementById(`txt_item_total_amount_${i}`).value);
+                formData.append(`txt_expire_date_${i}`, document.getElementById(`txt_expire_date_${i}`).value);
+                formData.append(`cbo_floor_name_${i}`, document.getElementById(`cbo_floor_name_${i}`).value);
+                formData.append(`cbo_room_no_${i}`, document.getElementById(`cbo_room_no_${i}`).value);
+                formData.append(`cbo_rack_no_${i}`, document.getElementById(`cbo_rack_no_${i}`).value);
+                formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
+                formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
             }
 
             if(flag > 0)
             {
-                alert('Please fill up item name, work order qty and cur. rate for row '+flag);
+                alert('Please fill up item name, Issue qty and cur. rate for row '+flag);
                 return;
             }
 
-            var url = `/order/work_order${param}`;
+            var url = `/order/issue${param}`;
             var requestData = {
                 method: method,
                 headers: {
@@ -355,8 +363,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             document.getElementById('txt_delivery_date').value = data.delivery_date;
             document.getElementById('txt_remarks').value = data.remarks;
             document.getElementById('txt_sys_no').readOnly = true;
-            set_button_status(1, permission, 'fnc_work_order', 1);
             load_details();
+            set_button_status(1, permission, 'fnc_issue_dtls', 1);
         } else {
             console.warn("Unexpected data format:", response);
         }
@@ -553,19 +561,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 console.log(data);
                 if (data) {
                     $('#update_id').val(data.id);
-                    //txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks
-                    $('#txt_sys_no').val(data.wo_no);
+                    
+                    $('#txt_sys_no').val(data.sys_number);
                     document.getElementById('cbo_company_name').value = data.company_id;
                     await handleCompanyChange(); // Await the company change
-                    $('#cbo_location_name').val(data.location_id).trigger('change');
-                    $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                    $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
-                    $('#txt_work_order_date').val(data.wo_date);
-                    $('#txt_delivery_date').val(data.delivery_date);
-                    $('#cbo_source').val(data.source).trigger('change');
+                    $('#cbo_location_name').val(data.location_id);
+                    await handleLocationChange();
+                    $('#cbo_store_name').val(data.store_id);
+                    await multipleStoreChange();
+                    $('#issue_basis').val(data.cbo_issue_basis).trigger('change');
+                    $('#txt_issue_date').val(data.date);
+                    $('#txt_requisition_no').val(data.requisition_no);
+                    $('#requisition_id').val(data.requisition_id);
                     $('#txt_remarks').val(data.remarks);
                     load_details();
-                    set_button_status(1, permission, 'fnc_work_order', 1);
+                    set_button_status(1, permission, 'fnc_issue_dtls', 1);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -712,7 +722,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
    async function load_details() {
         //fetch data from server as html and put in a div that id div_dtls_list_view
-        await fetch(`/order/work_order_details/${$('#update_id').val()}`)
+        await fetch(`/order/isssue_details/${$('#update_id').val()}`)
             .then(response => response.text())
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
