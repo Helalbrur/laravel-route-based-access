@@ -252,5 +252,55 @@ class ProductDetailsMaster extends Model
             Log::error('Failed to update product inventory: ' . $e->getMessage());
         }
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(InvTransaction::class, 'product_id')
+                    ->whereNull('deleted_at');
+    }
+
+
+    public function getBalanceQntyAttribute()
+    {
+        $addQty = $this->transactions()
+            ->whereIn('transaction_type', [1, 4, 5])
+            ->sum('cons_qnty');
+
+        $lessQty = $this->transactions()
+            ->whereIn('transaction_type', [2, 3, 6])
+            ->sum('cons_qnty');
+
+        return $addQty - $lessQty;
+    }
+
+    public function getBalanceAmountAttribute()
+    {
+        $addAmt = $this->transactions()
+            ->whereIn('transaction_type', [1, 4, 5])
+            ->sum('cons_amount');
+
+        $lessAmt = $this->transactions()
+            ->whereIn('transaction_type', [2, 3, 6])
+            ->sum('cons_amount');
+
+        return $addAmt - $lessAmt;
+    }
+
+    public function getAvgRateAttribute()
+    {
+        $balanceQty = $this->balance_qnty;
+        $balanceAmt = $this->balance_amount;
+
+        return $balanceQty > 0 ? $balanceAmt / $balanceQty : 0;
+    }
+
+
+    /*
+        $product = ProductDetailsMaster::find($id);
+        echo $product->balance_qnty;
+        echo $product->balance_amount;
+        echo $product->avg_rate;
+    */
+
     
 }

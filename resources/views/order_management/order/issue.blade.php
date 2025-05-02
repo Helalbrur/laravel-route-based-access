@@ -87,7 +87,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         <div class="row">
                                             <label for="cbo_issue_basis" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Issue Basis</label>
                                             <div class="col-sm-6 d-flex align-items-center">
-                                                <select style="width: 100%" name="cbo_issue_basis" id="cbo_issue_basis"  class="form-control">
+                                                <select style="width: 100%" name="cbo_issue_basis" id="cbo_issue_basis"  class="form-control" onchange="handleIssueBasisChange()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(get_issue_basis() as $id => $name)
                                                         <option value="{{ $id }}">{{ $name }}</option>
@@ -515,7 +515,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 
     function calculate_amount(row_id) {
         var rate = $('#txt_cur_rate_' + row_id).val() * 1;
+        var available_qty = $('#txt_available_qty_' + row_id).val() * 1;
         var order_qty = $('#txt_issue_qty_' + row_id).val() * 1;
+        if (order_qty > available_qty) {
+            alert('Issue quantity cannot be greater than available quantity');
+            $('#txt_issue_qty_' + row_id).val(available_qty);
+            order_qty = available_qty;
+        }
         var amount = (rate * order_qty * 1000000) / 1000000;
         $("#txt_item_total_amount_"+row_id).val(amount);
     }
@@ -657,6 +663,53 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 		}
     }
 
+    async function fnc_requisition_popup() {
+        if (form_validation('cbo_company_name*cbo_issue_basis', 'Company Name*Issue Basis') == false) {
+            return;
+        }
+        var param = JSON.stringify({
+            'company_id': $("#cbo_company_name").val(),
+            'location_id': $("#cbo_location_name").val(),
+            'store_id': $("#cbo_store_name").val()
+        });
+        var title = 'Requisition Search';
+        var page_link = '/show_common_popup_view?page=requisition_search&param=' + param;
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+        emailwindow.onclose =async function () {
+            try {
+                var popup_value = this.contentDoc.getElementById("popup_value").value; //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var data = JSON.parse(popup_value);
+                console.log(data);
+                $('#txt_requisition_no').val(data.requisition_no);
+                $('#requisition_id').val(data.id);
+                await load_requisition_details();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }
+
+    async function load_requisition_details() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/req_details_from_issue/${$('#requisition_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('div_dtls_list_view').innerHTML = html;
+                initializeSelect2();
+                field_manager(12);
+                var row_num = $('#dtls_list_view tbody tr').length;
+                for (let index = 1; index <= row_num; index++) {
+                    calculate_amount(index);
+                }
+            })
+            .catch(error => console.error('Error loading details:', error));
+            
+    }
+
    async function load_details() {
         //fetch data from server as html and put in a div that id div_dtls_list_view
         await fetch(`/order/work_order_details/${$('#update_id').val()}`)
@@ -670,7 +723,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             
     }
 
-    async function handleCompanyChange(row_id = null) {
+    async function handleCompanyChange(row_id = '') {
         try {
             var container = "location_div";
             if(row_id) {
@@ -682,7 +735,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         }
     }
 
-    async function handleLocationChange(row_id = null) {
+    async function handleLocationChange(row_id = '') {
         try {
             var container = "store_div";
             if(row_id) {
@@ -702,7 +755,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         }
     }
 
-    async function handleStoreChange(row_id = null) {
+    async function handleStoreChange(row_id = '') {
         try {
             var container = "floor_div";
             if(row_id) {
@@ -713,7 +766,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleFloorChange(row_id = null) {
+    async function handleFloorChange(row_id = '') {
         try {
             var name_extra = '';
             var container = "room_div";
@@ -726,7 +779,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleRoomChange(row_id = null) {
+    async function handleRoomChange(row_id = '') {
         try {
             var container = "rack_div";
             var name_extra = '';
@@ -739,7 +792,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleRackChange(row_id = null) {
+    async function handleRackChange(row_id = '') {
         try {
             var name_extra = '';
             var container = "shelf_div";
@@ -752,7 +805,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleShelfChange(row_id = null) {
+    async function handleShelfChange(row_id = '') {
         try {
             var name_extra = '';
             var container = "bin_div";
@@ -764,6 +817,38 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
+    }
+
+    async function handleIssueBasisChange() {
+        var issue_basis = document.getElementById('cbo_issue_basis').value * 1;
+        if(issue_basis == 1) {
+            document.getElementById('txt_requisition_no').value = '';
+            document.getElementById('requisition_id').value = '';
+            document.getElementById('txt_requisition_no').readOnly = true;
+            document.getElementById('txt_requisition_no').disabled = true;
+        } else {
+            document.getElementById('txt_requisition_no').readOnly = false;
+            document.getElementById('txt_requisition_no').disabled = false;
+        }
+
+        var row_num = $('#dtls_list_view tbody tr').length;
+        for (let index = 1; index <= row_num; index++) {
+            const itemInput = document.getElementById(`txt_item_name_${index}`);
+            
+            if (issue_basis == 1) {
+                itemInput.readOnly = true;
+                itemInput.disabled = false;
+                itemInput.setAttribute('ondblclick',`fn_item_popup(${index})`);
+                itemInput.placeholder = 'Browse';
+
+            } else {
+                itemInput.readOnly = true;
+                itemInput.disabled = false;
+                itemInput.removeAttribute('ondblclick');
+                itemInput.placeholder = '';
+            }
+        }
+
     }
 </script>
 @endsection

@@ -113,19 +113,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <th class="form-group" width="2%">Sl</th>
                                                 <th class="form-group" width="6%">Item Name</th>
                                                 <th class="form-group" width="5%">Item Code</th>
-                                                <th class="form-group" width="6%">Item Category</th>
-                                                <th class="form-group" width="6%">UOM</th>
+                                                <th class="form-group" width="5%">Item Category</th>
+                                                <th class="form-group" width="5%">UOM</th>
                                                 <th class="form-group" width="5%">Required QTY</th>
                                                 <th class="form-group" width="5%">WO Qty</th>
                                                 <th class="form-group" width="5%">Balance Qty</th>
                                                 <th class="form-group" width="5%">Receive Qty</th>
-                                                <th class="form-group" width="6%">Lot/Batch No.</th>
+                                                <th class="form-group" width="5%">Lot/Batch No.</th>
                                                 <th class="form-group" width="5%">Expire Date</th>
                                                 <th class="form-group" width="6%">Floor Name</th>
                                                 <th class="form-group" width="6%">Room No</th>
-                                                <th class="form-group" width="6%">Rack</th>
-                                                <th class="form-group" width="6%">Self</th>
-                                                <th class="form-group" width="6%">Bin</th>
+                                                <th class="form-group" width="5%">Rack</th>
+                                                <th class="form-group" width="5%">Self</th>
+                                                <th class="form-group" width="5%">Bin</th>
                                                 <th class="form-group" width="">Action</th>
                                             </tr>
                                         </thead>
@@ -332,12 +332,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         var others = '';
         var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {
+            await load_receive_details();
             set_button_status(1, permission, 'fnc_receive_entry', 1);
-            //load_details();
         }
     }
 
-    function fnc_work_order_popup() {
+    async  function fnc_work_order_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
         {
             return;
@@ -352,7 +352,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 		var title = 'Work Order Search';
 		var page_link='/show_common_popup_view?page=receive_work_order_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
+		emailwindow.onclose=async function()
 		{
 			
 			try {
@@ -366,8 +366,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 if (data) {
                     $('#work_order_id').val(data.id);
                     $('#txt_work_order_no').val(data.wo_no);
-                    $('#cbo_company_name').val(data.company_id).trigger('change');
-                    $('#cbo_location_name').val(data.location_id).trigger('change');
+                    $('#cbo_company_name').val(data.company_id);
+                    await handleCompanyChange();
+                    $('#cbo_location_name').val(data.location_id);
+                    await handleLocationChange();
+                    await multirowStoreChange();
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
                     load_details();
                 }
@@ -516,7 +519,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             
     }
 
-    function fnc_sys_no_popup() {
+    async function fnc_sys_no_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
         {
             return;
@@ -529,7 +532,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 		var title = 'Receive Search';
 		var page_link='/show_common_popup_view?page=receive_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
+		emailwindow.onclose=async function()
 		{
 			
 			try {
@@ -540,19 +543,24 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 }
                 var data = JSON.parse(popup_value);
                 console.log(data);
-                if (data) {
-                    $('#update_id').val(data.id);
-                    $('#txt_sys_no').val(data.sys_number);
-                    $('#cbo_company_name').val(data.company_id).trigger('change');
-                    $('#cbo_location_name').val(data.location_id).trigger('change');
-                    $('#cbo_store_name').val(data.store_id).trigger('change');
-                    $('#txt_receive_date').val(data.receive_date);
-                    $('#txt_work_order_no').val(data.work_order_no);
-                    $('#work_order_id').val(data.work_order_id);
-                    $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                    load_receive_details();
-                    set_button_status(1, permission, 'fnc_receive_entry', 1);
-                }
+               
+                $('#update_id').val(data.id);
+                $('#txt_sys_no').val(data.sys_number);
+                $('#cbo_company_name').val(data.company_id);
+                console.log('company_id=',data.company_id);
+                await handleCompanyChange();
+                console.log('location_id=',data.location_id);
+                $('#cbo_location_name').val(data.location_id);
+                await handleLocationChange();
+                $('#cbo_store_name').val(data.store_id);
+                await multirowStoreChange();
+                $('#txt_receive_date').val(data.receive_date);
+                $('#txt_work_order_no').val(data.work_order_no);
+                $('#work_order_id').val(data.work_order_id);
+                $('#cbo_supplier').val(data.supplier_id).trigger('change');
+                await load_receive_details();
+                set_button_status(1, permission, 'fnc_receive_entry', 1);
+                
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -571,7 +579,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             .catch(error => console.error('Error loading details:', error));
     }
 
-    async function handleCompanyChange(row_id = null) {
+    async function handleCompanyChange(row_id = '') {
         try {
             var container = "location_div";
             if(row_id) {
@@ -583,7 +591,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         }
     }
 
-    async function handleLocationChange(row_id = null) {
+    async function handleLocationChange(row_id = '') {
         try {
             var container = "store_div";
             if(row_id) {
@@ -603,7 +611,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         }
     }
 
-    async function handleStoreChange(row_id = null) {
+    async function handleStoreChange(row_id = '') {
         try {
             var container = "floor_div";
             if(row_id) {
@@ -614,7 +622,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleFloorChange(row_id = null) {
+    async function handleFloorChange(row_id = '') {
         try {
             var name_extra = '';
             var container = "room_div";
@@ -627,7 +635,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleRoomChange(row_id = null) {
+    async function handleRoomChange(row_id = '') {
         try {
             var container = "rack_div";
             var name_extra = '';
@@ -640,7 +648,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleRackChange(row_id = null) {
+    async function handleRackChange(row_id = '') {
         try {
             var name_extra = '';
             var container = "shelf_div";
@@ -653,7 +661,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             console.error('Error loading dropdown:', error);
         }
     }
-    async function handleShelfChange(row_id = null) {
+    async function handleShelfChange(row_id = '') {
         try {
             var name_extra = '';
             var container = "bin_div";
