@@ -129,7 +129,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         <div class="form-group row">
                                             <label for="cbo_location_from" class="col-sm-4 col-form-label">Location</label>
                                             <div class="col-sm-8 d-flex align-items-center" id="location_div_from">
-                                                <select name="cbo_location_from" id="cbo_location_from" class="form-control w-100">
+                                                <select name="cbo_location_from" id="cbo_location_from" class="form-control w-100" onchange="handle_location_from_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibLocation::pluck('location_name', 'id') as $id => $location_name)
                                                     <option value="{{ $id }}">{{ $location_name }}</option>
@@ -139,8 +139,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_store_from" class="col-sm-4 col-form-label">Store</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_store_from" id="cbo_store_from" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="store_div_from">
+                                                <select name="cbo_store_from" id="cbo_store_from" class="form-control w-100" onchange="handle_store_from_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibStoreLocation::get() as $store)
                                                     <option value="{{ $store->id }}">{{ $store->store_name }}</option>
@@ -150,7 +150,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_floor_name_from" class="col-sm-4 col-form-label">Floor</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
+                                            <div class="col-sm-8 d-flex align-items-center" id="floor_div_from">
                                                 <select name="cbo_floor_name_from" id="cbo_floor_name_from" class="form-control w-100">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibFloor::get() as $floor)
@@ -353,7 +353,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 if (data) {
                     $('#txt_sys_no').val(data.transfer_no);
                     $('#update_id').val(data.id);
-                    $('#cbo_company_name').val(data.company_id).trigger('change');
+                    $('#cbo_company_name').val(data.company_id);
+                    await handleCompanyChange();
                     $('#txt_transfer_date').val(data.transfer_date);
                     $('#txt_requisition_no').val(data.requisition_no);
                     $('#hidden_requisition_id').val(data.requisition_id);
@@ -365,7 +366,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                     $('#txt_transfer_qty').val(data.transfer_qty);
                     $('#txt_sys_no').prop('readonly', true);
 
-                    load_transfer_dtls();
+                    await load_transfer_dtls();
+
                     set_button_status(1, permission, 'fnc_transfer', 1);
                 }
             } catch (error) {
@@ -444,7 +446,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
                 $('#txt_sys_no').val(data.transfer_no);
                 $('#update_id').val(data.id);
-                $('#cbo_company_name').val(data.company_id).trigger('change');
+                $('#cbo_company_name').val(data.company_id);
+                await handleCompanyChange();
                 $('#txt_transfer_date').val(data.transfer_date);
                 $('#txt_requisition_no').val(data.requisition_no);
                 $('#hidden_requisition_id').val(data.requisition_id);
@@ -456,7 +459,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 $('#txt_transfer_qty').val(data.transfer_qty);
                 $('#txt_sys_no').prop('readonly', true);
 
-                load_transfer_dtls();
+
+                await load_transfer_dtls();
 
                 set_button_status(1, permission, 'fnc_transfer', 1);
 
@@ -471,7 +475,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             release_freezing();
         }
     };
-
 
     function fnc_requisition_popup() {
         if (form_validation('cbo_company_name', 'Company Name') == false) {
@@ -562,6 +565,32 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 // field_manager(12);
             })
             .catch(error => console.error('Error loading details:', error));
+    }
+
+    async function handle_location_from_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'location_id': document.getElementById('cbo_location_from').value,
+                'onchange': 'handle_store_from_change()',
+                'field_id': 'cbo_store_from',
+                'field_name': 'cbo_store_from'
+            }), 'store_under_location', 'store_div_from');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handle_store_from_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'store_id': document.getElementById('cbo_store_from').value,
+                'onchange': ''
+            }), 'floor_under_store', 'floor_div_from');
+
+        } catch (error) {
+            console.error('Error loading dropdown:', error);
+        }
     }
 </script>
 @endsection
