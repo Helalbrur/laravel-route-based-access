@@ -256,7 +256,7 @@ class TransferController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    
+
     public function destroy(TransferMst $transferMaster)
     {
         DB::beginTransaction();
@@ -299,17 +299,44 @@ class TransferController extends Controller
         return view('order_management.order.transfer_search_list_view', compact('param'));
     }
 
+    public function load_transfer_mst_data($id)
+    {
+        $transfer = TransferMst::with(['requisition', 'product'])->find($id);
+
+        if (!$transfer) {
+            return response()->json(['code' => 404, 'message' => 'Transfer not found']);
+        }
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'id' => $transfer->id,
+                'transfer_no' => $transfer->transfer_no,
+                'company_id' => $transfer->company_id,
+                'transfer_date' => $transfer->transfer_date,
+                'requisition_id' => $transfer->requisition_id,
+                'requisition_no' => optional($transfer->requisition)->requisition_no,
+                'category_id' => $transfer->category_id,
+                'product_id' => $transfer->product_id,
+                'item_description' => optional($transfer->product)->item_description,
+                'current_stock' => $transfer->current_stock,
+                'avg_rate' => $transfer->avg_rate,
+                'transfer_qty' => $transfer->transfer_qty
+            ]
+        ]);
+    }
+
+
     public function load_transfer_dtls($id)
     {
         $transferFrom = InvTransaction::where('mst_id', $id)
             ->where('transaction_type', 6)
             ->first();
-    
+
         $transferTo = InvTransaction::where('mst_id', $id)
             ->where('transaction_type', 5)
             ->first();
-    
+
         return view('order_management.order.transfer_dtls', compact('transferFrom', 'transferTo'));
     }
-    
 }

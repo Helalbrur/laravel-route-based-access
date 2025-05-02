@@ -432,47 +432,46 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     }
 
     const load_php_data_to_form = async (update_id) => {
-
         freeze_window(3);
-
         try {
             reset_form('transfer_1', '', '', 1);
 
-            // Populate main header info
-            var columns = 'transfer_no*id*company_id*transfer_date*requisition_id*category_id*product_id*current_stock*avg_rate*transfer_qty';
-            var response = await populate_field_data('id', update_id, 'transfer_mst', columns, '{{csrf_token()}}', '');
+            const response = await fetch(`get_transfer_mst_data/${update_id}`);
+            const result = await response.json();
 
-            if (response.code === 18 && response.data) {
-                var data = response.data;
+            if (result.code === 200 && result.data) {
+                const data = result.data;
 
                 $('#txt_sys_no').val(data.transfer_no);
                 $('#update_id').val(data.id);
                 $('#cbo_company_name').val(data.company_id).trigger('change');
                 $('#txt_transfer_date').val(data.transfer_date);
+                $('#txt_requisition_no').val(data.requisition_no);
                 $('#hidden_requisition_id').val(data.requisition_id);
                 $('#cbo_item_category').val(data.category_id).trigger('change');
+                $('#txt_item_name').val(data.item_description);
                 $('#hidden_product_id').val(data.product_id);
                 $('#txt_current_stock').val(data.current_stock);
                 $('#txt_avg_rate').val(data.avg_rate);
                 $('#txt_transfer_qty').val(data.transfer_qty);
                 $('#txt_sys_no').prop('readonly', true);
 
-                // Now populate multiple rows for transfer details
                 load_transfer_dtls();
 
                 set_button_status(1, permission, 'fnc_transfer', 1);
 
             } else {
-                console.warn("Unexpected data format:", response);
+                console.warn("Unexpected response:", result);
             }
 
         } catch (error) {
-            console.error('Error occurred in load_php_data_to_form:', error);
+            console.error('Error in load_php_data_to_form:', error);
             showNotification('An unexpected error occurred.', 'warning');
         } finally {
             release_freezing();
         }
-    }
+    };
+
 
     function fnc_requisition_popup() {
         if (form_validation('cbo_company_name', 'Company Name') == false) {
