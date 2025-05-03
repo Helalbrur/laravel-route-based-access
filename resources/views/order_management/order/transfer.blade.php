@@ -474,7 +474,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         } finally {
             release_freezing();
         }
-    };
+    }
 
     function fnc_requisition_popup() {
         if (form_validation('cbo_company_name', 'Company Name') == false) {
@@ -585,11 +585,147 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         try {
             await load_drop_down_v2('load_drop_down', JSON.stringify({
                 'store_id': document.getElementById('cbo_store_from').value,
-                'onchange': ''
+                'onchange': 'handle_floor_from_change()',
+                'field_id': 'cbo_floor_name_from',
+                'field_name': 'cbo_floor_name_from'
             }), 'floor_under_store', 'floor_div_from');
 
         } catch (error) {
             console.error('Error loading dropdown:', error);
+        }
+    }
+
+    async function handle_floor_from_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'floor_id': document.getElementById('cbo_floor_name_from').value,
+                'onchange': 'handle_room_from_change()',
+                'field_id': 'cbo_room_no_from',
+                'field_name': 'cbo_room_no_from'
+            }), 'room_under_floor', 'room_div_from');
+        } catch (error) {
+            console.error('Error loading room dropdown:', error);
+        }
+    }
+
+    async function handle_room_from_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'room_id': document.getElementById('cbo_room_no_from').value,
+                'onchange': 'handle_rack_from_change()',
+                'field_id': 'cbo_rack_no_from',
+                'field_name': 'cbo_rack_no_from'
+            }), 'rack_under_room', 'rack_div_from');
+        } catch (error) {
+            console.error('Error loading rack dropdown:', error);
+        }
+    }
+
+    async function handle_rack_from_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'rack_id': document.getElementById('cbo_rack_no_from').value,
+                'onchange': 'handle_shelf_from_change()',
+                'field_id': 'cbo_shelf_no_from',
+                'field_name': 'cbo_shelf_no_from'
+            }), 'shelf_under_rack', 'shelf_div_from');
+        } catch (error) {
+            console.error('Error loading shelf dropdown:', error);
+        }
+    }
+
+    async function handle_shelf_from_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'shelf_id': document.getElementById('cbo_shelf_no_from').value,
+                'field_id': 'cbo_bin_no_from',
+                'field_name': 'cbo_bin_no_from'
+            }), 'bin_under_shelf', 'bin_div_from');
+        } catch (error) {
+            console.error('Error loading bin dropdown:', error);
+        }
+    }
+
+    async function handle_location_to_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'location_id': document.getElementById('cbo_location_to').value,
+                'onchange': 'handle_store_to_change()',
+                'field_id': 'cbo_store_to',
+                'field_name': 'cbo_store_to'
+            }), 'store_under_location', 'store_div_to');
+
+        } catch (error) {
+            console.error('Error loading store dropdown (to):', error);
+        }
+    }
+
+    async function handle_store_to_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'store_id': document.getElementById('cbo_store_to').value,
+                'onchange': 'handle_floor_to_change()',
+                'field_id': 'cbo_floor_name_to',
+                'field_name': 'cbo_floor_name_to'
+            }), 'floor_under_store', 'floor_div_to');
+
+        } catch (error) {
+            console.error('Error loading floor dropdown (to):', error);
+        }
+    }
+
+    async function handle_floor_to_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'floor_id': document.getElementById('cbo_floor_name_to').value,
+                'onchange': 'handle_room_to_change()',
+                'field_id': 'cbo_room_no_to',
+                'field_name': 'cbo_room_no_to'
+            }), 'room_under_floor', 'room_div_to');
+
+        } catch (error) {
+            console.error('Error loading room dropdown (to):', error);
+        }
+    }
+
+    async function handle_room_to_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'room_id': document.getElementById('cbo_room_no_to').value,
+                'onchange': 'handle_rack_to_change()',
+                'field_id': 'cbo_rack_no_to',
+                'field_name': 'cbo_rack_no_to'
+            }), 'rack_under_room', 'rack_div_to');
+
+        } catch (error) {
+            console.error('Error loading rack dropdown (to):', error);
+        }
+    }
+
+    async function handle_rack_to_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'rack_id': document.getElementById('cbo_rack_no_to').value,
+                'onchange': 'handle_shelf_to_change()',
+                'field_id': 'cbo_shelf_no_to',
+                'field_name': 'cbo_shelf_no_to'
+            }), 'shelf_under_rack', 'shelf_div_to');
+
+        } catch (error) {
+            console.error('Error loading shelf dropdown (to):', error);
+        }
+    }
+
+    async function handle_shelf_to_change() {
+        try {
+            await load_drop_down_v2('load_drop_down', JSON.stringify({
+                'shelf_id': document.getElementById('cbo_shelf_no_to').value,
+                'field_id': 'cbo_bin_no_to',
+                'field_name': 'cbo_bin_no_to'
+            }), 'bin_under_shelf', 'bin_div_to');
+
+        } catch (error) {
+            console.error('Error loading bin dropdown (to):', error);
         }
     }
 </script>
