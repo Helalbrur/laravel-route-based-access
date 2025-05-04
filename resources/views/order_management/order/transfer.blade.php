@@ -151,7 +151,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         <div class="form-group row">
                                             <label for="cbo_floor_name_from" class="col-sm-4 col-form-label">Floor</label>
                                             <div class="col-sm-8 d-flex align-items-center" id="floor_div_from">
-                                                <select name="cbo_floor_name_from" id="cbo_floor_name_from" class="form-control w-100">
+                                                <select name="cbo_floor_name_from" id="cbo_floor_name_from" class="form-control w-100" onchange="handle_floor_from_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibFloor::get() as $floor)
                                                     <option value="{{ $floor->id }}">{{ $floor->floor_name }}</option>
@@ -161,8 +161,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_room_no_from" class="col-sm-4 col-form-label">Room</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_room_no_from" id="cbo_room_no_from" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="room_div_from">
+                                                <select name="cbo_room_no_from" id="cbo_room_no_from" class="form-control w-100" onchange="handle_room_from_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('room_details')->get() as $room)
                                                     <option value="{{ $room->id }}">{{ $room->floor_room_rack_name }}</option>
@@ -172,8 +172,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_rack_no_from" class="col-sm-4 col-form-label">Rack</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_rack_no_from" id="cbo_rack_no_from" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center"  id="rack_div_from">
+                                                <select name="cbo_rack_no_from" id="cbo_rack_no_from" class="form-control w-100" onchange="handle_rack_from_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
                                                     <option value="{{ $rack->id }}">{{ $rack->floor_room_rack_name }}</option>
@@ -183,7 +183,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_shelf_no_from" class="col-sm-4 col-form-label">Shelf</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
+                                            <div class="col-sm-8 d-flex align-items-center" id="shelf_div_from" onchange="handle_shelf_from_change()">
                                                 <select name="cbo_shelf_no_from" id="cbo_shelf_no_from" class="form-control w-100">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('shelf_details')->get() as $shelf)
@@ -194,7 +194,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_bin_no_from" class="col-sm-4 col-form-label">Bin</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
+                                            <div class="col-sm-8 d-flex align-items-center" id="bin_div_from">
                                                 <select name="cbo_bin_no_from" id="cbo_bin_no_from" class="form-control w-100">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('bin_details')->get() as $bin)
@@ -216,7 +216,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         <div class="form-group row">
                                             <label for="cbo_location_to" class="col-sm-4 col-form-label">Location</label>
                                             <div class="col-sm-8 d-flex align-items-center" id="location_div_to">
-                                                <select name="cbo_location_to" id="cbo_location_to" class="form-control w-100">
+                                                <select name="cbo_location_to" id="cbo_location_to" class="form-control w-100" onchange="handle_location_to_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibLocation::pluck('location_name', 'id') as $id => $location_name)
                                                     <option value="{{ $id }}">{{ $location_name }}</option>
@@ -226,8 +226,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_store_to" class="col-sm-4 col-form-label">Store</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_store_to" id="cbo_store_to" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="store_div_to">
+                                                <select name="cbo_store_to" id="cbo_store_to" class="form-control w-100" onchange="handle_store_to_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibStoreLocation::get() as $store)
                                                     <option value="{{ $store->id }}">{{ $store->store_name }}</option>
@@ -237,8 +237,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_floor_name_to" class="col-sm-4 col-form-label">Floor</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_floor_name_to" id="cbo_floor_name_to" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="floor_div_to">
+                                                <select name="cbo_floor_name_to" id="cbo_floor_name_to" class="form-control w-100" onchange="handle_floor_to_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(App\Models\LibFloor::get() as $floor)
                                                     <option value="{{ $floor->id }}">{{ $floor->floor_name }}</option>
@@ -248,8 +248,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_room_no_to" class="col-sm-4 col-form-label">Room</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_room_no_to" id="cbo_room_no_to" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="room_div_to">
+                                                <select name="cbo_room_no_to" id="cbo_room_no_to" class="form-control w-100" onchange="handle_room_to_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('room_details')->get() as $room)
                                                     <option value="{{ $room->id }}">{{ $room->floor_room_rack_name }}</option>
@@ -259,8 +259,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_rack_no_to" class="col-sm-4 col-form-label">Rack</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_rack_no_to" id="cbo_rack_no_to" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="rack_div_to">
+                                                <select name="cbo_rack_no_to" id="cbo_rack_no_to" class="form-control w-100" onchange="handle_rack_to_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
                                                     <option value="{{ $rack->id }}">{{ $rack->floor_room_rack_name }}</option>
@@ -270,8 +270,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_shelf_no_to" class="col-sm-4 col-form-label">Shelf</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
-                                                <select name="cbo_shelf_no_to" id="cbo_shelf_no_to" class="form-control w-100">
+                                            <div class="col-sm-8 d-flex align-items-center" id="shelf_div_to">
+                                                <select name="cbo_shelf_no_to" id="cbo_shelf_no_to" class="form-control w-100" onchange="handle_shelf_to_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('shelf_details')->get() as $shelf)
                                                     <option value="{{ $shelf->id }}">{{ $shelf->floor_room_rack_name }}</option>
@@ -281,7 +281,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_bin_no_to" class="col-sm-4 col-form-label">Bin</label>
-                                            <div class="col-sm-8 d-flex align-items-center">
+                                            <div class="col-sm-8 d-flex align-items-center" id="bin_div_to">
                                                 <select name="cbo_bin_no_to" id="cbo_bin_no_to" class="form-control w-100">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('bin_details')->get() as $bin)

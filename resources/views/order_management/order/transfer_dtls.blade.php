@@ -7,7 +7,7 @@
             <div class="form-group row">
                 <label for="cbo_location_from" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-8 d-flex align-items-center" id="location_div_from">
-                    <select name="cbo_location_from" id="cbo_location_from" class="form-control w-100">
+                    <select name="cbo_location_from" id="cbo_location_from" class="form-control w-100" onchange="handle_location_from_change()">
                         <option value="0">SELECT</option>
                         @foreach(App\Models\LibLocation::pluck('location_name', 'id') as $id => $location_name)
                         <option value="{{ $id }}" {{ (isset($transferFrom) && $transferFrom->location_id == $id) ? 'selected' : '' }}>
@@ -19,8 +19,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_store_from" class="col-sm-4 col-form-label">Store</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_store_from" id="cbo_store_from" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="store_div_from">
+                    <select name="cbo_store_from" id="cbo_store_from" class="form-control w-100" onchange="handle_store_from_change()">
                         <option value="0">SELECT</option>
                         @foreach(App\Models\LibStoreLocation::get() as $store)
                         <option value="{{ $store->id }}" {{ (isset($transferFrom) && $transferFrom->store_id == $store->id) ? 'selected' : '' }}>
@@ -32,8 +32,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_floor_name_from" class="col-sm-4 col-form-label">Floor</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_floor_name_from" id="cbo_floor_name_from" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="floor_div_from">
+                    <select name="cbo_floor_name_from" id="cbo_floor_name_from" class="form-control w-100" onchange="handle_floor_from_change()">
                         <option value="0">SELECT</option>
                         @foreach(App\Models\LibFloor::get() as $floor)
                         <option value="{{ $floor->id }}" {{ (isset($transferFrom) && $transferFrom->floor_id == $floor->id) ? 'selected' : '' }}>
@@ -45,8 +45,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_room_no_from" class="col-sm-4 col-form-label">Room</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_room_no_from" id="cbo_room_no_from" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="room_div_from">
+                    <select name="cbo_room_no_from" id="cbo_room_no_from" class="form-control w-100" onchange="handle_room_from_change()">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('room_details')->get() as $room)
                         <option value="{{ $room->id }}" {{ (isset($transferFrom) && $transferFrom->room_id == $room->id) ? 'selected' : '' }}>
@@ -58,8 +58,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_rack_no_from" class="col-sm-4 col-form-label">Rack</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_rack_no_from" id="cbo_rack_no_from" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="rack_div_from">
+                    <select name="cbo_rack_no_from" id="cbo_rack_no_from" class="form-control w-100" onchange="handle_rack_from_change()">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
                         <option value="{{ $rack->id }}" {{ (isset($transferFrom) && $transferFrom->room_rack_id == $rack->id) ? 'selected' : '' }}>
@@ -71,8 +71,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_shelf_no_from" class="col-sm-4 col-form-label">Shelf</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_shelf_no_from" id="cbo_shelf_no_from" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="shelf_div_from">
+                    <select name="cbo_shelf_no_from" id="cbo_shelf_no_from" class="form-control w-100" onchange="handle_shelf_from_change()">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('shelf_details')->get() as $shelf)
                         <option value="{{ $shelf->id }}" {{ (isset($transferFrom) && $transferFrom->room_self_id == $shelf->id) ? 'selected' : '' }}>
@@ -84,7 +84,7 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_bin_no_from" class="col-sm-4 col-form-label">Bin</label>
-                <div class="col-sm-8 d-flex align-items-center">
+                <div class="col-sm-8 d-flex align-items-center" id="bin_div_from">
                     <select name="cbo_bin_no_from" id="cbo_bin_no_from" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('bin_details')->get() as $bin)
@@ -109,7 +109,7 @@
             <div class="form-group row">
                 <label for="cbo_location_to" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-8 d-flex align-items-center" id="location_div_to">
-                    <select name="cbo_location_to" id="cbo_location_to" class="form-control w-100">
+                    <select name="cbo_location_to" id="cbo_location_to" class="form-control w-100" onchange="handle_location_to_change()">
                         <option value="0">SELECT</option>
                         @foreach(App\Models\LibLocation::pluck('location_name', 'id') as $id => $location_name)
                         <option value="{{ $id }}" {{ (isset($transferTo) && $transferTo->location_id == $id) ? 'selected' : '' }}>
@@ -121,8 +121,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_store_to" class="col-sm-4 col-form-label">Store</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_store_to" id="cbo_store_to" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="store_div_to">
+                    <select name="cbo_store_to" id="cbo_store_to" class="form-control w-100" onchange="handle_store_to_change()">
                         <option value="0">SELECT</option>
                         @foreach(App\Models\LibStoreLocation::get() as $store)
                         <option value="{{ $store->id }}" {{ (isset($transferTo) && $transferTo->store_id == $store->id) ? 'selected' : '' }}>
@@ -134,8 +134,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_floor_name_to" class="col-sm-4 col-form-label">Floor</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_floor_name_to" id="cbo_floor_name_to" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="floor_div_to">
+                    <select name="cbo_floor_name_to" id="cbo_floor_name_to" class="form-control w-100" onchange="handle_floor_to_change()">
                         <option value="0">SELECT</option>
                         @foreach(App\Models\LibFloor::get() as $floor)
                         <option value="{{ $floor->id }}" {{ (isset($transferTo) && $transferTo->floor_id == $floor->id) ? 'selected' : '' }}>
@@ -147,8 +147,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_room_no_to" class="col-sm-4 col-form-label">Room</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_room_no_to" id="cbo_room_no_to" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="room_div_to">
+                    <select name="cbo_room_no_to" id="cbo_room_no_to" class="form-control w-100" onchange="handle_room_to_change()">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('room_details')->get() as $room)
                         <option value="{{ $room->id }}" {{ (isset($transferTo) && $transferTo->room_id == $room->id) ? 'selected' : '' }}>
@@ -160,8 +160,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_rack_no_to" class="col-sm-4 col-form-label">Rack</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_rack_no_to" id="cbo_rack_no_to" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="rack_div_to">
+                    <select name="cbo_rack_no_to" id="cbo_rack_no_to" class="form-control w-100" onchange="handle_rack_to_change()">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
                         <option value="{{ $rack->id }}" {{ (isset($transferTo) && $transferTo->room_rack_id == $rack->id) ? 'selected' : '' }}>
@@ -173,8 +173,8 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_shelf_no_to" class="col-sm-4 col-form-label">Shelf</label>
-                <div class="col-sm-8 d-flex align-items-center">
-                    <select name="cbo_shelf_no_to" id="cbo_shelf_no_to" class="form-control w-100">
+                <div class="col-sm-8 d-flex align-items-center" id="shelf_div_to">
+                    <select name="cbo_shelf_no_to" id="cbo_shelf_no_to" class="form-control w-100" onchange="handle_shelf_to_change()">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('shelf_details')->get() as $shelf)
                         <option value="{{ $shelf->id }}" {{ (isset($transferTo) && $transferTo->room_self_id == $shelf->id) ? 'selected' : '' }}>
@@ -186,7 +186,7 @@
             </div>
             <div class="form-group row">
                 <label for="cbo_bin_no_to" class="col-sm-4 col-form-label">Bin</label>
-                <div class="col-sm-8 d-flex align-items-center">
+                <div class="col-sm-8 d-flex align-items-center" id="bin_div_to">
                     <select name="cbo_bin_no_to" id="cbo_bin_no_to" class="form-control w-100">
                         <option value="0">SELECT</option>
                         @foreach(\App\Models\LibFloorRoomRackMst::whereHas('bin_details')->get() as $bin)
