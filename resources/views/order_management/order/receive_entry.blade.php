@@ -372,7 +372,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     await handleLocationChange();
                     await multirowStoreChange();
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                    load_details();
+                   await load_details();
+                    setup_date();
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -380,6 +381,26 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             }
 		}
     }
+
+    function setup_date() {
+        
+        var row_num = $('#dtls_list_view tbody tr').length;
+        console.log('Test'+row_num);  
+        for (let index = 1; index <= row_num; index++) {
+            var input = $('#txt_expire_date_' + index);
+            if (input.length && !input[0]._flatpickr) { // Check element exists and flatpickr is not already initialized
+                flatpickr(input[0], {
+                    dateFormat: "Y-m-d",
+                    allowInput: true,
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    defaultDate: new Date()
+                });
+            }
+        }
+    }
+
+
 
     function add_row(insertIndex) {
         var rows = $("#dtls_list_view tbody tr");
@@ -559,6 +580,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 $('#work_order_id').val(data.work_order_id);
                 $('#cbo_supplier').val(data.supplier_id).trigger('change');
                 await load_receive_details();
+                setup_date();
                 set_button_status(1, permission, 'fnc_receive_entry', 1);
                 
             } catch (error) {

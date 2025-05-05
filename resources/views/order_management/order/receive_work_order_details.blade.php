@@ -21,7 +21,7 @@
             <th class="form-group" width="">Action</th>
         </tr>
     </thead>
-    <tbody >
+    <tbody>
         <?php 
             use App\Models\LibFloorRoomRackMst;
             $floors = App\Models\LibFloor::get();
