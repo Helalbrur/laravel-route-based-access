@@ -66,7 +66,7 @@ $cbo_category_id    = $param['category_id'] ?? 0;
                                         item_code: document.getElementById('txt_item_code').value,
                                         item_origin: document.getElementById('txt_origin').value,
                                         generic_id: document.getElementById('cbo_generic_name').value
-                                    }), 'order/item_search_list_view', 'search_div', '', 'setFilterGrid(\'tbl_po_list\',-1)')" style="width:70px;" />
+                                    }), 'order/requisition_item_search_list_view', 'search_div', '', 'setFilterGrid(\'tbl_po_list\',-1)')" style="width:70px;" />
                                 </td>
                             </tr>
                         </tbody>

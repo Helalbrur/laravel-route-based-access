@@ -175,13 +175,13 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/work_order_search_list_view',[WorkOrderMstController::class,'work_order_search_list_view']);
     Route::get('/work_order_details/{id}',[WorkOrderMstController::class,'work_order_details']);
 
-    Route::get('/item_search_list_view',[RequisitionMstController::class,'item_search_list_view']);
+    Route::get('/requisition_item_search_list_view',[RequisitionMstController::class,'requisition_item_list_view']);
     Route::get('/requisition_search_list_view',[RequisitionMstController::class,'requisition_search_list_view']);
     Route::get('/requisition_details/{id}',[RequisitionMstController::class,'requisition_details']);
     Route::get('/req_details_from_issue/{id}',[RequisitionMstController::class,'req_details_from_issue']);
 
     Route::get('/transfer_search_list_view',[TransferController::class,'transfer_search_list_view']);
-    Route::get('/item_search_list_view',[TransferController::class,'transfer_item_list_view']);
+    Route::get('/transfer_item_search_list_view',[TransferController::class,'transfer_item_list_view']);
     Route::get('/requisition_search_list_view',[TransferController::class,'requisition_search_list_view']);
     Route::get('/transfer_dtls/{id}',[TransferController::class,'load_transfer_dtls']);
     Route::get('/get_transfer_mst_data/{id}',[TransferController::class,'load_transfer_mst_data']);

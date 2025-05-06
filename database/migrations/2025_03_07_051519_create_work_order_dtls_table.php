@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('uom');
             $table->unsignedBigInteger('category_id');
             $table->double('quantity',15,6)->default(0);
-            $table->double('required_quantity',15,6)->default(0);
+            $table->double('required_quantity', 15, 6)->default(0)->nullable();
             $table->double('rate',15,6)->default(0);
             $table->double('amount',15,6)->default(0);
             $table->double('discount',15,6)->default(0);

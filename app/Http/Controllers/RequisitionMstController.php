@@ -224,7 +224,7 @@ class RequisitionMstController extends Controller
         //
     }
 
-    public function item_search_list_view(Request $request)
+    public function requisition_item_list_view(Request $request)
     {
         $param = $request->query('param') ?? '';
         return view('order_management.order.item_search_list_view', compact('param'));
