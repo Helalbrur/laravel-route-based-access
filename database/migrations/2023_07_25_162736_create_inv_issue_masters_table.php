@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('inv_issue_master', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('compoany_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('sys_number_prefix');
             $table->string('sys_number_prefix_num');
             $table->string('sys_number');

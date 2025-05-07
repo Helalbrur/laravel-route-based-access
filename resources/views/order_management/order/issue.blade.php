@@ -91,7 +91,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                                 <select style="width: 100%" name="cbo_issue_basis" id="cbo_issue_basis"  class="form-control" onchange="handleIssueBasisChange()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(get_issue_basis() as $id => $name)
-                                                        <option value="{{ $id }}">{{ $name }}</option>
+                                                        @if(!in_array($id, [3]))
+                                                            <option value="{{ $id }}">{{ $name }}</option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                             </div>

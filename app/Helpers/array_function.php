@@ -176,7 +176,7 @@ function get_generic_name()
 
 function get_issue_basis()
 {
-    return array(1 => "Independent", 2 => "Requisition");
+    return array(1 => "Independent", 2 => "Requisition", 3 => "Work Order");
 }
 
 ?>
