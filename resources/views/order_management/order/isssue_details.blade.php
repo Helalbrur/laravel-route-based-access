@@ -41,7 +41,7 @@
                     </select>
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="">
+                    <input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="{{ $tran->lot }}">
                 </td>
                 <td class="form-group">
                     <select name="cbo_uom_{{ $i }}" id="cbo_uom_{{ $i }}" class="form-control">

@@ -536,6 +536,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         var amount = (rate * order_qty * 1000000) / 1000000;
         $("#txt_item_total_amount_"+row_id).val(amount);
     }
+
     async function fnc_sys_no_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
         {
@@ -571,13 +572,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 await handleLocationChange();
                 $('#cbo_store_name').val(data.store_id);
                 await multirowStoreChange();
-                $('#txt_receive_date').val(data.receive_date);
-                $('#txt_work_order_no').val(data.work_order_no);
-                $('#work_order_id').val(data.work_order_id);
-                $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                await load_receive_details();
+                $('#txt_issue_date').val(data.date);
+                $('#cbo_issue_basis').val(data.issue_basis).trigger('change');
+                $('#txt_requisition_no').val(data.requisition_no);
+                $('#requisition_id').val(data.requisition_id);
+                $('#txt_remarks').val(data.remarks);
+                await load_issue_details();
                 setup_date();
-                set_button_status(1, permission, 'fnc_receive_entry', 1);
+                set_button_status(1, permission, 'fnc_issue_dtls', 1);
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -585,23 +587,58 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 		}
     }
 
-    function fn_item_popup(row_id) {
-        if(form_validation('cbo_supplier','Supplier')==false)
-        {
-            return;
+    async function load_issue_details() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/isssue_details/${$('#update_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('div_dtls_list_view').innerHTML = html;
+                initializeSelect2();
+                field_manager(12);
+                var row_num = $('#dtls_list_view tbody tr').length;
+                for (let index = 1; index <= row_num; index++) {
+                    calculate_amount(index);
+                }
+            })
+            .catch(error => console.error('Error loading details:', error));
+            
+    }
+
+
+    function setup_date() {
+        
+        var row_num = $('#dtls_list_view tbody tr').length;
+        console.log('Test'+row_num);  
+        for (let index = 1; index <= row_num; index++) {
+            var input = $('#txt_expire_date_' + index);
+            if (input.length && !input[0]._flatpickr) { // Check element exists and flatpickr is not already initialized
+                flatpickr(input[0], {
+                    dateFormat: "Y-m-d",
+                    allowInput: true,
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    defaultDate: new Date()
+                });
+            }
         }
-        var supplier_id = $("#cbo_supplier").val();
+    }
+
+    function fn_item_popup(row_id) {
+        // if(form_validation('cbo_supplier','Supplier')==false)
+        // {
+        //     return;
+        // }
         var item_id = $('#hidden_product_id_' + row_id).val();
         var item_name = $('#txt_item_name_' + row_id).val();
         var item_code = $('#txt_item_code_' + row_id).val();
-        var item_category = $('#txt_item_category_' + row_id).val();
+        //var item_category = $('#txt_item_category_' + row_id).val();
 
        
         var param = JSON.stringify({
-            'supplier_id': supplier_id,
+            //'supplier_id': supplier_id,
             'item_id': item_id,
             'item_name': item_name,
-            'category_id': item_category,
+            //'category_id': item_category,
             'item_code': item_code
            
         });
@@ -698,6 +735,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 $('#txt_requisition_no').val(data.requisition_no);
                 $('#requisition_id').val(data.id);
                 await load_requisition_details();
+                setup_date();
             } catch (error) {
                 console.error('Error:', error);
             }

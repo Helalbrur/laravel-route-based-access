@@ -95,6 +95,8 @@ class InvIssueMasterController extends Controller
                     'mst_id' => $invIssueMaster->id,
                     'transaction_type' => 2,
                     'product_id' => $product_id,
+                    'location_id' => $request->cbo_location_name,
+                    'store_id' => $request->cbo_store_name,
                     'order_uom' => $product->order_uom ?? $request["cbo_order_uom_$i"],
                     'order_qnty' => $order_qnty, 
                     'order_rate' => $cons_rate,
@@ -199,6 +201,8 @@ class InvIssueMasterController extends Controller
                     'mst_id' => $invIssueMaster->id,
                     'transaction_type' => 2,
                     'product_id' => $product_id,
+                    'location_id' => $request->cbo_location_name,
+                    'store_id' => $request->cbo_store_name,
                     'order_qnty' => $cons_qnty,
                     'order_rate' => $cons_rate,
                     'order_amount' => $cons_amount,
@@ -236,7 +240,7 @@ class InvIssueMasterController extends Controller
 
             DB::commit();
             return response()->json([
-                'code' => 0,
+                'code' => 1,
                 'message' => 'Issue Updated Successfully',
                 'data' => $invIssueMaster,
                 'sys_number' => $invIssueMaster->sys_number,
@@ -286,15 +290,17 @@ class InvIssueMasterController extends Controller
      * @param int $id The ID of the issue master record
      * @return \Illuminate\Http\Response
      */
-    public function isssue_details($id)
-    {
-        $trans = InvTransaction::where('mst_id', $id)->get();
-        return view('order_management.order.isssue_details',compact('trans'));
-    }
+
 
     public function issue_search_list_view(Request $request)
     {
         $param = $request->query('param') ?? '';
         return view('order_management.order.issue_search_list_view',compact('param'));
+    }
+
+    public function isssue_details($id)
+    {
+        $trans = InvTransaction::where('mst_id', $id)->where('transaction_type', '=', 2)->get();
+        return view('order_management.order.isssue_details',compact('trans'));
     }
 }

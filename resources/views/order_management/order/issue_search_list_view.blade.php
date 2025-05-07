@@ -8,7 +8,7 @@
     $to_date        = $data['txt_to_date'];
     
     $query_builder = App\Models\InvIssueMaster::query();
-    dd($query_builder->toSql());
+
     if(!empty($company_id))
     {
         $query_builder = $query_builder->where('company_id', $company_id);
@@ -24,7 +24,7 @@
         $query_builder = $query_builder->whereBetween('date', [$from_date, $to_date]);
     }
     
-    $issue = $query_builder->get();
+    $issuess = $query_builder->get();
     
 ?>
 <table id="list_view" class="table table-striped" style="width: 100%">
