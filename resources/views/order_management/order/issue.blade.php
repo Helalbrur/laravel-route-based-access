@@ -281,7 +281,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
     function fnc_issue_dtls(operation) {
-        if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier*cbo_pay_mode', 'Company Name*Location*Work Order Date*Supplier*Pay Mode') == false) {
+        if (form_validation('cbo_company_name*cbo_location_name*cbo_store_name*txt_issue_date*cbo_issue_basis', 'Company Name*Location*Store Name*Date*Issue Basis') == false) {
             return;
         } else {
             var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_store_name,txt_issue_date,cbo_issue_basis,txt_requisition_no,requisition_id,txt_remarks');
@@ -349,22 +349,23 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
        
         freeze_window(3);
         reset_form('workorder_1', '', '', 1);
-        var columns = 'wo_no*id*company_id*location_id*supplier_id*pay_mode*wo_date*delivery_date*source*remarks';
-        var response = await populate_field_data('id', update_id, 'work_order_mst', columns, '{{csrf_token()}}', '');
+        var columns = 'sys_number*id*company_id*location_id*store_id*date*issue_basis*requisition_no*requisition_id*remarks';
+        var response = await populate_field_data('id', update_id, 'inv_issue_master', columns, '{{csrf_token()}}', '');
         if (response.code === 18 && response.data) {
             var data = response.data;
-            document.getElementById('txt_sys_no').value = data.wo_no;
-            document.getElementById('update_id').value = data.id;
+            $('#update_id').val(data.id);
+            $('#txt_sys_no').val(data.sys_number);
             document.getElementById('cbo_company_name').value = data.company_id;
             await handleCompanyChange(); // Await the company change
-            $('#cbo_location_name').val(data.location_id).trigger('change');
-            $('#cbo_supplier').val(data.supplier_id).trigger('change');
-            $('#cbo_pay_mode').val(data.pay_mode).trigger('change');
-            $('#cbo_source').val(data.source).trigger('change');
-            document.getElementById('txt_work_order_date').value = data.wo_date;
-            document.getElementById('txt_delivery_date').value = data.delivery_date;
-            document.getElementById('txt_remarks').value = data.remarks;
-            document.getElementById('txt_sys_no').readOnly = true;
+            $('#cbo_location_name').val(data.location_id);
+            await handleLocationChange();
+            $('#cbo_store_name').val(data.store_id);
+            await multipleStoreChange();
+            $('#cbo_issue_basis').val(data.issue_basis).trigger('change');
+            $('#txt_issue_date').val(data.date);
+            $('#txt_requisition_no').val(data.requisition_no);
+            $('#requisition_id').val(data.requisition_id);
+            $('#txt_remarks').val(data.remarks);
             load_details();
             set_button_status(1, permission, 'fnc_issue_dtls', 1);
         } else {
@@ -535,22 +536,20 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         var amount = (rate * order_qty * 1000000) / 1000000;
         $("#txt_item_total_amount_"+row_id).val(amount);
     }
-
-    function fnc_sys_no_popup() {
+    async function fnc_sys_no_popup() {
         if(form_validation('cbo_company_name','Company Name')==false)
         {
             return;
         }
         
         var param = JSON.stringify({
-            'supplier_id': $("#cbo_supplier").val(),
             'company_id': $("#cbo_company_name").val()
         });
-        console.log(param);
-		var title = 'Work Order Search';
-		var page_link='/show_common_popup_view?page=work_order_search&param='+param;
+        //console.log(param);
+		var title = 'Issue Search';
+		var page_link='/show_common_popup_view?page=issue_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose= async function()
+		emailwindow.onclose=async function()
 		{
 			
 			try {
@@ -561,27 +560,27 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 }
                 var data = JSON.parse(popup_value);
                 console.log(data);
-                if (data) {
-                    $('#update_id').val(data.id);
-                    
-                    $('#txt_sys_no').val(data.sys_number);
-                    document.getElementById('cbo_company_name').value = data.company_id;
-                    await handleCompanyChange(); // Await the company change
-                    $('#cbo_location_name').val(data.location_id);
-                    await handleLocationChange();
-                    $('#cbo_store_name').val(data.store_id);
-                    await multipleStoreChange();
-                    $('#issue_basis').val(data.cbo_issue_basis).trigger('change');
-                    $('#txt_issue_date').val(data.date);
-                    $('#txt_requisition_no').val(data.requisition_no);
-                    $('#requisition_id').val(data.requisition_id);
-                    $('#txt_remarks').val(data.remarks);
-                    load_details();
-                    set_button_status(1, permission, 'fnc_issue_dtls', 1);
-                }
+               
+                $('#update_id').val(data.id);
+                $('#txt_sys_no').val(data.sys_number);
+                $('#cbo_company_name').val(data.company_id);
+                console.log('company_id=',data.company_id);
+                await handleCompanyChange();
+                console.log('location_id=',data.location_id);
+                $('#cbo_location_name').val(data.location_id);
+                await handleLocationChange();
+                $('#cbo_store_name').val(data.store_id);
+                await multirowStoreChange();
+                $('#txt_receive_date').val(data.receive_date);
+                $('#txt_work_order_no').val(data.work_order_no);
+                $('#work_order_id').val(data.work_order_id);
+                $('#cbo_supplier').val(data.supplier_id).trigger('change');
+                await load_receive_details();
+                setup_date();
+                set_button_status(1, permission, 'fnc_receive_entry', 1);
+                
             } catch (error) {
                 console.error('Error:', error);
-                
             }
 		}
     }

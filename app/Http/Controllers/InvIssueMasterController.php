@@ -46,7 +46,7 @@ class InvIssueMasterController extends Controller
         try
         {
             
-            // Generate system no for receive
+            // Generate system no for issue
 
             $system_no_info=generate_system_no( $request->cbo_company_name, '', 'GIS', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_issue_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
 
@@ -124,7 +124,7 @@ class InvIssueMasterController extends Controller
             DB::commit();
             return response()->json([
                 'code'=>0,
-                'message'=>'Receive Created Successfully',
+                'message'=>'Issue Created Successfully',
                 'data'=>$invIssueMaster,
                 'sys_number' => $invIssueMaster->sys_number, 
                 'id' => $invIssueMaster->id
@@ -290,5 +290,11 @@ class InvIssueMasterController extends Controller
     {
         $trans = InvTransaction::where('mst_id', $id)->get();
         return view('order_management.order.isssue_details',compact('trans'));
+    }
+
+    public function issue_search_list_view(Request $request)
+    {
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.issue_search_list_view',compact('param'));
     }
 }
