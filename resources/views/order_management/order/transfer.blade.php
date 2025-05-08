@@ -116,6 +116,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 </div>
             </div>
 
+            <div class="card col-md-10 mx-auto" style="background-color: rgb(241, 241, 241);">
+                <div class="card-body">
+                    <div class="card-text">
+                        <div class="row justify-content-center" id="requisition_dtls_div">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-body">
                     <div class="card-text">
@@ -507,10 +517,33 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
                     $('#hidden_requisition_id').val(id).trigger('change');
                     $('#txt_requisition_no').val(requisition_no).trigger('change');
+
+                    load_requisition_dtls_list_view(id);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
+        }
+    }
+
+    async function load_requisition_dtls_list_view(requisition_id) {
+        //fetch data from server as html and put in a div that id requisition_dtls_list_view
+        await fetch(`/order/show_requisition_dtls_list_view/${requisition_id}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('requisition_dtls_div').innerHTML = html;
+            })
+            .catch(error => console.error('Error loading requisition details:', error));
+    }
+
+    function set_requisition_dtls_data(param) {
+        try {
+            const data = typeof param === 'string' ? JSON.parse(param) : param;
+            $('#cbo_item_category').val(data.category_id).trigger('change');
+            $('#txt_item_name').val(data.item_description);
+            $('#hidden_product_id').val(data.product_id);
+        } catch (e) {
+            console.error('Error processing parameter:', e);
         }
     }
 

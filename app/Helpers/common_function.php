@@ -1167,5 +1167,39 @@ function generate_system_no($company, $location, $category, $year, $num_length, 
 }
 
 
+function CurrentStock($param = array())
+{
+    $query = App\Models\InvTransaction::selectRaw('
+                SUM(
+                    CASE
+                        WHEN transaction_type IN (1, 4, 5) THEN cons_qnty
+                        ELSE 0
+                    END)
+                - SUM(
+                    CASE
+                        WHEN transaction_type IN (2, 3, 6) THEN cons_qnty
+                        ELSE 0
+                    END) AS balance,
+                SUM(
+                    CASE
+                        WHEN transaction_type IN (1, 4, 5) THEN cons_amount
+                        ELSE 0
+                    END)
+                - SUM(
+                    CASE
+                        WHEN transaction_type IN (2, 3, 6) THEN cons_amount
+                        ELSE 0
+                    END) AS amount');
 
-?>
+    $query->where('product_id', $param['product_id']);
+
+    if (!empty($param['location_id'])) {
+        $query->where('location_id', $param['location_id']);
+    }
+    
+    if (!empty($param['store_id'])) {
+        $query->where('store_id', $param['store_id']);
+    }
+
+    return $query->first();
+}

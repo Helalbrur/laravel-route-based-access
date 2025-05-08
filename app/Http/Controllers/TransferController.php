@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TransferMst;
 use App\Models\InvTransaction;
+use App\Models\RequisitionDtls;
 use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -338,5 +339,14 @@ class TransferController extends Controller
             ->first();
 
         return view('order_management.order.transfer_dtls', compact('transferFrom', 'transferTo'));
+    }
+
+    public function requisition_dlts_list_view($requisition_id)
+    {
+        $requisition_dtls = RequisitionDtls::with(['product', 'category', 'uom'])
+            ->where('mst_id', $requisition_id)
+            ->get();
+    
+        return view('order_management.order.requisition_dtls_list', compact('requisition_dtls'));
     }
 }

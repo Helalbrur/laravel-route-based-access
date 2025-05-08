@@ -12,7 +12,7 @@
     </thead>
     <tbody>
         <?php $i = 1; ?>
-        @foreach ($requisitions as $requisition)
+        @foreach ($requisition_dtls as $requisition)
         <tr id="tr_{{ $i }}">
             <td class="form-group" id="sl_{{ $i }}">{{ $i }}</td>
             <td class="form-group">
