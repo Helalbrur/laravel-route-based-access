@@ -182,7 +182,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                                         </div>
                                         <div class="form-group row">
                                             <label for="cbo_rack_no_from" class="col-sm-4 col-form-label">Rack</label>
-                                            <div class="col-sm-8 d-flex align-items-center"  id="rack_div_from">
+                                            <div class="col-sm-8 d-flex align-items-center" id="rack_div_from">
                                                 <select name="cbo_rack_no_from" id="cbo_rack_no_from" class="form-control w-100" onchange="handle_rack_from_change()">
                                                     <option value="0">SELECT</option>
                                                     @foreach(\App\Models\LibFloorRoomRackMst::whereHas('rack_details')->get() as $rack)
@@ -391,14 +391,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         try {
             await load_drop_down_v2('load_drop_down', JSON.stringify({
                 'company_id': document.getElementById('cbo_company_name').value,
-                'onchange': '',
+                'onchange': 'handle_location_from_change()',
                 'field_name': 'cbo_location_from',
                 'field_id': 'cbo_location_from',
             }), 'location_under_company', 'location_div_from');
 
             await load_drop_down_v2('load_drop_down', JSON.stringify({
                 'company_id': document.getElementById('cbo_company_name').value,
-                'onchange': '',
+                'onchange': 'handle_location_from_change()',
                 'field_name': 'cbo_location_to',
                 'field_id': 'cbo_location_to',
             }), 'location_under_company', 'location_div_to');
@@ -486,6 +486,58 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         }
     }
 
+    function fn_item_popup(row_id) {
+
+        var param = JSON.stringify({
+            'item_category_id': $("#cbo_item_category").val()
+        });
+
+        var title = 'Item Search';
+        var page_link = '/show_common_popup_view?page=transfer_item_search&param=' + param;
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+        emailwindow.onclose = function() {
+
+            try {
+
+                let popupField = this.contentDoc?.getElementById("popup_value");
+                if (!popupField || popupField.value === '') {
+                    return;
+                }
+
+                let data = JSON.parse(popupField.value);
+                console.log(data);
+
+                if (data) {
+                    let {
+                        id,
+                        item_category_id,
+                        item_description,
+                        current_stock
+                    } = data;
+
+                    $('#hidden_product_id').val(id).trigger('change');
+                    $('#cbo_item_category').val(item_category_id).trigger('change');
+                    $('#txt_item_name').val(item_description).trigger('change');
+                    $('#txt_current_stock').val(current_stock).trigger('change');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }
+
+    async function load_transfer_dtls() {
+        //fetch data from server as html and put in a div that id div_dtls_list_view
+        await fetch(`/order/transfer_dtls/${$('#update_id').val()}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('transfer_dtls_div').innerHTML = html;
+                initializeSelect2();
+            })
+            .catch(error => console.error('Error loading details:', error));
+    }
+
     function fnc_requisition_popup() {
         if (form_validation('cbo_company_name', 'Company Name') == false) {
             return;
@@ -542,62 +594,71 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
+
+            handleDropdownChange(data.product_id, 'product_id');
+
         } catch (e) {
             console.error('Error processing parameter:', e);
         }
     }
 
-    function fn_item_popup(row_id) {
+    function set_requisition_dtls_data(param) {
+        try {
+            const data = typeof param === 'string' ? JSON.parse(param) : param;
+            $('#cbo_item_category').val(data.category_id).trigger('change');
+            $('#txt_item_name').val(data.item_description);
+            $('#hidden_product_id').val(data.product_id);
 
-        var param = JSON.stringify({
-            'item_category_id': $("#cbo_item_category").val()
-        });
+            handleDropdownChange(data.product_id, 'product_id');
 
-        var title = 'Item Search';
-        var page_link = '/show_common_popup_view?page=transfer_item_search&param=' + param;
-        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
-        emailwindow.onclose = function() {
-
-            try {
-
-                let popupField = this.contentDoc?.getElementById("popup_value");
-                if (!popupField || popupField.value === '') {
-                    return;
-                }
-
-                let data = JSON.parse(popupField.value);
-                console.log(data);
-
-                if (data) {
-                    let {
-                        id,
-                        item_category_id,
-                        item_description,
-                        current_stock
-                    } = data;
-
-                    $('#hidden_product_id').val(id).trigger('change');
-                    $('#cbo_item_category').val(item_category_id).trigger('change');
-                    $('#txt_item_name').val(item_description).trigger('change');
-                    $('#txt_current_stock').val(current_stock).trigger('change');
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-            }
+        } catch (e) {
+            console.error('Error processing parameter:', e);
         }
     }
 
-    async function load_transfer_dtls() {
-        //fetch data from server as html and put in a div that id div_dtls_list_view
-        await fetch(`/order/transfer_dtls/${$('#update_id').val()}`)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('transfer_dtls_div').innerHTML = html;
-                initializeSelect2();
-                // field_manager(12);
+    // Store selected values globally
+    let stockParams = {
+        product_id: 0,
+        location_id: 0,
+        store_id: 0,
+        floor_id: 0,
+        room_id: 0,
+        room_rack_id: 0,
+        room_self_id: 0,
+        room_bin_id: 0
+    };
+
+    function handleDropdownChange(element, paramName) {
+
+        const value = element;
+        stockParams[paramName] = value;
+        console.log(`Updated ${paramName} to ${value}`);
+        calculateStock();
+    }
+
+    function calculateStock() {
+        // Only proceed if we have a product_id
+        if (!stockParams.product_id) return;
+
+        const url = '{{ URL::to("order/calculate-stock") }}';
+
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(stockParams)
             })
-            .catch(error => console.error('Error loading details:', error));
+            .then(response => {
+                console.log('Raw response:', response);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Current stock:', data);
+                // Example: document.getElementById('stock-balance').innerText = data.balance;
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     async function handle_location_from_change() {
@@ -608,6 +669,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 'field_id': 'cbo_store_from',
                 'field_name': 'cbo_store_from'
             }), 'store_under_location', 'store_div_from');
+
+            handleDropdownChange(document.getElementById('cbo_location_from').value, 'location_id');
 
         } catch (error) {
             console.error('Error loading dropdown:', error);
@@ -623,6 +686,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 'field_name': 'cbo_floor_name_from'
             }), 'floor_under_store', 'floor_div_from');
 
+            handleDropdownChange(document.getElementById('cbo_store_from').value, 'store_id');
+
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
@@ -636,6 +701,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 'field_id': 'cbo_room_no_from',
                 'field_name': 'cbo_room_no_from'
             }), 'room_under_floor', 'room_div_from');
+
+            handleDropdownChange(document.getElementById('cbo_floor_name_from').value, 'floor_id');
+
         } catch (error) {
             console.error('Error loading room dropdown:', error);
         }
@@ -649,6 +717,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 'field_id': 'cbo_rack_no_from',
                 'field_name': 'cbo_rack_no_from'
             }), 'rack_under_room', 'rack_div_from');
+
+            handleDropdownChange(document.getElementById('cbo_room_no_from').value, 'room_id');
+
         } catch (error) {
             console.error('Error loading rack dropdown:', error);
         }
@@ -662,6 +733,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 'field_id': 'cbo_shelf_no_from',
                 'field_name': 'cbo_shelf_no_from'
             }), 'shelf_under_rack', 'shelf_div_from');
+
+            handleDropdownChange(document.getElementById('cbo_rack_no_from').value, 'room_rack_id');
+
         } catch (error) {
             console.error('Error loading shelf dropdown:', error);
         }
@@ -671,9 +745,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         try {
             await load_drop_down_v2('load_drop_down', JSON.stringify({
                 'shelf_id': document.getElementById('cbo_shelf_no_from').value,
+                'onchange': 'handle_bin_from_change()',
                 'field_id': 'cbo_bin_no_from',
                 'field_name': 'cbo_bin_no_from'
             }), 'bin_under_shelf', 'bin_div_from');
+
+            handleDropdownChange(document.getElementById('cbo_shelf_no_from').value, 'room_self_id');
+
+        } catch (error) {
+            console.error('Error loading bin dropdown:', error);
+        }
+    }
+
+    async function handle_bin_from_change() {
+        try {
+            handleDropdownChange(document.getElementById('cbo_bin_no_from').value, 'room_bin_id');
         } catch (error) {
             console.error('Error loading bin dropdown:', error);
         }

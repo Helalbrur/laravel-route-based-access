@@ -186,6 +186,7 @@ Route::prefix('/order')->middleware(['auth'])->group(function () {
     Route::get('/transfer_dtls/{id}',[TransferController::class,'load_transfer_dtls']);
     Route::get('/get_transfer_mst_data/{id}',[TransferController::class,'load_transfer_mst_data']);
     Route::get('/show_requisition_dtls_list_view/{requisition_id}',[TransferController::class,'requisition_dlts_list_view']);
+    Route::post('/calculate-stock', [TransferController::class, 'calculateStock']);
 
     Route::get('/receive_work_order_search_list_view',[InvReceiveMasterController::class,'receive_work_order_search_list_view']);
     Route::get('/receive_work_order_details/{id}',[InvReceiveMasterController::class,'receive_work_order_details']);

@@ -346,7 +346,14 @@ class TransferController extends Controller
         $requisition_dtls = RequisitionDtls::with(['product', 'category', 'uom'])
             ->where('mst_id', $requisition_id)
             ->get();
-    
+
         return view('order_management.order.requisition_dtls_list', compact('requisition_dtls'));
+    }
+
+    public function calculateStock(Request $request)
+    {
+        $params = $request->all();
+        $result = calculate_current_stock($params);
+        return response()->json($result);
     }
 }

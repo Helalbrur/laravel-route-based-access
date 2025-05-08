@@ -1167,7 +1167,7 @@ function generate_system_no($company, $location, $category, $year, $num_length, 
 }
 
 
-function CurrentStock($param = array())
+function calculate_current_stock($param = array())
 {
     $query = App\Models\InvTransaction::selectRaw('
                 SUM(
@@ -1196,9 +1196,23 @@ function CurrentStock($param = array())
     if (!empty($param['location_id'])) {
         $query->where('location_id', $param['location_id']);
     }
-    
     if (!empty($param['store_id'])) {
         $query->where('store_id', $param['store_id']);
+    }
+    if (!empty($param['floor_id'])) {
+        $query->where('floor_id', $param['floor_id']);
+    }
+    if (!empty($param['room_id'])) {
+        $query->where('room_id', $param['room_id']);
+    }
+    if (!empty($param['room_rack_id'])) {
+        $query->where('room_rack_id', $param['room_rack_id']);
+    }
+    if (!empty($param['room_self_id'])) {
+        $query->where('room_self_id', $param['room_self_id']);
+    }
+    if (!empty($param['room_bin_id'])) {
+        $query->where('room_bin_id', $param['room_bin_id']);
     }
 
     return $query->first();
