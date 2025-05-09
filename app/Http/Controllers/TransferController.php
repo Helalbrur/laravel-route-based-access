@@ -236,7 +236,12 @@ class TransferController extends Controller
             $transferMaster->update([
                 'company_id' => $request->cbo_company_name,
                 'transfer_date' => $request->txt_transfer_date,
-                'requisition_id' => $request->hidden_requisition_id
+                'requisition_id' => $request->hidden_requisition_id,
+                // 'category_id' => $request->cbo_item_category,
+                // 'product_id' => $request->hidden_product_id,
+                // 'current_stock' => $request->txt_current_stock,
+                // 'avg_rate' => $request->txt_avg_rate,
+                // 'transfer_qty' => $request->txt_transfer_qty
             ]);
 
 
