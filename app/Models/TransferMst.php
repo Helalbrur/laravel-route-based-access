@@ -20,11 +20,6 @@ class TransferMst extends Model
         'company_id',
         'transfer_date',
         'requisition_id',
-        'category_id',
-        'product_id',
-        'current_stock',
-        'avg_rate',
-        'transfer_qty',
         'created_by',
         'updated_by',
     ];

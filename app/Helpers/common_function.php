@@ -1179,17 +1179,7 @@ function calculate_current_stock($param = array())
                     CASE
                         WHEN transaction_type IN (2, 3, 6) THEN cons_qnty
                         ELSE 0
-                    END) AS balance,
-                SUM(
-                    CASE
-                        WHEN transaction_type IN (1, 4, 5) THEN cons_amount
-                        ELSE 0
-                    END)
-                - SUM(
-                    CASE
-                        WHEN transaction_type IN (2, 3, 6) THEN cons_amount
-                        ELSE 0
-                    END) AS amount');
+                    END) AS current_stock');
 
     $query->where('product_id', $param['product_id']);
 

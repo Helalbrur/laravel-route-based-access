@@ -18,10 +18,6 @@ class CreateTransferMstTable extends Migration
             $table->date('transfer_date')->default(Carbon::now()->format('Y-m-d'));
             $table->unsignedBigInteger('requisition_id');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('product_id');
-            $table->double('current_stock', 15, 6)->default(0);
-            $table->double('avg_rate', 15, 6)->default(0);
-            $table->double('transfer_qty', 15, 6)->default(0);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

@@ -16,7 +16,8 @@
             'id' => $req_dtls->id,
             'category_id' => $req_dtls->category_id,
             'product_id' => $req_dtls->product_id,
-            'item_description' => optional($req_dtls->product)->item_description
+            'item_description' => optional($req_dtls->product)->item_description,
+            'avg_rate' => round(optional($req_dtls->product)->avg_rate,6)
         ]);
         ?>
         <tr id="tr_{{$req_dtls->id}}" onclick="set_requisition_dtls_data('{{ $param }}')" style="cursor: pointer;">

@@ -116,22 +116,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 </div>
             </div>
 
-            <div class="card col-md-10 mx-auto" style="background-color: rgb(241, 241, 241);">
-                <div class="card-body">
-                    <div class="card-text">
-                        <div class="row justify-content-center" id="requisition_dtls_div">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-body">
                     <div class="card-text">
                         <div class="row" id="transfer_dtls_div">
 
                             {{-- Transfer From Card --}}
+                            <input type="hidden" name="hidden_trans_from_id" id="hidden_trans_from_id">
                             <div class="col-md-6">
                                 <div class="card h-100" style="background-color: rgb(241, 241, 241);">
                                     <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer From</div>
@@ -219,6 +210,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                             </div>
 
                             {{-- Transfer To Card --}}
+                            <input type="hidden" name="hidden_trans_to_id" id="hidden_trans_to_id">
                             <div class="col-md-6">
                                 <div class="card h-100" style="background-color: rgb(241, 241, 241);">
                                     <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer To</div>
@@ -319,6 +311,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 </div>
             </div>
 
+            <div class="card col-md-10 mx-auto" style="background-color: rgb(241, 241, 241);">
+                <div class="card-body">
+                    <div class="card-text">
+                        <div class="row justify-content-center" id="requisition_dtls_div">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>
 </div>
@@ -412,7 +414,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         if (form_validation('cbo_company_name*txt_item_name*txt_transfer_date', 'Company Name*Item Name*Transfer Date') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id');
 
             var method = "POST";
             var param = "";
@@ -608,6 +610,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
+            $('#txt_avg_rate').val(data.avg_rate);
 
             handleDropdownChange(data.product_id, 'product_id');
 
@@ -656,7 +659,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             })
             .then(data => {
                 console.log('Current stock:', data);
-                // Example: document.getElementById('stock-balance').innerText = data.balance;
+                document.getElementById('txt_current_stock').value = data.current_stock;
             })
             .catch(error => console.error('Error:', error));
     }

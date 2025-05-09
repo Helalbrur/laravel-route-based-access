@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\TransferMst;
 use App\Models\InvTransaction;
+use App\Models\ProductDetailsMaster;
 use App\Models\RequisitionDtls;
 use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Throw_;
 
 class TransferController extends Controller
 {
@@ -64,35 +66,56 @@ class TransferController extends Controller
 
         DB::beginTransaction();
         try {
-            $system_no_info = generate_system_no(
-                $request->cbo_company_name,
-                '',
-                '',
-                date("Y"),
-                5,
-                "SELECT transfer_no_prefix,transfer_no_prefix_num from transfer_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y') . " order by transfer_no_prefix_num desc ",
-                "transfer_no_prefix",
-                "transfer_no_prefix_num"
-            );
 
-            $transferMaster = TransferMst::create([
-                'transfer_no_prefix' => $system_no_info->sys_no_prefix,
-                'transfer_no_prefix_num' => $system_no_info->sys_no_prefix_num,
-                'transfer_no' => $system_no_info->sys_no,
-                'company_id' => $request->cbo_company_name,
-                'transfer_date' => $request->txt_transfer_date,
-                'requisition_id' => $request->hidden_requisition_id,
-                'category_id' => $request->cbo_item_category,
+            if (empty($request->update_id)) {
+
+                $system_no_info = generate_system_no(
+                    $request->cbo_company_name,
+                    '',
+                    '',
+                    date("Y"),
+                    5,
+                    "SELECT transfer_no_prefix,transfer_no_prefix_num from transfer_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y') . " order by transfer_no_prefix_num desc ",
+                    "transfer_no_prefix",
+                    "transfer_no_prefix_num"
+                );
+
+                $transferMaster = TransferMst::create([
+                    'transfer_no_prefix' => $system_no_info->sys_no_prefix,
+                    'transfer_no_prefix_num' => $system_no_info->sys_no_prefix_num,
+                    'transfer_no' => $system_no_info->sys_no,
+                    'company_id' => $request->cbo_company_name,
+                    'transfer_date' => $request->txt_transfer_date,
+                    'requisition_id' => $request->hidden_requisition_id
+                ]);
+            } else {
+            }
+
+            $params = [
                 'product_id' => $request->hidden_product_id,
-                'current_stock' => $request->txt_current_stock,
-                'avg_rate' => $request->txt_avg_rate,
-                'transfer_qty' => $request->txt_transfer_qty
-            ]);
+                'location_id' => $request->cbo_location_from,
+                'store_id' => $request->cbo_store_from,
+                'floor_id' => $request->cbo_floor_name_from,
+                'room_id' => $request->cbo_room_no_from,
+                'room_rack_id' => $request->cbo_rack_no_from,
+                'room_self_id' => $request->cbo_shelf_no_from,
+                'room_bin_id' => $request->cbo_bin_no_from
+            ];
+
+            $stock = calculate_current_stock($params);
+
+            if ($stock->current_stock < $request->txt_transfer_qty) {
+                throw new Exception('Transfer qty can not be greater than current stock');
+            }
+
+            $product_data = ProductDetailsMaster::find($request->hidden_product_id);
 
             // FROM transfer details
             InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '6',
+                'category_id' => $request->cbo_item_category,
+                'product_id' => $request->hidden_product_id,
                 'location_id' => $request->cbo_location_from,
                 'store_id' => $request->cbo_store_from,
                 'floor_id' => $request->cbo_floor_name_from,
@@ -100,12 +123,22 @@ class TransferController extends Controller
                 'room_rack_id' => $request->cbo_rack_no_from,
                 'room_self_id' => $request->cbo_shelf_no_from,
                 'room_bin_id' => $request->cbo_bin_no_from,
+                'order_uom' => $product_data->order_uom,
+                'order_qnty' => $request->txt_transfer_qty * ($product_data->conversion_fac ?? 1),
+                'order_rate' => round($product_data->avg_rate, 6),
+                'order_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6),
+                'cons_uom' => $product_data->consuption_uom,
+                'cons_qnty' => $request->txt_transfer_qty,
+                'cons_rate' => round($product_data->avg_rate, 6),
+                'cons_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6)
             ]);
 
             // TO transfer details
             InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '5',
+                'category_id' => $request->cbo_item_category,
+                'product_id' => $request->hidden_product_id,
                 'location_id' => $request->cbo_location_to,
                 'store_id' => $request->cbo_store_to,
                 'floor_id' => $request->cbo_floor_name_to,
@@ -113,6 +146,14 @@ class TransferController extends Controller
                 'room_rack_id' => $request->cbo_rack_no_to,
                 'room_self_id' => $request->cbo_shelf_no_to,
                 'room_bin_id' => $request->cbo_bin_no_to,
+                'order_uom' => $product_data->order_uom,
+                'order_qnty' => $request->txt_transfer_qty * ($product_data->conversion_fac ?? 1),
+                'order_rate' => round($product_data->avg_rate, 6),
+                'order_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6),
+                'cons_uom' => $product_data->consuption_uom,
+                'cons_qnty' => $request->txt_transfer_qty,
+                'cons_rate' => round($product_data->avg_rate, 6),
+                'cons_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6)
             ]);
 
             DB::commit();
@@ -195,21 +236,36 @@ class TransferController extends Controller
             $transferMaster->update([
                 'company_id' => $request->cbo_company_name,
                 'transfer_date' => $request->txt_transfer_date,
-                'requisition_id' => $request->hidden_requisition_id,
-                'category_id' => $request->cbo_item_category,
-                'product_id' => $request->hidden_product_id,
-                'current_stock' => $request->txt_current_stock,
-                'avg_rate' => $request->txt_avg_rate,
-                'transfer_qty' => $request->txt_transfer_qty
+                'requisition_id' => $request->hidden_requisition_id
             ]);
 
+
+            $product_data = ProductDetailsMaster::find($request->hidden_product_id);
+
             // Update InvTransaction - FROM
-            $transferFrom = InvTransaction::where('mst_id', $transferMaster->id)
-                ->where('transaction_type', 6)
-                ->first();
+            $transferFrom = InvTransaction::find($request->hidden_trans_from_id);
+
+            $params = [
+                'product_id' => $request->hidden_product_id,
+                'location_id' => $request->cbo_location_from,
+                'store_id' => $request->cbo_store_from,
+                'floor_id' => $request->cbo_floor_name_from,
+                'room_id' => $request->cbo_room_no_from,
+                'room_rack_id' => $request->cbo_rack_no_from,
+                'room_self_id' => $request->cbo_shelf_no_from,
+                'room_bin_id' => $request->cbo_bin_no_from
+            ];
+
+            $stock = calculate_current_stock($params);
+
+            if (($stock->current_stock - $transferFrom->cons_qnty) < $request->txt_transfer_qty) {
+                throw new Exception('Transfer qty can not be greater than current stock');
+            }
 
             if ($transferFrom) {
                 $transferFrom->update([
+                    'category_id' => $request->cbo_item_category,
+                    'product_id' => $request->hidden_product_id,
                     'location_id' => $request->cbo_location_from,
                     'store_id' => $request->cbo_store_from,
                     'floor_id' => $request->cbo_floor_name_from,
@@ -217,16 +273,24 @@ class TransferController extends Controller
                     'room_rack_id' => $request->cbo_rack_no_from,
                     'room_shelf_id' => $request->cbo_shelf_no_from,
                     'room_bin_id' => $request->cbo_bin_no_from,
+                    'order_uom' => $product_data->order_uom,
+                    'order_qnty' => $request->txt_transfer_qty * ($product_data->conversion_fac ?? 1),
+                    'order_rate' => round($product_data->avg_rate, 6),
+                    'order_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6),
+                    'cons_uom' => $product_data->consuption_uom,
+                    'cons_qnty' => $request->txt_transfer_qty,
+                    'cons_rate' => round($product_data->avg_rate, 6),
+                    'cons_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6)
                 ]);
             }
 
             // Update InvTransaction - TO
-            $transferTo = InvTransaction::where('mst_id', $transferMaster->id)
-                ->where('transaction_type', 5)
-                ->first();
+            $transferTo = InvTransaction::find($request->hidden_trans_to_id);
 
             if ($transferTo) {
                 $transferTo->update([
+                    'category_id' => $request->cbo_item_category,
+                    'product_id' => $request->hidden_product_id,
                     'location_id' => $request->cbo_location_to,
                     'store_id' => $request->cbo_store_to,
                     'floor_id' => $request->cbo_floor_name_to,
@@ -234,6 +298,14 @@ class TransferController extends Controller
                     'room_rack_id' => $request->cbo_rack_no_to,
                     'room_shelf_id' => $request->cbo_shelf_no_to,
                     'room_bin_id' => $request->cbo_bin_no_to,
+                    'order_uom' => $product_data->order_uom,
+                    'order_qnty' => $request->txt_transfer_qty * ($product_data->conversion_fac ?? 1),
+                    'order_rate' => round($product_data->avg_rate, 6),
+                    'order_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6),
+                    'cons_uom' => $product_data->consuption_uom,
+                    'cons_qnty' => $request->txt_transfer_qty,
+                    'cons_rate' => round($product_data->avg_rate, 6),
+                    'cons_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6)
                 ]);
             }
 
