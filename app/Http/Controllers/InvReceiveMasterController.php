@@ -87,6 +87,8 @@ class InvReceiveMasterController extends Controller
 
                     'mst_id' => $invReceiveMaster->id,
                     'transaction_type' => 1,
+                    'location_id' => $request->cbo_location_name,
+                    'store_id' => $request->cbo_store_name,
                     'product_id' => $request["hidden_product_id_$i"],
                     'order_uom' => $request["cbo_order_uom_$i"],
                     'order_qnty' => $request["txt_work_order_qty_$i"], 
@@ -206,7 +208,8 @@ class InvReceiveMasterController extends Controller
 
                         'mst_id' => $invReceiveMaster->id,
                         'product_id' => $productId,
-    
+                        'location_id' => $request->cbo_location_name,
+                        'store_id' => $request->cbo_store_name,
                         'transaction_type' => 1,
                         'order_uom' => $request["cbo_order_uom_$i"],
                         'order_qnty' => $request["txt_work_order_qty_$i"], 
