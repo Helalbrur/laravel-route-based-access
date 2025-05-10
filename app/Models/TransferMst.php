@@ -21,9 +21,8 @@ class TransferMst extends Model
         'transfer_date',
         'requisition_id',
         'created_by',
-        'updated_by',
+        'updated_by'
     ];
-
 
     protected static function boot()
     {
@@ -40,13 +39,16 @@ class TransferMst extends Model
         });
     }
 
-    // Define relationship with TransferDtls
     public function transferDtls()
+    {
+        return $this->hasMany(TransferDtls::class, 'mst_id');
+    }
+
+    public function invTransaction()
     {
         return $this->hasMany(InvTransaction::class, 'mst_id');
     }
 
-    // Define relationship with LibCompany
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');
@@ -55,12 +57,10 @@ class TransferMst extends Model
     public function requisition()
     {
         return $this->belongsTo(RequisitionMst::class, 'requisition_id', 'id');
-    }    
+    }
 
     public function product()
     {
         return $this->belongsTo(ProductDetailsMaster::class, 'product_id', 'id');
     }
-    
 }
-

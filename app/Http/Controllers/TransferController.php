@@ -6,6 +6,7 @@ use App\Models\TransferMst;
 use App\Models\InvTransaction;
 use App\Models\ProductDetailsMaster;
 use App\Models\RequisitionDtls;
+use App\Models\TransferDtls;
 use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -88,7 +89,6 @@ class TransferController extends Controller
                     'transfer_date' => $request->txt_transfer_date,
                     'requisition_id' => $request->hidden_requisition_id
                 ]);
-            } else {
             }
 
             $params = [
@@ -111,7 +111,7 @@ class TransferController extends Controller
             $product_data = ProductDetailsMaster::find($request->hidden_product_id);
 
             // FROM transfer details
-            InvTransaction::create([
+            $fromTransaction = InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '6',
                 'category_id' => $request->cbo_item_category,
@@ -134,7 +134,7 @@ class TransferController extends Controller
             ]);
 
             // TO transfer details
-            InvTransaction::create([
+            $toTransaction = InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '5',
                 'category_id' => $request->cbo_item_category,
@@ -154,6 +154,15 @@ class TransferController extends Controller
                 'cons_qnty' => $request->txt_transfer_qty,
                 'cons_rate' => round($product_data->avg_rate, 6),
                 'cons_amount' => round($request->txt_transfer_qty * ($product_data->avg_rate ?? 1), 6)
+            ]);
+
+            TransferDtls::create([
+                'mst_id' => $transferMaster->id,
+                'trans_from_id' => $fromTransaction->id,
+                'trans_to_id' => $toTransaction->id,
+                'category_id' => $request->cbo_item_category,
+                'product_id' => $request->hidden_product_id,
+                'transfer_qty' => $request->txt_transfer_qty
             ]);
 
             DB::commit();
@@ -237,13 +246,7 @@ class TransferController extends Controller
                 'company_id' => $request->cbo_company_name,
                 'transfer_date' => $request->txt_transfer_date,
                 'requisition_id' => $request->hidden_requisition_id,
-                // 'category_id' => $request->cbo_item_category,
-                // 'product_id' => $request->hidden_product_id,
-                // 'current_stock' => $request->txt_current_stock,
-                // 'avg_rate' => $request->txt_avg_rate,
-                // 'transfer_qty' => $request->txt_transfer_qty
             ]);
-
 
             $product_data = ProductDetailsMaster::find($request->hidden_product_id);
 
@@ -314,6 +317,20 @@ class TransferController extends Controller
                 ]);
             }
 
+            $transferDtls = TransferDtls::find($request->hidden_transfer_dtls_id);
+
+            if ($transferDtls) {
+                $transferDtls->update([
+                    'mst_id' => $transferMaster->id,
+                    'trans_from_id' => $transferFrom ? $transferFrom->id : null,
+                    'trans_to_id' => $transferTo ? $transferTo->id : null,
+                    'category_id' => $request->cbo_item_category,
+                    'product_id' => $request->hidden_product_id,
+                    'transfer_qty' => $request->txt_transfer_qty
+                ]);
+            }
+
+
             DB::commit();
             return response()->json([
                 'code' => 1,
@@ -357,7 +374,6 @@ class TransferController extends Controller
             ]);
         }
     }
-
 
     public function requisition_search_list_view(Request $request)
     {
@@ -404,8 +420,16 @@ class TransferController extends Controller
         ]);
     }
 
-
     public function load_transfer_dtls($id)
+    {
+        $transfer_dtls = TransferDtls::with(['product', 'category'])
+            ->where('mst_id', $id)
+            ->get();
+
+        return view('order_management.order.transfer_dtls_list_view', compact('transfer_dtls'));
+    }
+
+    public function load_transaction_dtls($id)
     {
         $transferFrom = InvTransaction::where('mst_id', $id)
             ->where('transaction_type', 6)
@@ -415,7 +439,7 @@ class TransferController extends Controller
             ->where('transaction_type', 5)
             ->first();
 
-        return view('order_management.order.transfer_dtls', compact('transferFrom', 'transferTo'));
+        return view('order_management.order.transaction_dtls', compact('transferFrom', 'transferTo'));
     }
 
     public function requisition_dlts_list_view($requisition_id)

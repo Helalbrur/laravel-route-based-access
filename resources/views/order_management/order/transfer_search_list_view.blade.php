@@ -30,7 +30,10 @@ if (!empty($from_date) && !empty($to_date)) {
     $query_builder = $query_builder->whereBetween('transfer_date', [$from_date, $to_date]);
 }
 
-$transfers = $query_builder->with(['requisition', 'product'])->get();
+$transfers = $query_builder
+    ->with(['requisition', 'product'])
+    ->latest()
+    ->get();
 
 ?>
 <table id="list_view" class="table table-striped table-bordered" style="width: 100%">

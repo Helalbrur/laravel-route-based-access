@@ -119,7 +119,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             <div class="card">
                 <div class="card-body">
                     <div class="card-text">
-                        <div class="row" id="transfer_dtls_div">
+                        <div class="row" id="transaction_dtls_div">
 
                             {{-- Transfer From Card --}}
                             <input type="hidden" name="hidden_trans_from_id" id="hidden_trans_from_id">
@@ -305,6 +305,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             <div class="row justify-content-center">
                 <div class="col-auto">
                     <input type="hidden" name="update_id" id="update_id">
+                    <input type="hidden" name="hidden_transfer_dtls_id" id="hidden_transfer_dtls_id">
                 </div>
                 <div class="col-auto">
                     <?php echo load_submit_buttons($permission, "fnc_transfer", 0, 0, "reset_form('transfer_1','','',1)"); ?>
@@ -321,6 +322,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 </div>
             </div>
 
+            <div class="card col-md-10 mx-auto" style="background-color: rgb(241, 241, 241);">
+                <div class="card-body">
+                    <div class="card-text">
+                        <div class="row justify-content-center" id="transfer_dtls_div">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>
 </div>
@@ -329,7 +340,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 @section('script')
 <script>
     var permission = '{{$permission}}';
-    var setup_data = load_all_setup(12); // Pass the entry_form dynamically
+    // var setup_data = load_all_setup();
 
     $('#txt_transfer_qty').on('keyup', function() {
         let currentStock = parseFloat($('#txt_current_stock').val()) || 0;
@@ -378,14 +389,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                     $('#txt_transfer_qty').val(data.transfer_qty);
                     $('#txt_sys_no').prop('readonly', true);
 
-                    await load_transfer_dtls();
+                    await load_tranfer_dtls(data.id);
+                    await load_transaction_dtls(data.id);
+                    await load_requisition_dtls_list_view(data.requisition_id);
 
                     set_button_status(1, permission, 'fnc_transfer', 1);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-
         }
     }
 
@@ -414,7 +426,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         if (form_validation('cbo_company_name*txt_item_name*txt_transfer_date', 'Company Name*Item Name*Transfer Date') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id,hidden_transfer_dtls_id');
 
             var method = "POST";
             var param = "";
@@ -472,7 +484,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 $('#txt_sys_no').prop('readonly', true);
 
 
-                await load_transfer_dtls();
+                await load_tranfer_dtls(data.id);
+                await load_transaction_dtls(data.id);
+                await load_requisition_dtls_list_view(data.requisition_id);
 
                 set_button_status(1, permission, 'fnc_transfer', 1);
 
@@ -529,12 +543,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         }
     }
 
-    async function load_transfer_dtls() {
-        //fetch data from server as html and put in a div that id div_dtls_list_view
-        await fetch(`/order/transfer_dtls/${$('#update_id').val()}`)
+    async function load_tranfer_dtls(mst_id) {
+        await fetch(`/order/transfer_dtls/${mst_id}`)
             .then(response => response.text())
             .then(html => {
                 document.getElementById('transfer_dtls_div').innerHTML = html;
+                initializeSelect2();
+            })
+            .catch(error => console.error('Error loading details:', error));
+    }
+
+    async function load_transaction_dtls(mst_id) {
+        await fetch(`/order/transaction_dtls/${mst_id}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('transaction_dtls_div').innerHTML = html;
                 initializeSelect2();
             })
             .catch(error => console.error('Error loading details:', error));
@@ -590,14 +613,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             .catch(error => console.error('Error loading requisition details:', error));
     }
 
-    function set_requisition_dtls_data(param) {
+    function set_transfer_dtls_data(param) {
         try {
             const data = typeof param === 'string' ? JSON.parse(param) : param;
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
-
-            handleDropdownChange(data.product_id, 'product_id');
+            $('#txt_transfer_qty').val(data.transfer_qty);
 
         } catch (e) {
             console.error('Error processing parameter:', e);
@@ -633,9 +655,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
     function handleDropdownChange(element, paramName) {
 
-        const value = element;
-        stockParams[paramName] = value;
-        console.log(`Updated ${paramName} to ${value}`);
+        const field_value = element;
+        stockParams[paramName] = field_value;
+        console.log(`${paramName} : ${field_value}`);
         calculateStock();
     }
 
