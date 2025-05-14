@@ -9,6 +9,7 @@
             <th class="form-group" width="5%">UOM</th>
             <th class="form-group" width="5%">Required QTY</th>
             <th class="form-group" width="5%">WO Qty</th>
+            <th class="form-group" width="5%">Rate</th>
             <th class="form-group" width="5%">Balance Qty</th>
             <th class="form-group" width="5%">Receive Qty</th>
             <th class="form-group" width="5%">Lot/Batch No.</th>
@@ -70,6 +71,9 @@
                     <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty }}" disabled>
                     <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->order_rate }}">
                     <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $receive->order_qnty*$receive->order_rate }}">
+                </td>
+                <td class="form-group">
+                    <input type="text" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->order_rate }}" disabled>
                 </td>
                 <td class="form-group">
                     <input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty-$receive->quantity }}" disabled>

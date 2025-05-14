@@ -132,6 +132,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <th class="form-group" width="5%">UOM</th>
                                                 <th class="form-group" width="5%">Required QTY</th>
                                                 <th class="form-group" width="5%">WO Qty</th>
+                                                <th class="form-group" width="5%">Rate</th>
                                                 <th class="form-group" width="5%">Balance Qty</th>
                                                 <th class="form-group" width="5%">Receive Qty</th>
                                                 <th class="form-group" width="5%">Lot/Batch No.</th>
@@ -174,8 +175,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group"><input type="text" name="txt_required_qty_1" id="txt_required_qty_1" class="form-control" value=""></td>
                                                 <td class="form-group">
                                                     <input type="text" name="txt_work_order_qty_1" id="txt_work_order_qty_1" class="form-control" value="">
-                                                    <input type="hidden" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
                                                     <input type="hidden" name="txt_work_order_amount_1" id="txt_work_order_amount_1" class="form-control" value="">
+                                                </td>
+                                                <td class="form-group">
+                                                    <input type="text" name="txt_work_order_rate_1" id="txt_work_order_rate_1" class="form-control" value="">
                                                 </td>
                                                 <td class="form-group">
                                                     <input type="text" name="txt_balance_qty_1" id="txt_balance_qty_1" class="form-control" value="">
@@ -385,11 +388,12 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     await handleCompanyChange();
                     $('#cbo_location_name').val(data.location_id);
                     await handleLocationChange();
-                    await multirowStoreChange();
+                    $('#cbo_store_name').val(data.store_id);
                     $('#cbo_receive_basis').val(data.receive_basis).trigger('change');
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
-                   await load_details();
+                    await load_details();
                     setup_date();
+
                 }
             } catch (error) {
                 console.error('Error:', error);
