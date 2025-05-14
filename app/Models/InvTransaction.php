@@ -50,12 +50,28 @@ class InvTransaction extends Model
 
         static::creating(function ($trans) {
             $trans->created_by = Auth::id();
-            self::updateProductInventory($trans);
+            //self::updateProductInventory($trans);
+            $product = ProductDetailsMaster::find($trans->product_id);
+            if ($product) {
+                ProductDetailsMaster::updateProductInventory($product);
+            }
         });
 
         static::updating(function ($trans) {
             $trans->updated_by = Auth::id();
-            self::updateProductInventory($trans);
+            //self::updateProductInventory($trans);
+            $product = ProductDetailsMaster::find($trans->product_id);
+            if ($product) {
+                ProductDetailsMaster::updateProductInventory($product);
+            }
+        });
+
+        static::deleted(function ($trans) {
+            //self::updateProductInventory($trans);
+            // $product = ProductDetailsMaster::find($trans->product_id);
+            // if ($product) {
+            //     ProductDetailsMaster::updateProductInventory($product);
+            // }
         });
     }
 
@@ -85,8 +101,7 @@ class InvTransaction extends Model
                             ELSE 0
                         END) AS amount,
                     a.product_id')
-                ->where('a.is_deleted', 0)
-                ->where('a.status_active', 1)
+                ->whereNull('a.deleted_at')
                 ->where('a.product_id', $transaction->product_id)
                 ->groupBy('a.product_id')
                 ->first();
