@@ -67,11 +67,11 @@ class InvTransaction extends Model
         });
 
         static::deleted(function ($trans) {
-            //self::updateProductInventory($trans);
-            // $product = ProductDetailsMaster::find($trans->product_id);
-            // if ($product) {
-            //     ProductDetailsMaster::updateProductInventory($product);
-            // }
+            self::updateProductInventory($trans);
+            $product = ProductDetailsMaster::find($trans->product_id);
+            if ($product) {
+                ProductDetailsMaster::updateProductInventory($product);
+            }
         });
     }
 

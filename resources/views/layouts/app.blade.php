@@ -36,8 +36,7 @@
     <link href="{{asset('sweetalert2/sweetalert2.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{asset('modal_window/modal_window.css')}}">
     <script src="{{asset('sweetalert2/sweetalert2.all.js')}}" type="text/javascript"></script>
-    <!-- App js -->
-    <script src="{{ asset('skote/assets/js/plugin.js') }}"></script>
+
     {{-- custom style --}}
     <link rel="stylesheet" href="{{asset('skote/assets/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
@@ -51,6 +50,7 @@
         </script>
     @endif
     <script>
+        window.ASSET_BASE_URL = "{{ asset('') }}";
         var sessionData = {!! json_encode([
         'data_arr' => session('laravel_stater.data_arr', []),
         'mandatory_field' => session('laravel_stater.mandatory_field', []),
@@ -58,6 +58,8 @@
         ]) !!};
         //console.log(sessionData);
     </script>
+        <!-- App js -->
+    <script src="{{ asset('skote/assets/js/plugin.js') }}"></script>
     @yield('script_before')
 </head>
 
