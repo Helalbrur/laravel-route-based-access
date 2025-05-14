@@ -644,7 +644,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         });
         console.log(param);
 		var title = 'Item Search';
-		var page_link='/show_common_popup_view?page=work_order_item_search&param='+param;
+		var page_link='/show_common_popup_view?page=issue_item_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
 		emailwindow.onclose=function()
 		{

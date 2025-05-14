@@ -83,7 +83,22 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                     </div>
                                     <div class="col-sm-6 col-md-3 col-lg-3 form-group">
                                         <div class="row">
-                                            <label for="cbo_supplier" class="col-sm-6 col-form-label must_entry_caption">Work Order No.</label>
+                                            <label for="cbo_receive_basis" class="col-sm-6 col-form-label fw-bold text-start must_entry_caption">Receive Basis</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select style="width: 100%" name="cbo_receive_basis" id="cbo_receive_basis"  class="form-control" onchange="handleReceiveBasisChange()">
+                                                    <option value="0">SELECT</option>
+                                                    @foreach(get_issue_basis() as $id => $name)
+                                                        @if(!in_array($id, [2]))
+                                                            <option value="{{ $id }}">{{ $name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 col-lg-3 form-group">
+                                        <div class="row">
+                                            <label for="txt_work_order_no" class="col-sm-6 col-form-label">Work Order No.</label>
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <input id="txt_work_order_no" name="txt_work_order_no" placeholder="Browse" ondblclick="fnc_work_order_popup()" class="form-control">
                                                 <input type="hidden" name="work_order_id" id="work_order_id">
@@ -133,7 +148,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                             <tr id="tr_1">
                                                 <td class="form-group" id="sl_1">1</td>
                                                 <td class="form-group">
-                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="">
+                                                    <input type="text" name="txt_item_name_1" id="txt_item_name_1" class="form-control" value="" placeholder="Browse" ondblclick="fn_item_popup(1)">
                                                     <input type="hidden" name="hidden_product_id_1" id="hidden_product_id_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_conversion_fac_1" id="hidden_conversion_fac_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_consuption_uom_1" id="hidden_consuption_uom_1" class="form-control" value="">
@@ -263,10 +278,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 <script>
     var permission = '{{$permission}}';
     function fnc_receive_entry(operation) { 
-        if (form_validation('cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*txt_work_order_no*cbo_supplier', 'Company Name*Location*Store*Receive Date*Work Order No.*Supplier') == false) {
+        if (form_validation('cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*cbo_supplier', 'Company Name*Location*Store*Receive Date*Supplier') == false) {
             return;
         } else {
-            var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store_name,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier');
+            var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store_name,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier,cbo_receive_basis');
             var method = "POST";
             var param = "";
             if (operation == 1 || operation == 2) {
@@ -327,8 +342,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
     }
 
     const load_php_data_to_form = async (update_id) => {
-        var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id';
-        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier';
+        var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id*receive_basis';
+        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier*cbo_receive_basis';
         var others = '';
         var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {
@@ -371,6 +386,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     $('#cbo_location_name').val(data.location_id);
                     await handleLocationChange();
                     await multirowStoreChange();
+                    $('#cbo_receive_basis').val(data.receive_basis).trigger('change');
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
                    await load_details();
                     setup_date();
@@ -521,6 +537,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             $('#sl_' + i).text(i);
             $('#btn_add_row_' + i).off("click").on("click", function() { add_row(i); });
             $('#btn_remove_row_' + i).off("click").on("click", function() { remove_row(i); });
+            $('#txt_item_name_' + i).removeAttr("ondblclick").attr("ondblclick","fn_item_popup("+i+")");
 
             i++;
         });
@@ -695,6 +712,126 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         } catch (error) {
             console.error('Error loading dropdown:', error);
         }
+    }
+
+        async function handleReceiveBasisChange() {
+        var receive_basis = document.getElementById('cbo_receive_basis').value * 1;
+        if(receive_basis == 1) {
+            document.getElementById('txt_work_order_no').value = '';
+            document.getElementById('work_order_id').value = '';
+            document.getElementById('txt_work_order_no').readOnly = true;
+            document.getElementById('txt_work_order_no').disabled = true;
+        } else {
+            document.getElementById('txt_work_order_no').readOnly = false;
+            document.getElementById('txt_work_order_no').disabled = false;
+        }
+
+        var row_num = $('#dtls_list_view tbody tr').length;
+        for (let index = 1; index <= row_num; index++) {
+            const itemInput = document.getElementById(`txt_item_name_${index}`);
+            
+            if (receive_basis == 1) {
+                itemInput.readOnly = true;
+                itemInput.disabled = false;
+                itemInput.setAttribute('ondblclick',`fn_item_popup(${index})`);
+                itemInput.placeholder = 'Browse';
+
+            } else {
+                itemInput.readOnly = true;
+                itemInput.disabled = false;
+                itemInput.removeAttribute('ondblclick');
+                itemInput.placeholder = '';
+            }
+        }
+
+    }
+
+        function fn_item_popup(row_id) {
+        // if(form_validation('cbo_supplier','Supplier')==false)
+        // {
+        //     return;
+        // }
+        var item_id = $('#hidden_product_id_' + row_id).val();
+        var item_name = $('#txt_item_name_' + row_id).val();
+        var item_code = $('#txt_item_code_' + row_id).val();
+        //var item_category = $('#txt_item_category_' + row_id).val();
+
+       
+        var param = JSON.stringify({
+            //'supplier_id': supplier_id,
+            'item_id': item_id,
+            'item_name': item_name,
+            //'category_id': item_category,
+            'item_code': item_code
+           
+        });
+        console.log(param);
+		var title = 'Item Search';
+		var page_link='/show_common_popup_view?page=receive_item_search&param='+param;
+		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
+		emailwindow.onclose=function()
+		{
+			
+			try {
+                var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+                var product_arr = JSON.parse(popup_value);
+
+                var row_num = $('#dtls_list_view tbody tr').length;
+
+                for (let index = 1; index <= row_num; index++) {
+                   var product_id = $('#hidden_product_id_' + index).val() * 1;
+                   if(product_id == 0 && row_id > 1) {
+                       remove_row(index);
+                       row_id--;
+                   }
+                }
+                var row_num = $('#dtls_list_view tbody tr').length;
+                for (let index = row_id + 1; index <= row_num; index++) {
+                    var product_id = $('#hidden_product_id_' + index).val() * 1;
+                    if(product_id == 0 ) {
+                        remove_row(index);
+                    }
+                }
+                //iterate product_arr using foreach and extrat data
+
+                var cur_row_id = row_id;
+                product_arr.forEach(data => {
+                    console.log(data);
+                    if (data) {
+                        if(cur_row_id> row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+
+                        $('#hidden_product_id_' + cur_row_id).val(data.product_id).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val(data.item_name);
+                        $('#txt_item_code_' + cur_row_id).val(data.item_code);
+                        $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
+                        $('#cbo_uom_' + cur_row_id).val(data.uom_id).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+                        cur_row_id++;
+                    }
+                    else
+                    {
+                        if(cur_row_id> row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+                        $('#hidden_product_id_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val('');
+                        $('#txt_item_code_' + cur_row_id).val('');
+                        $('#cbo_item_category_' + cur_row_id).val(0).trigger('change');
+                        $('#cbo_uom_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(0);
+                    }
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                
+            }
+		}
     }
 
 </script>

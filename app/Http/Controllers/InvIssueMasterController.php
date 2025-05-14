@@ -303,4 +303,11 @@ class InvIssueMasterController extends Controller
         $trans = InvTransaction::where('mst_id', $id)->where('transaction_type', '=', 2)->get();
         return view('order_management.order.isssue_details',compact('trans'));
     }
+
+    public function issue_product_search_list_view(Request $request)
+    {
+    
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.issue_product_search_list_view',compact('param'));
+    }
 }

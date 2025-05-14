@@ -62,6 +62,7 @@ class InvReceiveMasterController extends Controller
                 'work_order_no' => $request->txt_work_order_no,
                 'work_order_id' => $request->work_order_id,
                 'supplier_id' => $request->cbo_supplier,
+                'receive_basis' => $request->cbo_receive_basis,
                 'created_at' => now(),
                 'created_by' => Auth::id(),
             ]);
@@ -180,7 +181,8 @@ class InvReceiveMasterController extends Controller
                 'receive_date' => $request->txt_receive_date,
                 'work_order_no' => $request->txt_work_order_no,
                 'work_order_id' => $request->work_order_id,
-                'supplier_id' => $request->cbo_supplier,
+                'supplier_id' => $request->cbo_supplier, 
+                'receive_basis' => $request->cbo_receive_basis,
             ]);
 
             // Insert receive details
@@ -327,6 +329,12 @@ class InvReceiveMasterController extends Controller
     {
         $receives = InvTransaction::where('mst_id', $id)->get();
         return view('order_management.order.receive_details',compact('receives'));
+    }
+
+    public function receive_product_search_list_view(Request $request)
+    {
+        $param = $request->query('param') ?? '';
+        return view('order_management.order.receive_product_search_list_view',compact('param'));
     }
 
     
