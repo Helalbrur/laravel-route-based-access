@@ -232,8 +232,7 @@ class ProductDetailsMaster extends Model
                             ELSE 0
                         END) AS amount,
                     a.product_id')
-                ->where('a.is_deleted', 0)
-                ->where('a.status_active', 1)
+                ->whereNull('a.deleted_at')
                 ->where('a.product_id', $product->id)
                 ->groupBy('a.product_id')
                 ->first();
