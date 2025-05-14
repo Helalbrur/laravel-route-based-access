@@ -56,7 +56,7 @@ class ProductDetailsMaster extends Model
             {
                 $item->product_name_details = $item->item_description ?? '';
             }
-            self::updateProductInventory($item);
+            //self::updateProductInventory($item);
         });
 
         // Automatically update updated_by when updating
@@ -76,7 +76,7 @@ class ProductDetailsMaster extends Model
             {
                 $item->product_name_details = $item->item_description ?? '';
             }
-            self::updateProductInventory($item);
+            //self::updateProductInventory($item);
         });
     }
 
