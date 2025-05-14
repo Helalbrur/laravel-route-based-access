@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 public/images/*
 public/common_uploads/*
+public/.htaccess
