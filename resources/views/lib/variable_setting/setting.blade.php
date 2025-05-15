@@ -106,7 +106,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
             }
             else if(cbo_variable_name == 2)
             {
-                
+                if (form_validation('cbo_variable_value','System Generated')==false)
+                {
+                    return;
+                }
+                else
+                {
+                    var formData = get_form_data('cbo_variable_value');
+                }
             }
 
            
