@@ -6,6 +6,7 @@ use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use App\Models\WorkOrderDtls;
 use App\Models\InvTransaction;
+use App\Models\VariableSetting;
 use App\Models\InvReceiveMaster;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductDetailsMaster;
@@ -77,9 +78,43 @@ class InvReceiveMasterController extends Controller
                 throw new Exception("row not found");
             }
 
+            
+
+            // for($j = 1; $j <= $request->row_num; $j++)
+            // {
+                
+            // }
+           
+
             $details_count = 0;
             for($i = 1; $i <= $request->row_num; $i++)
             {
+
+                // $settings = VariableSetting::select('id', 'over_receive')
+                //         ->where('variable_id', 3)
+                //         ->where('variable_value', 1)
+                //         ->whereNull('deleted_at')
+                //         ->get();
+
+                // $over_receive = $settings->pluck('over_receive')->first();
+                // //dd($settings->pluck('over_receive'));
+                
+                // if(!empty($over_receive) && $request->cbo_receive_basis == 3)
+                // {
+                //     $txt_work_order_qty = ($request["txt_work_order_qty_$i"]*$over_receive)/100;
+                //     if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
+                //     {
+                //         throw new Exception("Over Receive is not allowed");
+                //     }
+                // }else if(empty($over_receive) && $request->cbo_receive_basis == 3)
+                // {
+                //     $txt_work_order_qty = $request["txt_work_order_qty_$i"];
+                //     if($request["txt_receive_qty_$i"] > $request["txt_work_order_qty_$i"])
+                //     {
+                //         throw new Exception("Over Receive is not allowed");
+                //     }
+                // }
+        
 
                 $dtls_receive = InvTransaction::create([
 
@@ -105,6 +140,7 @@ class InvReceiveMasterController extends Controller
                     'room_self_id' => $request["cbo_shelf_no_$i"],
                     'room_bin_id' => $request["cbo_bin_no_$i"],
                     'cons_uom' => $request["hidden_consuption_uom_$i"],
+                    'ref_dtls_id' => $request["hidden_work_order_detailsId_$i"],
                     'cons_qnty' => $cons_qnty,
                     'cons_rate' => $cons_rate,
                     'cons_amount' => $cons_amount,
@@ -241,6 +277,7 @@ class InvReceiveMasterController extends Controller
                         'room_self_id' => $request["cbo_shelf_no_$i"],
                         'room_bin_id' => $request["cbo_bin_no_$i"],
                         'cons_uom' => $request["hidden_consuption_uom_$i"],
+                        'ref_dtls_id' => $request["hidden_work_order_detailsId_$i"],
                         'cons_qnty' => $cons_qnty,
                         'cons_rate' => $cons_rate,
                         'cons_amount' => $cons_amount,
@@ -273,6 +310,7 @@ class InvReceiveMasterController extends Controller
                             'room_self_id' => $request["cbo_shelf_no_$i"],
                             'room_bin_id' => $request["cbo_bin_no_$i"],
                             'cons_uom' => $request["hidden_consuption_uom_$i"],
+                             'ref_dtls_id' => $request["hidden_work_order_detailsId_$i"],
                             'cons_qnty' => $cons_qnty,
                             'cons_rate' => $cons_rate,
                             'cons_amount' => $cons_amount,

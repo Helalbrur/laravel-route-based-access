@@ -65,6 +65,7 @@
                     <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $order->quantity }}" disabled>
                     <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $order->rate }}">
                     <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $order->quantity*$order->rate }}">
+                    <input type="hidden" name="hidden_work_order_detailsId_{{ $i }}" id="hidden_work_order_detailsId_{{ $i }}" class="form-control" value="{{ $order->id }}">
                 </td>
                 <td class="form-group">
                      <input type="text" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $order->rate }}" disabled>
