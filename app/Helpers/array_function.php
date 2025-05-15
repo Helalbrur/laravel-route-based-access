@@ -136,7 +136,7 @@ function get_all_company_name()
 
 function variable_setting()
 {
-    return array(1 => "Item Code System Generated");
+    return array(1 => "Item Code System Generated", 2 => "Can Issue Exceed Requisition");
 }
 
 function get_source()
@@ -176,7 +176,7 @@ function get_generic_name()
 
 function get_issue_basis()
 {
-    return array(1 => "Independent", 2 => "Requisition", 3 => "Work Order");
+    return array(1 => "Independent", 2 => "Requisition", 3 => " xWork Order");
 }
 
 ?>
