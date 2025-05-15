@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         $user = Auth::user();
-       // dd($user);
+        //dd($user);
         $sql = "SELECT page_id, company_id, user_id, field_id, field_name, is_disable, default_value FROM field_level_access WHERE user_id = ?";
         $sql_exe = DB::select($sql, [$user->id]);
 
@@ -61,8 +61,8 @@ class AuthenticatedSessionController extends Controller
         }
 
         $this->cacheFieldManagerData($user->id);
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        //dd(Auth::user());
+        return redirect()->intended(route('home'));
     }
 
     protected function cacheFieldManagerData($userId)
