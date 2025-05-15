@@ -213,6 +213,26 @@
             });
         });
 
+        $('.theme-choice').on('change', function() {
+            var checkboxId = $(this).attr('id');
+            var isChecked = $(this).is(':checked');
+            
+            if (isChecked) {
+                // Uncheck other theme options in the same group
+                $('.theme-choice').not(this).prop('checked', false);
+                
+                // Store the selected theme
+                sessionStorage.setItem("selected_theme", checkboxId);
+                console.log('Theme selected:', checkboxId);
+                
+                // Apply the theme immediately
+                applyTheme(checkboxId);
+            } else {
+                // If unchecking, clear the storage (or set default)
+                sessionStorage.removeItem("selected_theme");
+            }
+        });
+
         // $(document).on('DOMNodeInserted', function() {
         //     $('.select2, select[id^="cbo_"]').select2();
         // });

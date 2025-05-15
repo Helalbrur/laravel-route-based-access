@@ -1,45 +1,51 @@
+function applyTheme(themeId) {
+    switch (themeId) {
+        case "light-mode-switch":
+            document.documentElement.removeAttribute("dir");
+            document.getElementById("bootstrap-style").href = window.ASSET_BASE_URL + "skote/assets/css/bootstrap.min.css";
+            document.getElementById("app-style").href = window.ASSET_BASE_URL + "skote/assets/css/app.min.css";
+            document.documentElement.setAttribute("data-bs-theme", "light");
+            break;
+        case "dark-mode-switch":
+            document.documentElement.removeAttribute("dir");
+            document.getElementById("bootstrap-style").href = window.ASSET_BASE_URL + "skote/assets/css/bootstrap.min.css";
+            document.getElementById("app-style").href = window.ASSET_BASE_URL + "skote/assets/css/app.min.css";
+            document.documentElement.setAttribute("data-bs-theme", "dark");
+            break;
+        case "rtl-mode-switch":
+            document.getElementById("bootstrap-style").href = window.ASSET_BASE_URL + "skote/assets/css/bootstrap.min.rtl.css";
+            document.getElementById("app-style").href = window.ASSET_BASE_URL + "skote/assets/css/app.min.rtl.css";
+            document.documentElement.setAttribute("dir", "rtl");
+            document.documentElement.setAttribute("data-bs-theme", "light");
+            break;
+        case "dark-rtl-mode-switch":
+            document.getElementById("bootstrap-style").href = window.ASSET_BASE_URL + "skote/assets/css/bootstrap.min.rtl.css";
+            document.getElementById("app-style").href = window.ASSET_BASE_URL + "skote/assets/css/app.min.rtl.css";
+            document.documentElement.setAttribute("dir", "rtl");
+            document.documentElement.setAttribute("data-bs-theme", "dark");
+            break;
+    }
+}
 
-!function ($) {
-    "use strict";
-    if (window.sessionStorage) {
-        var alreadyVisited = sessionStorage.getItem("is_visited");
-        if (alreadyVisited) {
-            switch (alreadyVisited) {
-                case "light-mode-switch":
-                    document.documentElement.removeAttribute("dir");
-                    if (document.getElementById("bootstrap-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.css")
-                        document.getElementById("bootstrap-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.css");
-                    if (document.getElementById("app-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/app.min.css")
-                        document.getElementById("app-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/app.min.css");
-                    document.documentElement.setAttribute("data-bs-theme", "light");
-                    break;
-                case "dark-mode-switch":
-                    document.documentElement.removeAttribute("dir");
-                    if (document.getElementById("bootstrap-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.css")
-                        document.getElementById("bootstrap-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.css");
-                    if (document.getElementById("app-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/app.min.css")
-                        document.getElementById("app-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/app.min.css");
-                    document.documentElement.setAttribute("data-bs-theme", "dark");
-                    break;
-                case "rtl-mode-switch":
-                    if (document.getElementById("bootstrap-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.rtl.css")
-                        document.getElementById("bootstrap-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.rtl.css");
-                    if (document.getElementById("app-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/app.min.rtl.css")
-                        document.getElementById("app-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/app.min.rtl.css");
-                    document.documentElement.setAttribute("dir", "rtl");
-                    document.documentElement.setAttribute("data-bs-theme", "light");
-                    break;
-                case "dark-rtl-mode-switch":
-                    if (document.getElementById("bootstrap-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.rtl.css")
-                        document.getElementById("bootstrap-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/bootstrap.min.rtl.css");
-                    if (document.getElementById("app-style").getAttribute("href") != window.ASSET_BASE_URL +"skote/assets/css/app.min.rtl.css")
-                        document.getElementById("app-style").setAttribute("href", window.ASSET_BASE_URL +"skote/assets/css/app.min.rtl.css");
-                    document.documentElement.setAttribute("dir", "rtl");
-                    document.documentElement.setAttribute("data-bs-theme", "dark");
-                    break;
-                default:
-                    console.log("Something wrong with the layout mode.");
+document.addEventListener('DOMContentLoaded', function() {
+    var themeChoices = document.querySelectorAll('.theme-choice');
+    
+    themeChoices.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                var checkboxId = this.id;
+                sessionStorage.setItem("selected_theme", checkboxId);
+                applyTheme(checkboxId);
             }
+        });
+    });
+    
+    // Load saved theme
+    if (window.sessionStorage) {
+        var savedTheme = sessionStorage.getItem("selected_theme");
+        if (savedTheme) {
+            document.getElementById(savedTheme).checked = true;
+            applyTheme(savedTheme);
         }
     }
-}(window.jQuery);
+});
