@@ -14,6 +14,7 @@ class VariableSetting extends Model
         'company_id',
         'variable_id',
         'variable_value',
+        'over_receive',
         'created_by',
         'updated_by',
     ];

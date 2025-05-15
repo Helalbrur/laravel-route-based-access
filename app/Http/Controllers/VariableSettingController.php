@@ -30,10 +30,20 @@ class VariableSettingController extends Controller
      */
     public function store(Request $request)
     {
+
+        // return response()->json([
+        //     'code' => 0,
+        //     'message' => 'Record Updated Successfully',
+        //     'id' => time(),
+        //     'data'=>$request->all()
+        // ]);
+
+    
         $this->validate($request, [
             'cbo_company_name' => 'required',
             'cbo_variable_name' => 'required'
         ]);
+        
         if($request->cbo_variable_name == 1 || $request->cbo_variable_name == 2)
         {
             $this->validate($request, [
@@ -89,6 +99,7 @@ class VariableSettingController extends Controller
         return response()->json([
             'code' => 0,
             'message' => 'Record Updated Successfully',
+            'id' => time(),
             'data'=>$setting
         ]);
     }
@@ -118,12 +129,26 @@ class VariableSettingController extends Controller
             'cbo_company_name' => 'required',
             'cbo_variable_name' => 'required'
         ]);
+
+
+       
         if($request->cbo_variable_name == 1 || $request->cbo_variable_name == 2)
         {
             $this->validate($request, [
                 'cbo_variable_value' => 'required'
             ]);
             $setting = $setting->update(['variable_value' => $request->cbo_variable_value]);
+        } 
+        else if($request->cbo_variable_name == 3)
+        {
+            $this->validate($request, [
+                'cbo_variable_value' => 'required'
+            ]);
+
+            $setting->update([
+                'variable_value' => $request->cbo_variable_value,
+                'over_receive'   => $request->txt_over_receive,
+            ]);
         }
         else
         {
@@ -135,7 +160,7 @@ class VariableSettingController extends Controller
 
         
         return response()->json([
-            'code' => 0,
+            'code' => 1,
             'message' => 'Record Updated Successfully',
             'data'=>$setting
         ]);

@@ -146,7 +146,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                 },
                 body: formData
             };
-            save_update_delete(operation,url,requestData,'id','','','variablesetting_1');
+            save_update_delete(operation,url,requestData,'id','','','');
         }
         
     }
