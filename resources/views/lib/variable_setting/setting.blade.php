@@ -93,29 +93,29 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
         {
             var formData = '';
             var cbo_variable_name =document.getElementById("cbo_variable_name").value * 1;
-            if(cbo_variable_name == 1)
-            {
-                if (form_validation('cbo_variable_value','System Generated')==false)
-                {
-                    return;
-                }
-                else
-                {
-                    var formData = get_form_data('cbo_variable_value');
-                }
-            }
-            else if(cbo_variable_name == 2)
-            {
-                if (form_validation('cbo_variable_value','System Generated')==false)
-                {
-                    return;
-                }
-                else
-                {
-                    var formData = get_form_data('cbo_variable_value');
-                }
-            }
 
+            if(cbo_variable_name == 1 || cbo_variable_name == 2)
+            {
+                if (form_validation('cbo_variable_value','System Generated')==false)
+                {
+                    return;
+                }
+                else
+                {
+                    var formData = get_form_data('cbo_variable_value');
+                }
+            }
+            else if(cbo_variable_name == 3)
+            {
+                if (form_validation('cbo_variable_value','System Generated')==false)
+                {
+                    return;
+                }
+                else
+                {
+                    var formData = get_form_data('cbo_variable_value,txt_over_receive');
+                }
+            }
            
            if(formData == '')
            {
@@ -137,6 +137,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
             formData.append('cbo_company_name', document.getElementById('cbo_company_name').value);
             formData.append('_token', '{{csrf_token()}}');
             var url = `/lib/variable_setting/setting${param}`;
+           
             var requestData = {
                 method: method,
                 headers: {
@@ -145,7 +146,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
                 },
                 body: formData
             };
-
             save_update_delete(operation,url,requestData,'id','','','variablesetting_1');
         }
         
@@ -154,8 +154,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
     const load_php_data_to_form =async (menuId) =>
     {
         reset_form('variablesetting_1','','',1);
-        var columns = 'variable_id*company_id';
-        var fields = 'cbo_variable_name*cbo_company_name';
+        var columns = 'variable_id*company_id*over_receive';
+        var fields = 'cbo_variable_name*cbo_company_name*txt_over_receive';
         var get_return_value = await populate_form_data('id',menuId,'variable_settings',columns,fields,'{{csrf_token()}}','','','');
        if(get_return_value == 1)
        {
@@ -168,7 +168,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Report Setting';
     {
         var cbo_variable_name =document.getElementById("cbo_variable_name").value;
         var cbo_company_name =document.getElementById("cbo_company_name").value;
-        var data = JSON.stringify({variable_name:cbo_variable_name,company_name:cbo_company_name,permission:permission});
+        var data = JSON.stringify({variable_name:cbo_variable_name,company_name:cbo_company_name,variable_name:cbo_variable_name,permission:permission});
         show_list_view('show_variable_setting_list_view','show_common_list_view','variable_div','/show_common_list_view','','','',data);
     }
 </script>

@@ -136,7 +136,7 @@ function get_all_company_name()
 
 function variable_setting()
 {
-    return array(1 => "Item Code System Generated", 2 => "Can Issue Exceed Requisition");
+    return array(1 => "Item Code System Generated", 2 => "Can Issue Exceed Requisition", 3 => "Material Over Receive Control");
 }
 
 function get_source()

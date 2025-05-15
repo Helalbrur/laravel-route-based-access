@@ -34,7 +34,7 @@ class VariableSettingController extends Controller
             'cbo_company_name' => 'required',
             'cbo_variable_name' => 'required'
         ]);
-        if($request->cbo_variable_name == 1)
+        if($request->cbo_variable_name == 1 || $request->cbo_variable_name == 2)
         {
             $this->validate($request, [
                 'cbo_variable_value' => 'required'
@@ -52,6 +52,28 @@ class VariableSettingController extends Controller
                     'company_id' => $request->cbo_company_name,
                     'variable_id' => $request->cbo_variable_name,
                     'variable_value' => $request->cbo_variable_value
+                ]);
+            }
+        }
+        else if($request->cbo_variable_name == 3)
+        {
+            $this->validate($request, [
+                'cbo_variable_value' => 'required|numeric'
+            ]);
+            if(VariableSetting::where('company_id', $request->cbo_company_name)->where('variable_id', $request->cbo_variable_name)->exists())
+            {
+               $setting = VariableSetting::where('company_id', $request->cbo_company_name)
+                                            ->where('variable_id', $request->cbo_variable_name)
+                                            ->where('over_receive', $request->txt_over_receive)
+                                            ->update(['variable_value' => $request->cbo_variable_value]);
+            }
+            else
+            {
+                $setting =  VariableSetting::create([
+                    'company_id' => $request->cbo_company_name,
+                    'variable_id' => $request->cbo_variable_name,
+                    'variable_value' => $request->cbo_variable_value,
+                    'over_receive' => $request->txt_over_receive
                 ]);
             }
         }
@@ -96,7 +118,7 @@ class VariableSettingController extends Controller
             'cbo_company_name' => 'required',
             'cbo_variable_name' => 'required'
         ]);
-        if($request->cbo_variable_name == 1)
+        if($request->cbo_variable_name == 1 || $request->cbo_variable_name == 2)
         {
             $this->validate($request, [
                 'cbo_variable_value' => 'required'
