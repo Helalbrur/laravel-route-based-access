@@ -236,7 +236,7 @@ class ProductDetailsMaster extends Model
                 ->where('a.product_id', $product->id)
                 ->groupBy('a.product_id')
                 ->first();
-
+            Log::error('update call:'.$product->id );
             if ($transSummary) {
                 // Update the product inventory details
                 $product->current_stock = $transSummary->balance ?? 0;
@@ -245,6 +245,15 @@ class ProductDetailsMaster extends Model
                     ? ($transSummary->amount ?? 0) / ($transSummary->balance ?? 1) 
                     : 0;
                 $product->save();
+                Log::error('update complete: '.$product->id,
+                [
+                    'current_stock' => $product->current_stock,
+                    'stock_value' => $product->stock_value,
+                    'avg_rate_per_unit' => $product->avg_rate_per_unit,
+                    'balance' => $product->balance_qnty,
+                    'amount' => $product->balance_amount,
+                    'avg_rate' => $product->avg_rate,
+                ]);
             }
         } catch (Exception $e) {
             // Log the error or handle it appropriately

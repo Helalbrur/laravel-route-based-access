@@ -50,6 +50,8 @@ class InvReceiveMasterController extends Controller
             // Generate system no for receive
 
             $system_no_info=generate_system_no( $request->cbo_company_name, '', 'GIR', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
+
+            $all_product_arr = array();
             
             $invReceiveMaster = InvReceiveMaster::create([
                 'sys_number_prefix' => $system_no_info->sys_no_prefix,
@@ -78,7 +80,6 @@ class InvReceiveMasterController extends Controller
             $details_count = 0;
             for($i = 1; $i <= $request->row_num; $i++)
             {
-                //throw new Exception($request["hidden_product_id_$i"]);
 
                 $dtls_receive = InvTransaction::create([
 
@@ -110,6 +111,7 @@ class InvReceiveMasterController extends Controller
                 ]);
                 $receiveDetails[] = $dtls_receive;
                 $details_count++;
+                $all_product_arr[$request["hidden_product_id_$i"]] = $request["hidden_product_id_$i"];
             }
 
             if(count($receiveDetails) == 0 || $details_count == 0)
@@ -118,6 +120,17 @@ class InvReceiveMasterController extends Controller
             }
            
             DB::commit();
+            $all_product_arr[$request["hidden_product_id_$i"]] = $request["hidden_product_id_$i"];
+
+            foreach($all_product_arr as $product_id)
+            {
+                $product = ProductDetailsMaster::find($product_id);
+                if (!empty($product->id))
+                {
+                    ProductDetailsMaster::updateProductInventory($product);
+                }
+            }
+                
             return response()->json([
                 'code'=>0,
                 'message'=>'Receive Created Successfully',
@@ -125,7 +138,7 @@ class InvReceiveMasterController extends Controller
                 'sys_number' => $invReceiveMaster->sys_number, 
                 'id' => $invReceiveMaster->id
             ]);
-            return response()->json(['success' => 'Receive Created Successfully', 'sys_number' => $invReceiveMaster->sys_number, 'id' => $invReceiveMaster->id]);
+           // return response()->json(['success' => 'Receive Created Successfully', 'sys_number' => $invReceiveMaster->sys_number, 'id' => $invReceiveMaster->id]);
         }
         catch (Exception $e)
         {
@@ -168,6 +181,8 @@ class InvReceiveMasterController extends Controller
         try
         {
                         
+            $all_product_arr = array();
+
             // Find the work order by ID
             $invReceiveMaster = InvReceiveMaster::findOrFail($update_id);
             if(!$invReceiveMaster) {
@@ -231,6 +246,7 @@ class InvReceiveMasterController extends Controller
                         'cons_amount' => $cons_amount,
                     ]);
                     $receiveDetails[] = $dtls_receive->id;
+                    $all_product_arr[$productId] = $productId;
                 } else{
 
                     // Update existing record
@@ -262,6 +278,7 @@ class InvReceiveMasterController extends Controller
                             'cons_amount' => $cons_amount,
                         ]);
                         $receiveDetails[] = $receive_dtls->id;
+                        $all_product_arr[$productId] = $productId;
                     }
                 }
             }
@@ -280,8 +297,17 @@ class InvReceiveMasterController extends Controller
                 InvTransaction::whereIn('id', $existingDtlsIds)->delete();
             }
    
-
+            foreach($all_product_arr as $product_id)
+            {
+                $product = ProductDetailsMaster::find($product_id);
+                if (!empty($product->id))
+                {
+                    ProductDetailsMaster::updateProductInventory($product);
+                }
+            }
             DB::commit();
+
+            
             return response()->json([
                 'code'=>1,
                 'message'=>'success',

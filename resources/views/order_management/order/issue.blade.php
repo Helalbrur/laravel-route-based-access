@@ -359,8 +359,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             await handleCompanyChange(); // Await the company change
             $('#cbo_location_name').val(data.location_id);
             await handleLocationChange();
-            $('#cbo_store_name').val(data.store_id);
-            await multipleStoreChange();
+            $('#cbo_store_name').val(data.store_id).trigger('change');
             $('#cbo_issue_basis').val(data.issue_basis).trigger('change');
             $('#txt_issue_date').val(data.date);
             $('#txt_requisition_no').val(data.requisition_no);
