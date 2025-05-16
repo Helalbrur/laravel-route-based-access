@@ -53,6 +53,7 @@ class InvReceiveMasterController extends Controller
                         ->where('variable_value', 1)
                         ->where('variable_value', $request->cbo_company_name)
                         ->whereNull('deleted_at')
+                        ->orderby('id', 'desc')
                         ->first();
 
             $over_receive = $settings->over_receive;
@@ -124,7 +125,7 @@ class InvReceiveMasterController extends Controller
                     if($wo_dtls == null) {
                         throw new Exception("Work Order Details not found",111);
                     }
-                    $balance_qty = $wo_dtls->balance;
+                    $balance_qty = $wo_dtls->order_balance;
                     if($balance_qty == 0)
                     {
                         throw new Exception("Over Receive is not allowed",111);
@@ -148,7 +149,7 @@ class InvReceiveMasterController extends Controller
 
                 $dtls_receive = InvTransaction::create([
 
-                    $cons_qnty = $request["txt_work_order_qty_$i"]*$request["hidden_conversion_fac_$i"],
+                    $cons_qnty = $request["txt_receive_qty_$i"]*$request["hidden_conversion_fac_$i"],
                     $cons_rate = $request["txt_work_order_rate_$i"]*1,
                     $cons_amount = $cons_qnty*$cons_rate,
 
@@ -158,12 +159,12 @@ class InvReceiveMasterController extends Controller
                     'store_id' => $request->cbo_store_name,
                     'product_id' => $request["hidden_product_id_$i"],
                     'order_uom' => $request["cbo_order_uom_$i"],
-                    'order_qnty' => $request["txt_work_order_qty_$i"], 
+                    'order_qnty' => $request["txt_receive_qty_$i"], 
                     'order_rate' => $request["txt_work_order_rate_$i"],
                     'order_amount' => $request["txt_work_order_amount_$i"],
-                    'quantity' => $request["txt_receive_qty_$i"],
                     'lot' => $request["txt_lot_batch_no_$i"],
-                    'expire_date' => $request["txt_expire_date_$i"],
+                    'expire_date' => $request["txt_expire_date_$i"], 
+                    'date' => $request->txt_receive_date,
                     'floor_id' => $request["cbo_floor_name_$i"],
                     'room_id' => $request["cbo_room_no_$i"],
                     'room_rack_id' => $request["cbo_rack_no_$i"],
@@ -307,6 +308,7 @@ class InvReceiveMasterController extends Controller
                         'quantity' => $request["txt_receive_qty_$i"],
                         'lot' => $request["txt_lot_batch_no_$i"],
                         'expire_date' => $request["txt_expire_date_$i"],
+                        'date' => $request->txt_receive_date,
                         'floor_id' => $request["cbo_floor_name_$i"],
                         'room_id' => $request["cbo_room_no_$i"],
                         'room_rack_id' => $request["cbo_rack_no_$i"],
@@ -324,20 +326,77 @@ class InvReceiveMasterController extends Controller
 
                     // Update existing record
                     $receive_dtls = InvTransaction::find($dtlsId);
+                    if($receive_dtls == null) {
+                        throw new Exception("Receive Details not found",111);
+                    }
+
+                    
+
+                    if(!empty($over_receive) && $request->cbo_receive_basis == 3)
+                    {
+                        $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                        if($wo_dtls == null) {
+                            throw new Exception("Work Order Details not found",111);
+                        }
+                        $balance_qty = $wo_dtls->order_balance + $wo_dtls->order_balance;
+                        if($balance_qty == 0)
+                        {
+                            throw new Exception("Over Receive is not allowed",111);
+                        }
+                        if($wo_dtls->order_balance>0)
+                        {
+                            $over_receive_qty = ($balance_qty*$over_receive)/100;
+                            $txt_balanc_qty = $balance_qty + $over_receive_qty;
+                            if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
+                            {
+                                throw new Exception("Over Receive is not allowed",111);
+                            }
+                        }else{
+                                throw new Exception("Over Receive is not allowed",111);
+                        }
+                        
+                    }
+                    else if(empty($over_receive) && $request->cbo_receive_basis == 3)
+                    {
+                        $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                        if($wo_dtls == null) {
+                            throw new Exception("Work Order Details not found",111);
+                        }
+                        $balance_qty = $wo_dtls->balance;
+                        if($balance_qty == 0)
+                        {
+                            throw new Exception("Over Receive is not allowed",111);
+                        }
+                        if($balance_qty>0)
+                        {
+                            $txt_balanc_qty = $balance_qty;
+                            if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
+                            {
+                                throw new Exception("Over Receive is not allowed",111);
+                            }
+                        }else{
+                            $txt_work_order_qty = $request["txt_work_order_qty_$i"];
+                            if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
+                            {
+                                throw new Exception("Over Receive is not allowed",111);
+                            }
+                        }
+                    } 
+
+                 
                     if($receive_dtls) {
                         $receive_dtls->update([
 
-                            $cons_qnty = $request["txt_work_order_qty_$i"]*$request["hidden_conversion_fac_$i"],
+                            $cons_qnty = $request["txt_receive_qty_$i"]*$request["hidden_conversion_fac_$i"],
                             $cons_rate = $request["txt_work_order_rate_$i"]*1,
                             $cons_amount = $cons_qnty*$cons_rate,
 
                             'transaction_type' => 1,
                             'product_id' => $productId,
                             'order_uom' => $request["cbo_order_uom_$i"],
-                            'order_qnty' => $request["txt_work_order_qty_$i"], 
+                            'order_qnty' => $request["txt_receive_qty_$i"], 
                             'order_rate' => $request["txt_work_order_rate_$i"],
                             'order_amount' => $request["txt_work_order_amount_$i"],
-                            'quantity' => $request["txt_receive_qty_$i"],
                             'lot' => $request["txt_lot_batch_no_$i"],
                             'expire_date' => $request["txt_expire_date_$i"],
                             'floor_id' => $request["cbo_floor_name_$i"],
@@ -394,7 +453,13 @@ class InvReceiveMasterController extends Controller
         catch (Exception $e)
         {
             DB::rollBack();
-            return response()->json(['error' => $e->getMessage()." in ".$e->getFile()." at line ".$e->getLine()]);
+            return response()->json([
+                'code'=>$e->getCode() ?? 10,
+                'message'=>$e->getMessage(),
+                'data'=>[],
+                'sys_number' => '', 
+                'id' =>''
+            ],500);
         }
     }
 
@@ -425,8 +490,8 @@ class InvReceiveMasterController extends Controller
             ->select(
                 'a.id',
                 'a.quantity as work_order_quantity',
-                DB::raw('SUM(b.quantity) as total_received'),
-                DB::raw('a.quantity - SUM(b.quantity) as balance')
+                DB::raw('SUM(b.order_qnty) as total_received'),
+                DB::raw('a.quantity - SUM(b.order_qnty) as balance')
             )
             ->get();
 
@@ -464,8 +529,8 @@ class InvReceiveMasterController extends Controller
             ->select(
                 'a.id',
                 'a.quantity as work_order_quantity',
-                DB::raw('SUM(b.quantity) as total_received'),
-                DB::raw('a.quantity - SUM(b.quantity) as balance')
+                DB::raw('SUM(b.order_qnty) as total_received'),
+                DB::raw('a.quantity - SUM(b.order_qnty) as balance')
             )
             ->get();
         //dd($work_dtls);

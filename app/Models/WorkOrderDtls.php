@@ -104,6 +104,12 @@ class WorkOrderDtls extends Model
         return $this->transactions()->sum('cons_qnty');
     }
 
+     public function getOrderBalanceAttribute()
+    {
+        $consumedQty = $this->transactions()->sum('order_qnty');
+        return $this->quantity - $consumedQty;
+    }
+
      /*
         $work_order_dtls = WorkOrderDtls::find($id);
         $balance = $work_order_dtls->balance;

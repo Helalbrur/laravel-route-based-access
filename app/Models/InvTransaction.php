@@ -26,6 +26,7 @@ class InvTransaction extends Model
         'quantity',
         'lot',
         'expire_date',
+        'date',
         'location_id',
         'store_id',
         'floor_id',
