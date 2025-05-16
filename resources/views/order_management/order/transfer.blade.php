@@ -123,6 +123,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
                             {{-- Transfer From Card --}}
                             <input type="hidden" name="hidden_trans_from_id" id="hidden_trans_from_id">
+                            <input type="hidden" name="hidden_req_dtls_id" id="hidden_req_dtls_id">
                             <div class="col-md-6">
                                 <div class="card h-100" style="background-color: rgb(241, 241, 241);">
                                     <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer From</div>
@@ -371,29 +372,25 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 if (!popupField || popupField.value === '') return;
 
                 let data = JSON.parse(popupField.value);
-                console.log(data);
+                //console.log(data);
 
                 if (data) {
                     $('#txt_sys_no').val(data.transfer_no);
+                    $('#txt_sys_no').prop('readonly', true);
                     $('#update_id').val(data.id);
-                    $('#cbo_company_name').val(data.company_id);
-                    await handleCompanyChange();
+                    $('#cbo_company_name').val(data.company_id).trigger('change');
                     $('#txt_transfer_date').val(data.transfer_date);
                     $('#txt_requisition_no').val(data.requisition_no);
                     $('#hidden_requisition_id').val(data.requisition_id);
-                    $('#cbo_item_category').val(data.category_id).trigger('change');
-                    $('#txt_item_name').val(data.item_description);
-                    $('#hidden_product_id').val(data.product_id);
-                    $('#txt_current_stock').val(data.current_stock);
-                    $('#txt_avg_rate').val(data.avg_rate);
-                    $('#txt_transfer_qty').val(data.transfer_qty);
-                    $('#txt_sys_no').prop('readonly', true);
+                    $('#cbo_item_category').val(0).trigger('change');
+                    $('#txt_item_name').val('');
+                    $('#hidden_product_id').val('');
+                    $('#txt_current_stock').val();
+                    $('#txt_avg_rate').val();
+                    $('#txt_transfer_qty').val();
 
                     await load_tranfer_dtls(data.id);
-                    await load_transaction_dtls(data.id);
                     await load_requisition_dtls_list_view(data.requisition_id);
-
-                    set_button_status(1, permission, 'fnc_transfer', 1);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -426,7 +423,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         if (form_validation('cbo_company_name*txt_item_name*txt_transfer_date', 'Company Name*Item Name*Transfer Date') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id,hidden_transfer_dtls_id');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id,hidden_req_dtls_id,hidden_transfer_dtls_id');
 
             var method = "POST";
             var param = "";
@@ -467,28 +464,22 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
             if (result.code === 200 && result.data) {
                 const data = result.data;
-
                 $('#txt_sys_no').val(data.transfer_no);
+                $('#txt_sys_no').prop('readonly', true);
                 $('#update_id').val(data.id);
-                $('#cbo_company_name').val(data.company_id);
-                await handleCompanyChange();
+                $('#cbo_company_name').val(data.company_id).trigger('change');
                 $('#txt_transfer_date').val(data.transfer_date);
                 $('#txt_requisition_no').val(data.requisition_no);
                 $('#hidden_requisition_id').val(data.requisition_id);
-                $('#cbo_item_category').val(data.category_id).trigger('change');
-                $('#txt_item_name').val(data.item_description);
-                $('#hidden_product_id').val(data.product_id);
-                $('#txt_current_stock').val(data.current_stock);
-                $('#txt_avg_rate').val(data.avg_rate);
-                $('#txt_transfer_qty').val(data.transfer_qty);
-                $('#txt_sys_no').prop('readonly', true);
-
+                $('#cbo_item_category').val(0).trigger('change');
+                $('#txt_item_name').val('');
+                $('#hidden_product_id').val('');
+                $('#txt_current_stock').val();
+                $('#txt_avg_rate').val();
+                $('#txt_transfer_qty').val();
 
                 await load_tranfer_dtls(data.id);
-                await load_transaction_dtls(data.id);
                 await load_requisition_dtls_list_view(data.requisition_id);
-
-                set_button_status(1, permission, 'fnc_transfer', 1);
 
             } else {
                 console.warn("Unexpected response:", result);
@@ -531,10 +522,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                         current_stock
                     } = data;
 
-                    $('#hidden_product_id').val(id).trigger('change');
+                    $('#hidden_product_id').val(id);
                     $('#cbo_item_category').val(item_category_id).trigger('change');
-                    $('#txt_item_name').val(item_description).trigger('change');
-                    $('#txt_current_stock').val(current_stock).trigger('change');
+                    $('#txt_item_name').val(item_description);
+                    $('#txt_current_stock').val(current_stock);
                 }
 
             } catch (error) {
@@ -592,8 +583,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                         requisition_no
                     } = data;
 
-                    $('#hidden_requisition_id').val(id).trigger('change');
-                    $('#txt_requisition_no').val(requisition_no).trigger('change');
+                    $('#hidden_requisition_id').val(id);
+                    $('#txt_requisition_no').val(requisition_no);
 
                     load_requisition_dtls_list_view(id);
                 }
@@ -604,7 +595,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     }
 
     async function load_requisition_dtls_list_view(requisition_id) {
-        //fetch data from server as html and put in a div that id requisition_dtls_list_view
         await fetch(`/order/show_requisition_dtls_list_view/${requisition_id}`)
             .then(response => response.text())
             .then(html => {
@@ -613,15 +603,30 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             .catch(error => console.error('Error loading requisition details:', error));
     }
 
-    function set_transfer_dtls_data(param) {
+    async function set_transfer_dtls_data(param) {
         try {
             const data = typeof param === 'string' ? JSON.parse(param) : param;
+            $('#hidden_transfer_dtls_id').val(data.id);
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
-            $('#txt_current_stock').val(data.curr_stock_updatable);
             $('#txt_avg_rate').val(data.avg_rate);
             $('#txt_transfer_qty').val(data.transfer_qty);
+
+            await load_transaction_dtls(data.mst_id);
+
+            stockParams['product_id'] = data.product_id;
+            stockParams['location_id'] = document.getElementById('cbo_location_from').value;
+            stockParams['store_id'] = document.getElementById('cbo_store_from').value;
+            stockParams['floor_id'] = document.getElementById('cbo_floor_name_from').value;
+            stockParams['room_id'] = document.getElementById('cbo_room_no_from').value;
+            stockParams['room_rack_id'] = document.getElementById('cbo_rack_no_from').value;
+            stockParams['room_self_id'] = document.getElementById('cbo_shelf_no_from').value;
+            stockParams['room_bin_id'] = document.getElementById('cbo_bin_no_from').value;
+
+            await calculateStock();
+
+            set_button_status(1, permission, 'fnc_transfer', 1);
 
         } catch (e) {
             console.error('Error processing parameter:', e);
@@ -631,13 +636,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     function set_requisition_dtls_data(param) {
         try {
             const data = typeof param === 'string' ? JSON.parse(param) : param;
+            $('#hidden_req_dtls_id').val(data.id);
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
             $('#txt_avg_rate').val(data.avg_rate);
-
-            handleDropdownChange(data.product_id, 'product_id');
-
         } catch (e) {
             console.error('Error processing parameter:', e);
         }
@@ -656,10 +659,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     };
 
     function handleDropdownChange(element, paramName) {
-
         const field_value = element;
         stockParams[paramName] = field_value;
-        console.log(`${paramName} : ${field_value}`);
+        // console.log(`${paramName} : ${field_value}`);
         calculateStock();
     }
 

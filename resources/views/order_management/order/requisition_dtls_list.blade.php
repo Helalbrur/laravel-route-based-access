@@ -31,7 +31,7 @@
             <td>{{ optional($req_dtls->category)->category_name }}</td>
             <td>{{ $req_dtls->requisition_qty }}</td>
             <td>{{ $req_dtls->issue_qty ?? 0 }}</td>
-            <td>{{ $req_dtls->balance }}</td>
+            <td>{{ $req_dtls->balance ?? 0 }}</td>
         </tr>
         @empty
         <tr>

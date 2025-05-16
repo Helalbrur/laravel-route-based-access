@@ -1465,9 +1465,21 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 			}
 			show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
 		}
+		if(response.code > 10)
+		{
+			if(response.hasOwnProperty("message") && response.message.length > 0)
+			{
+				showNotification(operation_success_msg[response.message],'error');
+			}
+			else
+			{
+				showNotification(operation_success_msg[response.code],'error');
+			}
+		}
 		release_freezing();
 	})
 	.catch(error => {
+		// console.log(error);
 		if (error.status === 422) {
 			let validationErrors = error.data.errors;
 			let firstField = null;
@@ -1517,7 +1529,15 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	
 			showNotification(errorMessages.join('<br>'), 'error');
 		} else {
-			showNotification(error, 'error');
+			if (error?.data?.message) {
+				showNotification(error.data.message, 'error');
+			} else if (error?.message) {
+				showNotification(error.message, 'error');
+			} else {
+				showNotification('Something went wrong.', 'error');
+			}
+
+			
 		}
 		release_freezing();
 	});

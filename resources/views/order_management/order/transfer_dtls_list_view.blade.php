@@ -17,13 +17,13 @@
         <?php
         $param = json_encode([
             'id' => $trans_dtls->id,
+            'mst_id' => $trans_dtls->mst_id,
             'trans_from_id' => $trans_dtls->trans_from_id,
             'trans_to_id' => $trans_dtls->trans_to_id,
             'category_id' => $trans_dtls->category_id,
             'product_id' => $trans_dtls->product_id,
             'item_description' => optional($trans_dtls->product)->item_description,
-            'curr_stock_updatable' => (optional($trans_dtls->product)->balance_qnty ?? 0) + $trans_dtls->transfer_qty,
-            'avg_rate' => optional($trans_dtls->product)->avg_rate,
+            'avg_rate' => round(optional($trans_dtls->product)->avg_rate ?? 0, 6),
             'transfer_qty' => $trans_dtls->transfer_qty
         ]);
         ?>
