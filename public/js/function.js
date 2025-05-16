@@ -1529,7 +1529,15 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	
 			showNotification(errorMessages.join('<br>'), 'error');
 		} else {
-			showNotification(error.data.message, 'error');
+			if (error?.data?.message) {
+				showNotification(error.data.message, 'error');
+			} else if (error?.message) {
+				showNotification(error.message, 'error');
+			} else {
+				showNotification('Something went wrong.', 'error');
+			}
+
+			
 		}
 		release_freezing();
 	});
