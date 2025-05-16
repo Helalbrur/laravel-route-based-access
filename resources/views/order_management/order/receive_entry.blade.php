@@ -320,7 +320,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
                 formData.append(`hidden_conversion_fac_${i}`, document.getElementById(`hidden_conversion_fac_${i}`).value);
-                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value);formData.append(`hidden_work_order_detailsId_${i}`, document.getElementById(`hidden_work_order_detailsId_${i}`).value);
+                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value);
             }
             console.log(formData);
 
@@ -346,32 +346,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
     const load_php_data_to_form = async (update_id) => {
         var columns = 'sys_number*id*company_id*location_id*store_id*receive_date*work_order_no*work_order_id*supplier_id*receive_basis';
-        var response = await populate_field_data('id', update_id, 'inv_receive_master', columns, '{{csrf_token()}}');
-
-        if (response.code === 18 && response.data) {
-            var data = response.data;
-            document.getElementById('txt_sys_no').value = data.sys_number;
-            document.getElementById('update_id').value = data.id;
-            document.getElementById('cbo_company_name').value = data.company_id;
-            await handleCompanyChange(); // Await the company change
-            $('#cbo_location_name').val(data.location_id);
-            await handleLocationChange();
-            $('#cbo_store_name').val(data.store_id).trigger('change');;
-            $('#txt_receive_date').val(data.receive_date);await handleLocationChange();
-            $('#cbo_receive_basis').val(data.receive_basis).trigger('change');
-            $('#txt_work_order_no').val(data.work_order_no);
-            $('#work_order_id').val(data.work_order_id);
-            $('#cbo_supplier').val(data.supplier_id).trigger('change');
+        var fields = 'txt_sys_no*update_id*cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*txt_work_order_no*work_order_id*cbo_supplier*cbo_receive_basis';
+        var others = '';
+        var get_return_value = await populate_form_data('id', update_id, 'inv_receive_master', columns, fields, '{{csrf_token()}}');
+        if (get_return_value == 1) {
+            await load_receive_details();
             set_button_status(1, permission, 'fnc_receive_entry', 1);
-            load_receive_details();
-        } else {
-            console.warn("Unexpected data format:", response);
         }
-        release_freezing();
     }
 
     async  function fnc_work_order_popup() {
-        if(form_validation('cbo_company_name*cbo_receive_basis','Company Name*Receive Basis')==false)
+        if(form_validation('cbo_company_name','Company Name')==false)
         {
             return;
         }

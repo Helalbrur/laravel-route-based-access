@@ -32,6 +32,7 @@ use App\Http\Controllers\LibShelfController;
 use App\Http\Controllers\MainMenuController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ItemLedgerController;
 use App\Http\Controllers\LibCountryController;
 use App\Http\Controllers\MainModuleController;
 use App\Http\Controllers\PermissionController;
@@ -50,12 +51,12 @@ use App\Http\Controllers\OtherCompanyController;
 use App\Http\Controllers\WorkOrderMstController;
 use App\Http\Controllers\LibDepartmentController;
 use App\Http\Controllers\ReportSettingController;
+use App\Http\Controllers\InvIssueMasterController;
 use App\Http\Controllers\MandatoryFieldController;
 use App\Http\Controllers\RequisitionMstController;
 use App\Http\Controllers\LibItemSubGroupController;
 use App\Http\Controllers\VariableSettingController;
 use App\Http\Controllers\FieldLevelAccessController;
-use App\Http\Controllers\InvIssueMasterController;
 use App\Http\Controllers\InvReceiveMasterController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
@@ -281,6 +282,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+Route::prefix('reports')->middleware(['auth','PagePermission'])->group(function () {
+    Route::get('/item-ledger', [ItemLedgerController::class, 'index'])->name('item-ledger.index');
+    Route::post('/item-ledger', [ItemLedgerController::class, 'show'])->name('item-ledger.show');
+    Route::post('/item-ledger/excel', [ItemLedgerController::class, 'excelExport'])
+    ->name('item-ledger.excel');
+});
 
 require __DIR__.'/auth.php';
 
