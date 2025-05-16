@@ -86,44 +86,52 @@ class InvReceiveMasterController extends Controller
                 throw new Exception("row not found");
             }
 
-            
-            // for($j = 1; $j <= $request->row_num; $j++)
-            // {
-                
-            // }
-           
-
             $details_count = 0;
             for($i = 1; $i <= $request->row_num; $i++)
             {
 
                
-                //dd($settings->pluck('over_receive')); 
+                // //dd($settings->pluck('over_receive')); 
+                // $balance_qty = $receive_dtls_data[$request["hidden_work_order_detailsId_$i"]]['balance'];
                 
                 if(!empty($over_receive) && $request->cbo_receive_basis == 3)
                 {
-                    if($request["txt_balance_qty_$i"]>0)
+                    $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                    if($wo_dtls == null) {
+                        throw new Exception("Work Order Details not found",111);
+                    }
+                    $balance_qty = $wo_dtls->balance;
+                    if($balance_qty == 0)
                     {
-                        $over_receive_qty = ($request["txt_balance_qty_$i"]*$over_receive)/100;
-                        $txt_balanc_qty = $request["txt_balance_qty_$i"] + $over_receive_qty;
+                        throw new Exception("Over Receive is not allowed",111);
+                    }
+                    if($wo_dtls->balance>0)
+                    {
+                        $over_receive_qty = ($balance_qty*$over_receive)/100;
+                        $txt_balanc_qty = $balance_qty + $over_receive_qty;
                         if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
                         {
                             throw new Exception("Over Receive is not allowed",111);
                         }
                     }else{
-                        $over_receive_qty = ($request["txt_work_order_qty_$i"]*$over_receive)/100;
-                        $txt_work_order_qty = $request["txt_work_order_qty_$i"] + $over_receive_qty;
-                        if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
-                        {
-                            throw new Exception("Over Receive is not allowed",111);
-                        }
+                         throw new Exception("Over Receive is not allowed",111);
                     }
                     
-                }else if(empty($over_receive) && $request->cbo_receive_basis == 3)
+                }
+                else if(empty($over_receive) && $request->cbo_receive_basis == 3)
                 {
-                    if($request["txt_balance_qty_$i"]>0)
+                    $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                    if($wo_dtls == null) {
+                        throw new Exception("Work Order Details not found",111);
+                    }
+                    $balance_qty = $wo_dtls->balance;
+                    if($balance_qty == 0)
                     {
-                        $txt_balanc_qty = $request["txt_balance_qty_$i"];
+                        throw new Exception("Over Receive is not allowed",111);
+                    }
+                    if($balance_qty>0)
+                    {
+                        $txt_balanc_qty = $balance_qty;
                         if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
                         {
                             throw new Exception("Over Receive is not allowed",111);
@@ -207,7 +215,7 @@ class InvReceiveMasterController extends Controller
                 'data'=>[],
                 'sys_number' => '', 
                 'id' =>''
-            ]);
+            ],500);
         }
     }
 
