@@ -48,6 +48,14 @@ class InvReceiveMasterController extends Controller
         try
         {
             
+            $settings = VariableSetting::select('id', 'over_receive')
+                        ->where('variable_id', 3)
+                        ->where('variable_value', 1)
+                        ->where('variable_value', $request->cbo_company_name)
+                        ->whereNull('deleted_at')
+                        ->first();
+
+            $over_receive = $settings->over_receive;
             // Generate system no for receive
 
             $system_no_info=generate_system_no( $request->cbo_company_name, '', 'GIR', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );
@@ -79,7 +87,6 @@ class InvReceiveMasterController extends Controller
             }
 
             
-
             // for($j = 1; $j <= $request->row_num; $j++)
             // {
                 
@@ -90,30 +97,25 @@ class InvReceiveMasterController extends Controller
             for($i = 1; $i <= $request->row_num; $i++)
             {
 
-                // $settings = VariableSetting::select('id', 'over_receive')
-                //         ->where('variable_id', 3)
-                //         ->where('variable_value', 1)
-                //         ->whereNull('deleted_at')
-                //         ->get();
-
-                // $over_receive = $settings->pluck('over_receive')->first();
-                // //dd($settings->pluck('over_receive'));
+               
+                //dd($settings->pluck('over_receive'));
                 
-                // if(!empty($over_receive) && $request->cbo_receive_basis == 3)
-                // {
-                //     $txt_work_order_qty = ($request["txt_work_order_qty_$i"]*$over_receive)/100;
-                //     if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
-                //     {
-                //         throw new Exception("Over Receive is not allowed");
-                //     }
-                // }else if(empty($over_receive) && $request->cbo_receive_basis == 3)
-                // {
-                //     $txt_work_order_qty = $request["txt_work_order_qty_$i"];
-                //     if($request["txt_receive_qty_$i"] > $request["txt_work_order_qty_$i"])
-                //     {
-                //         throw new Exception("Over Receive is not allowed");
-                //     }
-                // }
+                if(!empty($over_receive) && $request->cbo_receive_basis == 3)
+                {
+                    $over_receive_qty = ($request["txt_work_order_qty_$i"]*$over_receive)/100;
+                    $txt_work_order_qty = $request["txt_work_order_qty_$i"] + $over_receive_qty;
+                    if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
+                    {
+                        throw new Exception("Over Receive is not allowed",111);
+                    }
+                }else if(empty($over_receive) && $request->cbo_receive_basis == 3)
+                {
+                    $txt_work_order_qty = $request["txt_work_order_qty_$i"];
+                    if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
+                    {
+                        throw new Exception("Over Receive is not allowed",111);
+                    }
+                }
         
 
                 $dtls_receive = InvTransaction::create([
@@ -152,7 +154,7 @@ class InvReceiveMasterController extends Controller
 
             if(count($receiveDetails) == 0 || $details_count == 0)
             {
-                throw new Exception("No product found");
+                throw new Exception("No product found",111);
             }
            
             DB::commit();
@@ -179,7 +181,13 @@ class InvReceiveMasterController extends Controller
         catch (Exception $e)
         {
             DB::rollBack();
-            return response()->json(['error' => $e->getMessage()." in ".$e->getFile()." at line ".$e->getLine()]);
+            return response()->json([
+                'code'=>$e->getCode() ?? 10,
+                'message'=>$e->getMessage(),
+                'data'=>[],
+                'sys_number' => '', 
+                'id' =>''
+            ]);
         }
     }
 
