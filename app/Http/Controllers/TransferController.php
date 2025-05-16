@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\TransferMst;
-use App\Models\InvTransaction;
-use App\Models\ProductDetailsMaster;
-use App\Models\RequisitionDtls;
 use App\Models\TransferDtls;
 use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\InvTransaction;
+use App\Models\RequisitionDtls;
+use App\Models\VariableSetting;
 use PhpParser\Node\Expr\Throw_;
+use Illuminate\Support\Facades\DB;
+use App\Models\ProductDetailsMaster;
 
 class TransferController extends Controller
 {
@@ -106,6 +107,20 @@ class TransferController extends Controller
 
             if ($stock->current_stock < $request->txt_transfer_qty) {
                 throw new Exception('Transfer qty can not be greater than current stock');
+            }
+
+            $settings = VariableSetting::select('id', 'variable_value')
+                ->where('variable_id', 2)
+                ->where('variable_value', 1)
+                ->where('company_id', $request->cbo_company_name)
+                ->whereNull('deleted_at')
+                ->orderby('id', 'desc')
+                ->first();
+
+            $requisition_balance = RequisitionDtls::find($request->hidden_requisition_dtls_id)->balance ?? 0;
+
+            if (!empty($settings->id) && !empty($request->hidden_requisition_id) && $request->txt_transfer_qty > $requisition_balance) {
+                throw new Exception("Transfer quantity (" . $request->txt_transfer_qty . ") can't be greater than requesition balance (" . $requisition_balance . ")", 11);
             }
 
             $product_data = ProductDetailsMaster::find($request->hidden_product_id);
@@ -271,6 +286,26 @@ class TransferController extends Controller
                 $available = $stock->current_stock + $transferFrom->cons_qnty;
                 throw new \Exception("Transfer quantity {$request->txt_transfer_qty} cannot be greater than available stock {$available}", 10);
             }
+
+            $settings = VariableSetting::select('id', 'variable_value')
+                ->where('variable_id', 2)
+                ->where('variable_value', 1)
+                ->where('company_id', $request->cbo_company_name)
+                ->whereNull('deleted_at')
+                ->orderby('id', 'desc')
+                ->first();
+
+            $requisition_balance = RequisitionDtls::find($request->hidden_requisition_dtls_id)->balance ?? 0;
+
+            if (
+                !empty($settings->id) &&
+                !empty($request->hidden_requisition_id) &&
+                ($request->txt_transfer_qty > ($requisition_balance + $transferFrom->cons_qnty))
+            ) {
+                $available_balance = $requisition_balance + $transferFrom->cons_qnty;
+                throw new Exception("Transfer quantity ({$request->txt_transfer_qty}) can't be greater than available requisition balance ({$available_balance})", 11);
+            }
+
 
             if ($transferFrom) {
                 $transferFrom->update([

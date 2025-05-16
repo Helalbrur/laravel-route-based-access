@@ -123,6 +123,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
                             {{-- Transfer From Card --}}
                             <input type="hidden" name="hidden_trans_from_id" id="hidden_trans_from_id">
+                            <input type="hidden" name="hidden_req_dtls_id" id="hidden_req_dtls_id">
                             <div class="col-md-6">
                                 <div class="card h-100" style="background-color: rgb(241, 241, 241);">
                                     <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer From</div>
@@ -305,7 +306,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             <div class="row justify-content-center">
                 <div class="col-auto">
                     <input type="hidden" name="update_id" id="update_id">
-                    <input type="hidden" name="hidden_requisition_dtls_id" id="hidden_requisition_dtls_id">
                     <input type="hidden" name="hidden_transfer_dtls_id" id="hidden_transfer_dtls_id">
                 </div>
                 <div class="col-auto">
@@ -423,7 +423,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         if (form_validation('cbo_company_name*txt_item_name*txt_transfer_date', 'Company Name*Item Name*Transfer Date') == false) {
             return;
         } else {
-            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id,hidden_requisition_dtls_id,hidden_transfer_dtls_id');
+            var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id,hidden_req_dtls_id,hidden_transfer_dtls_id');
 
             var method = "POST";
             var param = "";
@@ -464,10 +464,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
             if (result.code === 200 && result.data) {
                 const data = result.data;
-
-                $('#txt_current_stock').val();
-                $('#txt_avg_rate').val();
-                $('#txt_transfer_qty').val();
                 $('#txt_sys_no').val(data.transfer_no);
                 $('#txt_sys_no').prop('readonly', true);
                 $('#update_id').val(data.id);
@@ -478,6 +474,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 $('#cbo_item_category').val(0).trigger('change');
                 $('#txt_item_name').val('');
                 $('#hidden_product_id').val('');
+                $('#txt_current_stock').val();
+                $('#txt_avg_rate').val();
+                $('#txt_transfer_qty').val();
 
                 await load_tranfer_dtls(data.id);
                 await load_requisition_dtls_list_view(data.requisition_id);
@@ -637,7 +636,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
     function set_requisition_dtls_data(param) {
         try {
             const data = typeof param === 'string' ? JSON.parse(param) : param;
-            $('#hidden_product_id').val(data.product_id);
+            $('#hidden_req_dtls_id').val(data.id);
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);

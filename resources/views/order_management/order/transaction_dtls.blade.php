@@ -1,5 +1,6 @@
 {{-- Transfer From Card --}}
 <input type="hidden" name="hidden_trans_from_id" id="hidden_trans_from_id" value="{{$transferFrom->id}}">
+<input type="hidden" name="hidden_req_dtls_id" id="hidden_req_dtls_id" value="{{$transferFrom->ref_dtls_id}}">
 <div class="col-md-6">
     <div class="card h-100" style="background-color: rgb(241, 241, 241);">
         <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer From</div>
@@ -111,7 +112,7 @@
 </div>
 
 {{-- Transfer To Card --}}
-<input type="hidden" name="hidden_trans_to_id" id="hidden_trans_to_id"  value="{{$transferTo->id}}">
+<input type="hidden" name="hidden_trans_to_id" id="hidden_trans_to_id" value="{{$transferTo->id}}">
 <div class="col-md-6">
     <div class="card h-100" style="background-color: rgb(241, 241, 241);">
         <div class="card-header fw-bold" style="background-color: rgb(226, 226, 226);">Transfer To</div>
