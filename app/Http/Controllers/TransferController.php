@@ -114,6 +114,7 @@ class TransferController extends Controller
             $fromTransaction = InvTransaction::create([
                 'mst_id' => $transferMaster->id,
                 'transaction_type' => '6',
+                'ref_dtls_id' => $request->hidden_requisition_dtls_id,
                 'category_id' => $request->cbo_item_category,
                 'product_id' => $request->hidden_product_id,
                 'location_id' => $request->cbo_location_from,
@@ -266,12 +267,14 @@ class TransferController extends Controller
 
             $stock = calculate_current_stock($params);
 
-            if (($stock->current_stock - $transferFrom->cons_qnty) < $request->txt_transfer_qty) {
-                throw new Exception('Transfer qty can not be greater than current stock');
+            if (($stock->current_stock + $transferFrom->cons_qnty) < $request->txt_transfer_qty) {
+                $available = $stock->current_stock + $transferFrom->cons_qnty;
+                throw new \Exception("Transfer quantity {$request->txt_transfer_qty} cannot be greater than available stock {$available}", 10);
             }
 
             if ($transferFrom) {
                 $transferFrom->update([
+                    'ref_dtls_id' => $request->hidden_requisition_dtls_id,
                     'category_id' => $request->cbo_item_category,
                     'product_id' => $request->hidden_product_id,
                     'location_id' => $request->cbo_location_from,
@@ -317,18 +320,15 @@ class TransferController extends Controller
                 ]);
             }
 
-            $transferDtls = TransferDtls::find($request->hidden_transfer_dtls_id);
-
-            if ($transferDtls) {
-                $transferDtls->update([
-                    'mst_id' => $transferMaster->id,
-                    'trans_from_id' => $transferFrom ? $transferFrom->id : null,
-                    'trans_to_id' => $transferTo ? $transferTo->id : null,
-                    'category_id' => $request->cbo_item_category,
-                    'product_id' => $request->hidden_product_id,
-                    'transfer_qty' => $request->txt_transfer_qty
-                ]);
-            }
+            $transferDtls = TransferDtls::findOrFail($request->hidden_transfer_dtls_id);
+            $transferDtls->update([
+                'mst_id' => $transferMaster->id,
+                'trans_from_id' => $transferFrom ? $transferFrom->id : null,
+                'trans_to_id' => $transferTo ? $transferTo->id : null,
+                'category_id' => $request->cbo_item_category,
+                'product_id' => $request->hidden_product_id,
+                'transfer_qty' => $request->txt_transfer_qty
+            ]);
 
 
             DB::commit();
@@ -342,8 +342,12 @@ class TransferController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'error' => $e->getMessage() . " in " . $e->getFile() . " at line " . $e->getLine()
-            ]);
+                'code' => $e->getCode() ?? 10,
+                'message' => $e->getMessage(),
+                'data' => [],
+                'transfer_no' => '',
+                'id' => ''
+            ], 500);
         }
     }
 
@@ -395,7 +399,7 @@ class TransferController extends Controller
 
     public function load_transfer_mst_data($id)
     {
-        $transfer = TransferMst::with(['requisition', 'product'])->find($id);
+        $transfer = TransferMst::with(['requisition'])->find($id);
 
         if (!$transfer) {
             return response()->json(['code' => 404, 'message' => 'Transfer not found']);
@@ -409,13 +413,7 @@ class TransferController extends Controller
                 'company_id' => $transfer->company_id,
                 'transfer_date' => $transfer->transfer_date,
                 'requisition_id' => $transfer->requisition_id,
-                'requisition_no' => optional($transfer->requisition)->requisition_no,
-                'category_id' => $transfer->category_id,
-                'product_id' => $transfer->product_id,
-                'item_description' => optional($transfer->product)->item_description,
-                'current_stock' => $transfer->current_stock,
-                'avg_rate' => $transfer->avg_rate,
-                'transfer_qty' => $transfer->transfer_qty
+                'requisition_no' => optional($transfer->requisition)->requisition_no
             ]
         ]);
     }

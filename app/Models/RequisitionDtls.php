@@ -76,7 +76,7 @@ class RequisitionDtls extends Model
     public function transactions()
     {
         return $this->hasMany(InvTransaction::class, 'ref_dtls_id')
-                    ->where('transaction_type', 2)
+                    ->whereIn('transaction_type', [2, 3, 6])
                     ->whereNull('deleted_at');
     }
 
@@ -86,8 +86,14 @@ class RequisitionDtls extends Model
         return $this->requisition_qty - $consumedQty;
     }
 
+    public function getIssueQtyAttribute()
+    {
+        return $this->transactions()->sum('cons_qnty');
+    }
+
     /*
         $requisition = RequisitionDtls::with('transactions')->find($id);
         $balance = $requisition->balance;
+        $issue_qty = $requisition->issue_qty;
     */
 }

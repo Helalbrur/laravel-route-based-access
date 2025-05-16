@@ -1468,6 +1468,7 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 		release_freezing();
 	})
 	.catch(error => {
+		// console.log(error);
 		if (error.status === 422) {
 			let validationErrors = error.data.errors;
 			let firstField = null;
@@ -1517,7 +1518,7 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 	
 			showNotification(errorMessages.join('<br>'), 'error');
 		} else {
-			showNotification(error, 'error');
+			showNotification(error.data.message, 'error');
 		}
 		release_freezing();
 	});
