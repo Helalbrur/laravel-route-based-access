@@ -44,7 +44,7 @@ class RequisitionMstController extends Controller
         try {
             // Generate system no for requisition
 
-            $system_no_info = generate_system_no($request->cbo_company_name, '', '', date("Y", time()), 5, "SELECT requisition_no_prefix,requisition_no_prefix_num from requisition_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y', time()) . " order by requisition_no_prefix_num desc ", "requisition_no_prefix", "requisition_no_prefix_num");
+            $system_no_info = generate_system_no($request->cbo_company_name, '', 'REQ', date("Y", time()), 5, "SELECT requisition_no_prefix,requisition_no_prefix_num from requisition_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y', time()) . " order by requisition_no_prefix_num desc ", "requisition_no_prefix", "requisition_no_prefix_num");
 
 
             $requisitionMaster = RequisitionMst::create([

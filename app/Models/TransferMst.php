@@ -58,9 +58,4 @@ class TransferMst extends Model
     {
         return $this->belongsTo(RequisitionMst::class, 'requisition_id', 'id');
     }
-
-    public function product()
-    {
-        return $this->belongsTo(ProductDetailsMaster::class, 'product_id', 'id');
-    }
 }

@@ -73,7 +73,7 @@ class TransferController extends Controller
                 $system_no_info = generate_system_no(
                     $request->cbo_company_name,
                     '',
-                    '',
+                    'GIT',
                     date("Y"),
                     5,
                     "SELECT transfer_no_prefix,transfer_no_prefix_num from transfer_mst where company_id={$request->cbo_company_name} AND YEAR(created_at)=" . date('Y') . " order by transfer_no_prefix_num desc ",

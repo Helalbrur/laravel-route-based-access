@@ -1,5 +1,10 @@
 <table id="dtls_list_view" class="table table-striped table-bordered" style="width: 100%">
     <thead>
+        <tr>
+            <th colspan="4">
+                <h4>Transfer Details List</h4>
+            </th>
+        </tr>
         <tr class="table-secondary">
             <th width="10%">SL</th>
             <th width="35%">Product</th>
@@ -17,6 +22,8 @@
             'category_id' => $trans_dtls->category_id,
             'product_id' => $trans_dtls->product_id,
             'item_description' => optional($trans_dtls->product)->item_description,
+            'curr_stock_updatable' => (optional($trans_dtls->product)->balance_qnty ?? 0) + $trans_dtls->transfer_qty,
+            'avg_rate' => optional($trans_dtls->product)->avg_rate,
             'transfer_qty' => $trans_dtls->transfer_qty
         ]);
         ?>

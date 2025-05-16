@@ -363,7 +363,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         //console.log(param);
         var title = 'Transfer Search';
         var page_link = '/show_common_popup_view?page=transfer_search&param=' + param;
-        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1', '../');
+        emailwindow = dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=1000px,height=370px,center=1,resize=1,scrolling=1', '../');
         emailwindow.onclose = async function() {
 
             try {
@@ -619,6 +619,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             $('#cbo_item_category').val(data.category_id).trigger('change');
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
+            $('#txt_current_stock').val(data.curr_stock_updatable);
+            $('#txt_avg_rate').val(data.avg_rate);
             $('#txt_transfer_qty').val(data.transfer_qty);
 
         } catch (e) {

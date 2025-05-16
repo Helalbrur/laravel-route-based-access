@@ -1,5 +1,10 @@
 <table id="list_view" class="table table-striped table-bordered" style="width: 100%">
     <thead>
+        <tr>
+            <th colspan="6">
+                <h4>Requisition Details List</h4>
+            </th>
+        </tr>
         <tr class="table-secondary">
             <th width="10%">SL</th>
             <th width="20%">Product</th>

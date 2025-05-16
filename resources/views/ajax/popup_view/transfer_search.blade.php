@@ -17,11 +17,12 @@ $product_id      = $param['product_id'] ?? '';
                     <table id="list_view" class="table table-bordered" style="width: 100%">
                         <thead>
                             <tr>
-                                <th width="18%">Company Name</th>
-                                <th width="15%">Transfer No</th>
-                                <th width="15%">Category</th>
-                                <th width="15%">Product</th>
-                                <th width="30%">Transfer Date</th>
+                                <th width="15%">Company Name</th>
+                                <th width="13%">Transfer No</th>
+                                <th width="13%">Category</th>
+                                <th width="13%">Product</th>
+                                <th width="13%">Requisition No</th>
+                                <th width="22%">Transfer Date</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -58,6 +59,9 @@ $product_id      = $param['product_id'] ?? '';
                                     </select>
                                 </td>
                                 <td>
+                                    <input type="text" class="form-control form-control-sm" id="txt_requisition_no" name="txt_requisition_no" placeholder="Requisition No">
+                                </td>
+                                <td>
                                     <div class="d-flex">
                                         <input type="text" class="form-control form-control-sm flatpickr mr-2" id="txt_from_date" name="txt_from_date" value="{{ date('Y-m-1') }}" placeholder="From Date">
                                         <input type="text" class="form-control form-control-sm flatpickr" id="txt_to_date" name="txt_to_date" value="{{ date('Y-m-t') }}" placeholder="To Date">
@@ -71,6 +75,7 @@ $product_id      = $param['product_id'] ?? '';
                                                 transfer_no: document.getElementById('txt_transfer_no').value,
                                                 category_id: document.getElementById('cbo_category').value,
                                                 product_id: document.getElementById('cbo_product').value,
+                                                requisition_no: document.getElementById('txt_requisition_no').value,
                                                 from_date: document.getElementById('txt_from_date').value,
                                                 to_date: document.getElementById('txt_to_date').value
                                             }),
