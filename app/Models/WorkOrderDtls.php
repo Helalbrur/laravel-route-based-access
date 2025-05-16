@@ -85,4 +85,28 @@ class WorkOrderDtls extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(InvTransaction::class, 'ref_dtls_id')
+                    ->whereIn('transaction_type', [1, 4, 5])
+                    ->whereNull('deleted_at');
+    }
+
+    public function getBalanceAttribute()
+    {
+        $consumedQty = $this->transactions()->sum('cons_qnty');
+        return $this->quantity - $consumedQty;
+    }
+    
+    public function getRecvQntyAttribute()
+    {
+        return $this->transactions()->sum('cons_qnty');
+    }
+
+     /*
+        $work_order_dtls = WorkOrderDtls::find($id);
+        $balance = $work_order_dtls->balance;
+        $balance = $work_order_dtls->recv_qnty;
+    */
 }

@@ -310,7 +310,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_order_uom_${i}`, document.getElementById(`cbo_order_uom_${i}`).value);
                 formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
                 formData.append(`txt_work_order_rate_${i}`, document.getElementById(`txt_work_order_rate_${i}`).value);
-                formData.append(`txt_work_order_amount_${i}`, document.getElementById(`txt_work_order_amount_${i}`).value);
+                formData.append(`txt_work_order_amount_${i}`, document.getElementById(`txt_work_order_amount_${i}`).value);formData.append(`txt_balance_qty_${i}`, document.getElementById(`txt_balance_qty_${i}`).value);
                 formData.append(`txt_receive_qty_${i}`, document.getElementById(`txt_receive_qty_${i}`).value);
                 formData.append(`txt_lot_batch_no_${i}`, document.getElementById(`txt_lot_batch_no_${i}`).value);
                 formData.append(`txt_expire_date_${i}`, document.getElementById(`txt_expire_date_${i}`).value);

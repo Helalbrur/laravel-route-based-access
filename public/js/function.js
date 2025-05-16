@@ -1465,6 +1465,17 @@ function save_update_delete(operation,url,request_data,column_name='',show_list_
 			}
 			show_list_view(show_list_view_name,'show_common_list_view',show_list_view_div_id,'/show_common_list_view','setFilterGrid("list_view",-1)');
 		}
+		if(response.code > 10)
+		{
+			if(response.hasOwnProperty("message") && response.message.length > 0)
+			{
+				showNotification(operation_success_msg[response.message],'error');
+			}
+			else
+			{
+				showNotification(operation_success_msg[response.code],'error');
+			}
+		}
 		release_freezing();
 	})
 	.catch(error => {

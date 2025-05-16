@@ -71,7 +71,7 @@
                      <input type="text" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $order->rate }}" disabled>
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="" disabled>
+                    <input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$order->id]['balance'] ?? 0 }}" disabled>
                 </td>
                 <td class="form-group">
                     <input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="">
