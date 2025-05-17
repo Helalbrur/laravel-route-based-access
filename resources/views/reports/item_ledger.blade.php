@@ -133,6 +133,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Ledger';
         console.log(param);
         var title = 'Item Search';
         var page_link= getBaseUrl() +'/show_common_popup_view?page=item_ledger_product_search_list_view&param='+param;
+        console.log(page_link);
         emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
         emailwindow.onclose=function()
         {
@@ -140,14 +141,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Ledger';
             {
                 var popup_value=this.contentDoc.getElementById("popup_value").value;	 //Access form field
                 var product_arr = JSON.parse(popup_value);
-                /*
-                     $param = json_encode(array('product_id'=>$product->id,
-                                          'item_code'=>$product->item_code,
-                                          'item_name'=>$product->item_description,
-                                          'category_id'=>$product->item_category_id,
-                                          'uom_id'=>$product->order_uom,
-                                          'current_rate'=>$product->avg_rate_per_unit));
-                */
                 console.log(product_arr);
                 $('#txt_product_name').val(product_arr.item_name);
                 $('#hidden_product_id').val(product_arr.product_id);
