@@ -79,7 +79,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="cbo_status" class="col-sm-2 col-form-label fw-bold text-start">Status</label>
+                                            <div class="col-sm-6 d-flex align-items-center">
+                                                <select name="cbo_status" id="cbo_status" class="form-control">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Inactive</option>
+                                                    
+                                                </select>
+                                                <input type="hidden" name="deleted_at" id="deleted_at" value="">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                                 <div class="mb-3 row d-flex justify-content-center">
                                     <div class="col-sm-2">
                                         <input type="hidden" value="" name="update_id" id="update_id" />
@@ -98,15 +112,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
                                 <tr>
                                     <th width="10%">Sl</th>
                                     <th width="25%">Name</th>
-                                    <th width="25%">Email</th>
-                                    <th width="20%">Phone</th>
-                                    <th>Type</th>
+                                    <th width="20%">Email</th>
+                                    <th width="15%">Phone</th>
+                                    <th width="15%">Type</th>
+                                    <th >Type</th>
+
                                 </tr>
                             </thead>
                             <tbody id="list_view">
                                 <?php
                                 $sl = 1;
-                                $users = App\Models\User::get();
+                                $users = App\Models\User::withTrashed()->get();
                                 ?>
                                 @foreach($users as $user)
                                 <tr id="tr_{{$sl}}" onclick="load_php_data_to_form('{{$user->id}}')" style="cursor:pointer">
@@ -115,6 +131,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
                                     <td>{{$user->email}}</td>
                                     <td>{{$user->phone}}</td>
                                     <td>{{$user_type[$user->type] ?? ''}}</td>
+                                    <td>{{$user->deleted_at ? 'Inactive' : 'Active' }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -168,6 +185,13 @@ $title = getMenuName(request('mid') ?? 0) ?? 'User Management';
         var fields = 'txt_name*txt_email*txt_phone_no*cbo_user_type*update_id';
         var get_return_value = await populate_form_data('id', user_id, 'users', columns, fields, '{{csrf_token()}}');
         if (get_return_value == 1) {
+            var deletedAt = document.getElementById('deleted_at').value;
+
+            if (!deletedAt || deletedAt.trim().length === 0) {
+                $("#cbo_status").val(1).trigger('change'); // 1 = Active
+            } else {
+                $("#cbo_status").val(0).trigger('change'); // 0 = Deleted
+            }
             set_button_status(1, permission, 'fnc_user_management', 1);
         }
     }

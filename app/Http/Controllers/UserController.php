@@ -85,7 +85,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $user_id)
     {
-        $user = User::find($user_id);
+        $user = User::withTrashed()->where('id','=',$user_id)->first();
+
+
+       
+
         $request['name'] = $request->txt_name;
         $request['email'] = $request->txt_email;
         $request->validate([
@@ -96,6 +100,18 @@ class UserController extends Controller
         DB::beginTransaction();
         try
         {
+             // Handle soft delete/restore based on cbo_status
+            if ($request->input('cbo_status') == 1) {
+                // Restore soft-deleted record
+                if ($user->trashed()) {
+                    $user->restore();
+                }
+            } else {
+                // Soft delete if not already deleted
+                if (!$user->trashed()) {
+                    $user->delete();
+                }
+            }
             $user->update([
                 'name'=>$request->name,
                 'email'=>$request->email,
