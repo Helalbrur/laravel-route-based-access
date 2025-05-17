@@ -170,7 +170,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Ledger';
         var method = "POST";
         formData.append('_token', '{{csrf_token()}}');
         formData.append('type', type);
-        var url = getBaseUrl() + "/reports/item-ledger";
+        var url = "{{ route('item-ledger.show') }}";
         var requestData = {
             method: method,
             headers: {
