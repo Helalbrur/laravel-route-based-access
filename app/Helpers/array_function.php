@@ -63,12 +63,12 @@ function get_pay_mode()
 
 function party_type()
 {
-    return array(1=>"Buyer", 2=>"Subcontract", 3=>"Buyer/Subcontract", 4=>"Notifying Party", 5=>"Consignee", 6=>"Notifying/Consignee", 7=>"Client",8=>"Customer", 20=>"Buying Agent", 21=>"Buyer/Buying Agent", 22=>"Export LC Applicant", 23=>"LC Applicant/Buying Agent", 30=>"Developing Buyer", 80=>"Other Buyer", 90=>"Buyer/Supplier", 100=>"Also Notify Party");
+    return array(1=>"Buyer", 2=>"Subcontract", 3=>"Buyer/Subcontract",4=>"Others");
 }
 
 function party_type_supplier()
 {
-   return array(1 => "Supplier", 2 => "Yarn Supplier", 3 => "Dyes & Chemical Supplier", 4 => "Trims Supplier", 5 => "Accessories Supplier", 6 => "Machineries Supplier", 7 => "General Item", 8 => "Stationery Supplier", 9 => "Leather & Synthetic Supplier", 20 => "Knit Subcontract", 21 => "Dyeing/Finishing Subcontract", 22 => "Finish Footwear Subcontract", 23 => "Embellishment Subcontract", 24 => "Fabric Washing Subcontract", 25 => "AOP Subcontract", 26 => "Lab Test Company", 30 => "C & F Agent", 31 => "Clearing Agent", 32 => "Forwarding Agent", 35 => "Transport Supplier", 36 => "Labor Contractor", 37 => "Civil Contractor", 38 => "Interior", 39 => "Other Contractor", 40 => "Indentor", 41 => "Inspection", 90 => "Buyer/Supplier", 91 => "Loan Party", 92 => "Vehicle Components", 93 => "Twisting", 94 => "Re-Waxing", 95 => "Grey Fabric Service Subcontract",96 => "Trims Sub-Contract", 130 => "General Accessories Service");
+   return array(1 => "Medicine", 2 => "Accessories");
 }
 
 function get_all_month()

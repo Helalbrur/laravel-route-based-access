@@ -121,11 +121,26 @@ class LibSupplierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibSupplier $supplier)
+    public function update(Request $request, $id)
     {
         DB::beginTransaction();
         try
         {
+            $supplier = LibSupplier::withTrashed()->where('id','=',$id)->first();
+            
+            // Handle soft delete/restore based on cbo_status
+            if ($request->input('cbo_status') == 1) {
+                // Restore soft-deleted record
+                if ($supplier->trashed()) {
+                    $supplier->restore();
+                }
+            } else {
+                // Soft delete if not already deleted
+                if (!$supplier->trashed()) {
+                    $supplier->delete();
+                }
+            }
+           
             $supplier->update([
                 'supplier_name'=>$request->input('txt_supplier_name'),
                 'short_name'=>$request->input('txt_short_name'),

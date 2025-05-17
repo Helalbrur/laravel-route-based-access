@@ -150,6 +150,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Supplier Profile';
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <div class="row d-flex justify-content-center">
+                                            <label for="cbo_status" class="col-sm-4 col-form-label fw-bold text-start">Status</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <select name="cbo_status" id="cbo_status" class="form-control">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Inactive</option>
+                                                    
+                                                </select>
+                                                <input type="hidden" name="deleted_at" id="deleted_at" value="">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-2 row d-flex justify-content-center">
@@ -169,19 +182,20 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Supplier Profile';
                             <tr>
                                 <th width="3%">Sl</th>
                                 <th width="12%">Supplier Name</th>
-                                <th width="12%">Company Name</th>
-                                <th width="10%">Country Name</th>
-                                <th width="10%">Email</th>
-                                <th width="10%">Website</th>
-                                <th width="10%">Contact No</th>
+                                <th width="10%">Company Name</th>
+                                <th width="8%">Country Name</th>
+                                <th width="8%">Email</th>
+                                <th width="8%">Website</th>
+                                <th width="8%">Contact No</th>
                                 <th width="10%">Supplier Company</th>
-                                <th>Address</th>
+                                <th width="10%">Address</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="list_view">
                             <?php
                                 $sl = 1;
-                                $suppliers = App\Models\LibSupplier::get();
+                                $suppliers = App\Models\LibSupplier::withTrashed()->get();
                             ?>
                             @foreach($suppliers as $supplier)
                                 <tr id="tr_{{ $sl }}" onclick="load_php_data_to_form('{{ $supplier->id }}')" style="cursor:pointer">
@@ -201,6 +215,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Supplier Profile';
                                     <td>{{ $supplier->contact_no }}</td>
                                     <td>{{ $supplier->other_company->name ?? '' }}</td>
                                     <td>{{ $supplier->address }}</td>
+                                    <td>{{ $supplier->deleted_at ? 'Inactive' : 'Active' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -247,7 +262,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Supplier Profile';
                     return;
                 }
             }
-            var formData = get_form_data('txt_supplier_name,txt_short_name,cbo_country_name,txt_email,txt_website_name,txt_contact_no,txt_contact_person,txt_supplier_address,cbo_tag_company_name,cbo_tag_party_name,update_id,cbo_supplier_company');
+            var formData = get_form_data('txt_supplier_name,txt_short_name,cbo_country_name,txt_email,txt_website_name,txt_contact_no,txt_contact_person,txt_supplier_address,cbo_tag_company_name,cbo_tag_party_name,update_id,cbo_supplier_company,cbo_status');
             var method ="POST";
             var param = "";
             if(operation == 1 || operation == 2)
@@ -274,12 +289,20 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Supplier Profile';
     const load_php_data_to_form =async (menuId) =>
     {
         
-        var columns = 'supplier_name*short_name*country_id*tag_company*party_type*contact_person*contact_no*web_site*email*address*id*other_company_id';
-        var fields = 'txt_supplier_name*txt_short_name*cbo_country_name*cbo_tag_company_name*cbo_tag_party_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_supplier_address*update_id*cbo_supplier_company';
+        var columns = 'supplier_name*short_name*country_id*tag_company*party_type*contact_person*contact_no*web_site*email*address*id*other_company_id*deleted_at';
+        var fields = 'txt_supplier_name*txt_short_name*cbo_country_name*cbo_tag_company_name*cbo_tag_party_name*txt_contact_person*txt_contact_no*txt_website_name*txt_email*txt_supplier_address*update_id*cbo_supplier_company*deleted_at';
         var others = '';
        var get_return_value = await populate_form_data('id',menuId,'lib_supplier',columns,fields,'{{csrf_token()}}','','');
        if(get_return_value == 1)
        {
+            var deletedAt = document.getElementById('deleted_at').value;
+
+            if (!deletedAt || deletedAt.trim().length === 0) {
+                $("#cbo_status").val(1).trigger('change'); // 1 = Active
+            } else {
+                $("#cbo_status").val(0).trigger('change'); // 0 = Deleted
+            }
+
          set_button_status(1, permission, 'fnc_supplier_name',1);
        }
     }
