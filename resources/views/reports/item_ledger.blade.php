@@ -132,7 +132,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Ledger';
         });
         console.log(param);
         var title = 'Item Search';
-        var page_link='/show_common_popup_view?page=item_ledger_product_search_list_view&param='+param;
+        var page_link= getBaseUrl() +'/show_common_popup_view?page=item_ledger_product_search_list_view&param='+param;
         emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
         emailwindow.onclose=function()
         {
@@ -170,7 +170,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Ledger';
         var method = "POST";
         formData.append('_token', '{{csrf_token()}}');
         formData.append('type', type);
-        var url = `/reports/item-ledger`;
+        var url = getBaseUrl() + "/reports/item-ledger";
         var requestData = {
             method: method,
             headers: {
@@ -205,9 +205,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Ledger';
     function excel_download() {
         // Get current report HTML
         const reportHtml = document.getElementById('item_ledger_report').outerHTML;
-        
+        const BASE_URL = getBaseUrl();
+        var url = "{{ route('item-ledger.excel') }}";
         // Send HTML to server for conversion
-        fetch("{{ route('item-ledger.excel') }}", {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
