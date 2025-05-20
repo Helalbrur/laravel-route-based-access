@@ -95,56 +95,56 @@ class InvReceiveMasterController extends Controller
                 // //dd($settings->pluck('over_receive')); 
                 // $balance_qty = $receive_dtls_data[$request["hidden_work_order_detailsId_$i"]]['balance'];
                 
-                if(!empty($over_receive) && $request->cbo_receive_basis == 3)
-                {
-                    $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
-                    if($wo_dtls == null) {
-                        throw new Exception("Work Order Details not found",111);
-                    }
-                    $balance_qty = $wo_dtls->balance;
-                    if($balance_qty == 0)
-                    {
-                        throw new Exception("Over Receive is not allowed",111);
-                    }
-                    if($wo_dtls->balance>0)
-                    {
-                        $over_receive_qty = ($balance_qty*$over_receive)/100;
-                        $txt_balanc_qty = $balance_qty + $over_receive_qty;
-                        if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
-                        {
-                            throw new Exception("Over Receive is not allowed",111);
-                        }
-                    }else{
-                         throw new Exception("Over Receive is not allowed",111);
-                    }
+                // if(!empty($over_receive) && $request->cbo_receive_basis == 3)
+                // {
+                //     $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                //     if($wo_dtls == null) {
+                //         throw new Exception("Work Order Details not found",111);
+                //     }
+                //     $balance_qty = $wo_dtls->balance;
+                //     if($balance_qty == 0)
+                //     {
+                //         throw new Exception("Over Receive is not allowed",111);
+                //     }
+                //     if($wo_dtls->balance>0)
+                //     {
+                //         $over_receive_qty = ($balance_qty*$over_receive)/100;
+                //         $txt_balanc_qty = $balance_qty + $over_receive_qty;
+                //         if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
+                //         {
+                //             throw new Exception("Over Receive is not allowed",111);
+                //         }
+                //     }else{
+                //          throw new Exception("Over Receive is not allowed",111);
+                //     }
                     
-                }
-                else if(empty($over_receive) && $request->cbo_receive_basis == 3)
-                {
-                    $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
-                    if($wo_dtls == null) {
-                        throw new Exception("Work Order Details not found",111);
-                    }
-                    $balance_qty = $wo_dtls->order_balance;
-                    if($balance_qty == 0)
-                    {
-                        throw new Exception("Over Receive is not allowed",111);
-                    }
-                    if($balance_qty>0)
-                    {
-                        $txt_balanc_qty = $balance_qty;
-                        if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
-                        {
-                            throw new Exception("Over Receive is not allowed",111);
-                        }
-                    }else{
-                        $txt_work_order_qty = $request["txt_work_order_qty_$i"];
-                        if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
-                        {
-                            throw new Exception("Over Receive is not allowed",111);
-                        }
-                    }
-                }
+                // }
+                // else if(empty($over_receive) && $request->cbo_receive_basis == 3)
+                // {
+                //     $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                //     if($wo_dtls == null) {
+                //         throw new Exception("Work Order Details not found",111);
+                //     }
+                //     $balance_qty = $wo_dtls->order_balance;
+                //     if($balance_qty == 0)
+                //     {
+                //         throw new Exception("Over Receive is not allowed",111);
+                //     }
+                //     if($balance_qty>0)
+                //     {
+                //         $txt_balanc_qty = $balance_qty;
+                //         if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
+                //         {
+                //             throw new Exception("Over Receive is not allowed",111);
+                //         }
+                //     }else{
+                //         $txt_work_order_qty = $request["txt_work_order_qty_$i"];
+                //         if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
+                //         {
+                //             throw new Exception("Over Receive is not allowed",111);
+                //         }
+                //     }
+                // }
         
 
                 $dtls_receive = InvTransaction::create([
@@ -332,56 +332,56 @@ class InvReceiveMasterController extends Controller
 
                     
 
-                    if(!empty($over_receive) && $request->cbo_receive_basis == 3)
-                    {
-                        $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
-                        if($wo_dtls == null) {
-                            throw new Exception("Work Order Details not found",111);
-                        }
-                        $balance_qty = $wo_dtls->order_balance + $wo_dtls->order_balance;
-                        if($balance_qty == 0)
-                        {
-                            throw new Exception("Over Receive is not allowed",111);
-                        }
-                        if($wo_dtls->order_balance>0)
-                        {
-                            $over_receive_qty = ($balance_qty*$over_receive)/100;
-                            $txt_balanc_qty = $balance_qty + $over_receive_qty;
-                            if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
-                            {
-                                throw new Exception("Over Receive is not allowed",111);
-                            }
-                        }else{
-                                throw new Exception("Over Receive is not allowed",111);
-                        }
+                    // if(!empty($over_receive) && $request->cbo_receive_basis == 3)
+                    // {
+                    //     $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                    //     if($wo_dtls == null) {
+                    //         throw new Exception("Work Order Details not found",111);
+                    //     }
+                    //     $balance_qty = $wo_dtls->order_balance + $wo_dtls->order_balance;
+                    //     if($balance_qty == 0)
+                    //     {
+                    //         throw new Exception("Over Receive is not allowed",111);
+                    //     }
+                    //     if($wo_dtls->order_balance>0)
+                    //     {
+                    //         $over_receive_qty = ($balance_qty*$over_receive)/100;
+                    //         $txt_balanc_qty = $balance_qty + $over_receive_qty;
+                    //         if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
+                    //         {
+                    //             throw new Exception("Over Receive is not allowed",111);
+                    //         }
+                    //     }else{
+                    //             throw new Exception("Over Receive is not allowed",111);
+                    //     }
                         
-                    }
-                    else if(empty($over_receive) && $request->cbo_receive_basis == 3)
-                    {
-                        $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
-                        if($wo_dtls == null) {
-                            throw new Exception("Work Order Details not found",111);
-                        }
-                        $balance_qty = $wo_dtls->balance;
-                        if($balance_qty == 0)
-                        {
-                            throw new Exception("Over Receive is not allowed",111);
-                        }
-                        if($balance_qty>0)
-                        {
-                            $txt_balanc_qty = $balance_qty;
-                            if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
-                            {
-                                throw new Exception("Over Receive is not allowed",111);
-                            }
-                        }else{
-                            $txt_work_order_qty = $request["txt_work_order_qty_$i"];
-                            if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
-                            {
-                                throw new Exception("Over Receive is not allowed",111);
-                            }
-                        }
-                    } 
+                    // }
+                    // else if(empty($over_receive) && $request->cbo_receive_basis == 3)
+                    // {
+                    //     $wo_dtls = WorkOrderDtls::find($request["hidden_work_order_detailsId_$i"]);
+                    //     if($wo_dtls == null) {
+                    //         throw new Exception("Work Order Details not found",111);
+                    //     }
+                    //     $balance_qty = $wo_dtls->balance;
+                    //     if($balance_qty == 0)
+                    //     {
+                    //         throw new Exception("Over Receive is not allowed",111);
+                    //     }
+                    //     if($balance_qty>0)
+                    //     {
+                    //         $txt_balanc_qty = $balance_qty;
+                    //         if($request["txt_receive_qty_$i"] > $txt_balanc_qty)
+                    //         {
+                    //             throw new Exception("Over Receive is not allowed",111);
+                    //         }
+                    //     }else{
+                    //         $txt_work_order_qty = $request["txt_work_order_qty_$i"];
+                    //         if($request["txt_receive_qty_$i"] > $txt_work_order_qty)
+                    //         {
+                    //             throw new Exception("Over Receive is not allowed",111);
+                    //         }
+                    //     }
+                    // } 
 
                  
                     if($receive_dtls) {

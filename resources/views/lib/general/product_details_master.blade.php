@@ -326,7 +326,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                                 <th width="12%">Item Category</th>
                                                 <th width="13%">Brand</th>
                                                 <th width="8%">Item Color</th>
-                                                <th width="8%">Conversion fac.</th>
+                                                <th width="8%">Supplier</th>
                                                 <th width="8%">Type</th>
                                                 <th>Dosage Form</th>
                                             </tr>
@@ -341,7 +341,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                                             ->leftJoin('lib_category as c','a.item_category_id','=','c.id')
                                                             ->leftJoin('lib_brand as d','a.brand_id','=','d.id')
                                                             ->leftJoin('lib_color as e','a.color_id','=','e.id')
-                                                            ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name')
+                                                            ->leftJoin('lib_supplier as f','a.supplier_id','=','f.id')
+                                                            ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name','f.supplier_name')
                                                             ->where('a.deleted_at',null)
                                                             ->get();
                                             ?>
@@ -354,7 +355,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                                 <td>{{$lib_item->category_name}}</td>
                                                 <td>{{$lib_item->brand_name}}</td>
                                                 <td>{{$lib_item->color_name}}</td>
-                                                <td>{{$lib_item->conversion_fac}}</td>
+                                                <td>{{$lib_item->supplier_name}}</td>
                                                 <td>{{$lib_item->item_type}}</td>
                                                 <td>{{$lib_item->dosage_form}}</td>
                                             </tr>
