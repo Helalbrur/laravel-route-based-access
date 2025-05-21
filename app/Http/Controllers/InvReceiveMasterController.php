@@ -405,7 +405,7 @@ class InvReceiveMasterController extends Controller
                             'room_self_id' => $request["cbo_shelf_no_$i"],
                             'room_bin_id' => $request["cbo_bin_no_$i"],
                             'cons_uom' => $request["hidden_consuption_uom_$i"],
-                             'ref_dtls_id' => $request["hidden_work_order_detailsId_$i"],
+                            'ref_dtls_id' => $request["hidden_work_order_detailsId_$i"],
                             'cons_qnty' => $cons_qnty,
                             'cons_rate' => $cons_rate,
                             'cons_amount' => $cons_amount,
@@ -528,6 +528,7 @@ class InvReceiveMasterController extends Controller
             ->groupBy('a.id', 'a.quantity')
             ->select(
                 'a.id',
+                'a.required_quantity',
                 'a.quantity as work_order_quantity',
                 DB::raw('SUM(b.order_qnty) as total_received'),
                 DB::raw('a.quantity - SUM(b.order_qnty) as balance')
@@ -538,7 +539,8 @@ class InvReceiveMasterController extends Controller
         $work_dtls_data = [];
         foreach($work_dtls as $row)
         {
-            $work_dtls_data[$row->id] = [
+            $work_dtls_data[$row->id] = [ 
+                'required_quantity' => $row->required_quantity,
                 'work_order_quantity' => $row->work_order_quantity,
                 'total_received' => $row->total_received,
                 'balance' => $row->balance

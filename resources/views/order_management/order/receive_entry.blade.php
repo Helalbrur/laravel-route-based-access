@@ -320,9 +320,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
                 formData.append(`hidden_conversion_fac_${i}`, document.getElementById(`hidden_conversion_fac_${i}`).value);
-                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value);
+                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value); formData.append(`hidden_work_order_detailsId_${i}`, document.getElementById(`hidden_work_order_detailsId_${i}`).value);
             }
-            console.log(formData);
+            console.log(formData); 
 
             if(flag > 0)
             {

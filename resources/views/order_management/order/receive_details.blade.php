@@ -65,10 +65,10 @@
                     </select>
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_required_qty_{{ $i }}" id="txt_required_qty_{{ $i }}" class="form-control" value="{{ $receive->required_quantity }}" disabled>
+                    <input type="text" name="txt_required_qty_{{ $i }}" id="txt_required_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$receive->ref_dtls_id]['required_quantity'] ?? 0 }}" disabled>
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty }}" disabled>
+                    <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$receive->ref_dtls_id]['work_order_quantity'] ?? 0 }}" disabled>
                     <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->order_rate }}">
                     <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $receive->order_qnty*$receive->order_rate }}">
                      <input type="hidden" name="hidden_work_order_detailsId_{{ $i }}" id="hidden_work_order_detailsId_{{ $i }}" class="form-control" value="{{ $receive->ref_dtls_id }}">
@@ -80,7 +80,7 @@
                     <input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$receive->ref_dtls_id]['balance'] ?? 0 }}" disabled>
                 </td>
                 <td class="form-group">
-                    <input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="{{ $receive->quantity }}">
+                    <input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty }}">
                 </td>
                 <td class="form-group">
                     <input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="{{ $receive->lot }}">
