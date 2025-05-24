@@ -238,8 +238,8 @@ class RequisitionMstController extends Controller
 
     public function requisition_details($id)
     {
-        $requisitions = RequisitionDtls::where('mst_id', $id)->get();
-        return view('order_management.order.requisition_details', compact('requisitions'));
+        $requisition_dtls = RequisitionDtls::where('mst_id', $id)->get();
+        return view('order_management.order.requisition_details', compact('requisition_dtls'));
     }
     public function req_details_from_issue($req_id)
     {

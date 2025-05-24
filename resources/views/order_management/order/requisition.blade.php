@@ -246,7 +246,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
     }
 
     const load_php_data_to_form = async (update_id) => {
-        alert(update_id);
+
         freeze_window(3);
         reset_form('requisition_1', '', '', 1);
         var columns = 'requisition_no*id*company_id*location_id*store_dept*store_id*department_id*requisition_date';
@@ -254,7 +254,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
         if (response.code === 18 && response.data) {
             var data = response.data;
             // console.table(data);
-            // alert(data)
             document.getElementById('txt_sys_no').value = data.requisition_no;
             document.getElementById('update_id').value = data.id;
             document.getElementById('cbo_company_name').value = data.company_id;

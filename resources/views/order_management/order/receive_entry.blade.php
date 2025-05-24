@@ -311,7 +311,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_order_uom_${i}`, document.getElementById(`cbo_order_uom_${i}`).value);
                 formData.append(`txt_work_order_qty_${i}`, document.getElementById(`txt_work_order_qty_${i}`).value);
                 formData.append(`txt_work_order_rate_${i}`, document.getElementById(`txt_work_order_rate_${i}`).value);
-                formData.append(`txt_work_order_amount_${i}`, document.getElementById(`txt_work_order_amount_${i}`).value);formData.append(`txt_balance_qty_${i}`, document.getElementById(`txt_balance_qty_${i}`).value);
+                formData.append(`txt_work_order_amount_${i}`, document.getElementById(`txt_work_order_amount_${i}`).value);
+                formData.append(`txt_balance_qty_${i}`, document.getElementById(`txt_balance_qty_${i}`).value);
                 formData.append(`txt_receive_qty_${i}`, document.getElementById(`txt_receive_qty_${i}`).value);
                 formData.append(`txt_lot_batch_no_${i}`, document.getElementById(`txt_lot_batch_no_${i}`).value);
                 formData.append(`txt_expire_date_${i}`, document.getElementById(`txt_expire_date_${i}`).value);
@@ -321,7 +322,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 formData.append(`cbo_shelf_no_${i}`, document.getElementById(`cbo_shelf_no_${i}`).value);
                 formData.append(`cbo_bin_no_${i}`, document.getElementById(`cbo_bin_no_${i}`).value);
                 formData.append(`hidden_conversion_fac_${i}`, document.getElementById(`hidden_conversion_fac_${i}`).value);
-                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value); formData.append(`hidden_work_order_detailsId_${i}`, document.getElementById(`hidden_work_order_detailsId_${i}`).value);
+                formData.append(`hidden_consuption_uom_${i}`, document.getElementById(`hidden_consuption_uom_${i}`).value); 
+                formData.append(`hidden_work_order_detailsId_${i}`, document.getElementById(`hidden_work_order_detailsId_${i}`).value);
             }
             console.log(formData); 
 
