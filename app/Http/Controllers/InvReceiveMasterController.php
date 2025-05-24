@@ -51,12 +51,12 @@ class InvReceiveMasterController extends Controller
             $settings = VariableSetting::select('id', 'over_receive')
                         ->where('variable_id', 3)
                         ->where('variable_value', 1)
-                        ->where('variable_value', $request->cbo_company_name)
+                        ->where('company_id', $request->cbo_company_name)
                         ->whereNull('deleted_at')
                         ->orderby('id', 'desc')
                         ->first();
 
-            $over_receive = $settings->over_receive;
+            $over_receive = $settings ? $settings->over_receive : null;
             // Generate system no for receive
 
             $system_no_info=generate_system_no( $request->cbo_company_name, '', 'GIR', date("Y",time()), 5, "SELECT sys_number_prefix,sys_number_prefix_num from inv_receive_master where company_id={$request->cbo_company_name} AND YEAR(created_at)=".date('Y',time())." order by sys_number_prefix_num desc ", "sys_number_prefix", "sys_number_prefix_num" );

@@ -154,6 +154,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                     <input type="hidden" name="hidden_conversion_fac_1" id="hidden_conversion_fac_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_consuption_uom_1" id="hidden_consuption_uom_1" class="form-control" value="">
                                                     <input type="hidden" name="hidden_dtls_id_1" id="hidden_dtls_id_1" class="form-control" value="">
+                                                    <input type="hidden" name="hidden_work_order_detailsId_1" id="hidden_work_order_detailsId_1" class="form-control" value="">
                                                 </td>
                                                 <td class="form-group"><input type="text" name="txt_item_code_1" id="txt_item_code_1" class="form-control" value=""></td>
                                                 <td class="form-group">
