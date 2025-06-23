@@ -43,7 +43,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             $requiredHeaders = [
                 'company', 'supplier', 'item_category', 'item_description',
                 'order_uom', 'consuption_uom', 'conversion_fac',
-                'item_sub_category', 'brand', 'size', 'dosage_form', 'power',
+                'item_sub_category', 'brand', 'size', 'dosage_form',
                 'color', 'generic'
             ];
     
