@@ -80,7 +80,7 @@ class ProductImport implements ToCollection, WithHeadingRow
                     'brand'             => 'required|string',
                     'size'              => 'required|string',
                     'dosage_form'       => 'required|string',
-                    'power'             => 'required|string',
+                    
                 ]);
 
                 if ($validator->fails()) {
