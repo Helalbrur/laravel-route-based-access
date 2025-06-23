@@ -20,7 +20,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                 <div class="card-body">
                     <div class="card-text">
                         <div class="card p-4" style="background-color: rgb(241, 241, 241);">
-                            <form name="mainform_1" id="mainform_1" autocomplete="off">
+                            
                                 <div class="row">
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">
@@ -46,6 +46,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                         </div>
                                     </div>
                                 </div>
+                            <form name="mainform_1" id="mainform_1" autocomplete="off">
                                 <div class="row">
                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group">
                                         <div class="row">

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreProductDetailsMasterRequest;
 use App\Http\Requests\UpdateProductDetailsMasterRequest;
+use App\Models\Log;
 use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
 
 class ProductDetailsMasterController extends Controller
@@ -204,10 +205,12 @@ class ProductDetailsMasterController extends Controller
 
     public function import(Request $request)
     {
+        //dd('hello');
+        //Log::info('import controller start');
         $request->validate([
             'file' => 'required|mimetypes:text/plain,text/csv,application/csv,application/vnd.ms-excel',
         ]);
-
+        //Log::info($request->file('file'));
         $extension = $request->file('file')->getClientOriginalExtension();
         if (!in_array($extension, ['csv', 'xlsx'])) {
             return back()->with('error', 'Invalid file format. Please upload a CSV or Excel file.');
@@ -230,7 +233,7 @@ class ProductDetailsMasterController extends Controller
 
             return back()->with('success', $message);
         } catch (Exception $e) {
-            dd($e->getMessage()." in ".$e->getFile()." at line ".$e->getLine());
+            //dd($e->getMessage()." in ".$e->getFile()." at line ".$e->getLine());
             return back()->with('error', "Import failed: " . $e->getMessage());
         }
     }

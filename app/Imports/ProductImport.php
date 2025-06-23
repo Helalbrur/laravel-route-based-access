@@ -11,13 +11,14 @@ use App\Models\LibCategory;
 use App\Models\LibSupplier;
 use App\Models\LibItemGroup;
 use App\Models\LibItemSubCategory;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\ProductDetailsMaster;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Collection;
 
 class ProductImport implements ToCollection, WithHeadingRow
 {
@@ -31,16 +32,45 @@ class ProductImport implements ToCollection, WithHeadingRow
         try {
             $insertData = [];
             $rowNumber = 1;
+            
+              // ✅ Normalize and validate headers from the first row
+            $firstRow = $rows->first();
+            $normalizedHeaders = [];
+            foreach ($firstRow->keys() as $header) {
+                $normalizedHeaders[] = strtolower(trim(str_replace('*', '', $header)));
+            }
+    
+            $requiredHeaders = [
+                'company', 'supplier', 'item_category', 'item_description',
+                'order_uom', 'consuption_uom', 'conversion_fac',
+                'item_sub_category', 'brand', 'size', 'dosage_form', 'power',
+                'color', 'generic'
+            ];
+    
+            $missingHeaders = array_diff($requiredHeaders, $normalizedHeaders);
+            if (count($missingHeaders)) {
+                Log::info("Missing required columns: " . implode(', ', $missingHeaders));
+                throw new \Exception("Missing required columns: " . implode(', ', $missingHeaders));
+            }
 
             foreach ($rows as $row) {
                 $rowNumber++;
+                
+                // ✅ Normalize row keys
+                $normalizedRow = [];
+                foreach ($row as $key => $value) {
+                    $normalizedKey = strtolower(trim(str_replace('*', '', $key)));
+                    $normalizedRow[$normalizedKey] = $value;
+                }
+                $row = collect($normalizedRow);
+                Log::info('Import started...');
 
                 // Validate row
                 $validator = Validator::make($row->toArray(), [
                     'company'           => 'required|string',
                     'supplier'          => 'required|string',
                     'item_category'     => 'required|string',
-                    // 'item_group'        => 'required|string',
+                    //'item_group'        => 'required|string',
                     'item_description'  => 'required|string',
                     // 'uom'               => 'required|string',
                     'order_uom'         => 'required|string',
@@ -54,12 +84,16 @@ class ProductImport implements ToCollection, WithHeadingRow
                 ]);
 
                 if ($validator->fails()) {
+                    $errors = $validator->errors()->all();
                     $this->skippedRows[] = [
-                        'row'       => $rowNumber,
-                        'reason'    => $validator->errors()->all()
+                        'row' => $rowNumber,
+                        'reason' => $errors
                     ];
-                    throw new \Exception("Validation failed at row {$rowNumber}: " . implode(', ', $validator->errors()->all()));
+                    Log::info("Validation failed at row {$rowNumber}: " . implode(', ', $errors));
+
+                    throw new \Exception("Validation failed at row {$rowNumber}: " . implode(', ', $errors));
                 }
+
 
                 // Get IDs of referenced models
                 $company_id        = optional(Company::where('company_name', $row['company'])->first())->id;
@@ -90,11 +124,14 @@ class ProductImport implements ToCollection, WithHeadingRow
 
                 if ($existingProduct) {
                     $this->skippedRows[] = [
-                        'row'       => $rowNumber,
-                        'reason'    => ['Duplicate entry']
+                        'row' => $rowNumber,
+                        'reason' => ['Duplicate entry']
                     ];
+                    Log::info("Duplicate entry found at row {$rowNumber}");
+
                     throw new \Exception("Duplicate entry found at row {$rowNumber}");
                 }
+
 
                 // Prepare data for bulk insertion
                 $insertData = [
