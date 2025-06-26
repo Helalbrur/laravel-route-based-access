@@ -154,7 +154,7 @@ class ProductImport implements ToCollection, WithHeadingRow
         }
     }
 
-    private function getReferenceId(string $model, string $column, string $value): int
+    private function getReferenceId(string $model, string $column, $value): int
     {
         if ($value == null || empty($value)) return 0;
         
