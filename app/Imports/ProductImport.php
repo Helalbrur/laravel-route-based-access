@@ -24,176 +24,253 @@ class ProductImport implements ToCollection, WithHeadingRow
 {
     public $importedCount = 0;
     public $skippedRows = [];
-    
+    private $prefixCache = [];
+    private $lastItemCodes = [];
+    private $referenceCache = [];
+
     public function collection(Collection $rows)
     {
-        DB::beginTransaction(); // Start transaction
+        DB::beginTransaction();
+        $this->skippedRows = [];
+        $rowNumber = 1;
+        $validRows = [];
 
         try {
-            $insertData = [];
-            $rowNumber = 1;
-            
-              // ✅ Normalize and validate headers from the first row
-            $firstRow = $rows->first();
-            $normalizedHeaders = [];
-            foreach ($firstRow->keys() as $header) {
-                $normalizedHeaders[] = strtolower(trim(str_replace('*', '', $header)));
-            }
-    
-            $requiredHeaders = [
-                'company', 'supplier', 'item_category', 'item_description',
-                'order_uom', 'consuption_uom', 'conversion_fac',
-                'item_sub_category', 'brand', 'size', 'dosage_form',
-                'color', 'generic'
-            ];
-    
-            $missingHeaders = array_diff($requiredHeaders, $normalizedHeaders);
-            if (count($missingHeaders)) {
-                Log::info("Missing required columns: " . implode(', ', $missingHeaders));
-                throw new \Exception("Missing required columns: " . implode(', ', $missingHeaders));
-            }
-
             foreach ($rows as $row) {
                 $rowNumber++;
+                $rowData = $this->processRow($row, $rowNumber);
                 
-                // ✅ Normalize row keys
-                $normalizedRow = [];
-                foreach ($row as $key => $value) {
-                    $normalizedKey = strtolower(trim(str_replace('*', '', $key)));
-                    $normalizedRow[$normalizedKey] = $value;
+                if ($rowData['valid']) {
+                    $validRows[] = $rowData['data'];
+                } else {
+                    $this->skippedRows[] = $rowData['error'];
                 }
-                $row = collect($normalizedRow);
-                Log::info('Import started...');
-
-                // Validate row
-                $validator = Validator::make($row->toArray(), [
-                    'company'           => 'required|string',
-                    'supplier'          => 'required|string',
-                    'item_category'     => 'required|string',
-                    //'item_group'        => 'required|string',
-                    'item_description'  => 'required|string',
-                    // 'uom'               => 'required|string',
-                    'order_uom'         => 'required|string',
-                    'consuption_uom'    => 'required|string',
-                    'conversion_fac'    => 'required|numeric|min:0',
-                    'item_sub_category' => 'required|string',
-                    'brand'             => 'required|string',
-                    'size'              => 'required|string',
-                    'dosage_form'       => 'required|string',
-                    
-                ]);
-
-                if ($validator->fails()) {
-                    $errors = $validator->errors()->all();
-                    $this->skippedRows[] = [
-                        'row' => $rowNumber,
-                        'reason' => $errors
-                    ];
-                    Log::info("Validation failed at row {$rowNumber}: " . implode(', ', $errors));
-
-                    throw new \Exception("Validation failed at row {$rowNumber}: " . implode(', ', $errors));
-                }
-
-
-                // Get IDs of referenced models
-                $company_id        = optional(Company::where('company_name', $row['company'])->first())->id;
-                $supplier_id       = $this->getOrCreateModel(LibSupplier::class, 'supplier_name', $row['supplier'])->id ?? 0;
-                $item_category_id  = $this->getOrCreateModel(LibCategory::class, 'category_name', $row['item_category'])->id ?? 0;
-                $item_group_id     = $this->getOrCreateModel(LibItemGroup::class, 'item_name', ($row['item_group'] ?? 0))->id ?? 0;
-                $uom_id            = $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? 0;
-                $item_sub_category = $this->getOrCreateModel(LibItemSubCategory::class, 'sub_category_name', $row['item_sub_category'])->id ?? 0;
-                $generic_id        = $this->getOrCreateModel(LibGeneric::class, 'generic_name', $row['generic'])->id ?? 0;
-                $brand_id          = $this->getOrCreateModel(LibBrand::class, 'brand_name', $row['brand'])->id ?? 0;
-                $size_id           = $this->getOrCreateModel(LibSize::class, 'size_name', $row['size'])->id ?? 0;
-
-                // Check for duplicates
-                $existingProduct = ProductDetailsMaster::where([
-                    'company_id'       => $company_id,
-                    'supplier_id'      => $supplier_id,
-                    'item_category_id' => $item_category_id,
-                    'item_group_id'    => $item_group_id,
-                    'item_description' => $row['item_description'],
-                    'consuption_uom'   => $uom_id,
-                    'item_sub_category_id' => $item_sub_category,
-                    'generic_id'       => $generic_id,
-                    'brand_id'         => $brand_id,
-                    'size_id'          => $size_id,
-                    'dosage_form'      => $row['dosage_form'] ?? '',
-                    'power'            => $row['power'] ?? '',
-                ])->exists();
-
-                if ($existingProduct) {
-                    $this->skippedRows[] = [
-                        'row' => $rowNumber,
-                        'reason' => ['Duplicate entry']
-                    ];
-                    Log::info("Duplicate entry found at row {$rowNumber}");
-
-                    throw new \Exception("Duplicate entry found at row {$rowNumber}");
-                }
-
-
-                // Prepare data for bulk insertion
-                $insertData = [
-                    'company_id'        => $company_id,
-                    'supplier_id'       => $supplier_id,
-                    'item_category_id'  => $item_category_id,
-                    'item_group_id'     => $item_group_id,
-                    'item_sub_category_id' => $item_sub_category,
-                    'brand_id'         => $brand_id,
-                    'color_id'         => $this->getOrCreateModel(LibColor::class, 'color_name', $row['color'])->id ?? 0,
-                    'size_id'          => $size_id,
-                    'generic_id'       => $generic_id,
-                    'uom'              => $uom_id,
-                    'order_uom'        => $this->getOrCreateModel(LibUom::class, 'uom_name', $row['order_uom'])->id ?? 0,
-                    'consuption_uom'   => $this->getOrCreateModel(LibUom::class, 'uom_name', $row['consuption_uom'])->id ?? $uom_id,
-        
-                    // Other product fields
-                    'item_description'  => $row['item_description'] ?? '',
-                    'product_name_details' => ($row['product_name_details'] ?? $row['item_description']) ?? '',
-                    'lot'              => $row['lot'] ?? '',
-                    'item_account'     => $row['item_account'] ?? '',
-                    'packing_type'     => $row['packing_type'] ?? '',
-                    'avg_rate_per_unit'=> $row['avg_rate_per_unit'] ?? 0,
-                    'current_stock'    => $row['current_stock'] ?? 0,
-                    'stock_value'      => $row['stock_value'] ?? 0,
-                    'item_type'        => $row['item_type'] ?? '',
-                    'item_origin'      => $row['item_origin'] ?? '',
-                    'dosage_form'      => $row['dosage_form'] ?? '',
-                    'order_uom_qty'    => $row['order_uom_qty'] ?? 0,
-                    'consuption_uom_qty' => $row['consuption_uom_qty'] ?? 0,
-                    'conversion_fac'   => $row['conversion_fac'] ?? 0,
-                    'power'            => $row['power'] ?? '',
-                    'created_by'       => Auth::id(),
-                    'updated_by'       => Auth::id(),
-                ];
-                if (!empty($insertData)) {
-               
-                    $this->importedCount++;
-                }
-                ProductDetailsMaster::create($insertData);
             }
 
-            // If there are no skipped rows, insert all data at once
+            if (count($this->skippedRows) > 0) {
+                throw new \Exception("Validation errors detected");
+            }
+
+            $this->prefetchLastItemCodes($validRows);
             
+            foreach ($validRows as $rowData) {
+                $this->createProduct($rowData);
+                $this->importedCount++;
+            }
 
-            DB::commit(); // Commit transaction
-
+            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack(); // Rollback on error
-            throw $e; // Throw exception to be handled in the controller
+            DB::rollBack();
+            // Only add generic error if no specific row errors
+            if (count($this->skippedRows) === 0) {
+                $this->skippedRows[] = [
+                    'row' => 'All Rows',
+                    'reason' => $e->getMessage()
+                ];
+            }
+            throw $e;
         }
     }
 
-    private function getOrCreateModel($model, $column, $value)
+    private function processRow($row, $rowNumber): array
     {
-        if (empty($value)) {
-            return null;
+        try {
+            // Normalization and validation
+            $normalizedRow = $this->normalizeRow($row);
+            $this->validateRow($normalizedRow, $rowNumber);
+            
+            // Prepare data
+            $companyId = $this->getReferenceId(Company::class, 'company_name', $normalizedRow['company']);
+            $isSystemGenerated = $this->getSystemGeneratedSetting($companyId);
+            
+            $data = [
+                'company_id' => $companyId,
+                'supplier_id' => $this->getReferenceId(LibSupplier::class, 'supplier_name', $normalizedRow['supplier']),
+                'item_category_id' => $this->getReferenceId(LibCategory::class, 'category_name', $normalizedRow['item_category']),
+                'item_sub_category_id' => $this->getReferenceId(LibItemSubCategory::class, 'sub_category_name', $normalizedRow['item_sub_category']),
+                'brand_id' => $this->getReferenceId(LibBrand::class, 'brand_name', $normalizedRow['brand']),
+                'generic_id' => $this->getReferenceId(LibGeneric::class, 'generic_name', $normalizedRow['generic']),
+                'size_id' => $this->getReferenceId(LibSize::class, 'size_name', $normalizedRow['size']),
+                'color_id' => $this->getReferenceId(LibColor::class, 'color_name', $normalizedRow['color'] ?? ''),
+                'item_description' => $normalizedRow['item_description'],
+                'product_name_details' => $normalizedRow['product_name_details'] ?? $normalizedRow['item_description'],
+                'dosage_form' => $normalizedRow['dosage_form'],
+                'order_uom' => $this->getReferenceId(LibUom::class, 'uom_name', $normalizedRow['order_uom']),
+                'consuption_uom' => $this->getReferenceId(LibUom::class, 'uom_name', $normalizedRow['consuption_uom']),
+                'conversion_fac' => $normalizedRow['conversion_fac'],
+                'is_system_generated' => $isSystemGenerated,
+                // Add other fields as needed
+            ];
+
+            // Check for duplicates
+            $this->checkForDuplicates($data, $rowNumber);
+
+            return ['valid' => true, 'data' => $data];
+        } catch (\Exception $e) {
+            return [
+                'valid' => false,
+                'error' => [
+                    'row' => $rowNumber,
+                    'reason' => $e->getMessage()
+                ]
+            ];
+        }
+    }
+
+    private function normalizeRow($row): array
+    {
+        $normalized = [];
+        foreach ($row as $key => $value) {
+            $cleanKey = strtolower(trim(str_replace('*', '', $key));
+            $normalized[$cleanKey] = $value;
+        }
+        return $normalized;
+    }
+
+    private function validateRow(array $row, int $rowNumber): void
+    {
+        $validator = Validator::make($row, [
+            'company' => 'required|string',
+            'supplier' => 'required|string',
+            'item_category' => 'required|string',
+            'item_description' => 'required|string',
+            'order_uom' => 'required|string',
+            'consuption_uom' => 'required|string',
+            'conversion_fac' => 'required|numeric|min:0',
+            'item_sub_category' => 'required|string',
+            'brand' => 'required|string',
+            'size' => 'required|string',
+            'dosage_form' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            throw new \Exception(implode(', ', $validator->errors()->all()));
+        }
+    }
+
+    private function getReferenceId(string $model, string $column, string $value): int
+    {
+        if (empty($value)) return 0;
+        
+        $cacheKey = $model . '|' . $value;
+        if (isset($this->referenceCache[$cacheKey])) {
+            return $this->referenceCache[$cacheKey];
         }
 
-        return $model::firstOrCreate(
+        $instance = $model::firstOrCreate(
             [$column => $value],
             ['created_by' => Auth::id()]
         );
+
+        $this->referenceCache[$cacheKey] = $instance->id;
+        return $instance->id;
+    }
+
+    private function getSystemGeneratedSetting(int $companyId): bool
+    {
+        return (bool) VariableSetting::where('company_id', $companyId)
+            ->where('variable_id', 1)
+            ->value('variable_value');
+    }
+
+    private function checkForDuplicates(array $data, int $rowNumber): void
+    {
+        $exists = ProductDetailsMaster::where([
+            'company_id' => $data['company_id'],
+            'supplier_id' => $data['supplier_id'],
+            'item_category_id' => $data['item_category_id'],
+            'item_sub_category_id' => $data['item_sub_category_id'],
+            'brand_id' => $data['brand_id'],
+            'generic_id' => $data['generic_id'],
+            'size_id' => $data['size_id'],
+            'item_description' => $data['item_description'],
+            'dosage_form' => $data['dosage_form'],
+        ])->exists();
+
+        if ($exists) {
+            throw new \Exception('Duplicate product entry');
+        }
+    }
+
+    private function prefetchLastItemCodes(array $rows): void
+    {
+        $prefixMap = [];
+        
+        foreach ($rows as $row) {
+            if (!$row['is_system_generated']) continue;
+            
+            $prefix = $this->getPrefixForRow($row);
+            $prefixMap[$prefix] = true;
+        }
+
+        foreach (array_keys($prefixMap) as $prefix) {
+            $lastItem = ProductDetailsMaster::where('item_code', 'like', $prefix . '%')
+                ->where('is_system_generated_item_code', 1)
+                ->orderBy('item_code', 'desc')
+                ->first();
+
+            $this->lastItemCodes[$prefix] = $lastItem 
+                ? (int) substr($lastItem->item_code, strlen($prefix)) 
+                : 0;
+        }
+    }
+
+    private function getPrefixForRow(array $row): string
+    {
+        $cacheKey = implode('-', [
+            $row['company_id'],
+            $row['item_category_id'],
+            $row['item_sub_category_id'],
+            $row['brand_id'],
+            $row['dosage_form']
+        ]);
+        
+        if (isset($this->prefixCache[$cacheKey])) {
+            return $this->prefixCache[$cacheKey];
+        }
+
+        $companyShort = strtoupper(substr(
+            Company::find($row['company_id'])->company_short_name, 0, 3
+        ));
+        
+        $categoryShort = strtoupper(substr(
+            LibCategory::find($row['item_category_id'])->short_name, 0, 3
+        ));
+        
+        $subCategoryShort = strtoupper(substr(
+            LibItemSubCategory::find($row['item_sub_category_id'])->sub_category_name, 0, 3
+        ));
+        
+        $brandShort = strtoupper(substr(
+            LibBrand::find($row['brand_id'])->brand_name, 0, 3
+        ));
+        
+        $dosageShort = strtoupper(substr($row['dosage_form'], 0, 3));
+
+        $prefix = "{$companyShort}-{$categoryShort}-{$subCategoryShort}-{$brandShort}-{$dosageShort}";
+        $this->prefixCache[$cacheKey] = $prefix;
+        return $prefix;
+    }
+
+    private function createProduct(array $rowData): void
+    {
+        $product = new ProductDetailsMaster();
+        
+        // System-generated item code
+        if ($rowData['is_system_generated']) {
+            $prefix = $this->getPrefixForRow($rowData);
+            $this->lastItemCodes[$prefix]++;
+            $product->item_code = $prefix . str_pad($this->lastItemCodes[$prefix], 5, '0', STR_PAD_LEFT);
+            $product->is_system_generated_item_code = 1;
+        }
+        
+        // Map data to product attributes
+        foreach ($rowData as $key => $value) {
+            if ($key !== 'is_system_generated') {
+                $product->$key = $value;
+            }
+        }
+        
+        $product->save();
     }
 }

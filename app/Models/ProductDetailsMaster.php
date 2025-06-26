@@ -47,7 +47,7 @@ class ProductDetailsMaster extends Model
                 ->where('variable_id', 1)
                 ->value('variable_value') ?? 0;
 
-            if ($is_item_code_system_generated == 1) {
+            if ($is_item_code_system_generated == 1 && empty($item->item_code)) {
                 $item->item_code = self::generate_item_code($item);
                 $item->is_system_generated_item_code = 1;
             }
@@ -80,14 +80,14 @@ class ProductDetailsMaster extends Model
         });
     }
 
-    protected static function generate_item_code($item)
+    protected static function generate_item_code_backup($item)
     {
         // Get Company Short Name (First 3 letters)
         $company_short = Company::where('id', $item->company_id)->value('company_short_name');
         $company_short = strtoupper(substr($company_short, 0, 3));
 
         // Get Category Short Name (First 3 letters)
-        $category_short = LibCategory::where('id', $item->category_id)->value('short_name');
+        $category_short = LibCategory::where('id', $item->item_category_id)->value('short_name');
         $category_short = strtoupper(substr($category_short, 0, 3));
 
         $sub_category_name = LibItemSubCategory::where('id', $item->item_sub_category_id)->value('sub_category_name');
@@ -105,7 +105,7 @@ class ProductDetailsMaster extends Model
 
         // Get the latest item code matching the prefix
         $last_item = self::where('company_id', $item->company_id)
-        ->where('item_category_id', $item->category_id)
+        ->where('item_category_id', $item->item_category_id)
         ->where('item_sub_category_id', $item->item_sub_category_id)
         ->where('brand_id', $item->brand_id)
         ->where('dosage_form', $item->dosage_form)
@@ -121,6 +121,36 @@ class ProductDetailsMaster extends Model
         }
 
         // Format new code (padded with 5 digits)
+        return $prefix . str_pad($next_number, 5, '0', STR_PAD_LEFT);
+    }
+
+    // In ProductDetailsMaster model
+    protected static function generate_item_code($item)
+    {
+        // Fix field name: category_id → item_category_id
+        $category_short = LibCategory::where('id', $item->item_category_id)->value('short_name');
+        
+        // Add null checks
+        $company_short = strtoupper(substr(optional(Company::find($item->company_id))->company_short_name ?? '', 0, 3));
+        $category_short = strtoupper(substr($category_short ?? '', 0, 3));
+        $sub_category_name = strtoupper(substr(optional(LibItemSubCategory::find($item->item_sub_category_id))->sub_category_name ?? '', 0, 3));
+        $brand_name = strtoupper(substr(optional(LibBrand::find($item->brand_id))->brand_name ?? '', 0, 3));
+        $dosage_form = strtoupper(substr($item->dosage_form ?? '', 0, 3));
+
+        $prefix = "{$company_short}-{$category_short}-{$sub_category_name}-{$brand_name}-{$dosage_form}";
+
+        // Fix field names in query
+        $last_item = self::where('company_id', $item->company_id)
+            ->where('item_category_id', $item->item_category_id)
+            ->where('item_sub_category_id', $item->item_sub_category_id)
+            ->where('brand_id', $item->brand_id)
+            ->where('dosage_form', $item->dosage_form)
+            ->where('is_system_generated_item_code', 1)
+            ->orderBy('item_code', 'desc')
+            ->first();
+
+        $next_number = $last_item ? ((int) substr($last_item->item_code, -5)) + 1 : 1;
+
         return $prefix . str_pad($next_number, 5, '0', STR_PAD_LEFT);
     }
 
