@@ -49,7 +49,17 @@ class ProductImport implements ToCollection, WithHeadingRow
             }
 
             if (count($this->skippedRows) > 0) {
-                throw new \Exception("Validation errors detected");
+                $errorDetails = "Validation errors detected in " . count($this->skippedRows) . " rows:\n";
+                
+                foreach ($this->skippedRows as $skipped) {
+                    $reasons = is_array($skipped['reason']) ? 
+                        implode(', ', $skipped['reason']) : 
+                        $skipped['reason'];
+                        
+                    $errorDetails .= "- Row {$skipped['row']}: {$reasons}\n";
+                }
+                
+                throw new \Exception($errorDetails);
             }
 
             $this->prefetchLastItemCodes($validRows);
