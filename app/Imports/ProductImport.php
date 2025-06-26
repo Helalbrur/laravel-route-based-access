@@ -1,6 +1,7 @@
 <?php
 namespace App\Imports;
 
+use App\Models\VariableSetting;
 use App\Models\LibUom;
 use App\Models\Company;
 use App\Models\LibSize;
@@ -99,6 +100,11 @@ class ProductImport implements ToCollection, WithHeadingRow
                 'consuption_uom' => $this->getReferenceId(LibUom::class, 'uom_name', $normalizedRow['consuption_uom']),
                 'conversion_fac' => $normalizedRow['conversion_fac'],
                 'is_system_generated' => $isSystemGenerated,
+                'item_group_id' => $this->getReferenceId(LibItemGroup::class, 'item_name', $normalizedRow['item_group'] ?? ''),
+                'item_origin' => $normalizedRow['item_origin'] ?? '',
+                'order_uom_qty' => $normalizedRow['order_uom_qty'] ?? 0,
+                'consuption_uom_qty' => $normalizedRow['consuption_uom_qty'] ?? 0,
+                'power' => $normalizedRow['power'] ?? '',
                 // Add other fields as needed
             ];
 
@@ -121,7 +127,7 @@ class ProductImport implements ToCollection, WithHeadingRow
     {
         $normalized = [];
         foreach ($row as $key => $value) {
-            $cleanKey = strtolower(trim(str_replace('*', '', $key));
+            $cleanKey = strtolower(trim(str_replace('*', '', $key)));
             $normalized[$cleanKey] = $value;
         }
         return $normalized;
