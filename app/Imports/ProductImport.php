@@ -156,7 +156,7 @@ class ProductImport implements ToCollection, WithHeadingRow
 
     private function getReferenceId(string $model, string $column, string $value): int
     {
-        if (empty($value)) return 0;
+        if ($value == null || empty($value)) return 0;
         
         $cacheKey = $model . '|' . $value;
         if (isset($this->referenceCache[$cacheKey])) {
