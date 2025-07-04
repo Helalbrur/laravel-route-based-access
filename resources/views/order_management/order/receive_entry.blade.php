@@ -392,7 +392,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                     $('#cbo_location_name').val(data.location_id);
                     await handleLocationChange();
                     $('#cbo_store_name').val(data.store_id);
-                    $('#cbo_receive_basis').val(data.receive_basis).trigger('change');
+                   // $('#cbo_receive_basis').val(data.receive_basis).trigger('change');
                     $('#cbo_supplier').val(data.supplier_id).trigger('change');
                     await load_details();
                     setup_date();
