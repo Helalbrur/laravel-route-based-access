@@ -2,7 +2,7 @@
 
 function get_item_category()
 {
-    $item_category = return_library_array("select id, short_name from  lib_category where deleted_at is null order by short_name", "id", "short_name");
+    $item_category = return_library_array("select id, category_name from  lib_category where deleted_at is null order by category_name", "id", "category_name");
     return $item_category;
 }
 
