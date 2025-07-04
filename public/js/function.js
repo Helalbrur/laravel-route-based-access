@@ -384,20 +384,25 @@ function form_validation(control,msg_text)
 				 return 0;
 			}
 		}
-		else if (type == 'select-one' || type=='select' )
+		else if (type === 'select-one' || type === 'select')
 		{
-			//alert(control[i]);
-			 if ( trim(document.getElementById(control[i]).value)==0)
-			 {
-				 document.getElementById(control[i]).focus();
-				 document.getElementById(control[i]).style.backgroundImage=bgcolor;
-				 $('#messagebox_main', window.parent.document).fadeTo(100,1,function() //start fading the messagebox
-				 {
-					$(this).html('Please Select  '+msg_text[i]+' field Value').removeClass('messagebox').addClass('messagebox_error').fadeOut(2500);
+			let selectedValue = $('#' + control[i]).val();
 
-				 });
-				 return 0;
-			 }
+			if (selectedValue === null || selectedValue === '' || selectedValue == 0) {
+				$('#' + control[i]).next('.select2').find('.select2-selection').css('border', '2px solid red');
+
+				$('#messagebox_main', window.parent.document).fadeTo(100, 1, function () {
+					showNotification('Please Select ' + msg_text[i] + ' field Value', 'error');
+					$(this).html('Please Select ' + msg_text[i] + ' field Value')
+						.removeClass('messagebox')
+						.addClass('messagebox_error')
+						.fadeOut(2500);
+				});
+				return 0;
+			} else {
+				// Reset border if valid
+				$('#' + control[i]).next('.select2').find('.select2-selection').css('border', '');
+			}
 		}
 		else if (type == 'checkbox' || type == 'radio')
 		{
