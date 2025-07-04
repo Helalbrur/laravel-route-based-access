@@ -246,10 +246,43 @@ class WorkOrderMstController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkOrderMst $workOrderMst)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction(); // Start the transaction
+
+        try {
+
+            $order = WorkOrderMst::findOrFail($id);
+
+            // Load work order details with their transactions
+            $dtls = $order->workOrderDtls()->with('transactions')->get();
+
+            // Check if any transaction has a positive cons_qnty
+            foreach ($dtls as $dtl) {
+                if ($dtl->transactions->sum('cons_qnty') > 0) {
+                    throw new Exception("Receive Found. Delete or return related inventory transactions first.");
+                }
+            }
+
+            // Delete child details and then the master
+            $order->workOrderDtls()->delete();
+            $order->delete();
+
+            DB::commit();
+            return response()->json([
+                'code' => 2,
+                'message' => 'success',
+                'data' => [],
+                'wo_no' => '',
+                'id' => ''
+            ], 200);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage(),'message'=> $e->getMessage()], 400);
+        }
     }
+
 
     public function product_search_list_view(Request $request)
     {

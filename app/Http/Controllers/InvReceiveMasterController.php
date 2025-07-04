@@ -424,6 +424,7 @@ class InvReceiveMasterController extends Controller
             // Delete receive details that are not in the updated list
             $existingDtlsIds = InvTransaction::where('mst_id', $invReceiveMaster->id)
             ->whereNotIn('id', $receiveDetails)
+            ->where('transaction_type',1)
             ->pluck('id');
                
             if(count($existingDtlsIds) > 0) {
@@ -466,10 +467,59 @@ class InvReceiveMasterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(InvReceiveMaster $invReceiveMaster)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction(); // Start transaction
+
+        $receive = InvReceiveMaster::findOrFail($id);
+        try {
+            $all_product_arr = [];
+            $transactions = InvTransaction::where('mst_id', $receive->id)
+                ->where('transaction_type', 1)
+                ->get();
+
+            foreach ($transactions as $tran) {
+                $stock_in = InvTransaction::where('product_id', $tran->product_id)
+                    ->whereIn('transaction_type', [1, 4, 5])
+                    ->sum('cons_qnty');
+
+                $stock_out = InvTransaction::where('product_id', $tran->product_id)
+                    ->whereIn('transaction_type', [2, 3, 6])
+                    ->sum('cons_qnty');
+
+                $balance = $stock_in - $stock_out;
+
+                if ($balance < $tran->cons_qnty) {
+                    throw new Exception('Cannot delete: Dependent issue/return transaction exists. Please delete or return those first.');
+                }
+
+                $all_product_arr[] = $tran->product_id;
+                $tran->delete();
+            }
+
+            $receive->delete();
+
+            foreach (array_unique($all_product_arr) as $product_id) {
+                $product = ProductDetailsMaster::find($product_id);
+                if ($product && !empty($product->id)) {
+                    ProductDetailsMaster::updateProductInventory($product);
+                }
+            }
+
+            DB::commit();
+            return response()->json([
+                'code' => 2,
+                'message' => 'success',
+                'data' => [],
+                'wo_no' => '',
+                'id' => ''
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage(),'message'=> $e->getMessage()], 400);
+        }
     }
+
 
     public function receive_work_order_search_list_view(Request $request)
     {
