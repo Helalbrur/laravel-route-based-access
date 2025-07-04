@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\LibUom;
+use App\Models\InvTransaction;
+use App\Models\WorkOrderDtls;
+use App\Models\RequisitionDtls;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -96,6 +99,7 @@ class LibUomController extends Controller
         }
         catch(Exception $e)
         {
+            DB::rollBack();
             $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
             return response()->json([
                 'code'=>10,
@@ -112,26 +116,36 @@ class LibUomController extends Controller
     public function destroy(LibUom $uom)
     {
         DB::beginTransaction();
-        try
-        {
+        try {
+            if (InvTransaction::where('order_uom', $uom->id)->orWhere('cons_uom', $uom->id)->exists()) {
+                throw new Exception('UOM found in transactions; delete not allowed');
+            }
+
+            if (WorkOrderDtls::where('uom', $uom->id)->exists()) {
+                throw new Exception('UOM found in Work Orders; delete not allowed');
+            }
+
+            if (RequisitionDtls::where('uom', $uom->id)->exists()) {
+                throw new Exception('UOM found in Requisitions; delete not allowed');
+            }
+
             $uom->delete();
             DB::commit();
+
             return response()->json([
-                'code'=>2,
-                'message'=>'success',
-                'data'=>[]
+                'code'    => 2,
+                'message' => 'success',
+                'data'    => []
             ]);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             DB::rollBack();
-            $error_message ="Error: ".$e->getMessage()." in ".$e->getFile()." at line ".$e->getLine();
+            $error_message = "Error: " . $e->getMessage();
+
             return response()->json([
-                'code'=>10,
-                'message'=>$error_message,
-                'data'=> [
-                ]
-            ]);
+                'code'    => 10,
+                'message' => $error_message,
+                'data'    => []
+            ], 422); // Optional: Return appropriate HTTP code
         }
     }
 }
