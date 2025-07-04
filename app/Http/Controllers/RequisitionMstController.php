@@ -219,10 +219,37 @@ class RequisitionMstController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RequisitionMst $requisitionMaster)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try
+        {
+            $requisition_mst = RequisitionMst::findOrFail($id);
+
+            $req_dtls = RequisitionDtls::with('transactions')->where('mst_id', $id)->get();
+
+            foreach ($req_dtls as $dtls) {
+                if ($dtls->transactions->count() > 0) {
+                    throw new Exception("Issue Found. Delete or return related inventory transactions first.");
+                }
+                $dtls->delete();
+            }
+
+            $requisition_mst->delete();
+            DB::commit();
+
+            return response()->json(['status' => 'ok', 'message' => 'Delete Success','code' =>2], 200);
+        }
+        catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Delete failed. Please check related inventory transactions.',
+                'code' => 10
+            ], 400);
+        }
     }
+
 
     public function requisition_item_list_view(Request $request)
     {
