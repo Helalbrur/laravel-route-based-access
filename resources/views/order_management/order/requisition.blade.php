@@ -253,19 +253,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
         var response = await populate_field_data('id', update_id, 'requisition_mst', columns, '{{csrf_token()}}', '');
         if (response.code === 18 && response.data) {
             var data = response.data;
-            // console.table(data);
+            console.table(data);
             document.getElementById('txt_sys_no').value = data.requisition_no;
             document.getElementById('update_id').value = data.id;
             document.getElementById('cbo_company_name').value = data.company_id;
             await handleCompanyChange(); // Await the company change
-            $('#cbo_location_name').val(data.location_id);
-            document.getElementById('cbo_store_dept').value = data.store_dept;
-            document.getElementById('cbo_store').value = data.store_id;
-            document.getElementById('cbo_department').value = data.department_id;
+            $('#cbo_location_name').val(data.location_id).trigger('change');
+            $('#cbo_store_dept').val(data.store_dept).trigger('change');
+            $('#cbo_store').val(data.store_id).trigger('change');
+            $('#cbo_department').val(data.department_id).trigger('change');
             document.getElementById('txt_requisition_date').value = data.requisition_date;
             document.getElementById('txt_sys_no').readOnly = true;
             set_button_status(1, permission, 'fnc_requisition', 1);
-            load_details();
+            load_details
         } else {
             console.warn("Unexpected data format:", response);
         }
