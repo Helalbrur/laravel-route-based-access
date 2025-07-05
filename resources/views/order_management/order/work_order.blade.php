@@ -546,6 +546,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                         $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
                         $('#cbo_uom_' + cur_row_id).val(data.uom_id).trigger('change');
                         $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+                        $('#txt_required_qty_' + cur_row_id).val(data.required_qty);
                         cur_row_id++;
                     }
                     else
@@ -559,6 +560,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                         $('#cbo_item_category_' + cur_row_id).val(0).trigger('change');
                         $('#cbo_uom_' + cur_row_id).val(0).trigger('change');
                         $('#txt_previous_rate_' + cur_row_id).val(0);
+                        $('#txt_required_qty_' + cur_row_id).val(0);
                     }
                 });
             } catch (error) {

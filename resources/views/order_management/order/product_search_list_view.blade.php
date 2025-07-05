@@ -80,7 +80,9 @@
                                           'item_name'=>$product->item_description,
                                           'category_id'=>$product->item_category_id,
                                           'uom_id'=>$product->order_uom,
-                                          'current_rate'=>$product->avg_rate_per_unit));
+                                          'current_rate'=>$product->avg_rate_per_unit,
+                                          'required_qty'=>calculate_required($product->id)
+                                        ));
             ?>
             <tr id="tr_{{$product->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" >
                 <td>{{ get_item_category()[$product->item_category_id] ?? '' }}</td>

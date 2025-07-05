@@ -1207,3 +1207,14 @@ function calculate_current_stock($param = array())
 
     return $query->first();
 }
+
+function calculate_required($product_id)
+{
+    $requisition_qnty = App\Models\RequisitionDtls::where('product_id', $product_id)
+        ->sum('requisition_qty');
+
+    $work_order_qnty = App\Models\WorkOrderDtls::where('product_id', $product_id)
+        ->sum('quantity');
+
+    return max($requisition_qnty - $work_order_qnty, 0);
+}
