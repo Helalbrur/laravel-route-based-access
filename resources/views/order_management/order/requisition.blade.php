@@ -253,7 +253,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
         var response = await populate_field_data('id', update_id, 'requisition_mst', columns, '{{csrf_token()}}', '');
         if (response.code === 18 && response.data) {
             var data = response.data;
-            console.table(data);
+            // console.table(data);
             document.getElementById('txt_sys_no').value = data.requisition_no;
             document.getElementById('update_id').value = data.id;
             document.getElementById('cbo_company_name').value = data.company_id;
@@ -265,7 +265,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
             document.getElementById('txt_requisition_date').value = data.requisition_date;
             document.getElementById('txt_sys_no').readOnly = true;
             set_button_status(1, permission, 'fnc_requisition', 1);
-            load_details
+            load_details();
         } else {
             console.warn("Unexpected data format:", response);
         }
@@ -528,7 +528,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
     }
 
     async function load_details() {
-        //fetch data from server as html and put in a div that id div_dtls_list_view
         await fetch(`/order/requisition_details/${$('#update_id').val()}`)
             .then(response => response.text())
             .then(html => {
