@@ -23,6 +23,7 @@
                 ->leftJoin('lib_color as e','a.color_id','=','e.id')
                 ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name')
                 ->where('a.deleted_at',null)
+                ->orderBy('a.id','desc')
                 ->get();
         
         ?>

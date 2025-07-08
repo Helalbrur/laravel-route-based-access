@@ -345,6 +345,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Item Creation';
                                                             ->leftJoin('lib_supplier as f','a.supplier_id','=','f.id')
                                                             ->select('a.id','a.item_description','a.item_code','a.conversion_fac','a.item_type','a.dosage_form','b.generic_name','c.category_name','d.brand_name','e.color_name','f.supplier_name')
                                                             ->where('a.deleted_at',null)
+                                                            ->orderBy('a.id','desc')
                                                             ->get();
                                             ?>
                                             @foreach($lib_items as $lib_item)
