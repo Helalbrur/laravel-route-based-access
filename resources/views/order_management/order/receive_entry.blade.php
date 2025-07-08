@@ -602,6 +602,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 $('#txt_receive_date').val(data.receive_date);
                 $('#txt_work_order_no').val(data.work_order_no);
                 $('#work_order_id').val(data.work_order_id);
+                $('#cbo_receive_basis').val(data.receive_basis).trigger('change');
                 $('#cbo_supplier').val(data.supplier_id).trigger('change');
                 await load_receive_details();
                 setup_date();
