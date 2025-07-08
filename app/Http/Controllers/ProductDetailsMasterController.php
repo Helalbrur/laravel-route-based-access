@@ -178,10 +178,10 @@ class ProductDetailsMasterController extends Controller
      */
     public function destroy($id)
     {
-        $item=ProductDetailsMaster::find($id);
         DB::beginTransaction();
         try
         {
+            $item=ProductDetailsMaster::findOrFail($id);
             $item->delete();
             DB::commit();
             return response()->json([
