@@ -85,7 +85,7 @@ class OtherCompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OtherCompany $company)
+    public function update(Request $request,  $id)
     {
         $validatedData = $request->validate([
             'txt_name' => 'required|string|max:255'
@@ -93,6 +93,7 @@ class OtherCompanyController extends Controller
         DB::beginTransaction();
         try
         {
+            $company = OtherCompany::findOrFail($id);
             $company->update([
                 'name'=>$request->input('txt_name'),
                 'short_name'=>$request->input('txt_short_name'),
@@ -119,11 +120,12 @@ class OtherCompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OtherCompany $company)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $company = OtherCompany::findOrFail($id);
             $company->delete();
             DB::commit();
             return response()->json([
