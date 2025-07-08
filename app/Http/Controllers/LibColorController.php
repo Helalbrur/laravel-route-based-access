@@ -80,11 +80,12 @@ class LibColorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibColor $color)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $color = LibColor::findOrFail($id);
             $user_id = Auth::user()->id;
             $color->update([
                 'color_name'=>$request->input('txt_color_name'),
@@ -112,11 +113,12 @@ class LibColorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibColor $color)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $color = LibColor::findOrFail($id);
             $color->delete();
             DB::commit();
             return response()->json([

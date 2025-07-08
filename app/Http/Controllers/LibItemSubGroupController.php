@@ -82,11 +82,12 @@ class LibItemSubGroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibItemSubGroup $sub_group)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $sub_group = LibItemSubGroup::findOrFail($id);
             $sub_group->update([
                 'item_category_id'=>$request->input('cbo_category_id'),
                 'item_group_id'=>$request->input('cbo_item_group_id'),
@@ -118,11 +119,12 @@ class LibItemSubGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibItemSubGroup $sub_group)
+    public function destroy($id )
     {
         DB::beginTransaction();
         try
         {
+            $sub_group = LibItemSubGroup::findOrFail($id);
             $sub_group->delete();
             DB::commit();
             return response()->json([

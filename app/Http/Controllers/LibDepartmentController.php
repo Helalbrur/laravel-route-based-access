@@ -79,11 +79,12 @@ class LibDepartmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibDepartment $department)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $department = LibDepartment::findOrFail($id);
             $department->update([
                 'department_name'=>$request->input('txt_department_name'),
                 'company_id' => $request->input('cbo_company_id') ?? null,
@@ -113,11 +114,12 @@ class LibDepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibDepartment $department)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $department = LibDepartment::findOrFail($id);
             $department->delete();
 
             DB::commit();

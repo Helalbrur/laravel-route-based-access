@@ -210,12 +210,12 @@ class LibSupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibSupplier $supplier)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
-            
+            $supplier = LibSupplier::findOrFail($id);
             foreach($supplier->tagCompany() as $tag)
             {
                 $tag->delete();

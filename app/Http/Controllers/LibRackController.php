@@ -95,11 +95,12 @@ class LibRackController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibFloorRoomRackMst $rack)
+    public function update(Request $request,  $id)
     {
 
         DB::beginTransaction();
         try {
+            $rack = LibFloorRoomRackMst::findOrFail($id);
             $rack->update([
                 'floor_room_rack_name' => $request->input('txt_rack_no'),
                 'company_id' => $request->input('cbo_company_name'),
@@ -148,11 +149,11 @@ class LibRackController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibFloorRoomRackMst $rack)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try {
-
+            $rack = LibFloorRoomRackMst::findOrFail($id);
             $rack->rack_details()->delete();
             $rack->delete();
 

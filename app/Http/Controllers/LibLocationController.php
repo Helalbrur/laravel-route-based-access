@@ -87,11 +87,12 @@ class LibLocationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibLocation $location)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $location = LibLocation::findOrFail($id);
             $location->update([
                 'location_name'=>$request->input('txt_location_name'),
                 'company_id'=>$request->input('cbo_company_name'),
@@ -126,11 +127,12 @@ class LibLocationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibLocation $location)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $location = LibLocation::findOrFail($id);
             $location->delete();
             DB::commit();
             return response()->json([

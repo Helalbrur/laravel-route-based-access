@@ -107,11 +107,13 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $company = Company::findOrFail($id);
+            
             $company->update([
                 'group_id'=>$request->input('cbo_group_name'),
                 'company_name'=>$request->input('txt_company_name'),
@@ -155,11 +157,12 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $company = Company::findOrFail($id);
             $ret = ImageUpload::removeFiles($company->id,'company_profile');
             $company->delete();
             DB::commit();

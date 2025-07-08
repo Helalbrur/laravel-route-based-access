@@ -82,11 +82,12 @@ class LibFloorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibFloor $floor)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $floor = LibFloor::findOrFail($id);
             $floor->update([
                 'floor_name'=>$request->input('txt_floor_name'),
                 'company_id'=>$request->input('cbo_company_name'),
@@ -118,12 +119,12 @@ class LibFloorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibFloor $floor)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
-           
+            $floor = LibFloor::findOrFail($id);
             $floor->delete();
             DB::commit();
             return response()->json([

@@ -77,11 +77,12 @@ class LibGenericController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibGeneric $generic)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $generic = LibGeneric::findOrFail($id);
             $user_id = Auth::user()->id;
             $generic->update([
                 'generic_name'=>$request->input('txt_generic_name'),
@@ -109,11 +110,12 @@ class LibGenericController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibGeneric $generic)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $generic = LibGeneric::findOrFail($id);
             $generic->delete();
             DB::commit();
             return response()->json([

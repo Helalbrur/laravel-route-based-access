@@ -122,11 +122,12 @@ class LibBuyerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibBuyer $buyer)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $buyer = LibBuyer::findOrFail($id);
             $buyer->update([
                 'buyer_name'=>$request->input('txt_buyer_name'),
                 'short_name'=>$request->input('txt_short_name'),
@@ -196,12 +197,12 @@ class LibBuyerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibBuyer $buyer)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
-            
+            $buyer = LibBuyer::findOrFail($id);
             foreach($buyer->tagCompany() as $tag)
             {
                 $tag->delete();

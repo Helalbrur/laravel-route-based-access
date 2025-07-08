@@ -78,11 +78,12 @@ class LibCountryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibCountry $country)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $country = LibCountry::findOrFail($id);
             $country->update([
                 'country_name'=>$request->input('txt_country_name')
             ]);
@@ -109,11 +110,12 @@ class LibCountryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibCountry $country)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $country = LibCountry::findOrFail($id);
             $country->delete();
             DB::commit();
             return response()->json([

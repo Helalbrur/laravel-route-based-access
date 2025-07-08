@@ -80,11 +80,12 @@ class LibSizeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibSize $size)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $size = LibSize::findOrFail($id);
             $size->update([
                 'size_name'=>$request->input('txt_size_name'),
                 'updated_by'=>Auth::user()->id
@@ -112,11 +113,12 @@ class LibSizeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibSize $size)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $size = LibSize::findOrFail($id);
             $size->delete();
             DB::commit();
             return response()->json([

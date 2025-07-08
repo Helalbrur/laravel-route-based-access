@@ -99,11 +99,12 @@ class LibBinController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibFloorRoomRackMst $bin)
+    public function update(Request $request,  $id)
     {
 
         DB::beginTransaction();
         try {
+            $bin = LibFloorRoomRackMst::findOrFail($id);
             $bin->update([
                 'floor_room_rack_name' => $request->input('txt_bin_no'),
                 'company_id' => $request->input('cbo_company_name'),
@@ -156,11 +157,11 @@ class LibBinController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibFloorRoomRackMst $bin)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try {
-
+            $bin = LibFloorRoomRackMst::findOrFail($id);
             $bin->bin_details()->delete();
             $bin->delete();
 

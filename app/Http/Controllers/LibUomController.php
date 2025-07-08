@@ -80,11 +80,12 @@ class LibUomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibUom $uom)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $uom = LibUom::findOrFail($id);
             $user_id = Auth::user()->id;
             $uom->update([
                 'uom_name'=>$request->input('txt_uom_name'),
@@ -113,10 +114,11 @@ class LibUomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibUom $uom)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try {
+            $uom = LibUom::findOrFail($id);
             if (InvTransaction::where('order_uom', $uom->id)->orWhere('cons_uom', $uom->id)->exists()) {
                 throw new Exception('UOM found in transactions; delete not allowed');
             }

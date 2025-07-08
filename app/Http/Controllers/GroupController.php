@@ -107,12 +107,13 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Group $group)
+    public function update(Request $request,  $id)
     {
         //dd($group);
         DB::beginTransaction();
         try
         {
+            $group = Group::findOrFail($id);
             $group->update([
                 'group_name'=>$request->input('txt_group_name'),
                 'group_short_name'=>$request->input('txt_group_short'),
@@ -154,11 +155,12 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Group $group)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $group = Group::findOrFail($id);
             $ret = ImageUpload::removeFiles($group->id,'group_profile');
             $group->delete();
             DB::commit();

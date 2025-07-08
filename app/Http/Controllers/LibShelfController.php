@@ -97,11 +97,12 @@ class LibShelfController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibFloorRoomRackMst $shelf)
+    public function update(Request $request,  $id)
     {
 
         DB::beginTransaction();
         try {
+            $shelf = LibFloorRoomRackMst::findOrFail($id);
             $shelf->update([
                 'floor_room_rack_name' => $request->input('txt_shelf_no'),
                 'company_id' => $request->input('cbo_company_name'),
@@ -152,11 +153,12 @@ class LibShelfController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibFloorRoomRackMst $shelf)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try {
 
+            $shelf = LibFloorRoomRackMst::findOrFail($id);
             $shelf->shelf_details()->delete();
             $shelf->delete();
 

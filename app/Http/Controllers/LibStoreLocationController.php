@@ -99,12 +99,12 @@ class LibStoreLocationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibStoreLocation $store)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
-            
+            $store = LibStoreLocation::findOrFail($id);
             $store->update([
                 'store_name'=>$request->input('txt_store_name'),
                 'company_id'=>$request->input('cbo_company_name'),
@@ -153,11 +153,12 @@ class LibStoreLocationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibStoreLocation $store)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $store = LibStoreLocation::findOrFail($id);
             foreach($store->tagCategory as $tag)
             {
                 $tag->delete();

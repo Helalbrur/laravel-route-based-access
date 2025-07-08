@@ -79,11 +79,12 @@ class LibBrandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibBrand $brand)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $brand = LibBrand::findOrFail($id);
             $brand->update([
                 'brand_name'=>$request->input('txt_brand_name'),
                 'buyer_id' => $request->input('cbo_buyer_id') ?? null,
@@ -113,11 +114,12 @@ class LibBrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibBrand $brand)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $brand = LibBrand::findOrFail($id);
             $brand->delete();
 
             DB::commit();

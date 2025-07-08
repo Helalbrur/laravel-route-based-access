@@ -80,11 +80,12 @@ class LibCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibCategory $category)
+    public function update(Request $request,  $id)
     {
         DB::beginTransaction();
         try
         {
+            $category = LibCategory::findOrFail($id);
             $category->update([
                 'category_name'=>$request->input('txt_category_name'),
                 'short_name'=>$request->input('txt_category_short_name'),
@@ -113,11 +114,12 @@ class LibCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibCategory $category)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try
         {
+            $category = LibCategory::findOrFail($id);
             $category->delete();
             DB::commit();
             return response()->json([
