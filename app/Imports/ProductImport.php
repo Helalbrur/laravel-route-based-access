@@ -1,7 +1,7 @@
 <?php
 namespace App\Imports;
 
-use App\Models\VariableSetting;
+use Exception;
 use App\Models\LibUom;
 use App\Models\Company;
 use App\Models\LibSize;
@@ -11,6 +11,7 @@ use App\Models\LibGeneric;
 use App\Models\LibCategory;
 use App\Models\LibSupplier;
 use App\Models\LibItemGroup;
+use App\Models\VariableSetting;
 use App\Models\LibItemSubCategory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +71,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             }
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             // Only add generic error if no specific row errors
             if (count($this->skippedRows) === 0) {
@@ -94,11 +95,12 @@ class ProductImport implements ToCollection, WithHeadingRow
             $companyId = $this->getReferenceId(Company::class, 'company_name', $normalizedRow['company']);
             $isSystemGenerated = $this->getSystemGeneratedSetting($companyId);
             
+            $item_category_id = $this->getReferenceId(LibCategory::class, 'category_name', $normalizedRow['item_category']);
             $data = [
                 'company_id' => $companyId,
                 'supplier_id' => $this->getReferenceId(LibSupplier::class, 'supplier_name', $normalizedRow['supplier']),
-                'item_category_id' => $this->getReferenceId(LibCategory::class, 'category_name', $normalizedRow['item_category']),
-                'item_sub_category_id' => $this->getReferenceId(LibItemSubCategory::class, 'sub_category_name', $normalizedRow['item_sub_category']),
+                'item_category_id' => $item_category_id,
+                'item_sub_category_id' => $this->getReferenceId(LibItemSubCategory::class, 'sub_category_name', $normalizedRow['item_sub_category'],'item_category_id',$item_category_id),
                 'brand_id' => $this->getReferenceId(LibBrand::class, 'brand_name', $normalizedRow['brand']),
                 'generic_id' => $this->getReferenceId(LibGeneric::class, 'generic_name', $normalizedRow['generic']),
                 'size_id' => $this->getReferenceId(LibSize::class, 'size_name', $normalizedRow['size']),
@@ -110,7 +112,7 @@ class ProductImport implements ToCollection, WithHeadingRow
                 'consuption_uom' => $this->getReferenceId(LibUom::class, 'uom_name', $normalizedRow['consuption_uom']),
                 'conversion_fac' => $normalizedRow['conversion_fac'],
                 'is_system_generated' => $isSystemGenerated,
-                'item_group_id' => $this->getReferenceId(LibItemGroup::class, 'item_name', $normalizedRow['item_group'] ?? ''),
+                'item_group_id' => $this->getReferenceId(LibItemGroup::class, 'item_name', $normalizedRow['item_group'] ?? '','item_category_id', $item_category_id),
                 'item_origin' => $normalizedRow['item_origin'] ?? '',
                 'order_uom_qty' => $normalizedRow['order_uom_qty'] ?? 0,
                 'consuption_uom_qty' => $normalizedRow['consuption_uom_qty'] ?? 0,
@@ -122,7 +124,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             $this->checkForDuplicates($data, $rowNumber);
 
             return ['valid' => true, 'data' => $data];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [
                 'valid' => false,
                 'error' => [
@@ -160,27 +162,43 @@ class ProductImport implements ToCollection, WithHeadingRow
         ]);
 
         if ($validator->fails()) {
-            throw new \Exception(implode(', ', $validator->errors()->all()));
+            throw new Exception(implode(', ', $validator->errors()->all()));
         }
     }
 
-    private function getReferenceId(string $model, string $column, $value): int
+    private function getReferenceId(string $model, string $column, $value, string $column2 = '', $value2 = ''): int
     {
-        if ($value == null || empty($value)) return 0;
-        
-        $cacheKey = $model . '|' . $value;
+        if ($value === null || $value === '') return 0;
+
+        // Cache only by the value used in the lookup
+        $cacheKey = $model . '|' . $column . '|' . $value;
+
         if (isset($this->referenceCache[$cacheKey])) {
             return $this->referenceCache[$cacheKey];
         }
 
-        $instance = $model::firstOrCreate(
-            [$column => $value],
-            ['created_by' => Auth::id()]
-        );
+        // Try to find using only the main column
+        $instance = $model::where($column, $value)->first();
+
+        // If not found, create with both columns and created_by
+        if (!$instance) {
+            $createData = [$column => $value];
+
+            if ($column2 !== '' && $value2 !== '') {
+                $createData[$column2] = $value2;
+            }
+
+            $instance = $model::create(array_merge(
+                $createData,
+                ['created_by' => Auth::id()]
+            ));
+        }
 
         $this->referenceCache[$cacheKey] = $instance->id;
+
         return $instance->id;
     }
+
 
     private function getSystemGeneratedSetting(int $companyId): bool
     {
@@ -204,7 +222,7 @@ class ProductImport implements ToCollection, WithHeadingRow
         ])->exists();
 
         if ($exists) {
-            throw new \Exception('Duplicate product entry');
+            throw new Exception('Duplicate product entry');
         }
     }
 
