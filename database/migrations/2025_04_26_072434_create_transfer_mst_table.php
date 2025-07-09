@@ -16,7 +16,7 @@ class CreateTransferMstTable extends Migration
             $table->string('transfer_no', 50)->unique();
             $table->unsignedBigInteger('company_id');
             $table->date('transfer_date')->default(Carbon::now()->format('Y-m-d'));
-            $table->unsignedBigInteger('requisition_id');
+            $table->unsignedBigInteger('requisition_id')->nullable();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

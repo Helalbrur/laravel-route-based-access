@@ -39,7 +39,7 @@ class TransferController extends Controller
             'cbo_item_category'     => 'required',
             'hidden_product_id'     => 'required|integer',
             'txt_current_stock'     => 'required|numeric|min:1',
-            'txt_avg_rate'          => 'required|numeric|min:1',
+            'txt_avg_rate'          => 'nullable|numeric|min:1',
             'txt_transfer_qty'      => [
                 'required',
                 'numeric',
@@ -226,7 +226,7 @@ class TransferController extends Controller
             'cbo_item_category'     => 'required',
             'hidden_product_id'     => 'required|integer',
             'txt_current_stock'     => 'required|numeric|min:1',
-            'txt_avg_rate'          => 'required|numeric|min:1',
+            'txt_avg_rate'          => 'nullable|numeric|min:1',
             'txt_transfer_qty'      => [
                 'required',
                 'numeric',
