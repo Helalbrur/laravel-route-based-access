@@ -413,6 +413,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
                 'field_name': 'cbo_location_to',
                 'field_id': 'cbo_location_to',
             }), 'location_under_company', 'location_div_to');
+            await calculateStock();
 
         } catch (error) {
             console.error('Error loading dropdown:', error);
@@ -488,6 +489,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         } catch (error) {
             console.error('Error in load_php_data_to_form:', error);
             showNotification('An unexpected error occurred.', 'warning');
+            await calculateStock();
         } finally {
             release_freezing();
         }
@@ -633,7 +635,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         }
     }
 
-    function set_requisition_dtls_data(param) {
+   async function set_requisition_dtls_data(param) {
         try {
             const data = typeof param === 'string' ? JSON.parse(param) : param;
             $('#hidden_req_dtls_id').val(data.id);
@@ -641,6 +643,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             $('#txt_item_name').val(data.item_description);
             $('#hidden_product_id').val(data.product_id);
             $('#txt_avg_rate').val(data.avg_rate);
+            stockParams['product_id'] = data.product_id;
+            stockParams['location_id'] = document.getElementById('cbo_location_from').value;
+            stockParams['store_id'] = document.getElementById('cbo_store_from').value;
+            stockParams['floor_id'] = document.getElementById('cbo_floor_name_from').value;
+            stockParams['room_id'] = document.getElementById('cbo_room_no_from').value;
+            stockParams['room_rack_id'] = document.getElementById('cbo_rack_no_from').value;
+            stockParams['room_self_id'] = document.getElementById('cbo_shelf_no_from').value;
+            stockParams['room_bin_id'] = document.getElementById('cbo_bin_no_from').value;
+            await calculateStock();
         } catch (e) {
             console.error('Error processing parameter:', e);
         }
@@ -667,6 +678,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 
     function calculateStock() {
         // Only proceed if we have a product_id
+        stockParams['product_id'] = document.getElementById('hidden_product_id').value;
+        stockParams['location_id'] = document.getElementById('cbo_location_from').value;
+        stockParams['store_id'] = document.getElementById('cbo_store_from').value;
+        stockParams['floor_id'] = document.getElementById('cbo_floor_name_from').value;
+        stockParams['room_id'] = document.getElementById('cbo_room_no_from').value;
+        stockParams['room_rack_id'] = document.getElementById('cbo_rack_no_from').value;
+        stockParams['room_self_id'] = document.getElementById('cbo_shelf_no_from').value;
+        stockParams['room_bin_id'] = document.getElementById('cbo_bin_no_from').value;
+        console.log('Calculating stock with params:', stockParams);
         if (!stockParams.product_id) return;
 
         const url = '{{ URL::to("order/calculate-stock") }}';

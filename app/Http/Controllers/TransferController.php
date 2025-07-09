@@ -391,10 +391,11 @@ class TransferController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy(TransferMst $transferMaster)
+    public function destroy( $id)
     {
         DB::beginTransaction();
         try {
+            $transferMaster = TransferMst::findOrFail($id);
             // Soft delete related InvTransaction
             InvTransaction::where('mst_id', $transferMaster->id)->delete();
 
@@ -488,6 +489,7 @@ class TransferController extends Controller
     {
         $params = $request->all();
         $result = calculate_current_stock($params);
+        //dd($result);
         return response()->json($result);
     }
 }

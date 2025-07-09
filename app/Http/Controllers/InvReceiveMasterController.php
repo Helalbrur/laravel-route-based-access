@@ -149,7 +149,7 @@ class InvReceiveMasterController extends Controller
 
                 $dtls_receive = InvTransaction::create([
 
-                    $cons_qnty = $request["txt_receive_qty_$i"]*$request["hidden_conversion_fac_$i"],
+                    $cons_qnty = $request["txt_receive_qty_$i"]*($request["hidden_conversion_fac_$i"] ?? 1),
                     $cons_rate = $request["txt_work_order_rate_$i"]*1,
                     $cons_amount = $cons_qnty*$cons_rate,
 
@@ -292,7 +292,7 @@ class InvReceiveMasterController extends Controller
                 if(empty($dtlsId)){
                     $dtls_receive = InvTransaction::create([
 
-                        $cons_qnty = $request["txt_work_order_qty_$i"]*$request["hidden_conversion_fac_$i"],
+                        $cons_qnty = $request["txt_work_order_qty_$i"]*($request["hidden_conversion_fac_$i"] ?? 1),
                         $cons_rate = $request["txt_work_order_rate_$i"]*1,
                         $cons_amount = $cons_qnty*$cons_rate,
 
@@ -387,7 +387,7 @@ class InvReceiveMasterController extends Controller
                     if($receive_dtls) {
                         $receive_dtls->update([
 
-                            $cons_qnty = $request["txt_receive_qty_$i"]*$request["hidden_conversion_fac_$i"],
+                            $cons_qnty = $request["txt_receive_qty_$i"]*($request["hidden_conversion_fac_$i"] ?? 1),
                             $cons_rate = $request["txt_work_order_rate_$i"]*1,
                             $cons_amount = $cons_qnty*$cons_rate,
 

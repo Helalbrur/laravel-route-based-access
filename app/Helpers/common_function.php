@@ -1167,7 +1167,7 @@ function generate_system_no($company, $location, $category, $year, $num_length, 
 }
 
 
-function calculate_current_stock($param = array())
+function calculate_current_stock($param = array(),$is_return_query = 0)
 {
     $query = App\Models\InvTransaction::selectRaw('
                 SUM(
@@ -1203,6 +1203,19 @@ function calculate_current_stock($param = array())
     }
     if (!empty($param['room_bin_id'])) {
         $query->where('room_bin_id', $param['room_bin_id']);
+    }
+
+    if ($is_return_query == 1) {
+        $sql = $query->toSql();
+        $bindings = $query->getBindings();
+
+        // Replace bindings in SQL manually (not safe for production use with user input)
+        foreach ($bindings as $binding) {
+            $binding = is_numeric($binding) ? $binding : "'" . addslashes($binding) . "'";
+            $sql = preg_replace('/\?/', $binding, $sql, 1);
+        }
+
+        return ['sql' => $sql];
     }
 
     return $query->first();
