@@ -279,11 +279,24 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 @section('script')
 <script>
     var permission = '{{$permission}}';
-    var setup_data = load_all_setup(12); // Pass the entry_form dynamically
+    var setup_data = load_all_setup(15); // Pass the entry_form dynamically
+    var mandatoryField = setup_data.mandatoryField;
+    var mandatoryMessage = setup_data.mandatoryMessage;
     function fnc_issue_dtls(operation) {
         if (form_validation('cbo_company_name*cbo_location_name*cbo_store_name*txt_issue_date*cbo_issue_basis', 'Company Name*Location*Store Name*Date*Issue Basis') == false) {
             return;
         } else {
+
+            // Check if mandatoryField is not empty
+            if (mandatoryField)
+            {
+                // Call the form_validation function passing mandatoryField and mandatoryMessage
+                if (form_validation(mandatoryField, mandatoryMessage) == false)
+                {
+                    return;
+                }
+            }
+            
             var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_store_name,txt_issue_date,cbo_issue_basis,txt_requisition_no,requisition_id,txt_remarks');
             var method = "POST";
             var param = "";
@@ -593,7 +606,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                field_manager(12);
+                field_manager(15);
                 var row_num = $('#dtls_list_view tbody tr').length;
                 for (let index = 1; index <= row_num; index++) {
                     calculate_amount(index);
@@ -748,7 +761,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                field_manager(12);
+                field_manager(15);
                 var row_num = $('#dtls_list_view tbody tr').length;
                 for (let index = 1; index <= row_num; index++) {
                     calculate_amount(index);
@@ -765,7 +778,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                field_manager(12);
+                field_manager(15);
             })
             .catch(error => console.error('Error loading details:', error));
             
@@ -898,5 +911,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
         }
 
     }
+    field_manager(15);
 </script>
 @endsection

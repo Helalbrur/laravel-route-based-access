@@ -40,6 +40,7 @@ function fieldlevel_arr()
     $fieldlevel_arr[9][2] = "cbo_tag_party_name";
     $fieldlevel_arr[10][1] = "cbo_tag_company_name";
     $fieldlevel_arr[10][2] = "cbo_tag_party_name";
+    $fieldlevel_arr[12][1] = "cbo_pay_mode";
     return $fieldlevel_arr;
 }
 

@@ -185,7 +185,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
 @section('script')
 <script>
     var permission = '{{$permission}}';
-    var setup_data = load_all_setup(12); // Pass the entry_form dynamically
+    var setup_data = load_all_setup(16); // Pass the entry_form dynamically
+    var mandatoryField = setup_data.mandatoryField;
+    var mandatoryMessage = setup_data.mandatoryMessage;
 
     $('#cbo_store_dept').on('change', function() {
         const val = $(this).val();
@@ -197,6 +199,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
         if (form_validation('cbo_company_name*cbo_location_name*cbo_store_dept*txt_requisition_date', 'Company Name*Location*Store/Department*Requisition Date') == false) {
             return;
         } else {
+            // Check if mandatoryField is not empty
+            if (mandatoryField)
+            {
+                // Call the form_validation function passing mandatoryField and mandatoryMessage
+                if (form_validation(mandatoryField, mandatoryMessage) == false)
+                {
+                    return;
+                }
+            }
             var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_store_dept,cbo_store,cbo_department,txt_requisition_date');
             var method = "POST";
             var param = "";
@@ -533,10 +544,11 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Requisition';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                // field_manager(12);
+                field_manager(16);
             })
             .catch(error => console.error('Error loading details:', error));
 
     }
+    field_manager(16);
 </script>
 @endsection

@@ -341,7 +341,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 @section('script')
 <script>
     var permission = '{{$permission}}';
-    // var setup_data = load_all_setup();
+    var setup_data = load_all_setup(17); // Pass the entry_form dynamically
+    var mandatoryField = setup_data.mandatoryField;
+    var mandatoryMessage = setup_data.mandatoryMessage;
 
     $('#txt_transfer_qty').on('keyup', function() {
         let currentStock = parseFloat($('#txt_current_stock').val()) || 0;
@@ -424,6 +426,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         if (form_validation('cbo_company_name*txt_item_name*txt_transfer_date', 'Company Name*Item Name*Transfer Date') == false) {
             return;
         } else {
+            // Check if mandatoryField is not empty
+            if (mandatoryField)
+            {
+                // Call the form_validation function passing mandatoryField and mandatoryMessage
+                if (form_validation(mandatoryField, mandatoryMessage) == false)
+                {
+                    return;
+                }
+            }
+
             var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,txt_transfer_date,hidden_requisition_id,cbo_item_category,hidden_product_id,txt_current_stock,txt_avg_rate,txt_transfer_qty,cbo_location_from,cbo_store_from,cbo_floor_name_from,cbo_room_no_from,cbo_rack_no_from,cbo_shelf_no_from,cbo_bin_no_from,cbo_location_to,cbo_store_to,cbo_floor_name_to,cbo_room_no_to,cbo_rack_no_to,cbo_shelf_no_to,cbo_bin_no_to,hidden_trans_from_id,hidden_trans_to_id,hidden_req_dtls_id,hidden_transfer_dtls_id');
 
             var method = "POST";
@@ -896,5 +908,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             console.error('Error loading bin dropdown (to):', error);
         }
     }
+    field_manager(17);
 </script>
 @endsection

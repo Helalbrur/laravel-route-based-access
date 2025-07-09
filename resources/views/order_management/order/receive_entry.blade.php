@@ -281,10 +281,24 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 @section('script')
 <script>
     var permission = '{{$permission}}';
+    var setup_data = load_all_setup(14); // Pass the entry_form dynamically
+    var mandatoryField = setup_data.mandatoryField;
+    var mandatoryMessage = setup_data.mandatoryMessage;
     function fnc_receive_entry(operation) { 
         if (form_validation('cbo_company_name*cbo_location_name*cbo_store_name*txt_receive_date*cbo_supplier', 'Company Name*Location*Store*Receive Date*Supplier') == false) {
             return;
         } else {
+
+            // Check if mandatoryField is not empty
+            if (mandatoryField)
+            {
+                // Call the form_validation function passing mandatoryField and mandatoryMessage
+                if (form_validation(mandatoryField, mandatoryMessage) == false)
+                {
+                    return;
+                }
+            }
+
             var formData = get_form_data('cbo_company_name,cbo_location_name,cbo_store_name,txt_receive_date,txt_work_order_no,work_order_id,cbo_supplier,cbo_receive_basis');
             var method = "POST";
             var param = "";
@@ -558,7 +572,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                field_manager(12);
+                field_manager(14);
             })
             .catch(error => console.error('Error loading details:', error));
             
@@ -621,7 +635,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             .then(html => {
                 document.getElementById('div_dtls_list_view').innerHTML = html;
                 initializeSelect2();
-                field_manager(12);
+                field_manager(14);
             })
             .catch(error => console.error('Error loading details:', error));
     }
@@ -841,6 +855,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
             }
 		}
     }
+
+    field_manager(14);
 
 </script>
 @endsection

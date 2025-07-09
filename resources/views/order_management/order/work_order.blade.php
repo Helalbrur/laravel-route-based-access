@@ -210,10 +210,23 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 <script>
     var permission = '{{$permission}}';
     var setup_data = load_all_setup(12); // Pass the entry_form dynamically
+    var mandatoryField = setup_data.mandatoryField;
+    var mandatoryMessage = setup_data.mandatoryMessage;
     function fnc_work_order(operation) {
-        if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier*cbo_pay_mode', 'Company Name*Location*Work Order Date*Supplier*Pay Mode') == false) {
+        if (form_validation('cbo_company_name*cbo_location_name*txt_work_order_date*cbo_supplier', 'Company Name*Location*Work Order Date*Supplier') == false) {
             return;
         } else {
+
+            // Check if mandatoryField is not empty
+            if (mandatoryField)
+            {
+                // Call the form_validation function passing mandatoryField and mandatoryMessage
+                if (form_validation(mandatoryField, mandatoryMessage) == false)
+                {
+                    return;
+                }
+            }
+
             var formData = get_form_data('txt_sys_no,update_id,cbo_company_name,cbo_location_name,cbo_supplier,cbo_pay_mode,txt_work_order_date,txt_delivery_date,cbo_source,txt_remarks');
             var method = "POST";
             var param = "";
@@ -582,5 +595,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             .catch(error => console.error('Error loading details:', error));
             
     }
+    field_manager(12);
 </script>
 @endsection
