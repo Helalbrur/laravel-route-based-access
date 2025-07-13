@@ -38,14 +38,14 @@
         @foreach ($receives as $receive) 
             <tr id="tr_{{ $i }}">
                 <td class="form-group" id="sl_{{ $i }}">{{ $i }}</td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $receive->product->item_description ?? '' }}">
                     <input type="text" name="txt_item_name_{{ $i }}" id="txt_item_name_{{ $i }}" class="form-control" value="{{ $receive->product->item_description }}" disabled>
                     <input type="hidden" name="hidden_product_id_{{ $i }}" id="hidden_product_id_{{ $i }}" class="form-control" value="{{ $receive->product_id }}">
                     <input type="hidden" name="hidden_conversion_fac_{{ $i }}" id="hidden_conversion_fac_{{ $i }}" class="form-control" value="{{ $receive->product->conversion_fac }}">
                     <input type="hidden" name="hidden_consuption_uom_{{ $i }}" id="hidden_consuption_uom_{{ $i }}" class="form-control" value="{{ $receive->product->consuption_uom }}">
                     <input type="hidden" name="hidden_dtls_id_{{ $i }}" id="hidden_dtls_id_{{ $i }}" class="form-control" value="{{ $receive->id }}">
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $receive->product->item_code ?? '' }}">
                     <input type="text" name="txt_item_code_{{ $i }}" id="txt_item_code_{{ $i }}" class="form-control" value="{{ $receive->product->item_code }}" disabled>
                 </td>
                 <td class="form-group">
@@ -64,31 +64,31 @@
                         @endforeach
                     </select>
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $work_dtls_data[$receive->ref_dtls_id]['required_quantity'] ?? 0 }}">
                     <input type="text" name="txt_required_qty_{{ $i }}" id="txt_required_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$receive->ref_dtls_id]['required_quantity'] ?? 0 }}" disabled>
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $work_dtls_data[$receive->ref_dtls_id]['work_order_quantity'] ?? 0 }}">
                     <input type="text" name="txt_work_order_qty_{{ $i }}" id="txt_work_order_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$receive->ref_dtls_id]['work_order_quantity'] ?? 0 }}" disabled>
                     <input type="hidden" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->order_rate }}">
                     <input type="hidden" name="txt_work_order_amount_{{ $i }}" id="txt_work_order_amount_{{ $i }}" class="form-control" value="{{ $receive->order_qnty*$receive->order_rate }}">
                      <input type="hidden" name="hidden_work_order_detailsId_{{ $i }}" id="hidden_work_order_detailsId_{{ $i }}" class="form-control" value="{{ $receive->ref_dtls_id }}">
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $receive->order_rate }}">
                     <input type="text" name="txt_work_order_rate_{{ $i }}" id="txt_work_order_rate_{{ $i }}" class="form-control" value="{{ $receive->order_rate }}" disabled>
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $work_dtls_data[$receive->ref_dtls_id]['balance'] ?? 0 }}">
                     <input type="text" name="txt_balance_qty_{{ $i }}" id="txt_balance_qty_{{ $i }}" class="form-control" value="{{ $work_dtls_data[$receive->ref_dtls_id]['balance'] ?? 0 }}" disabled>
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $receive->order_qnty }}">
                     <input type="text" name="txt_receive_qty_{{ $i }}" id="txt_receive_qty_{{ $i }}" class="form-control" value="{{ $receive->order_qnty }}">
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $receive->lot }}">
                     <input type="text" name="txt_lot_batch_no_{{ $i }}" id="txt_lot_batch_no_{{ $i }}" class="form-control" value="{{ $receive->lot }}">
                 </td>
-                <td class="form-group">
+                <td class="form-group" title="{{ $receive->receive_date }}">
                     <input type="text" name="txt_expire_date_{{ $i }}" id="txt_expire_date_{{ $i }}" class="form-control flatpickr" value="{{ $receive->receive_date }}">
                 </td>
-                <td class="form-group" id="floor_div_{{ $i }}">
+                <td class="form-group" id="floor_div_{{ $i }}" >
                     <select name="cbo_floor_name_{{ $i }}" id="cbo_floor_name_{{ $i }}" class="form-control">
                         <option value="0">SELECT</option>
                         @foreach($floors as $id => $floor)
