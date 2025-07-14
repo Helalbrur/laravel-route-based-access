@@ -14,7 +14,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
 @endsection()
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-lg-12">
+    <div class="col-lg-8 col-md-8">
         <form name="transfer_1" id="transfer_1" autocomplete="off">
 
             <div class="card">
@@ -316,16 +316,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             <div class="card col-md-10 mx-auto" style="background-color: rgb(241, 241, 241);">
                 <div class="card-body">
                     <div class="card-text">
-                        <div class="row justify-content-center" id="requisition_dtls_div">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card col-md-10 mx-auto" style="background-color: rgb(241, 241, 241);">
-                <div class="card-body">
-                    <div class="card-text">
                         <div class="row justify-content-center" id="transfer_dtls_div">
 
                         </div>
@@ -334,6 +324,16 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             </div>
 
         </form>
+    </div>
+
+    <div class="card col-lg-4 col-md-4 mx-auto" style="background-color: rgb(241, 241, 241);">
+        <div class="card-body">
+            <div class="card-text">
+                <div class="row justify-content-center" id="requisition_dtls_div">
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -427,11 +427,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
             return;
         } else {
             // Check if mandatoryField is not empty
-            if (mandatoryField)
-            {
+            if (mandatoryField) {
                 // Call the form_validation function passing mandatoryField and mandatoryMessage
-                if (form_validation(mandatoryField, mandatoryMessage) == false)
-                {
+                if (form_validation(mandatoryField, mandatoryMessage) == false) {
                     return;
                 }
             }
@@ -647,7 +645,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Transfer';
         }
     }
 
-   async function set_requisition_dtls_data(param) {
+    async function set_requisition_dtls_data(param) {
         try {
             const data = typeof param === 'string' ? JSON.parse(param) : param;
             $('#hidden_req_dtls_id').val(data.id);
