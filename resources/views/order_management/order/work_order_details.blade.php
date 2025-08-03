@@ -2,12 +2,12 @@
     <thead>
         <tr>
             <th class="form-group" width="3%">Sl</th>
-            <th class="form-group" width="15%">Item Name</th>
+            <th class="form-group" width="20%">Item Name</th>
             <th class="form-group" width="10%">Item Code</th>
             <th class="form-group" width="10%">Item Category</th>
-            <th class="form-group" width="10%">UOM</th>
-            <th class="form-group" width="10%">Required QTY</th>
-            <th class="form-group" width="10%">Work Order Qty</th>
+            <th class="form-group" width="6%">UOM</th>
+            <th class="form-group" width="8%">Required QTY</th>
+            <th class="form-group" width="8%">Work Order Qty</th>
             <th class="form-group" width="7%">Previous Rate</th>
             <th class="form-group" width="8%">Cur. Rate</th>
             <th class="form-group" width="10%">Item Total Amount</th>
