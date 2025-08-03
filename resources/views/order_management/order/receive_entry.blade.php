@@ -868,7 +868,6 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
         var cbo_company_name = document.getElementById('cbo_company_name') * 1;
         await handleCompanyChange();
         await handleLocationChange();
-        await handleStoreChange();
     });
 
 </script>
