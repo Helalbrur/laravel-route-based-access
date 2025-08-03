@@ -34,11 +34,3 @@
         <option value="{{ $id }}" {{ $selected == $id ? 'selected' : '' }}>{{ $location_name }}</option>
     @endforeach
 </select>
-<?php if($single_option && !empty($on_change)): ?>
-<script>
-    $(document).ready(function() {
-        // Execute the onchange JS if there’s only one option
-        <?php echo $on_change; ?> 
-    });
-</script>
-<?php endif; ?>
