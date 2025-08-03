@@ -35,9 +35,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" class="form-control" onchange="handleCompanyChange()">
                                                     <option value="0">SELECT</option>
-                                                    <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
+                                                    <?php 
+                                                        $lib_company = App\Models\Company::pluck('company_name', 'id');
+                                                        $selected = 0;
+                                                        if(count($lib_company) == 1) {
+                                                            $selected = $lib_company->keys()->first();
+                                                        }
+                                                    ?>
                                                     @foreach($lib_company as $id => $company_name)
-                                                    <option value="{{ $id }}">{{ $company_name }}</option>
+                                                    <option value="{{ $id }}" {{ $id == $selected ? 'selected' : '' }}>{{ $company_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -126,17 +132,17 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                         <thead>
                                             <tr>
                                                 <th class="form-group" width="2%">Sl</th>
-                                                <th class="form-group" width="6%">Item Name</th>
+                                                <th class="form-group" width="10%">Item Name</th>
                                                 <th class="form-group" width="5%">Item Code</th>
                                                 <th class="form-group" width="5%">Item Category</th>
                                                 <th class="form-group" width="5%">UOM</th>
-                                                <th class="form-group" width="5%">Required QTY</th>
+                                                <th class="form-group" width="4%">Required QTY</th>
                                                 <th class="form-group" width="5%">WO Qty</th>
                                                 <th class="form-group" width="5%">Rate</th>
-                                                <th class="form-group" width="5%">Balance Qty</th>
-                                                <th class="form-group" width="5%">Receive Qty</th>
-                                                <th class="form-group" width="5%">Lot/Batch No.</th>
-                                                <th class="form-group" width="5%">Expire Date</th>
+                                                <th class="form-group" width="4%">Balance Qty</th>
+                                                <th class="form-group" width="4%">Receive Qty</th>
+                                                <th class="form-group" width="4%">Lot/Batch No.</th>
+                                                <th class="form-group" width="4%">Expire Date</th>
                                                 <th class="form-group" width="6%">Floor Name</th>
                                                 <th class="form-group" width="6%">Room No</th>
                                                 <th class="form-group" width="5%">Rack</th>
@@ -857,6 +863,25 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
     }
 
     field_manager(14);
+
+    $(document).ready(async function() {
+        var cbo_company_name = document.getElementById('cbo_company_name') * 1;
+        if(cbo_company_name > 0)
+        {
+            await handleCompanyChange();
+        }
+        
+        var cbo_location_name = document.getElementById('cbo_location_name') * 1;
+        if(cbo_location_name > 0)
+        {
+            await handleLocationChange();
+        }
+        var cbo_store_name = document.getElementById('cbo_store_name') * 1;
+        if(cbo_store_name > 0)
+        {
+            await handleStoreChange();
+        }
+    });
 
 </script>
 @endsection

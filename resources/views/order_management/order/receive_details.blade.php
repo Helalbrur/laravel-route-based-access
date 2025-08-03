@@ -3,17 +3,17 @@
     <thead> 
         <tr>
             <th class="form-group" width="2%">Sl</th>
-            <th class="form-group" width="5%">Item Name</th>
+            <th class="form-group" width="10%">Item Name</th>
             <th class="form-group" width="5%">Item Code</th>
             <th class="form-group" width="5%">Item Category</th>
             <th class="form-group" width="5%">UOM</th>
-            <th class="form-group" width="5%">Required QTY</th>
+            <th class="form-group" width="4%">Required QTY</th>
             <th class="form-group" width="5%">WO Qty</th>
             <th class="form-group" width="5%">Rate</th>
-            <th class="form-group" width="5%">Balance Qty</th>
-            <th class="form-group" width="5%">Receive Qty</th>
-            <th class="form-group" width="5%">Lot/Batch No.</th>
-            <th class="form-group" width="5%">Expire Date</th>
+            <th class="form-group" width="4%">Balance Qty</th>
+            <th class="form-group" width="4%">Receive Qty</th>
+            <th class="form-group" width="4%">Lot/Batch No.</th>
+            <th class="form-group" width="4%">Expire Date</th>
             <th class="form-group" width="5%">Floor Name</th>
             <th class="form-group" width="5%">Room No</th>
             <th class="form-group" width="5%">Rack</th>
