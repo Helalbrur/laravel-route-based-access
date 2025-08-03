@@ -3,10 +3,10 @@
     <thead> 
         <tr>
             <th class="form-group" width="2%">Sl</th>
-            <th class="form-group" width="10%">Item Name</th>
+            <th class="form-group" width="15%">Item Name</th>
             <th class="form-group" width="5%">Item Code</th>
             <th class="form-group" width="5%">Item Category</th>
-            <th class="form-group" width="5%">UOM</th>
+            <th class="form-group" width="4%">UOM</th>
             <th class="form-group" width="4%">Required QTY</th>
             <th class="form-group" width="5%">WO Qty</th>
             <th class="form-group" width="5%">Rate</th>
