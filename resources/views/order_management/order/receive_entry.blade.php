@@ -866,21 +866,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
     $(document).ready(async function() {
         var cbo_company_name = document.getElementById('cbo_company_name') * 1;
-        if(cbo_company_name > 0)
-        {
-            await handleCompanyChange();
-        }
-        
-        var cbo_location_name = document.getElementById('cbo_location_name') * 1;
-        if(cbo_location_name > 0)
-        {
-            await handleLocationChange();
-        }
-        var cbo_store_name = document.getElementById('cbo_store_name') * 1;
-        if(cbo_store_name > 0)
-        {
-            await handleStoreChange();
-        }
+        await handleCompanyChange();
+        await handleLocationChange();
+        await handleStoreChange();
     });
 
 </script>
