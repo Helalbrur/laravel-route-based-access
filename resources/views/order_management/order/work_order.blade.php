@@ -34,9 +34,15 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                             <div class="col-sm-6 d-flex align-items-center">
                                                 <select style="width: 100%" name="cbo_company_name" id="cbo_company_name" onchange="handleCompanyChange()" class="form-control">
                                                     <option value="0">SELECT</option>
-                                                    <?php $lib_company = App\Models\Company::pluck('company_name', 'id'); ?>
+                                                    <?php 
+                                                        $lib_company = App\Models\Company::pluck('company_name', 'id');
+                                                        $selected = 0;
+                                                        if(count($lib_company) == 1) {
+                                                            $selected = $lib_company->keys()->first();
+                                                        }
+                                                    ?>
                                                     @foreach($lib_company as $id => $company_name)
-                                                    <option value="{{ $id }}">{{ $company_name }}</option>
+                                                        <option value="{{ $id }}" {{ $id == $selected ? 'selected' : '' }}>{{ $company_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -132,14 +138,14 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                                         <thead>
                                             <tr>
                                                 <th class="form-group" width="3%">Sl</th>
-                                                <th class="form-group" width="10%">Item Name</th>
+                                                <th class="form-group" width="15%">Item Name</th>
                                                 <th class="form-group" width="10%">Item Code</th>
                                                 <th class="form-group" width="10%">Item Category</th>
                                                 <th class="form-group" width="10%">UOM</th>
                                                 <th class="form-group" width="10%">Required QTY</th>
                                                 <th class="form-group" width="10%">Work Order Qty</th>
-                                                <th class="form-group" width="10%">Previous Rate</th>
-                                                <th class="form-group" width="10%">Cur. Rate</th>
+                                                <th class="form-group" width="7%">Previous Rate</th>
+                                                <th class="form-group" width="8%">Cur. Rate</th>
                                                 <th class="form-group" width="10%">Item Total Amount</th>
                                                 <th class="form-group">Action</th>
                                             </tr>
@@ -596,5 +602,10 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
             
     }
     field_manager(12);
+
+    $(document).ready(async function() {
+        var cbo_company_name = document.getElementById('cbo_company_name') * 1;
+        await handleCompanyChange();
+    });
 </script>
 @endsection
