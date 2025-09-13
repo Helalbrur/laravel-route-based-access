@@ -322,7 +322,7 @@
             <div class="kpi-icon" style="background-color: rgba(251, 188, 4, 0.2); color: #fbbc04;">
                 <i class="fas fa-money-bill-wave"></i>
             </div>
-            <div class="kpi-value" style="color: #fbbc04;" id="totalWorkOrderValue">{{$grandTotalAmount}}</div>
+            <div class="kpi-value" style="color: #fbbc04;" id="totalWorkOrderValue">{{round($$grandTotalAmount,2)}}</div>
             <div class="kpi-title">Work Order Value</div>
             <div class="currency-note">Amount in BDT</div>
         </div>
