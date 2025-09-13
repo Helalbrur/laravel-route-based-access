@@ -322,7 +322,9 @@
             <div class="kpi-icon" style="background-color: rgba(251, 188, 4, 0.2); color: #fbbc04;">
                 <i class="fas fa-money-bill-wave"></i>
             </div>
-            <div class="kpi-value" style="color: #fbbc04;" id="totalWorkOrderValue">{{round($grandTotalAmount,2)}}</div>
+            <div class="kpi-value" style="color: #fbbc04;" id="totalWorkOrderValue">
+                {{round($grandTotalAmount,2)}}
+            </div>
             <div class="kpi-title">Work Order Value</div>
             <div class="currency-note">Amount in BDT</div>
         </div>
@@ -545,16 +547,17 @@
 
         // Update KPI cards
         function updateKPIs(data) {
-            const totalSales = data.reduce((sum, item) => sum + item.sales, 0);
+            const totalSales = data.reduce((sum, item) => sum + Number(item.sales), 0);
             const uniqueSuppliers = new Set(data.map(item => item.supplier)).size;
-            const totalWorkOrder = data.reduce((sum, item) => sum + item.workOrderQty, 0);
-            const totalWorkOrderValue = data.reduce((sum, item) => sum + item.value, 0);
+            const totalWorkOrder = data.reduce((sum, item) => sum + Number(item.workOrderQty), 0);
+            const totalWorkOrderValue = data.reduce((sum, item) => sum + Number(item.value), 0);
             
             document.getElementById('totalSales').textContent = formatNumber(totalSales);
             document.getElementById('totalSupplier').textContent = uniqueSuppliers;
             document.getElementById('totalWorkOrder').textContent = totalWorkOrder;
             document.getElementById('totalWorkOrderValue').textContent = formatNumber(totalWorkOrderValue);
         }
+
 
         // Update order status
         function updateOrderStatus(data) {
