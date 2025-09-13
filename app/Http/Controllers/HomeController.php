@@ -36,11 +36,9 @@ class HomeController extends Controller
         $grandTotalAmount = 0;
 
         foreach ($works_order as $wo) {
-            // per work order totals
-            $wo->total_qty   = $wo->workOrderDtls->sum('quantity');
-            $wo->total_value = $wo->workOrderDtls->sum('amount');
+            $wo->total_qty   = $wo->workOrderDtls->sum(fn($d) => (float) $d->quantity);
+            $wo->total_value = $wo->workOrderDtls->sum(fn($d) => (float) $d->amount);
 
-            // supplier wise totals
             $supplierId = $wo->Supplier->id ?? null;
             if ($supplierId) {
                 if (!isset($supplierTotals[$supplierId])) {
@@ -55,10 +53,10 @@ class HomeController extends Controller
                 $supplierTotals[$supplierId]['total_amount'] += $wo->total_value;
             }
 
-            // grand totals
-            $grandTotalQty    += ($wo->total_qty * 1);
-            $grandTotalAmount += ($wo->total_value * 1);
+            $grandTotalQty    += $wo->total_qty;
+            $grandTotalAmount += $wo->total_value;
         }
+
 
         // If you want supplier totals as a collection:
         $supplierTotals = collect($supplierTotals)->values();
