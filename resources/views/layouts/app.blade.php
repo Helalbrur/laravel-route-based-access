@@ -44,33 +44,33 @@
     <link rel="stylesheet" href="{{asset('css/flatpickr.min.css')}}">
     <style>
         /* Reset margin/padding from all typical Skote containers */
-body.sidebar-enable .vertical-menu,
-body.sidebar-enable .sidebar-enable,
-body.vertical-collapsed .vertical-menu,
-body.vertical-collapsed .sidebar-enable {
-  display: none !important; /* hide sidebar if still present */
-}
+        body.sidebar-enable .vertical-menu,
+        body.sidebar-enable .sidebar-enable,
+        body.vertical-collapsed .vertical-menu,
+        body.vertical-collapsed .sidebar-enable {
+            display: none !important; /* hide sidebar if still present */
+        }
 
-.main-content,
-.page-content,
-.content,
-.content-wrapper,
-.layout-wrapper,
-.app-content {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  transition: none !important;
-}
+        .main-content,
+        .page-content,
+        .content,
+        .content-wrapper,
+        .layout-wrapper,
+        .app-content {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            transition: none !important;
+        }
 
-/* Also fix navbar full width if needed */
-.header,
-.navbar-header {
-  width: 100% !important;
-  left: 0 !important;
-  padding-left: 20px; /* optional padding */
-}
+        /* Also fix navbar full width if needed */
+        .header,
+        .navbar-header {
+            width: 100% !important;
+            left: 0 !important;
+            padding-left: 20px; /* optional padding */
+        }
 
     </style>
     @if(Auth::check())
