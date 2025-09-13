@@ -56,8 +56,8 @@ class HomeController extends Controller
             }
 
             // grand totals
-            $grandTotalQty    += $wo->total_qty;
-            $grandTotalAmount += $wo->total_value;
+            $grandTotalQty    += ($wo->total_qty * 1);
+            $grandTotalAmount += ($wo->total_value * 1);
         }
 
         // If you want supplier totals as a collection:
