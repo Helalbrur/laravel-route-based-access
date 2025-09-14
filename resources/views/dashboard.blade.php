@@ -314,7 +314,7 @@
             <div class="kpi-icon" style="background-color: rgba(234, 67, 53, 0.2); color: #ea4335;">
                 <i class="fas fa-clipboard-list"></i>
             </div>
-            <div class="kpi-value" style="color: #ea4335;" id="totalWorkOrder">{{$totalWorkOrders}}</div>
+            <div class="kpi-value" style="color: #ea4335;" id="totalWorkOrder">{{$totalWorkOrders ?? 0}}</div>
             <div class="kpi-title">Total Work Orders</div>
         </div>
         
@@ -323,7 +323,7 @@
                 <i class="fas fa-money-bill-wave"></i>
             </div>
             <div class="kpi-value" style="color: #fbbc04;" id="totalWorkOrderValue">
-                {{round($grandTotalAmount,2)}}
+                {{round($grandTotalAmount ?? 0,2)}}
             </div>
             <div class="kpi-title">Work Order Value</div>
             <div class="currency-note">Amount in BDT</div>
@@ -462,13 +462,13 @@
 @section('script')
     <script>
         // Convert PHP data to JS
-        const supplierTotals = @json($supplierTotals);
-        //const worksOrderData = ($works_order);
-        const grandTotalQty = {{ $grandTotalQty }};
-        const grandTotalAmount = {{ $grandTotalAmount }};
-        const totalWorkOrders = {{ $totalWorkOrders }};
-        const totalSuppliers = {{ count($lib_supplier_arr) }};
-        const allData = @json($allData);
+        const grandTotalQty = {{ $grandTotalQty ?? 0 }};
+        const grandTotalAmount = {{ $grandTotalAmount ?? 0 }};
+        const totalWorkOrders = {{ $totalWorkOrders ?? 0 }};
+        const totalSuppliers   = {{ isset($lib_supplier_arr) ? count($lib_supplier_arr) : 0 }};    
+        
+        const supplierTotals = @json($supplierTotals ?? []);
+        const allData        = @json($allData ?? []);
 
         // const chartData = worksOrderData.map(wo => {
         //     return {
