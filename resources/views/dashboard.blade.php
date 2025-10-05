@@ -282,10 +282,12 @@
         <h3>Select Supplier:</h3>
         <select id="supplierFilter">
             <option value="all">All Suppliers</option>
-            @foreach ($supplierTotals as $supp)
-                
-                <option value="{{ $supp['supplier_name'] }}">{{ $supp['supplier_name'] }}</option>
-            @endforeach
+            @if(count($supplierTotals) > 0)
+                @foreach ($supplierTotals as $supp)
+                    
+                    <option value="{{ $supp['supplier_name'] }}">{{ $supp['supplier_name'] }}</option>
+                @endforeach
+            @endif 
         </select>
         <button onclick="updateDashboard()" style="background: #4c7ee9; padding: 10px 20px;">
             <i class="fas fa-filter"></i> Apply Filter
