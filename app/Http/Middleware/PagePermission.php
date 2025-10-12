@@ -34,12 +34,14 @@ class PagePermission
                 $query->where('f_location', $request->path())
                     ->orWhere('f_location', '=', $urlPath);
             })->first();
+            //dd($mainMenu);
 
             if ($mainMenu)
             {
                 $userPrivMst = UserPrivMst::where('user_id', $user->id)
                     ->where('main_menu_id', $mainMenu->m_menu_id)
                     ->first();
+                //dd($userPrivMst);
                 if ($userPrivMst)
                 {
                     $url_parts = explode('/', $request->path());

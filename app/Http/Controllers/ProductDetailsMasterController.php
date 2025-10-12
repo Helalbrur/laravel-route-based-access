@@ -243,4 +243,21 @@ class ProductDetailsMasterController extends Controller
     {
         return Excel::download(new ProductExport, 'item_creation.csv');
     }
+
+    public function get_product_details($product_id)
+    {
+        $product = ProductDetailsMaster::with(['company', 'supplier', 'generic', 'itemCategory', 'itemSubCategory', 'brand', 'color', 'size', 'itemGroup', 'itemSubGroup'])->find($product_id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json([
+            'supplier' => $product->supplier ? $product->supplier->supplier_name : null,
+            'category' => $product->itemCategory ? $product->itemCategory->category_name : null,
+            'item_code' => $product->item_code,
+            'size' => $product->size ? $product->size->size_name : null,
+            'doage' => $product->dosage_form,
+        ]);
+    }
 }

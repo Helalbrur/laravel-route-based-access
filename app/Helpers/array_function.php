@@ -180,4 +180,9 @@ function get_issue_basis()
     return array(1 => "Independent", 2 => "Requisition", 3 => "Work Order");
 }
 
+function get_all_size()
+{
+    return App\Models\LibSize::pluck('size_name', 'id')->toArray();
+}
+
 ?>

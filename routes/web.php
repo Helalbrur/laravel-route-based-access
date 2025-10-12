@@ -60,6 +60,7 @@ use App\Http\Controllers\FieldLevelAccessController;
 use App\Http\Controllers\InvReceiveMasterController;
 use App\Http\Controllers\LibStoreLocationController;
 use App\Http\Controllers\LibItemSubCategoryController;
+use App\Http\Controllers\ProductRoomRackSelfController;
 use App\Http\Controllers\ProductDetailsMasterController;
 
 /*
@@ -124,6 +125,7 @@ Route::prefix('/lib')->middleware(['auth','PagePermission'])->group(function () 
     Route::resource('/inventory/rack', LibRackController::class);
     Route::resource('/inventory/shelf', LibShelfController::class);
     Route::resource('/inventory/bin', LibBinController::class);
+    Route::resource('/inventory/product_room_rack', ProductRoomRackSelfController::class);
 
     Route::resource('/general/color', LibColorController::class);
     Route::resource('/general/uom', LibUomController::class);
@@ -278,6 +280,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/rack_details/{rack_id}', [LibRackController::class, 'load_details']);
     Route::get('/shelf_details/{shelf_id}', [LibShelfController::class, 'load_details']);
     Route::get('/bin_details/{bin_id}', [LibBinController::class, 'load_details']);
+    Route::get('/get_product_details/{product_id}', [ProductDetailsMasterController::class, 'get_product_details']);
+    Route::get('/product_room_rack_details/{id}', [ProductRoomRackSelfController::class, 'load_details']);
     
 });
 
