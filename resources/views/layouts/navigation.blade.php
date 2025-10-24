@@ -7,7 +7,7 @@
   padding-left: 0 !important;
   margin: 0 !important;
   list-style: none !important;
-  background: #222 !important;
+  background: #8f7c7cff; !important;
   border-radius: 6px !important;
   overflow: visible !important;
   flex-direction: row !important;
@@ -125,7 +125,7 @@
 }
 
 .custom-navbar {
-    background: #222;
+    background: #8f7c7cff;
     padding: 0.5rem 1rem;
     color: white;
 }
