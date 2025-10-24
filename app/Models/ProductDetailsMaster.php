@@ -340,5 +340,84 @@ class ProductDetailsMaster extends Model
         echo $product->avg_rate;
     */
 
+
+    public function FloorRoomRackSelfBin()
+    {
+        return $this->hasMany(ProductRoomRackSelf::class,'product_id');
+    }
+
+    public function getDefaultLocationAttribute()
+    {
+        // If multiple locations exist, you can mark one as default later
+        return $this->FloorRoomRackSelfBin()->first(); 
+    }
+
+    public function getLocationBalanceQntyAttribute()
+    {
+        $query = $this->transactions()
+            ->whereIn('transaction_type', [1, 4, 5]);
+        $queryLess = $this->transactions()
+            ->whereIn('transaction_type', [2, 3, 6]);
+
+        // Try to fetch default location
+        $location = $this->default_location;
+
+        if ($location) {
+            // Add conditional filters only if not null
+            if ($location->floor_id) $query->where('floor_id', $location->floor_id);
+            if ($location->room_id) $query->where('room_id', $location->room_id);
+            if ($location->rack_id) $query->where('room_rack_id', $location->rack_id);
+            if ($location->shelf_id) $query->where('room_self_id', $location->shelf_id);
+            if ($location->bin_id) $query->where('room_bin_id', $location->bin_id);
+
+            if ($location->floor_id) $queryLess->where('floor_id', $location->floor_id);
+            if ($location->room_id) $queryLess->where('room_id', $location->room_id);
+            if ($location->rack_id) $queryLess->where('room_rack_id', $location->rack_id);
+            if ($location->shelf_id) $queryLess->where('room_self_id', $location->shelf_id);
+            if ($location->bin_id) $queryLess->where('room_bin_id', $location->bin_id);
+        }
+
+        $addQty = $query->sum('cons_qnty');
+        $lessQty = $queryLess->sum('cons_qnty');
+
+        return $addQty - $lessQty;
+    }
+
+    public function getLocationBalanceAmountAttribute()
+    {
+        $query = $this->transactions()
+            ->whereIn('transaction_type', [1, 4, 5]);
+        $queryLess = $this->transactions()
+            ->whereIn('transaction_type', [2, 3, 6]);
+
+        $location = $this->default_location;
+
+        if ($location) {
+            if ($location->floor_id) $query->where('floor_id', $location->floor_id);
+            if ($location->room_id) $query->where('room_id', $location->room_id);
+            if ($location->rack_id) $query->where('room_rack_id', $location->rack_id);
+            if ($location->shelf_id) $query->where('room_self_id', $location->shelf_id);
+            if ($location->bin_id) $query->where('room_bin_id', $location->bin_id);
+
+            if ($location->floor_id) $queryLess->where('floor_id', $location->floor_id);
+            if ($location->room_id) $queryLess->where('room_id', $location->room_id);
+            if ($location->rack_id) $queryLess->where('room_rack_id', $location->rack_id);
+            if ($location->shelf_id) $queryLess->where('room_self_id', $location->shelf_id);
+            if ($location->bin_id) $queryLess->where('room_bin_id', $location->bin_id);
+        }
+
+        $addAmt = $query->sum('cons_amount');
+        $lessAmt = $queryLess->sum('cons_amount');
+
+        return $addAmt - $lessAmt;
+    }
+
+    public function getLocationAvgRateAttribute()
+    {
+        $qty = $this->location_balance_qnty;
+        $amt = $this->location_balance_amount;
+        return $qty > 0 ? $amt / $qty : 0;
+    }
+
     
 }

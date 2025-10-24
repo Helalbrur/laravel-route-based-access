@@ -35,10 +35,10 @@ class ProductRoomRackSelfController extends Controller
         $request->validate([
             'cbo_product_id' => 'required',
             'cbo_floor_name'    => 'required',  
-            'cbo_room_no'    => 'required',  
-            'cbo_rack_no'    => 'required',
-            'cbo_shelf_no'   => 'required',
-            'cbo_bin_no'     => 'required',
+            // 'cbo_room_no'    => 'required',  
+            // 'cbo_rack_no'    => 'required',
+            // 'cbo_shelf_no'   => 'required',
+            // 'cbo_bin_no'     => 'required',
         ]);
 
         DB::beginTransaction();
@@ -100,10 +100,10 @@ class ProductRoomRackSelfController extends Controller
         $request->validate([
             'cbo_product_id' => 'required',
             'cbo_floor_name' => 'required',
-            'cbo_room_no' => 'required',
-            'cbo_rack_no' => 'required',
-            'cbo_shelf_no' => 'required',
-            'cbo_bin_no' => 'required',
+            // 'cbo_room_no' => 'required',
+            // 'cbo_rack_no' => 'required',
+            // 'cbo_shelf_no' => 'required',
+            // 'cbo_bin_no' => 'required',
         ]);
         DB::beginTransaction();
         try{

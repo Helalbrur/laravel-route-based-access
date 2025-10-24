@@ -1,5 +1,4 @@
 <?php
-    use App\Models\ProductDetailsMaster;
     $data = json_decode($param,true);
     
     $category_id    = $data['category_id'];
@@ -10,27 +9,8 @@
     $generic_id     = $data['generic_id'];
     $reorder_level  = $data['reorder_level'] ?? 0;
 
-
-   // \DB::enableQueryLog();
-
-    $lib_product = ProductDetailsMaster::with('FloorRoomRackSelfBin')
-    ->when(!empty($category_id), fn($q) => $q->where('item_category_id', $category_id))
-    ->when(!empty($product_id), fn($q) => $q->where('id', $product_id))
-    ->when(!empty($item_code), fn($q) => $q->where('item_code', $item_code))
-    ->when(!empty($supplier_id), fn($q) => $q->where('supplier_id', $supplier_id))
-    ->when(!empty($item_origin), fn($q) => 
-        $q->where('item_origin', 'like', '%' . trim($item_origin) . '%')
-    )
-    ->when(!empty($generic_id), fn($q) => $q->where('generic_id', $generic_id))
-    ->when(!empty($reorder_level), fn($q) => 
-        $q->whereColumn('consuption_uom_qty', '>', 'current_stock')
-    )
-    ->get();
-    
-    //dd(\DB::getQueryLog());
   
     
-    /*
     $query_builder = DB::table('product_details_master')->whereNull('deleted_at');
     if(!empty($category_id))
     {
@@ -69,7 +49,6 @@
     
     //$lib_product = $query_builder->ddRawSql();
     $lib_product = $query_builder->get();
-    */
 
     
 ?>
@@ -96,39 +75,19 @@
                     $class = 'odd';
                 }
                 $sl++;
-                
-                $balance = $product->current_stock ?? 0;
-
-                if(!empty($location->floor_id) || !empty($location->room_id))
-                {
-                    $balance = $product->location_balance_qnty ?? 0;
-                }
-                $location   = $product->default_location;
-                
-                $param = json_encode([
-                        'product_id'   => $product->id ?? 0,               // default 0 if null
-                        'item_code'    => $product->item_code ?? '',       // default empty string
-                        'item_name'    => $product->item_description ?? '',
-                        'category_id'  => $product->item_category_id ?? 0, // default 1 instead of 0
-                        'uom_id'       => $product->order_uom ?? 0,       // default 2
-                        'current_rate' => $product->avg_rate_per_unit ?? 0.0,
-                        'floor_id'     => $location->floor_id ?? null,    // keep null if no default
-                        'room_id'      => $location->room_id ?? null,
-                        'rack_id'      => $location->rack_id ?? null,
-                        'shelf_id'     => $location->shelf_id ?? null,
-                        'bin_id'       => $location->bin_id ?? null,
-                        'balance'      => $balance ?? 0,
-                        'supplier_id'  => $product->supplier_id ?? 0,
-                        'generic_id'   => $product->generic_id ?? 0,
-                    ]);
-
+                $param = json_encode(array('product_id'=>$product->id,
+                                          'item_code'=>$product->item_code,
+                                          'item_name'=>$product->item_description,
+                                          'category_id'=>$product->item_category_id,
+                                          'uom_id'=>$product->order_uom,
+                                          'current_rate'=>$product->avg_rate_per_unit));
             ?>
             <tr id="tr_{{$product->id}}" onclick="js_set_value('{{ $param }}' )" style="cursor: pointer;" >
                 <td>{{ get_item_category()[$product->item_category_id] ?? '' }}</td>
                 <td>{{ $product->item_description }}</td>
                 <td>{{ $product->item_code }}</td>
                 <td>{{ get_uom()[$product->order_uom] ?? '' }}</td>
-                <td>{{ $balance }}</td>
+                <td>{{ $product->current_stock ?? 0 }}</td>
             </tr>
         @endforeach
     </tbody>

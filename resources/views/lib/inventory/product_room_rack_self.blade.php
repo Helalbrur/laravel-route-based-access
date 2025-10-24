@@ -230,7 +230,7 @@ $permission = getPagePermission(request('mid') ?? 0);
      var permission ='{{$permission}}';
     function fnc_lib_rack( operation )
     {
-        if (form_validation('cbo_product_id*cbo_floor_name*cbo_room_no*cbo_rack_no*cbo_shelf_no*cbo_bin_no','Product*Room No*Rack No*Shelf No*Bin No')==false)
+        if (form_validation('cbo_product_id*cbo_floor_name','Product*Floor No')==false)
         {
             return;
         }

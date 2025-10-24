@@ -174,6 +174,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                                                 <td class="form-group">
                                                     <select name="cbo_order_uom_1" id="cbo_order_uom_1" class="form-control">
                                                         <option value="0">SELECT</option>
+                                                        
                                                         @foreach(get_uom() as $id => $name)
                                                             <option value="{{$id}}">{{$name}}</option>
                                                         @endforeach
@@ -774,7 +775,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 
     }
 
-        function fn_item_popup(row_id) {
+    function fn_item_popup(row_id) {
         // if(form_validation('cbo_supplier','Supplier')==false)
         // {
         //     return;
@@ -797,7 +798,8 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
 		var title = 'Item Search';
 		var page_link='/show_common_popup_view?page=receive_item_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
+		/*
+        emailwindow.onclose=function()
 		{
 			
 			try {
@@ -838,8 +840,21 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                         $('#txt_item_name_' + cur_row_id).val(data.item_name);
                         $('#txt_item_code_' + cur_row_id).val(data.item_code);
                         $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
-                        $('#cbo_uom_' + cur_row_id).val(data.uom_id).trigger('change');
+                        $('#cbo_order_uom_' + cur_row_id).val(data.uom_id).trigger('change');
                         $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+
+                        $('#cbo_floor_name_'+cur_row_id).val(data.floor_id);
+                        await handleFloorChange(cur_row_id);
+
+                        $('#cbo_room_no_'+cur_row_id).val(data.room_id);
+                        await handleRoomChange(cur_row_id);
+
+                        $('#cbo_rack_no_'+cur_row_id).val(data.rack_id);
+                        await handleRackChange(cur_row_id);
+
+                        $('#cbo_shelf_no_'+cur_row_id).val(data.shelf_id);
+                        await handleShelfChange(cur_row_id);
+                        $('#cbo_bin_no_'+cur_row_id).val(data.bin_id).trigger('change');
                         cur_row_id++;
                     }
                     else
@@ -851,7 +866,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                         $('#txt_item_name_' + cur_row_id).val('');
                         $('#txt_item_code_' + cur_row_id).val('');
                         $('#cbo_item_category_' + cur_row_id).val(0).trigger('change');
-                        $('#cbo_uom_' + cur_row_id).val(0).trigger('change');
+                        $('#cbo_order_uom_' + cur_row_id).val(0).trigger('change');
                         $('#txt_previous_rate_' + cur_row_id).val(0);
                     }
                 });
@@ -860,6 +875,95 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Receive Entry';
                 
             }
 		}
+        */
+       emailwindow.onclose = async function () {
+            try {
+                var popup_value = this.contentDoc.getElementById("popup_value").value;
+                console.log(popup_value);
+                if (popup_value == '') {
+                    return;
+                }
+
+                var product_arr = JSON.parse(popup_value);
+
+                var row_num = $('#dtls_list_view tbody tr').length;
+
+                for (let index = 1; index <= row_num; index++) {
+                    var product_id = $('#hidden_product_id_' + index).val() * 1;
+                    if (product_id == 0 && row_id > 1) {
+                        remove_row(index);
+                        row_id--;
+                    }
+                }
+
+                row_num = $('#dtls_list_view tbody tr').length;
+                for (let index = row_id + 1; index <= row_num; index++) {
+                    var product_id = $('#hidden_product_id_' + index).val() * 1;
+                    if (product_id == 0) {
+                        remove_row(index);
+                    }
+                }
+
+                let cur_row_id = row_id;
+
+                // ✅ Use for...of instead of forEach for async/await
+                for (const data of product_arr) {
+                    console.log(data);
+                    if (data) {
+                        if (cur_row_id > row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+
+                        $('#hidden_product_id_' + cur_row_id).val(data.product_id).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val(data.item_name);
+                        $('#txt_item_code_' + cur_row_id).val(data.item_code);
+                        $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
+
+                        console.log('cbo_order_uom_',$('#cbo_order_uom_' + cur_row_id + ' option').map((i, el) => el.value).get());
+                        //$('#cbo_order_uom' + cur_row_id).val(parseInt(data.uom_id || 0)).trigger('change');
+                        //$('#cbo_order_uom' + cur_row_id).val((data.uom_id || 0).toString()).trigger('change');
+                        //$('#cbo_order_uom' + cur_row_id).val((data.uom_id || 0).toString()).trigger('change.select2');
+                        $('#cbo_order_uom_' + cur_row_id).val(data.uom_id).trigger('change');
+
+
+                        $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+
+                        
+
+
+                        // ✅ Location dropdown sequence (await properly)
+                        $('#cbo_floor_name_' + cur_row_id).val(data.floor_id);
+                        await handleFloorChange(cur_row_id);
+
+                        $('#cbo_room_no_' + cur_row_id).val(data.room_id);
+                        await handleRoomChange(cur_row_id);
+
+                        $('#cbo_rack_no_' + cur_row_id).val(data.rack_id);
+                        await handleRackChange(cur_row_id);
+
+                        $('#cbo_shelf_no_' + cur_row_id).val(data.shelf_id);
+                        await handleShelfChange(cur_row_id);
+
+                        $('#cbo_bin_no_' + cur_row_id).val(data.bin_id).trigger('change');
+
+                        cur_row_id++;
+                    } else {
+                        if (cur_row_id > row_id) {
+                            add_row((cur_row_id * 1) - 1);
+                        }
+                        $('#hidden_product_id_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_item_name_' + cur_row_id).val('');
+                        $('#txt_item_code_' + cur_row_id).val('');
+                        $('#cbo_item_category_' + cur_row_id).val(0).trigger('change');
+                        $('#cbo_order_uom_' + cur_row_id).val(0).trigger('change');
+                        $('#txt_previous_rate_' + cur_row_id).val(0);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
     }
 
     field_manager(14);

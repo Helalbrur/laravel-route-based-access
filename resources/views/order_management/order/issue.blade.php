@@ -658,7 +658,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
 		var title = 'Item Search';
 		var page_link='/show_common_popup_view?page=issue_item_search&param='+param;
 		emailwindow=dhtmlmodal.open('EmailBox', 'iframe', page_link, title, 'width=800px,height=370px,center=1,resize=1,scrolling=1','../');
-		emailwindow.onclose=function()
+		emailwindow.onclose=async function()
 		{
 			
 			try {
@@ -688,7 +688,7 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                 //iterate product_arr using foreach and extrat data
 
                 var cur_row_id = row_id;
-                product_arr.forEach(data => {
+                for (const data of product_arr) {
                     console.log(data);
                     if (data) {
                         if(cur_row_id> row_id) {
@@ -701,6 +701,19 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                         $('#cbo_item_category_' + cur_row_id).val(data.category_id).trigger('change');
                         $('#cbo_uom_' + cur_row_id).val(data.uom_id).trigger('change');
                         $('#txt_previous_rate_' + cur_row_id).val(data.current_rate);
+                        
+                        
+
+                        $('#cbo_floor_name_' + cur_row_id).val(data.floor_id);
+                        await handleFloorChange(cur_row_id);
+                        $('#cbo_room_no_' + cur_row_id).val(data.room_id);
+                        await handleRoomChange(cur_row_id);
+                        $('#cbo_rack_no_' + cur_row_id).val(data.rack_id);
+                        await handleRackChange(cur_row_id);
+                        $('#cbo_shelf_no_' + cur_row_id).val(data.shelf_id);
+                        await handleShelfChange(cur_row_id);
+                        $('#cbo_bin_no_' + cur_row_id).val(data.bin_id);
+                        $("#txt_available_qty_"+cur_row_id).val(data.balance);
                         cur_row_id++;
                     }
                     else
@@ -715,7 +728,9 @@ $title = getMenuName(request('mid') ?? 0) ?? 'Work Order';
                         $('#cbo_uom_' + cur_row_id).val(0).trigger('change');
                         $('#txt_previous_rate_' + cur_row_id).val(0);
                     }
-                });
+                    
+                }
+               
             } catch (error) {
                 console.error('Error:', error);
                 
