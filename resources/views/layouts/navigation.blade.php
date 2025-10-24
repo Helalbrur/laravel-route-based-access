@@ -27,7 +27,8 @@
   color: #eee !important;
   padding: 12px 20px !important;
   display: block !important;
-  font-weight: 600 !important;
+  font-weight: 800 !important;
+  font-size:18px;
   text-transform: uppercase !important;
   transition: background-color 0.3s ease, color 0.3s ease !important;
   border-radius: 4px !important;
@@ -105,7 +106,7 @@
   content: "▶";
   float: right;
   margin-left: 5px;
-  font-size: 12px;
+  font-size: 14px;
   color: #ccc;
 }
 
